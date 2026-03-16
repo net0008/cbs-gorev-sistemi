@@ -31,11 +31,9 @@ export default function TaskCreator() {
   const saveTask = async () => {
     if (!point || !taskName) return alert("İsim ve nokta eksik!");
 
-    // PostGIS için GeoJSON formatı
-    const geojson = {
-      type: 'Point',
-      coordinates: [point[1], point[0]] // [boylam, enlem] - Standart GIS sırası
-    };
+    // PostGIS'in en sevdiği format: WKT (Well-Known Text)
+    // Önemli: Önce Boylam (Lng), sonra Enlem (Lat) yazılır.
+    const wktPoint = `POINT(${point[1]} ${point[0]})`;
 
     const { data, error } = await supabase
       .from('gis_tasks')
@@ -43,13 +41,19 @@ export default function TaskCreator() {
         { 
           title: taskName, 
           task_type: 'point', 
-          geometry: geojson, // Supabase bunu otomatik olarak Geography tipine çevirir
+          geometry: wktPoint, // Artık obje değil, düz metin gönderiyoruz
           task_code: Math.random().toString(36).substring(7).toUpperCase()
         }
       ]);
 
-    if (error) console.error("Hata:", error.message);
-    else alert("Görev Başarıyla Kaydedildi!");
+    if (error) {
+      console.error("Supabase Hatası:", error.message);
+      alert("Hata oluştu: " + error.message);
+    } else {
+      alert("Görev Başarıyla Kaydedildi!");
+      setTaskName('');
+      setPoint(null);
+    }
   };
 
   return (
