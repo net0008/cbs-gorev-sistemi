@@ -2,4 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Tailwind'in dark modu, html ve body etiketlerindeki sınıflar aracılığıyla arka plan ve metin rengini yönetecek. */
+body {
+    @apply bg-slate-950 text-white min-h-screen flex flex-col;
+}
