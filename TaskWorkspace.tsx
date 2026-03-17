@@ -99,7 +99,6 @@ export default function TaskWorkspace() {
           </MapContainer>
         </div>
       </div>
-
       {/* Kontrol Listesi ve İşlem Paneli */}
       <div className="w-full lg:w-80 flex flex-col gap-6">
         <div className="bg-slate-50 dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 flex-1">
@@ -107,8 +106,7 @@ export default function TaskWorkspace() {
             <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
             Adım Adım İlerleme
           </h3>
-          
-          <div className="space-y-3">
+         <div className="space-y-3">
             {CHECKLIST_STEPS.map((step, index) => (
               <label key={index} className="flex items-start gap-3 p-3 rounded-lg hover:bg-white dark:hover:bg-slate-700 cursor-pointer border border-transparent hover:border-slate-200 dark:hover:border-slate-600 transition-colors shadow-sm bg-white/50 dark:bg-slate-800/50">
                 <input 
