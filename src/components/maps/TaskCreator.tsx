@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents, FeatureGroup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -19,39 +19,61 @@ import { EditControl } from "react-leaflet-draw"
 import "leaflet-draw/dist/leaflet.draw.css"
 
 export default function TaskCreator() {
-  const [position, setPosition] = useState<[number, number] | null>(null);
+  const [taskName, setTaskName] = useState('');
+  const [drawnItems, setDrawnItems] = useState<any>(null);
+  const featureGroupRef = useRef<L.FeatureGroup>(null);
+
+  const onCreated = (e: any) => {
+    if (featureGroupRef.current) {
+      featureGroupRef.current.addLayer(e.layer);
+      setDrawnItems(featureGroupRef.current.toGeoJSON());
+    }
+  };
+
+  const onEdited = () => {
+    if (featureGroupRef.current) {
+      setDrawnItems(featureGroupRef.current.toGeoJSON());
+    }
+  };
+
+  const onDeleted = () => {
+    if (featureGroupRef.current) {
+      setDrawnItems(featureGroupRef.current.toGeoJSON());
+    }
+  };
+
+  const handleSaveTask = () => {
+    if (!taskName || !drawnItems) {
+      alert('Lütfen görev adı girin ve haritaya bir öğe çizin.');
+      return;
+    }
+    // Burada Supabase'e kaydetme mantığı eklenebilir.
+    console.log('Görev Kaydediliyor:', { taskName, geometry: drawnItems });
+    alert(`'${taskName}' görevi kaydedildi!`);
+  };
 
   return (
-    <div className="flex flex-col gap-4 p-4 h-full">
+    <div className="flex flex-col gap-4 p-4 h-full bg-card text-foreground">
       <h2 className="text-xl font-semibold">Görev Oluştur</h2>
       <input
         type="text"
         placeholder="Görev Adı"
-        className="w-full p-2 border rounded text-black"
+        value={taskName}
+        onChange={(e) => setTaskName(e.target.value)}
+        className="w-full p-2 border border-border rounded bg-background text-foreground"
       />
 
-      <div className="flex justify-center gap-2">
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-          Nokta
-        </button>
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-          Çizgi
-        </button>
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-          Alan
-        </button>
-      </div>
-
-      <div className="h-[500px] w-full rounded-lg overflow-hidden border border-slate-700 bg-slate-900 shadow-inner">
+      <div className="h-[500px] w-full rounded-lg overflow-hidden border border-border shadow-inner">
         <MapContainer center={[39.12, 27.18]} zoom={13} style={{ height: '100%', width: '100%' }}>
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-
-          {position && <Marker position={position}><Popup>Yeni Görev Noktası</Popup></Marker>}
+          <FeatureGroup ref={featureGroupRef}>
+            <EditControl position="topright" onCreated={onCreated} onEdited={onEdited} onDeleted={onDeleted} draw={{ rectangle: false, circle: false, circlemarker: false }} />
+          </FeatureGroup>
         </MapContainer>
       </div>
-      <p className="text-center text-slate-400 text-sm italic">
-        Bergama arazisi üzerine tıklayarak görev noktası belirleyebilirsiniz.
-      </p>
+      <button onClick={handleSaveTask} className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        Görevi Kaydet
+      </button>
     </div>
   );
 }
