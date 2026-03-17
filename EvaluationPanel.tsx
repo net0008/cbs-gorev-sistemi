@@ -6,22 +6,33 @@ import dynamic from 'next/dynamic';
 // Haritayı SSR olmadan yüklüyoruz
 const ComparativeMap = dynamic(
   () => import('@/components/maps/ComparativeMap'),
-  { ssr: false, loading: () => <div className="h-full w-full flex items-center justify-center bg-slate-100">Harita Yükleniyor...</div> }
+  { ssr: false, loading: () => <div className="h-full w-full flex items-center justify-center bg-slate-100 dark:bg-slate-800 text-slate-500 font-medium">Harita Yükleniyor...</div> }
 );
+
+interface RubricScores {
+  amacaUygunluk: number;
+  mekansalVeriYeterliligi: number;
+  aracGerecKullanimi: number;
+  gunlukHayattaKullanim: number;
+  mekansalCikarim: number;
+}
 
 export default function EvaluationPanel() {
   // Maarif Modeli Analitik Rubrik Örneği
-  const [rubricScores, setRubricScores] = useState({
+  const [rubricScores, setRubricScores] = useState<RubricScores>({
     amacaUygunluk: 0,
     mekansalVeriYeterliligi: 0,
     aracGerecKullanimi: 0,
     gunlukHayattaKullanim: 0,
     mekansalCikarim: 0,
   });
-  const [teacherNote, setTeacherNote] = useState('');
+  const [teacherNote, setTeacherNote] = useState<string>('');
+  
+  // Örnek Supabase verisi
+  const cikarilanSonuc = "Fay hatlarının geçtiği bölgeleri riskli alan olarak belirledim ve yerleşim yerlerini bu hatlardan 500 metre uzağa planladım. Böylece olası afet riskini en aza indirmeyi hedefledim.";
 
   const handleSaveEvaluation = async () => {
-    const totalScore = rubricScores.amacaUygunluk + rubricScores.mekansalVeriYeterliligi + rubricScores.aracGerecKullanimi + rubricScores.gunlukHayattaKullanim + rubricScores.mekansalCikarim;
+    const totalScore = Object.values(rubricScores).reduce((acc, curr) => acc + curr, 0);
     console.log("Değerlendirme Kaydediliyor:", { rubricScores, totalScore, teacherNote });
     alert(`Değerlendirme kaydedildi. Toplam Puan: ${totalScore}`);
     
@@ -45,7 +56,7 @@ export default function EvaluationPanel() {
             Öğrencinin Çıkardığı Sonuç (Mekânsal Çıkarım)
         </h3>
         <p className="text-lg text-slate-800 dark:text-slate-200 leading-relaxed italic font-medium">
-            "Fay hatlarının geçtiği bölgeleri riskli alan olarak belirledim ve yerleşim yerlerini bu hatlardan 500 metre uzağa planladım. Böylece olası afet riskini en aza indirmeyi hedefledim."
+            "{cikarilanSonuc}"
         </p>
       </div>
 
@@ -53,7 +64,7 @@ export default function EvaluationPanel() {
         {/* Sol Taraf: Karşılaştırmalı Harita ve Öz Değerlendirme */}
         <div className="col-span-2 flex flex-col gap-6">
 
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Öğrenci Çalışması Karşılaştırması</h2>
           <div className="flex gap-4 text-sm font-medium">
             <span className="flex items-center gap-2 text-blue-600"><div className="w-4 h-1 border-b-2 border-dashed border-blue-600"></div> Referans (Öğretmen)</span>
@@ -63,8 +74,8 @@ export default function EvaluationPanel() {
         
         <div className="h-[500px] w-full rounded-2xl overflow-hidden shadow-md border border-slate-300 dark:border-slate-700">
           <ComparativeMap 
-            referenceGeoJSON={undefined} // Supabase'den gelen referans geometri JSON
-            studentGeoJSON={undefined}   // Öğrencinin çizdiği JSON
+            referenceGeoJSON={null} // Supabase'den gelen referans geometri JSON
+            studentGeoJSON={null}   // Öğrencinin çizdiği JSON
           />
         </div>
         
@@ -90,7 +101,7 @@ export default function EvaluationPanel() {
             { key: 'aracGerecKullanimi', label: 'Seçilen Araç-Gereç Kullanımı' },
             { key: 'gunlukHayattaKullanim', label: 'Günlük Hayatta Kullanım Potansiyeli' },
             { key: 'mekansalCikarim', label: 'Mekânsal Çıkarım ve Coğrafi Yorumlama (15 Puan)' }
-          ].map((criterion) => (
+          ].map((criterion: { key: string; label: string }) => (
             <div key={criterion.key} className="flex flex-col gap-2">
               <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">{criterion.label}</label>
               <div className="flex gap-2">
@@ -101,9 +112,9 @@ export default function EvaluationPanel() {
                 ].map((scale) => (
                   <button
                     key={scale.value}
-                    onClick={() => setRubricScores(prev => ({ ...prev, [criterion.key]: scale.value }))}
+                    onClick={() => setRubricScores(prev => ({ ...prev, [criterion.key as keyof RubricScores]: scale.value }))}
                     className={`flex-1 py-2 px-1 rounded-lg text-xs font-semibold transition-all border ${
-                      (rubricScores as any)[criterion.key] === scale.value 
+                      rubricScores[criterion.key as keyof RubricScores] === scale.value 
                         ? 'bg-blue-50 border-blue-600 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 shadow-sm' 
                         : 'bg-slate-50 border-slate-200 dark:bg-slate-800 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'
                     }`}
@@ -130,7 +141,7 @@ export default function EvaluationPanel() {
 
         <div className="mt-auto pt-4 border-t border-slate-200 dark:border-slate-700 flex justify-between items-center">
           <div className="text-lg font-bold text-slate-800 dark:text-slate-100">
-            Toplam: <span className="text-blue-600">{rubricScores.amacaUygunluk + rubricScores.mekansalVeriYeterliligi + rubricScores.aracGerecKullanimi + rubricScores.gunlukHayattaKullanim + rubricScores.mekansalCikarim}</span> / 15
+            Toplam: <span className="text-blue-600">{Object.values(rubricScores).reduce((a, b) => a + b, 0)}</span> / 15
           </div>
           <button 
             onClick={handleSaveEvaluation}

@@ -17,8 +17,8 @@ const EditControl = dynamic(
 import "leaflet-draw/dist/leaflet.draw.css"
 
 export default function TaskCreator() {
-  const [taskName, setTaskName] = useState('');
-  const [drawnItems, setDrawnItems] = useState<any>(null);
+  const [taskName, setTaskName] = useState<string>('');
+  const [drawnItems, setDrawnItems] = useState<Record<string, any> | null>(null);
   const featureGroupRef = useRef<L.FeatureGroup>(null);
 
   // Leaflet ikon hatasını sadece istemci tarafında çalışacak bir useEffect içinde çözüyoruz.

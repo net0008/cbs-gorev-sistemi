@@ -21,12 +21,18 @@ const CHECKLIST_STEPS = [
   "Semboloji uygun mu?"
 ];
 
+interface SelfAssessment {
+  ogrendiklerim: string;
+  zorlandiklarim: string;
+  farkYarattigim: string;
+}
+
 export default function TaskWorkspace() {
-  const [drawnItems, setDrawnItems] = useState<any>(null);
+  const [drawnItems, setDrawnItems] = useState<Record<string, any> | null>(null);
   const [checklist, setChecklist] = useState<boolean[]>(new Array(CHECKLIST_STEPS.length).fill(false));
   const [isSelfAssessmentOpen, setIsSelfAssessmentOpen] = useState(false);
-  const [cikarilanSonuc, setCikarilanSonuc] = useState('');
-  const [selfAssessment, setSelfAssessment] = useState({ ogrendiklerim: '', zorlandiklarim: '', farkYarattigim: '' });
+  const [cikarilanSonuc, setCikarilanSonuc] = useState<string>('');
+  const [selfAssessment, setSelfAssessment] = useState<SelfAssessment>({ ogrendiklerim: '', zorlandiklarim: '', farkYarattigim: '' });
   
   const featureGroupRef = useRef<L.FeatureGroup>(null);
 
@@ -145,7 +151,7 @@ export default function TaskWorkspace() {
                 rows={4}
                 value={cikarilanSonuc}
                 onChange={(e) => setCikarilanSonuc(e.target.value)}
-                placeholder="Hazırladığınız haritadaki verileri analiz ederek bölgenin coğrafi yapısı (horst-graben, yerleşme dokusu, arazi kullanımı vb.) hakkında hangi çıkarımlarda bulunabilirsiniz?"
+                placeholder="Çizdiğiniz haritayı analiz ederek bölgenin coğrafi yapısı hakkında hangi çıkarımlarda bulunabilirsiniz?"
               />
             </div>
             

@@ -7,10 +7,9 @@ const MapContainer = dynamic(() => import('react-leaflet').then(mod => mod.MapCo
 const TileLayer = dynamic(() => import('react-leaflet').then(mod => mod.TileLayer), { ssr: false });
 const GeoJSON = dynamic(() => import('react-leaflet').then(mod => mod.GeoJSON), { ssr: false });
 
-// TypeScript tipi: EvaluationPanel ile tam uyumlu hale getirildi
-interface ComparativeMapProps {
-  referenceGeoJSON?: any;
-  studentGeoJSON?: any;
+export interface ComparativeMapProps {
+  referenceGeoJSON: any;
+  studentGeoJSON: any;
 }
 
 export default function ComparativeMap({ referenceGeoJSON, studentGeoJSON }: ComparativeMapProps) {
