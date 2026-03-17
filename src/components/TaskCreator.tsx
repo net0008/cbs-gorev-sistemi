@@ -7,12 +7,12 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
 // İkon Fix
-if (typeof window !== 'undefined') {
-  L.Icon.Default.mergeOptions({
-    iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
-    iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-  });
-}
+delete (L.Icon.Default.prototype as any)._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+});
 
 export default function TaskCreator() {
   const [taskName, setTaskName] = useState('');
@@ -114,7 +114,11 @@ export default function TaskCreator() {
         </MapContainer>
       </div>
 
-      <button onClick={saveTask} className="bg-blue-600 py-3 rounded-lg font-bold hover:bg-blue-500 transition-colors">
+      <button 
+        onClick={saveTask} 
+        disabled={coords.length === 0 || !taskName}
+        className="bg-blue-600 py-3 rounded-lg font-bold hover:bg-blue-500 transition-colors disabled:bg-slate-700 disabled:cursor-not-allowed"
+      >
         MAKROYU KAYDET ({coords.length} Nokta Verisi)
       </button>
     </div>

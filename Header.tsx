@@ -1,3 +1,5 @@
+import Sidebar from "./Sidebar";
+
 export default function Header() {
   return (
     <header className="w-full bg-slate-900 border-b border-slate-800 p-4 sticky top-0 z-[1001] shadow-md">
@@ -8,11 +10,11 @@ export default function Header() {
             Bergama CBS Görev Sistemi
           </h1>
         </div>
-        <nav className="hidden md:flex gap-6 text-sm font-medium text-slate-300">
-          <a href="/" className="hover:text-white transition">Ana Sayfa</a>
-          <a href="/teacher" className="hover:text-white transition">Öğretmen Paneli</a>
-          <a href="/student" className="hover:text-white transition">Öğrenci Girişi</a>
-        </nav>
+
+        {/* Sağ Taraf: Menü */}
+        <div className="flex items-center gap-4">
+          <Sidebar />
+        </div>
       </div>
     </header>
   );
