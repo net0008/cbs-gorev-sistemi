@@ -37,8 +37,20 @@ export default function EvaluationPanel() {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 p-6 bg-slate-50 dark:bg-slate-900 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-800">
-      {/* Sol Taraf: Karşılaştırmalı Harita */}
-      <div className="col-span-2 flex flex-col gap-4">
+      {/* Sol Taraf: Çıkarım ve Karşılaştırmalı Harita */}
+      <div className="col-span-2 flex flex-col gap-6">
+        
+        {/* Öğrencinin Mekânsal Çıkarımı (Yorum Paneli) - EN ÜSTTE */}
+        <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-md border-l-4 border-blue-500 border-y border-r border-slate-200 dark:border-y-slate-700 dark:border-r-slate-700">
+          <h3 className="text-xl font-extrabold text-blue-900 dark:text-blue-400 mb-3 flex items-center gap-2">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            Öğrencinin Çıkardığı Sonuç (Mekânsal Çıkarım)
+          </h3>
+          <p className="text-base text-slate-700 dark:text-slate-300 leading-relaxed italic">
+            "Fay hatlarının geçtiği bölgeleri riskli alan olarak belirledim ve yerleşim yerlerini bu hatlardan 500 metre uzağa planladım. Böylece olası afet riskini en aza indirmeyi hedefledim."
+          </p>
+        </div>
+
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Öğrenci Çalışması Karşılaştırması</h2>
           <div className="flex gap-4 text-sm font-medium">
@@ -46,6 +58,7 @@ export default function EvaluationPanel() {
             <span className="flex items-center gap-2 text-red-500"><div className="w-4 h-1 bg-red-500"></div> Öğrenci Çizimi</span>
           </div>
         </div>
+        
         <div className="h-[500px] w-full rounded-2xl overflow-hidden shadow-md border border-slate-300 dark:border-slate-700">
           <ComparativeMap 
             referenceGeoJSON={null} // Supabase'den gelen referans geometri JSON
@@ -53,17 +66,6 @@ export default function EvaluationPanel() {
           />
         </div>
         
-        {/* Öğrencinin Mekânsal Çıkarımı (Yorum Paneli) */}
-        <div className="bg-blue-50 dark:bg-blue-900/20 p-5 rounded-2xl shadow-sm border border-blue-100 dark:border-blue-800">
-          <h3 className="text-lg font-bold text-blue-900 dark:text-blue-300 mb-2 flex items-center gap-2">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            Öğrencinin Çıkardığı Sonuç (Mekânsal Çıkarım)
-          </h3>
-          <p className="text-sm text-slate-700 dark:text-slate-300 italic">
-            "Fay hatlarının geçtiği bölgeleri riskli alan olarak belirledim ve yerleşim yerlerini bu hatlardan 500 metre uzağa planladım. Böylece olası afet riskini en aza indirmeyi hedefledim."
-          </p>
-        </div>
-
         {/* Öğrenci Öz Değerlendirmesi Görüntüleme Alanı */}
         <div className="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-blue-100 dark:border-slate-700">
           <h3 className="text-lg font-semibold text-blue-800 dark:text-blue-300 mb-2">Öğrenci Öz Değerlendirmesi</h3>
@@ -85,7 +87,7 @@ export default function EvaluationPanel() {
             { key: 'mekansalVeriYeterliligi', label: 'Mekânsal Veri Yeterliliği' },
             { key: 'aracGerecKullanimi', label: 'Seçilen Araç-Gereç Kullanımı' },
             { key: 'gunlukHayattaKullanim', label: 'Günlük Hayatta Kullanım Potansiyeli' },
-            { key: 'mekansalCikarim', label: 'Mekânsal Çıkarım ve Yorumlama' }
+            { key: 'mekansalCikarim', label: 'Coğrafi Çıkarım ve Yorumlama Yeteneği' }
           ].map((criterion) => (
             <div key={criterion.key} className="flex flex-col gap-2">
               <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">{criterion.label}</label>

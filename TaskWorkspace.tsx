@@ -55,6 +55,11 @@ export default function TaskWorkspace() {
       setIsSelfAssessmentOpen(false);
       return;
     }
+
+    if (!cikarilanSonuc.trim()) {
+      alert("Lütfen 'Öğrencinin Çıkardığı Sonuç' alanını doldurarak haritadaki bulgularınızı yorumlayınız.");
+      return;
+    }
     
     const payload = {
       ogrenci_geometrisi: drawnItems,
@@ -119,19 +124,22 @@ export default function TaskWorkspace() {
       {/* Öz Değerlendirme Modalı */}
       {isSelfAssessmentOpen && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="bg-white dark:bg-slate-900 w-full max-w-2xl rounded-2xl shadow-2xl p-8 transform transition-all">
+          <div className="bg-white dark:bg-slate-900 w-full max-w-2xl rounded-2xl shadow-2xl p-8 transform transition-all max-h-[90vh] overflow-y-auto">
             <h2 className="text-2xl font-bold text-blue-900 dark:text-blue-400 border-b border-slate-200 dark:border-slate-700 pb-4 mb-6">
               Sonuç ve Öz Değerlendirme
             </h2>
             
-            <div className="mb-6 bg-blue-50 dark:bg-blue-900/20 p-5 rounded-xl border border-blue-100 dark:border-blue-800">
-              <label className="block text-sm font-bold text-blue-900 dark:text-blue-300 mb-2">Öğrencinin Çıkardığı Sonuç (Mekânsal Çıkarım)</label>
+            <div className="mb-8 bg-blue-50 dark:bg-blue-900/20 p-6 rounded-2xl border-l-4 border-blue-600 shadow-inner">
+              <label className="block text-lg font-bold text-blue-900 dark:text-blue-300 mb-3 flex items-center gap-2">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                Öğrencinin Çıkardığı Sonuç <span className="text-sm font-normal text-slate-500">(Zorunlu)</span>
+              </label>
               <textarea 
-                className="w-full p-4 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 outline-none resize-none"
-                rows={3}
+                className="w-full p-4 rounded-xl border-2 border-blue-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 outline-none resize-none shadow-sm"
+                rows={4}
                 value={cikarilanSonuc}
                 onChange={(e) => setCikarilanSonuc(e.target.value)}
-                placeholder="Çizdiğiniz haritaya bakarak bölgenin coğrafi yapısı hakkında ne gibi çıkarımlarda bulunabilirsiniz?"
+                placeholder="Hazırladığınız haritadaki verileri kullanarak Bergama'nın fiziki/beşeri yapısı hakkında ne gibi çıkarımlarda bulunabilirsiniz?"
               />
             </div>
             
