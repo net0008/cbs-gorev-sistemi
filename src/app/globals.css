@@ -1,10 +1,5 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@theme {
-  --font-sans: var(--font-inter);
-}
-
-:root {
-  background-color: #020617; /* bg-slate-950 karşılığı */
-  color: white;
-}
+/* Tailwind'in dark modu, html ve body etiketlerindeki sınıflar aracılığıyla arka plan ve metin rengini yönetecek. */
