@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic';
 
 // Haritayı içeren çalışma alanını SSR olmadan yüklüyoruz
 const TaskWorkspace = dynamic(
-  () => import('@/components/student/TaskWorkspace'),
+  () => import('./TaskWorkspace'),
   { ssr: false, loading: () => <div className="animate-pulse h-[600px] w-full bg-slate-200 dark:bg-slate-800 rounded-2xl"></div> }
 );
 

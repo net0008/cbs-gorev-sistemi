@@ -1,12 +1,9 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import AdBanner from "@/components/ads/AdBanner";
 import Script from "next/script";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Coğrafi Bilgi Sistemleri'ni Öğreniyorum | Dijital Arazi Uygulaması",
@@ -20,7 +17,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="tr" className="dark"> {/* Varsayılan tema karanlık */}
-      <body className={`${inter.className} min-h-screen flex flex-col`}>
+      <body className="min-h-screen flex flex-col">
         {/* Arka plan ve metin renkleri globals.css'ten CSS değişkenleri ile yönetilir */}
         <Script
           async
