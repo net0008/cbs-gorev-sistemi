@@ -17,7 +17,7 @@ export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
-}) {
+}) { 
   return (
     <html lang="tr">
       <body className={`${inter.className} bg-slate-950 text-white min-h-screen flex flex-col`}>
