@@ -1,27 +1,33 @@
 'use client';
 
-import { useState, useRef } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents, FeatureGroup } from 'react-leaflet';
+import { useState, useRef, useEffect } from 'react';
+import { MapContainer, TileLayer, FeatureGroup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+import dynamic from 'next/dynamic';
 
-// Leaflet ikon hatası çözümü
-if (typeof window !== 'undefined') {
-  delete (L.Icon.Default.prototype as any)._getIconUrl;
-  L.Icon.Default.mergeOptions({
-    iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-    iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-    shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-  });
-}
-
-import { EditControl } from "react-leaflet-draw"
+// react-leaflet-draw SSR uyumlu olmadığından, EditControl bileşenini dinamik olarak ve sadece istemci tarafında yüklüyoruz.
+const EditControl = dynamic(
+  () => import('react-leaflet-draw').then(mod => mod.EditControl),
+  { ssr: false }
+);
 import "leaflet-draw/dist/leaflet.draw.css"
 
 export default function TaskCreator() {
   const [taskName, setTaskName] = useState('');
   const [drawnItems, setDrawnItems] = useState<any>(null);
   const featureGroupRef = useRef<L.FeatureGroup>(null);
+
+  // Leaflet ikon hatasını sadece istemci tarafında çalışacak bir useEffect içinde çözüyoruz.
+  // Bu, "window is not defined" hatasını engeller.
+  useEffect(() => {
+    delete (L.Icon.Default.prototype as any)._getIconUrl;
+    L.Icon.Default.mergeOptions({
+      iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+      iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+      shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+    });
+  }, []);
 
   const onCreated = (e: any) => {
     if (featureGroupRef.current) {
