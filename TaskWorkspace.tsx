@@ -1,10 +1,13 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { MapContainer, TileLayer, FeatureGroup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import dynamic from 'next/dynamic';
+
+const MapContainer = dynamic(() => import('react-leaflet').then(mod => mod.MapContainer), { ssr: false });
+const TileLayer = dynamic(() => import('react-leaflet').then(mod => mod.TileLayer), { ssr: false });
+const FeatureGroup = dynamic(() => import('react-leaflet').then(mod => mod.FeatureGroup), { ssr: false });
 
 const EditControl = dynamic(
   () => import('react-leaflet-draw').then(mod => mod.EditControl),
@@ -139,7 +142,7 @@ export default function TaskWorkspace() {
                 rows={4}
                 value={cikarilanSonuc}
                 onChange={(e) => setCikarilanSonuc(e.target.value)}
-                placeholder="Hazırladığınız haritadaki verileri kullanarak Bergama'nın fiziki/beşeri yapısı hakkında ne gibi çıkarımlarda bulunabilirsiniz?"
+                placeholder="Hazırladığınız haritadaki verileri analiz ederek bölgenin coğrafi yapısı (horst-graben, yerleşme, arazi kullanımı vb.) hakkında hangi çıkarımlarda bulunabilirsiniz?"
               />
             </div>
             

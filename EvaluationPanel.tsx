@@ -87,7 +87,7 @@ export default function EvaluationPanel() {
             { key: 'mekansalVeriYeterliligi', label: 'Mekânsal Veri Yeterliliği' },
             { key: 'aracGerecKullanimi', label: 'Seçilen Araç-Gereç Kullanımı' },
             { key: 'gunlukHayattaKullanim', label: 'Günlük Hayatta Kullanım Potansiyeli' },
-            { key: 'mekansalCikarim', label: 'Coğrafi Çıkarım ve Yorumlama Yeteneği' }
+            { key: 'mekansalCikarim', label: 'Mekânsal Çıkarım ve Coğrafi Yorumlama' }
           ].map((criterion) => (
             <div key={criterion.key} className="flex flex-col gap-2">
               <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">{criterion.label}</label>
