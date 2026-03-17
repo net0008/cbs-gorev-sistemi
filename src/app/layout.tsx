@@ -17,7 +17,7 @@ export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
-}) { // HATA BURADAYDI: "}>)" silindi ve ") {" yapıldı
+}) { 
   return (
     <html lang="tr">
       <head>
