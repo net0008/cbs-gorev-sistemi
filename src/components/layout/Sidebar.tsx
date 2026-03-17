@@ -43,9 +43,9 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
         <div className="p-6">
           <button onClick={() => setIsOpen(false)} className="mb-8 p-2 rounded-md hover:bg-muted"><X size={24} /></button>
           <nav className="flex flex-col gap-4">
-            <Link href="/" className="flex items-center gap-2"><Home size={20}/> Ana Sayfa</Link>
-            <Link href="/teacher" className="flex items-center gap-2"><Settings size={20}/> Öğretmen</Link>
-            <Link href="/student" className="flex items-center gap-2"><GraduationCap size={20}/> Öğrenci</Link>
+            <Link href="/" onClick={() => setIsOpen(false)} className="flex items-center gap-2 p-2 rounded-md hover:bg-muted"><Home size={20}/> Ana Sayfa</Link>
+            <Link href="/teacher" onClick={() => setIsOpen(false)} className="flex items-center gap-2 p-2 rounded-md hover:bg-muted"><Settings size={20}/> Öğretmen</Link>
+            <Link href="/student" onClick={() => setIsOpen(false)} className="flex items-center gap-2 p-2 rounded-md hover:bg-muted"><GraduationCap size={20}/> Öğrenci</Link>
           </nav>
 
           <div className="absolute bottom-4 left-4 right-4">
