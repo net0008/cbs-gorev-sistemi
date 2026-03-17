@@ -34,7 +34,7 @@ export default function Home() {
       <div className="relative z-10 w-full max-w-2xl p-8 bg-white/10 dark:bg-black/20 backdrop-blur-md rounded-xl shadow-2xl border border-white/20 text-center">
         <h1 className="text-4xl font-bold mb-4">Coğrafi Bilgi Sistemi'ni Öğreniyorum</h1>
         <p className="mb-6 text-lg text-foreground/90">
-          Etkileşimli haritalar üzerinde arazi çalışmaları yaparak, dijital haritacılık ve coğrafi analiz yeteneklerinizi geliştirin. Öğrenmeye hemen başlayın!
+          Bergama ve çevresinin eşsiz topoğrafyasını dijital araçlarla keşfedin. CBS eğitiminde yeni nesil bir deneyim başlıyor.
         </p>
         <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition-colors">
           Öğrenmeye Başla
