@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic';
 
 // Harita bileşenini SSR (Server Side Rendering) kapatarak çağırıyoruz
-const TaskCreator = dynamic(() => import('@/components/TaskCreator'), { ssr: false });
+const TaskCreator = dynamic(() => import('@/components/maps/TaskCreator'), { ssr: false });
 
 export default function Home() {
   return (

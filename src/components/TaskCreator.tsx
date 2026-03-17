@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { MapContainer, TileLayer, useMapEvents, Marker, Polyline, Polygon } from 'react-leaflet';
 import { supabase } from '@/lib/supabase';
 import L from 'leaflet';
+import { nanoid } from 'nanoid';
 import 'leaflet/dist/leaflet.css';
 
 // İkon Fix
@@ -71,7 +72,8 @@ export default function TaskCreator() {
 
     const { error } = await supabase.from('gis_tasks').insert([{
       title: taskName, task_type: mode, geometry: wkt,
-      task_code: Math.random().toString(36).substring(7).toUpperCase()
+      // Benzersiz, kısa ve güvenli ID oluştur
+      task_code: nanoid(6).toUpperCase()
     }]);
 
     if (error) alert(error.message);

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap, GeoJSON } from 'react-leaflet';
 import { supabase } from '@/lib/supabase';
 import L from 'leaflet';
 
@@ -156,8 +156,8 @@ export default function StudentView() {
               {taskGeometry.type === 'Point' && <Marker position={taskGeometry.coordinates}>
                 <Popup>{taskDetails?.title || 'Hedef Nokta'}</Popup>
               </Marker>}
-              {taskGeometry.type === 'LineString' && <L.GeoJSON data={taskGeometry} style={{ color: 'red', weight: 5 }} />}
-              {taskGeometry.type === 'Polygon' && <L.GeoJSON data={taskGeometry} style={{ color: 'lime' }} />}
+              {taskGeometry.type === 'LineString' && <GeoJSON data={taskGeometry} style={{ color: 'red', weight: 5 }} />}
+              {taskGeometry.type === 'Polygon' && <GeoJSON data={taskGeometry} style={{ color: 'lime' }} />}
             </>
           )}
         </MapContainer>
