@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import { supabase } from '@/lib/supabase';
 import L from 'leaflet';
@@ -15,16 +15,58 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
 });
 
-// Harita merkezini yeni bulunan koordinata kaydırmak için yardımcı bileşen
-function MapUpdater({ center }: { center: [number, number] }) {
+// WKT (Well-Known Text) formatını GeoJSON formatına çeviren yardımcı fonksiyon
+const parseWKT = (wkt: string): { type: string; coordinates: any } | null => {
+  if (!wkt) return null;
+  const typeMatch = wkt.match(/^(\w+)/);
+  if (!typeMatch) return null;
+  const type = typeMatch[1].toUpperCase();
+
+  const coordStringMatch = wkt.match(/\((.*)\)/);
+  if (!coordStringMatch) return null;
+  let coordString = coordStringMatch[1];
+
+  try {
+    if (type === 'POINT') {
+      const [lng, lat] = coordString.split(' ').map(parseFloat);
+      return { type: 'Point', coordinates: [lat, lng] };
+    }
+    if (type === 'LINESTRING') {
+      const coordinates = coordString.split(', ').map(pair => {
+        const [lng, lat] = pair.split(' ').map(parseFloat);
+        return [lat, lng];
+      });
+      return { type: 'LineString', coordinates };
+    }
+    if (type === 'POLYGON') {
+      coordString = coordString.replace(/^\(|\)$/g, ''); // Dış parantezleri kaldır
+      const coordinates = coordString.split(', ').map(pair => {
+        const [lng, lat] = pair.split(' ').map(parseFloat);
+        return [lat, lng];
+      });
+      return { type: 'Polygon', coordinates: [coordinates] }; // GeoJSON için ekstra dizi katmanı
+    }
+  } catch (e) {
+    console.error("WKT Ayrıştırma Hatası:", e);
+    return null;
+  }
+  return null;
+};
+
+// Haritayı bulunan geometriye odaklamak için yardımcı bileşen
+function MapUpdater({ geometry }: { geometry: any }) {
   const map = useMap();
-  map.setView(center, 14); // Koordinata git ve yakınlaş (zoom: 14)
+  useEffect(() => {
+    if (!geometry) return;
+    const layer = L.geoJSON(geometry);
+    map.fitBounds(layer.getBounds().pad(0.1));
+  }, [geometry, map]);
   return null;
 }
 
 export default function StudentView() {
   const [inputCode, setInputCode] = useState('');
-  const [targetCoords, setTargetCoords] = useState<[number, number] | null>(null);
+  const [taskGeometry, setTaskGeometry] = useState<any | null>(null);
   const [taskDetails, setTaskDetails] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -37,7 +79,7 @@ export default function StudentView() {
 
     setIsLoading(true);
     setErrorMessage('');
-    setTargetCoords(null);
+    setTaskGeometry(null);
     setTaskDetails(null);
 
     if (!supabase) {
@@ -58,16 +100,13 @@ export default function StudentView() {
       }
 
       if (data) {
-        // Supabase PostgREST, geography kolonunu GeoJSON olarak döndürür: { type: "Point", coordinates: [lng, lat] }
-        if (data.geometry && data.geometry.coordinates) {
-          // PostGIS verisini Leaflet'in beklediği [lat, lng] formatına çeviriyoruz
-          const lat = data.geometry.coordinates[1];
-          const lng = data.geometry.coordinates[0];
-          
-          setTargetCoords([lat, lng]);
-          setTaskDetails(data);
+        // Veritabanından gelen WKT string'ini ayrıştır
+        if (data.geometry) {
+          const parsedGeometry = parseWKT(data.geometry);
+          setTaskGeometry(parsedGeometry);
+          setTaskDetails(data); // Diğer görev detaylarını state'e ata
         } else {
-          setErrorMessage('Görevin koordinat bilgisi okunamadı.');
+          setErrorMessage('Görevin koordinat bilgisi (geometri) bulunamadı.');
         }
       }
     } catch (error: any) {
@@ -109,14 +148,16 @@ export default function StudentView() {
       )}
 
       <div className="h-[400px] w-full rounded-lg overflow-hidden border border-slate-600 relative bg-slate-800">
-        <MapContainer center={targetCoords || [39.12, 27.18]} zoom={13} style={{ height: '100%', width: '100%' }}>
+        <MapContainer center={[39.12, 27.18]} zoom={13} style={{ height: '100%', width: '100%' }}>
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-          {targetCoords && (
+          {taskGeometry && (
             <>
-              <MapUpdater center={targetCoords} />
-              <Marker position={targetCoords}>
+              <MapUpdater geometry={taskGeometry} />
+              {taskGeometry.type === 'Point' && <Marker position={taskGeometry.coordinates}>
                 <Popup>{taskDetails?.title || 'Hedef Nokta'}</Popup>
-              </Marker>
+              </Marker>}
+              {taskGeometry.type === 'LineString' && <L.GeoJSON data={taskGeometry} style={{ color: 'red', weight: 5 }} />}
+              {taskGeometry.type === 'Polygon' && <L.GeoJSON data={taskGeometry} style={{ color: 'lime' }} />}
             </>
           )}
         </MapContainer>
