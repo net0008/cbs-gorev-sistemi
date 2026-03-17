@@ -17,18 +17,16 @@ export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
-}) { 
+}) {
   return (
     <html lang="tr">
-      <head>
+      <body className={`${inter.className} bg-slate-950 text-white min-h-screen flex flex-col`}>
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
           crossOrigin="anonymous"
           strategy="afterInteractive"
         />
-      </head>
-      <body className={`${inter.className} bg-slate-950 text-white min-h-screen flex flex-col`}>
         <Header />
         <AdBanner />
         <main className="flex-grow container mx-auto p-4">
