@@ -19,11 +19,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="tr" className="dark">
-      <body 
-        className={`${inter.className} bg-[#020617] text-white min-h-screen flex flex-col`}
-        style={{ backgroundColor: '#020617' }} // Vercel hatasını garantiye almak için
-      >
+    <html lang="tr" className="dark"> {/* Varsayılan tema karanlık */}
+      <body className={`${inter.className} min-h-screen flex flex-col`}>
+        {/* Arka plan ve metin renkleri globals.css'ten CSS değişkenleri ile yönetilir */}
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
