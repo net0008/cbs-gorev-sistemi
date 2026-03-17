@@ -7,7 +7,7 @@ export default function CreateTaskPage() {
   return (
     <div>
       <h1 className="text-2xl font-bold mb-6 border-b border-border pb-4">
-        10. Sınıf İçerik Hazırlama Modülü
+        10. Sınıf Yeni Görev Hazırlama
       </h1>
       <TaskCreator />
     </div>
