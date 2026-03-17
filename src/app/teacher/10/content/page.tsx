@@ -1,12 +1,12 @@
 'use client';
 
-export default function StudentLoginPage() {
+export default function ContentPage() {
   return (
-    <div className="bg-card p-8 rounded-lg shadow-md max-w-md mx-auto">
-      <h1 className="text-3xl font-bold mb-6 text-center">
-        Öğrenci Girişi
+    <div>
+      <h1 className="text-2xl font-bold mb-6 border-b border-border pb-4">
+        10. Sınıf - Hazır İçerikler
       </h1>
-      <p className="text-center text-foreground/80">Bu özellik yakında aktif olacaktır. Lütfen daha sonra tekrar kontrol edin.</p>
+      <p className="mt-4 text-foreground/80">Bu bölüm geliştirme aşamasındadır.</p>
     </div>
   );
 }
