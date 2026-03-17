@@ -40,6 +40,12 @@ export default function StudentView() {
     setTargetCoords(null);
     setTaskDetails(null);
 
+    if (!supabase) {
+      setErrorMessage('Veritabanı bağlantı hatası: Supabase ayarları eksik.');
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const { data, error } = await supabase
         .from('gis_tasks')

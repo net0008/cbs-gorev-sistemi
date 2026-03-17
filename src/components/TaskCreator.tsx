@@ -60,6 +60,7 @@ export default function TaskCreator() {
 
   const saveTask = async () => {
     if (coords.length === 0 || !taskName) return alert("Hata: İsim veya seçim eksik!");
+    if (!supabase) return alert("Hata: Veritabanı bağlantısı yapılandırılmamış (Supabase ayarları eksik)!");
     
     let wkt = "";
     const wktCoords = coords.map(c => `${c[1]} ${c[0]}`).join(', ');
