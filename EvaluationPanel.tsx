@@ -61,8 +61,8 @@ export default function EvaluationPanel() {
         
         <div className="h-[500px] w-full rounded-2xl overflow-hidden shadow-md border border-slate-300 dark:border-slate-700">
           <ComparativeMap 
-            referenceGeoJSON={null} // Supabase'den gelen referans geometri JSON
-            studentGeoJSON={null}   // Öğrencinin çizdiği JSON
+            referenceGeoJSON={undefined} // Supabase'den gelen referans geometri JSON
+            studentGeoJSON={undefined}   // Öğrencinin çizdiği JSON
           />
         </div>
         
@@ -87,7 +87,7 @@ export default function EvaluationPanel() {
             { key: 'mekansalVeriYeterliligi', label: 'Mekânsal Veri Yeterliliği' },
             { key: 'aracGerecKullanimi', label: 'Seçilen Araç-Gereç Kullanımı' },
             { key: 'gunlukHayattaKullanim', label: 'Günlük Hayatta Kullanım Potansiyeli' },
-            { key: 'mekansalCikarim', label: 'Mekânsal Çıkarım ve Coğrafi Yorumlama' }
+            { key: 'mekansalCikarim', label: 'Mekânsal Çıkarım ve Coğrafi Yorumlama (15 Puan)' }
           ].map((criterion) => (
             <div key={criterion.key} className="flex flex-col gap-2">
               <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">{criterion.label}</label>

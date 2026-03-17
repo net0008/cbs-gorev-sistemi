@@ -10,8 +10,8 @@ const GeoJSON = dynamic(() => import('react-leaflet').then(mod => mod.GeoJSON), 
 
 // TypeScript tipi: EvaluationPanel ile tam uyumlu hale getirildi
 interface ComparativeMapProps {
-  referenceGeoJSON?: any | null;
-  studentGeoJSON?: any | null;
+  referenceGeoJSON?: any;
+  studentGeoJSON?: any;
 }
 
 export default function ComparativeMap({ referenceGeoJSON, studentGeoJSON }: ComparativeMapProps) {

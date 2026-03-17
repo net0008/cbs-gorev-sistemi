@@ -142,7 +142,7 @@ export default function TaskWorkspace() {
                 rows={4}
                 value={cikarilanSonuc}
                 onChange={(e) => setCikarilanSonuc(e.target.value)}
-                placeholder="Hazırladığınız haritadaki verileri analiz ederek bölgenin coğrafi yapısı (horst-graben, yerleşme, arazi kullanımı vb.) hakkında hangi çıkarımlarda bulunabilirsiniz?"
+                placeholder="Hazırladığınız haritadaki verileri analiz ederek bölgenin coğrafi yapısı (horst-graben, yerleşme dokusu, arazi kullanımı vb.) hakkında hangi çıkarımlarda bulunabilirsiniz?"
               />
             </div>
             
