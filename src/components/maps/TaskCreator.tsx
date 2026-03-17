@@ -9,12 +9,7 @@ const MapContainer = dynamic(() => import('react-leaflet').then(mod => mod.MapCo
 const TileLayer = dynamic(() => import('react-leaflet').then(mod => mod.TileLayer), { ssr: false });
 const FeatureGroup = dynamic(() => import('react-leaflet').then(mod => mod.FeatureGroup), { ssr: false });
 
-// react-leaflet-draw SSR uyumlu olmadığından, EditControl bileşenini dinamik olarak ve sadece istemci tarafında yüklüyoruz.
-const EditControl = dynamic(
-  () => import('react-leaflet-draw').then(mod => mod.EditControl),
-  { ssr: false }
-);
-import "leaflet-draw/dist/leaflet.draw.css"
+import DrawEditControl from '@/components/maps/DrawEditControl';
 
 export default function TaskCreator() {
   const [taskName, setTaskName] = useState<string>('');
@@ -76,7 +71,7 @@ export default function TaskCreator() {
         <MapContainer center={[39.12, 27.18]} zoom={13} style={{ height: '100%', width: '100%' }}>
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
           <FeatureGroup ref={featureGroupRef}>
-            <EditControl position="topright" onCreated={onCreated} onEdited={onEdited} onDeleted={onDeleted} draw={{ rectangle: false, circle: false, circlemarker: false }} />
+            <DrawEditControl position="topright" onCreated={onCreated} onEdited={onEdited} onDeleted={onDeleted} draw={{ rectangle: false, circle: false, circlemarker: false }} />
           </FeatureGroup>
         </MapContainer>
       </div>
