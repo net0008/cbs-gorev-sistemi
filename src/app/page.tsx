@@ -1,10 +1,8 @@
-'use client'; 
-
+'use client';
 import dynamic from 'next/dynamic';
 
-// Dosyan şu an src/components/TaskCreator.tsx adresinde durduğu için 
-// yolu @/components/TaskCreator olarak güncelledik.
-const TaskCreator = dynamic(() => import('@/components/TaskCreator'), { ssr: false }); 
+// Yol güncellendi: @/components/maps/TaskCreator
+const TaskCreator = dynamic(() => import('@/components/maps/TaskCreator'), { ssr: false });
 
 export default function Home() {
   return (
@@ -12,7 +10,6 @@ export default function Home() {
       <h1 className="text-3xl font-bold mb-8 text-center border-b border-slate-700 pb-4">
         CBS Görev Hazırlama Paneli
       </h1>
-      
       <div className="bg-slate-800 rounded-xl shadow-2xl overflow-hidden border border-slate-700">
         <TaskCreator />
       </div>
