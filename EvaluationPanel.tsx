@@ -16,11 +16,12 @@ export default function EvaluationPanel() {
     mekansalVeriYeterliligi: 0,
     aracGerecKullanimi: 0,
     gunlukHayattaKullanim: 0,
+    mekansalCikarim: 0,
   });
   const [teacherNote, setTeacherNote] = useState('');
 
   const handleSaveEvaluation = async () => {
-    const totalScore = rubricScores.amacaUygunluk + rubricScores.mekansalVeriYeterliligi + rubricScores.aracGerecKullanimi + rubricScores.gunlukHayattaKullanim;
+    const totalScore = rubricScores.amacaUygunluk + rubricScores.mekansalVeriYeterliligi + rubricScores.aracGerecKullanimi + rubricScores.gunlukHayattaKullanim + rubricScores.mekansalCikarim;
     console.log("Değerlendirme Kaydediliyor:", { rubricScores, totalScore, teacherNote });
     alert(`Değerlendirme kaydedildi. Toplam Puan: ${totalScore}`);
     
@@ -47,8 +48,8 @@ export default function EvaluationPanel() {
         </div>
         <div className="h-[500px] w-full rounded-2xl overflow-hidden shadow-md border border-slate-300 dark:border-slate-700">
           <ComparativeMap 
-            teacherData={null} // Supabase'den gelen referans geometri JSON
-            studentData={null} // Öğrencinin çizdiği JSON
+            referenceGeoJSON={null} // Supabase'den gelen referans geometri JSON
+            studentGeoJSON={null}   // Öğrencinin çizdiği JSON
           />
         </div>
         
@@ -83,7 +84,8 @@ export default function EvaluationPanel() {
             { key: 'amacaUygunluk', label: 'Amaca Uygunluk' },
             { key: 'mekansalVeriYeterliligi', label: 'Mekânsal Veri Yeterliliği' },
             { key: 'aracGerecKullanimi', label: 'Seçilen Araç-Gereç Kullanımı' },
-            { key: 'gunlukHayattaKullanim', label: 'Günlük Hayatta Kullanım Potansiyeli' }
+            { key: 'gunlukHayattaKullanim', label: 'Günlük Hayatta Kullanım Potansiyeli' },
+            { key: 'mekansalCikarim', label: 'Mekânsal Çıkarım ve Yorumlama' }
           ].map((criterion) => (
             <div key={criterion.key} className="flex flex-col gap-2">
               <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">{criterion.label}</label>
@@ -124,7 +126,7 @@ export default function EvaluationPanel() {
 
         <div className="mt-auto pt-4 border-t border-slate-200 dark:border-slate-700 flex justify-between items-center">
           <div className="text-lg font-bold text-slate-800 dark:text-slate-100">
-            Toplam: <span className="text-blue-600">{rubricScores.amacaUygunluk + rubricScores.mekansalVeriYeterliligi + rubricScores.aracGerecKullanimi + rubricScores.gunlukHayattaKullanim}</span> / 12
+            Toplam: <span className="text-blue-600">{rubricScores.amacaUygunluk + rubricScores.mekansalVeriYeterliligi + rubricScores.aracGerecKullanimi + rubricScores.gunlukHayattaKullanim + rubricScores.mekansalCikarim}</span> / 15
           </div>
           <button 
             onClick={handleSaveEvaluation}

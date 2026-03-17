@@ -131,35 +131,35 @@ export default function TaskWorkspace() {
                 rows={3}
                 value={cikarilanSonuc}
                 onChange={(e) => setCikarilanSonuc(e.target.value)}
-                placeholder="Haritadaki veriyi coğrafi olarak yorumlayınız. Neden bu alanları seçtiniz?"
+                placeholder="Çizdiğiniz haritaya bakarak bölgenin coğrafi yapısı hakkında ne gibi çıkarımlarda bulunabilirsiniz?"
               />
             </div>
             
             <div className="space-y-6">
               <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Bu çalışma sırasında neler öğrendim?</label>
+                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Neler öğrendim?</label>
                 <textarea 
                   className="w-full p-4 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 outline-none"
                   rows={3}
                   value={selfAssessment.ogrendiklerim}
                   onChange={(e) => setSelfAssessment({...selfAssessment, ogrendiklerim: e.target.value})}
-                  placeholder="Kendi ifadelerinizle açıklayınız..."
+                  placeholder="Bu görevde edindiğiniz kazanımları yazın..."
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Çalışmam sırasında en çok nerede zorlandım?</label>
+                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Nerede zorlandım?</label>
                 <textarea 
                   className="w-full p-4 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 outline-none"
                   rows={3}
                   value={selfAssessment.zorlandiklarim}
                   onChange={(e) => setSelfAssessment({...selfAssessment, zorlandiklarim: e.target.value})}
-                  placeholder="Karşılaştığınız zorlukları belirtiniz..."
+                  placeholder="Harita üzerinde çalışırken karşılaştığınız zorluklar..."
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Çalışmamı yeniden yapsaydım neye dikkat ederdim? (Ne fark yarattım?)</label>
+                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Çalışmamı yeniden yapsaydım neyi farklı yapardım?</label>
                 <textarea 
                   className="w-full p-4 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 outline-none"
                   rows={3}
