@@ -47,18 +47,29 @@ export default function EvaluationPanel() {
         </div>
         <div className="h-[500px] w-full rounded-2xl overflow-hidden shadow-md border border-slate-300 dark:border-slate-700">
           <ComparativeMap 
-            referenceGeoJSON={null} // Buraya Supabase'den gelen referans JSON eklenecek
-            studentGeoJSON={null}   // Buraya öğrencinin çizdiği JSON eklenecek
+            teacherData={null} // Supabase'den gelen referans geometri JSON
+            studentData={null} // Öğrencinin çizdiği JSON
           />
         </div>
         
+        {/* Öğrencinin Mekânsal Çıkarımı (Yorum Paneli) */}
+        <div className="bg-blue-50 dark:bg-blue-900/20 p-5 rounded-2xl shadow-sm border border-blue-100 dark:border-blue-800">
+          <h3 className="text-lg font-bold text-blue-900 dark:text-blue-300 mb-2 flex items-center gap-2">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            Öğrencinin Çıkardığı Sonuç (Mekânsal Çıkarım)
+          </h3>
+          <p className="text-sm text-slate-700 dark:text-slate-300 italic">
+            "Fay hatlarının geçtiği bölgeleri riskli alan olarak belirledim ve yerleşim yerlerini bu hatlardan 500 metre uzağa planladım. Böylece olası afet riskini en aza indirmeyi hedefledim."
+          </p>
+        </div>
+
         {/* Öğrenci Öz Değerlendirmesi Görüntüleme Alanı */}
         <div className="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-blue-100 dark:border-slate-700">
           <h3 className="text-lg font-semibold text-blue-800 dark:text-blue-300 mb-2">Öğrenci Öz Değerlendirmesi</h3>
           <div className="text-sm text-slate-600 dark:text-slate-300 space-y-2">
             <p><strong>Neleri Öğrendim?:</strong> Fay hatlarının yerleşim yerlerine etkisini kavramsal olarak haritaya dökmeyi öğrendim.</p>
             <p><strong>Nerede Zorlandım?:</strong> Ölçeğe uygun çizim yaparken poligon sınırlarını ayarlamakta zorlandım.</p>
-            <p><strong>Neye Dikkat Ederdim?:</strong> Daha detaylı bir lejand oluşturmaya ve renk seçimlerine daha çok dikkat ederdim.</p>
+            <p><strong>Ne Fark Yarattım?:</strong> Daha detaylı bir lejand oluşturmaya ve renk seçimlerine daha çok dikkat ederdim, böylece risk bölgeleri daha net anlaşılırdı.</p>
           </div>
         </div>
       </div>

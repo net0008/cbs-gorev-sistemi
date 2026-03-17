@@ -22,7 +22,8 @@ export default function TaskWorkspace() {
   const [drawnItems, setDrawnItems] = useState<any>(null);
   const [checklist, setChecklist] = useState<boolean[]>(new Array(CHECKLIST_STEPS.length).fill(false));
   const [isSelfAssessmentOpen, setIsSelfAssessmentOpen] = useState(false);
-  const [selfAssessment, setSelfAssessment] = useState({ ogrendiklerim: '', zorlandiklarim: '', dikkatEdeceklerim: '' });
+  const [cikarilanSonuc, setCikarilanSonuc] = useState('');
+  const [selfAssessment, setSelfAssessment] = useState({ ogrendiklerim: '', zorlandiklarim: '', farkYarattigim: '' });
   
   const featureGroupRef = useRef<L.FeatureGroup>(null);
 
@@ -58,6 +59,7 @@ export default function TaskWorkspace() {
     const payload = {
       ogrenci_geometrisi: drawnItems,
       kontrol_listesi_durumu: checklist,
+      cikarilan_sonuc: cikarilanSonuc,
       oz_degerlendirme_notu: selfAssessment
     };
     
@@ -119,8 +121,19 @@ export default function TaskWorkspace() {
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
           <div className="bg-white dark:bg-slate-900 w-full max-w-2xl rounded-2xl shadow-2xl p-8 transform transition-all">
             <h2 className="text-2xl font-bold text-blue-900 dark:text-blue-400 border-b border-slate-200 dark:border-slate-700 pb-4 mb-6">
-              Maarif Modeli: Öz Değerlendirme
+              Sonuç ve Öz Değerlendirme
             </h2>
+            
+            <div className="mb-6 bg-blue-50 dark:bg-blue-900/20 p-5 rounded-xl border border-blue-100 dark:border-blue-800">
+              <label className="block text-sm font-bold text-blue-900 dark:text-blue-300 mb-2">Öğrencinin Çıkardığı Sonuç (Mekânsal Çıkarım)</label>
+              <textarea 
+                className="w-full p-4 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 outline-none resize-none"
+                rows={3}
+                value={cikarilanSonuc}
+                onChange={(e) => setCikarilanSonuc(e.target.value)}
+                placeholder="Haritadaki veriyi coğrafi olarak yorumlayınız. Neden bu alanları seçtiniz?"
+              />
+            </div>
             
             <div className="space-y-6">
               <div>
@@ -146,13 +159,13 @@ export default function TaskWorkspace() {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Çalışmamı yeniden yapsaydım neye dikkat ederdim?</label>
+                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Çalışmamı yeniden yapsaydım neye dikkat ederdim? (Ne fark yarattım?)</label>
                 <textarea 
                   className="w-full p-4 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 outline-none"
                   rows={3}
-                  value={selfAssessment.dikkatEdeceklerim}
-                  onChange={(e) => setSelfAssessment({...selfAssessment, dikkatEdeceklerim: e.target.value})}
-                  placeholder="Gelecek çalışmalarda neleri farklı yapardınız?"
+                  value={selfAssessment.farkYarattigim}
+                  onChange={(e) => setSelfAssessment({...selfAssessment, farkYarattigim: e.target.value})}
+                  placeholder="Gelecek çalışmalarda neleri farklı yapardınız veya projenizde ne gibi bir fark yarattınız?"
                 />
               </div>
             </div>
