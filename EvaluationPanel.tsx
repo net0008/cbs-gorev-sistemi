@@ -36,20 +36,22 @@ export default function EvaluationPanel() {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 p-6 bg-slate-50 dark:bg-slate-900 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-800">
-      {/* Sol Taraf: Çıkarım ve Karşılaştırmalı Harita */}
-      <div className="col-span-2 flex flex-col gap-6">
-        
-        {/* Öğrencinin Mekânsal Çıkarımı (Yorum Paneli) - EN ÜSTTE */}
-        <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-md border-l-4 border-blue-500 border-y border-r border-slate-200 dark:border-y-slate-700 dark:border-r-slate-700">
-          <h3 className="text-xl font-extrabold text-blue-900 dark:text-blue-400 mb-3 flex items-center gap-2">
+    <div className="flex flex-col gap-6 p-6 bg-slate-50 dark:bg-slate-900 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-800">
+      
+      {/* Öğrencinin Mekânsal Çıkarımı (Vurgulu Kart - Tam Genişlik) */}
+      <div className="w-full bg-gradient-to-r from-blue-50 to-white dark:from-slate-800 dark:to-slate-800/40 p-6 rounded-2xl shadow-sm border-l-4 border-blue-600 border border-blue-100 dark:border-slate-700">
+        <h3 className="text-2xl font-extrabold text-blue-900 dark:text-blue-400 mb-3 flex items-center gap-3">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
             Öğrencinin Çıkardığı Sonuç (Mekânsal Çıkarım)
-          </h3>
-          <p className="text-base text-slate-700 dark:text-slate-300 leading-relaxed italic">
+        </h3>
+        <p className="text-lg text-slate-800 dark:text-slate-200 leading-relaxed italic font-medium">
             "Fay hatlarının geçtiği bölgeleri riskli alan olarak belirledim ve yerleşim yerlerini bu hatlardan 500 metre uzağa planladım. Böylece olası afet riskini en aza indirmeyi hedefledim."
-          </p>
-        </div>
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Sol Taraf: Karşılaştırmalı Harita ve Öz Değerlendirme */}
+        <div className="col-span-2 flex flex-col gap-6">
 
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Öğrenci Çalışması Karşılaştırması</h2>
@@ -138,6 +140,7 @@ export default function EvaluationPanel() {
           </button>
         </div>
       </div>
+    </div>
     </div>
   );
 }

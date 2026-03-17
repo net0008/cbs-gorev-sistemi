@@ -1,7 +1,6 @@
 'use client';
 import { useEffect } from 'react';
 import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
 import dynamic from 'next/dynamic';
 
 const MapContainer = dynamic(() => import('react-leaflet').then(mod => mod.MapContainer), { ssr: false });
@@ -16,13 +15,15 @@ interface ComparativeMapProps {
 
 export default function ComparativeMap({ referenceGeoJSON, studentGeoJSON }: ComparativeMapProps) {
   useEffect(() => {
-    // Leaflet ikon hatası çözümü
-    delete (L.Icon.Default.prototype as any)._getIconUrl;
-    L.Icon.Default.mergeOptions({
-      iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-      iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-      shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-    });
+    (async () => {
+      const L = (await import('leaflet')).default;
+      delete (L.Icon.Default.prototype as any)._getIconUrl;
+      L.Icon.Default.mergeOptions({
+        iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+        iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+        shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+      });
+    })();
   }, []);
 
   return (

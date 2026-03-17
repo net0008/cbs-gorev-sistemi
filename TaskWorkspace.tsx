@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
+import type L from 'leaflet';
 import dynamic from 'next/dynamic';
 
 const MapContainer = dynamic(() => import('react-leaflet').then(mod => mod.MapContainer), { ssr: false });
@@ -31,12 +31,15 @@ export default function TaskWorkspace() {
   const featureGroupRef = useRef<L.FeatureGroup>(null);
 
   useEffect(() => {
-    delete (L.Icon.Default.prototype as any)._getIconUrl;
-    L.Icon.Default.mergeOptions({
-      iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-      iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-      shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-    });
+    (async () => {
+      const Leaflet = (await import('leaflet')).default;
+      delete (Leaflet.Icon.Default.prototype as any)._getIconUrl;
+      Leaflet.Icon.Default.mergeOptions({
+        iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+        iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+        shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+      });
+    })();
   }, []);
 
   const onCreated = (e: any) => {
