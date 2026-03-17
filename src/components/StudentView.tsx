@@ -4,24 +4,24 @@ import { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap, GeoJSON } from 'react-leaflet';
 import { supabase } from '@/lib/supabase';
 import L from 'leaflet';
-
 import 'leaflet/dist/leaflet.css';
 
-// Next.js ile Leaflet ikonlarının haritada görünmeme sorununu çözen yerleşik yöntem
-delete (L.Icon.Default.prototype as any)._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-});
+// Leaflet ikon sorununu çözen blok
+if (typeof window !== 'undefined') {
+  delete (L.Icon.Default.prototype as any)._getIconUrl;
+  L.Icon.Default.mergeOptions({
+    iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+    iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+    shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+  });
+}
 
-// WKT (Well-Known Text) formatını GeoJSON formatına çeviren yardımcı fonksiyon
-const parseWKT = (wkt: string): { type: string; coordinates: any } | null => {
+// WKT -> GeoJSON (Standart Lng, Lat sırası)
+const parseWKT = (wkt: string): any => {
   if (!wkt) return null;
   const typeMatch = wkt.match(/^(\w+)/);
   if (!typeMatch) return null;
   const type = typeMatch[1].toUpperCase();
-
   const coordStringMatch = wkt.match(/\((.*)\)/);
   if (!coordStringMatch) return null;
   let coordString = coordStringMatch[1];
@@ -29,135 +29,107 @@ const parseWKT = (wkt: string): { type: string; coordinates: any } | null => {
   try {
     if (type === 'POINT') {
       const [lng, lat] = coordString.split(' ').map(parseFloat);
-      return { type: 'Point', coordinates: [lat, lng] };
+      return { type: 'Point', coordinates: [lng, lat] };
     }
     if (type === 'LINESTRING') {
-      const coordinates = coordString.split(', ').map(pair => {
+      const coordinates = coordString.split(/,\s*/).map(pair => {
         const [lng, lat] = pair.split(' ').map(parseFloat);
-        return [lat, lng];
+        return [lng, lat];
       });
       return { type: 'LineString', coordinates };
     }
     if (type === 'POLYGON') {
-      coordString = coordString.replace(/^\(|\)$/g, ''); // Dış parantezleri kaldır
-      const coordinates = coordString.split(', ').map(pair => {
+      coordString = coordString.replace(/^\(|\)$/g, ''); 
+      const coordinates = coordString.split(/,\s*/).map(pair => {
         const [lng, lat] = pair.split(' ').map(parseFloat);
-        return [lat, lng];
+        return [lng, lat];
       });
-      return { type: 'Polygon', coordinates: [coordinates] }; // GeoJSON için ekstra dizi katmanı
+      return { type: 'Polygon', coordinates: [coordinates] };
     }
   } catch (e) {
-    console.error("WKT Ayrıştırma Hatası:", e);
+    console.error("Ayrıştırma Hatası:", e);
     return null;
   }
   return null;
 };
 
-// Haritayı bulunan geometriye odaklamak için yardımcı bileşen
 function MapUpdater({ geometry }: { geometry: any }) {
   const map = useMap();
   useEffect(() => {
-    if (!geometry) return;
-    const layer = L.geoJSON(geometry);
-    map.fitBounds(layer.getBounds().pad(0.1));
+    if (geometry) {
+      const layer = L.geoJSON(geometry);
+      map.fitBounds(layer.getBounds().pad(0.2));
+    }
   }, [geometry, map]);
   return null;
 }
 
 export default function StudentView() {
   const [inputCode, setInputCode] = useState('');
-  const [taskGeometry, setTaskGeometry] = useState<any | null>(null);
+  const [taskGeometry, setTaskGeometry] = useState<any>(null);
   const [taskDetails, setTaskDetails] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   const fetchTask = async () => {
-    if (!inputCode.trim()) {
-      setErrorMessage('Lütfen bir görev kodu girin.');
-      return;
-    }
-
+    if (!inputCode.trim()) return setErrorMessage('Kod girin.');
     setIsLoading(true);
     setErrorMessage('');
-    setTaskGeometry(null);
-    setTaskDetails(null);
-
-    if (!supabase) {
-      setErrorMessage('Veritabanı bağlantı hatası: Supabase ayarları eksik.');
-      setIsLoading(false);
-      return;
-    }
-
+    
     try {
       const { data, error } = await supabase
         .from('gis_tasks')
         .select('*')
-        .eq('task_code', inputCode.trim().toUpperCase()) // Küçük/büyük harf duyarlılığını önlemek için
+        .eq('task_code', inputCode.trim().toUpperCase())
         .single();
 
-      if (error) {
-        throw error;
-      }
-
-      if (data) {
-        // Veritabanından gelen WKT string'ini ayrıştır
-        if (data.geometry) {
-          const parsedGeometry = parseWKT(data.geometry);
-          setTaskGeometry(parsedGeometry);
-          setTaskDetails(data); // Diğer görev detaylarını state'e ata
-        } else {
-          setErrorMessage('Görevin koordinat bilgisi (geometri) bulunamadı.');
-        }
+      if (error) throw error;
+      if (data?.geometry) {
+        setTaskGeometry(parseWKT(data.geometry));
+        setTaskDetails(data);
       }
     } catch (error: any) {
-      console.error("Supabase Hatası:", error.message);
-      // "single()" fonksiyonu kayıt bulamazsa hata fırlatır, bunu kullanıcıya dostane gösterelim
-      setErrorMessage('Görev bulunamadı. Lütfen kodu doğru girdiğinizden emin olun.');
+      setErrorMessage('Görev bulunamadı.');
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="flex flex-col gap-4 p-6">
+    <div className="flex flex-col gap-4 p-4 text-slate-200">
       <div className="flex gap-2">
         <input
           type="text"
-          placeholder="Görev Kodunu Girin (Örn: A1B2C)"
-          className="flex-1 p-3 border rounded text-black uppercase"
+          placeholder="GÖREV KODU"
+          className="flex-1 p-3 rounded bg-slate-800 border border-slate-700 uppercase outline-none focus:border-blue-500"
           value={inputCode}
-          onChange={(e) => setInputCode(e.target.value.toUpperCase())}
-          disabled={isLoading}
+          onChange={(e) => setInputCode(e.target.value)}
         />
         <button
           onClick={fetchTask}
-          className="bg-green-600 text-white p-3 rounded hover:bg-green-700 disabled:bg-green-400 disabled:cursor-not-allowed font-semibold px-8"
+          className="bg-blue-600 px-6 rounded font-bold hover:bg-blue-500 disabled:opacity-50"
           disabled={isLoading}
         >
-          {isLoading ? 'Aranıyor...' : 'Görevi Bul'}
+          {isLoading ? '...' : 'ARA'}
         </button>
       </div>
 
-      {errorMessage && <p className="text-red-400 font-medium text-sm">{errorMessage}</p>}
+      {errorMessage && <p className="text-red-400 text-sm">{errorMessage}</p>}
 
-      {taskDetails && (
-        <div className="bg-slate-700 p-4 rounded-lg border border-slate-600 shadow-inner">
-          <h3 className="text-xl font-bold text-green-400">{taskDetails.title}</h3>
-          <p className="text-slate-300 text-sm mt-1">Bu görevi başarıyla buldunuz! Hedef haritada işaretlendi.</p>
-        </div>
-      )}
-
-      <div className="h-[400px] w-full rounded-lg overflow-hidden border border-slate-600 relative bg-slate-800">
-        <MapContainer center={[39.12, 27.18]} zoom={13} style={{ height: '100%', width: '100%' }}>
+      <div className="h-[450px] rounded-xl overflow-hidden border border-slate-700 bg-slate-900 shadow-2xl">
+        <MapContainer center={[39.12, 27.18]} zoom={13} style={{ height: '100%' }}>
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
           {taskGeometry && (
             <>
               <MapUpdater geometry={taskGeometry} />
-              {taskGeometry.type === 'Point' && <Marker position={taskGeometry.coordinates}>
-                <Popup>{taskDetails?.title || 'Hedef Nokta'}</Popup>
-              </Marker>}
-              {taskGeometry.type === 'LineString' && <GeoJSON data={taskGeometry} style={{ color: 'red', weight: 5 }} />}
-              {taskGeometry.type === 'Polygon' && <GeoJSON data={taskGeometry} style={{ color: 'lime' }} />}
+              {taskGeometry.type === 'Point' && (
+                <Marker position={[taskGeometry.coordinates[1], taskGeometry.coordinates[0]]}>
+                  <Popup>{taskDetails?.title}</Popup>
+                </Marker>
+              )}
+              {(taskGeometry.type === 'LineString' || taskGeometry.type === 'Polygon') && (
+                <GeoJSON data={taskGeometry} style={{ color: '#3b82f6', weight: 4 }} />
+              )}
             </>
           )}
         </MapContainer>

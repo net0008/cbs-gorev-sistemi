@@ -1,9 +1,10 @@
-'use client'; // Bu satır şart, tarayıcıda çalışacağını belirtir.
+'use client'; 
 
 import dynamic from 'next/dynamic';
 
-// Harita bileşenini SSR (Server Side Rendering) kapatarak çağırıyoruz
-const TaskCreator = dynamic(() => import('@/components/maps/TaskCreator'), { ssr: false });
+// Dosyan şu an src/components/TaskCreator.tsx adresinde durduğu için 
+// yolu @/components/TaskCreator olarak güncelledik.
+const TaskCreator = dynamic(() => import('@/components/TaskCreator'), { ssr: false }); 
 
 export default function Home() {
   return (
@@ -12,7 +13,6 @@ export default function Home() {
         CBS Görev Hazırlama Paneli
       </h1>
       
-      {/* Hazırladığımız Makro Bileşeni */}
       <div className="bg-slate-800 rounded-xl shadow-2xl overflow-hidden border border-slate-700">
         <TaskCreator />
       </div>

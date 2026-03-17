@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
-import AdBanner from "@/components/ads/AdBanner";
+// Dosyaların şu an src/lib altında olduğu için yolları buna göre düzelttim:
+import Header from "@/lib/Header"; 
+import Footer from "@/lib/Footer"; 
+import AdBanner from "@/lib/AdBanner"; 
 import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -17,11 +18,10 @@ export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
-}>) {
+}) { // Buradaki fazlalık '>' silindi
   return (
     <html lang="tr">
       <head>
-        {/* Google AdSense Scripti */}
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
