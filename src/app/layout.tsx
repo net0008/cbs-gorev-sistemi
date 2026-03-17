@@ -9,7 +9,7 @@ import Script from "next/script";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Bergama CBS | Dijital Arazi Uygulaması",
+  title: "Coğrafi Bilgi Sistemleri'ni Öğreniyorum | Dijital Arazi Uygulaması",
   description: "Coğrafya ve Jeoloji eğitimi için etkileşimli görev sistemi",
 };
 

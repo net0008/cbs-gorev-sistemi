@@ -1,6 +1,7 @@
 'use client';
 import dynamic from 'next/dynamic';
 import 'leaflet/dist/leaflet.css';
+import Link from 'next/link';
 
 // Harita bileşenini, sunucu tarafında render edilmeyecek şekilde (SSR: false) dinamik olarak yüklüyoruz.
 // Bu, sadece tarayıcıda çalışması gereken kütüphaneler için en doğru yöntemdir.
@@ -32,13 +33,18 @@ export default function Home() {
         />
       </MapBackground>
       <div className="relative z-10 w-full max-w-2xl p-8 bg-white/10 dark:bg-black/20 backdrop-blur-md rounded-xl shadow-2xl border border-white/20 text-center">
-        <h1 className="text-4xl font-bold mb-4">Coğrafi Bilgi Sistemi'ni Öğreniyorum</h1>
+        <h1 className="text-4xl font-bold mb-4">Coğrafi Bilgi Sistemleri'ni Öğreniyorum</h1>
         <p className="mb-6 text-lg text-foreground/90">
-          Bergama ve çevresinin eşsiz topoğrafyasını dijital araçlarla keşfedin. CBS eğitiminde yeni nesil bir deneyim başlıyor.
+          Dijital araçlarla, CBS eğitiminde yeni nesil bir deneyim başlıyor.
         </p>
-        <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition-colors">
-          Öğrenmeye Başla
-        </button>
+        <div className="flex flex-wrap justify-center gap-4">
+          <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition-colors">
+            Keşfetmeye Başla
+          </button>
+          <Link href="/teacher/9/content" className="bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-6 rounded-lg transition-colors inline-flex items-center">
+            Öğretmen Paneli'ne Git
+          </Link>
+        </div>
       </div>
     </div>
   );
