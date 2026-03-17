@@ -17,10 +17,13 @@ export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
-}) { 
+}) {
   return (
-    <html lang="tr">
-      <body className={`${inter.className} bg-slate-950 text-white min-h-screen flex flex-col`}>
+    <html lang="tr" className="dark">
+      <body 
+        className={`${inter.className} bg-[#020617] text-white min-h-screen flex flex-col`}
+        style={{ backgroundColor: '#020617' }} // Vercel hatasını garantiye almak için
+      >
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
