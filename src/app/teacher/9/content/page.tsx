@@ -6,7 +6,6 @@ import MapReadingActivity from './MapReadingActivity';
 
 const activities = [
   {
-    id: 'map-reading',
     id: 'map-elements',
     title: 'Haritalar Nasıl Okunur?', // Vurgulu Başlık
     outcomes: [

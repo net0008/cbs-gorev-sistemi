@@ -1,226 +1,98 @@
 'use client';
-
-import React, { useState, useRef, useCallback, CSSProperties } from 'react';
+import React, { useState, useRef } from 'react';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { motion, AnimatePresence, PanInfo, Variants } from 'framer-motion';
-import { CheckCircle, Lightbulb, X } from 'lucide-react';
+import { X, CheckCircle } from 'lucide-react';
 
 interface MapReadingActivityProps {
   onClose: () => void;
 }
 
-interface MapElement {
-  id: string;
-  name: string;
-  hint: string;
-  position: CSSProperties;
-}
+export default function MapReadingActivity({ onClose }: MapReadingActivityProps) {
+  const [solved, setSolved] = useState<string[]>([]);
+  const dropZoneRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
-const MAP_ELEMENTS: MapElement[] = [
-  // 2. Optimize Edilmiş Hotspot Yerleşimi
-  { id: 'baslik', name: 'Başlık', hint: 'Haritanın konusunu ve amacını belirtir.', position: { top: '5%', left: '35%', width: '30%', height: '8%' } },
-  { id: 'lejant', name: 'Lejant', hint: 'Haritadaki sembollerin ve renklerin anlamını açıklar.', position: { bottom: '10%', right: '2%', width: '18%', height: '25%' } },
-  { id: 'olcek', name: 'Ölçek', hint: 'Haritadaki mesafelerin gerçekteki karşılığını gösterir.', position: { bottom: '5%', left: '2%', width: '15%', height: '10%' } },
-  { id: 'yon_oku', name: 'Yön Oku', hint: 'Haritanın yönünü, genellikle kuzeyi gösterir.', position: { top: '8%', right: '2%', width: '10%', height: '15%' } },
-  { id: 'koordinatlar', name: 'Koordinatlar', hint: 'Enlem ve boylam çizgileriyle konum belirlemeyi sağlar.', position: { top: '2%', left: '2%', bottom: '2%', right: '2%' } },
-];
+  // Fiziki haritadaki öğelerin gerçek yerlerine göre optimize edilmiş koordinatlar
+  const elements = [
+    { id: 'title', label: 'Başlık', pos: { top: '2%', left: '25%', width: '50%', height: '8%' } },
+    { id: 'legend', label: 'Lejant', pos: { bottom: '4%', right: '2%', width: '18%', height: '24%' } },
+    { id: 'scale', label: 'Ölçek', pos: { bottom: '4%', left: '2%', width: '22%', height: '10%' } },
+    { id: 'compass', label: 'Yön Oku', pos: { top: '2%', right: '2%', width: '12%', height: '18%' } },
+    { id: 'coords', label: 'Koordinatlar', pos: { top: '0%', left: '0%', width: '100%', height: '100%', border: '20px solid transparent' } }
+  ];
 
-const MapReadingActivity = ({ onClose }: MapReadingActivityProps) => {
-  const [completedElements, setCompletedElements] = useState<string[]>([]);
-  const [feedback, setFeedback] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
-  const score = completedElements.length * 20;
-
-  const dropZoneRefs = useRef<Record<string, HTMLDivElement | null>>({});
-  const activityAreaRef = useRef<HTMLDivElement>(null);
-
-  const showFeedback = useCallback((message: string, type: 'success' | 'error') => {
-    setFeedback({ message, type });
-    setTimeout(() => setFeedback(null), 2000);
-  }, []);
-
-  const overlayVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1 },
-    exit: { opacity: 0 },
-  };
-
-
-  const handleDragEnd = useCallback((info: PanInfo, elementId: string) => {
-    if (!activityAreaRef.current) return;
-    const activityRect = activityAreaRef.current.getBoundingClientRect();
-
-    const dropPoint = {
-      x: info.point.x - activityRect.left,
-      y: info.point.y - activityRect.top,
-    };
-
-    const targetElement = MAP_ELEMENTS.find(el => el.id === elementId);
-    if (!targetElement) return;
-
-    const dropZone = dropZoneRefs.current[targetElement.id];
-
+  const handleDragEnd = (id: string, info: any) => {
+    const zone = dropZoneRefs.current[id]?.getBoundingClientRect();
     if (dropZone) {
-      const zoneRect = dropZone.getBoundingClientRect();
-      const relativeZoneRect = {
-        left: zoneRect.left - activityRect.left,
-        top: zoneRect.top - activityRect.top,
-        right: zoneRect.right - activityRect.left,
-        bottom: zoneRect.bottom - activityRect.top,
-      };
-
       if (
-        dropPoint.x >= relativeZoneRect.left &&
-        dropPoint.x <= relativeZoneRect.right &&
-        dropPoint.y >= relativeZoneRect.top &&
-        dropPoint.y <= relativeZoneRect.bottom
+        info.point.x > zone.left && info.point.x < zone.right &&
+        info.point.y > zone.top && info.point.y < zone.bottom
       ) {
-        if (!completedElements.includes(elementId)) {
-          setCompletedElements(prev => [...prev, elementId]);
-          showFeedback('Harika! Doğru yerleştirdin.', 'success');
-        }
-      } else {
-        showFeedback(targetElement.hint, 'error');
+        setSolved(prev => [...prev, id]);
       }
     }
-  }, [completedElements, showFeedback]);
+  };
 
   return (
-    // 4. Etkinlik Sayfası: Tam ekran, kaydırmasız bir katman olarak tasarlandı.
-    <motion.div
-      ref={activityAreaRef}
-      variants={overlayVariants}
-      initial="hidden"
-      animate="visible"
-      exit="exit"
-      // 1. Sayfa Düzeni: fixed inset-0 z-50 ile tam ekran ve kaydırmasız yapı.
-      className="fixed inset-0 z-50 flex flex-col md:flex-row bg-slate-950"
-    >
-      {/* 2. Estetik: Sabit, parlak kırmızı KAPAT butonu */}
-      <button
-        onClick={onClose}
-        className="fixed top-4 right-4 z-[100] flex items-center justify-center w-12 h-12 bg-red-600/80 text-white rounded-full shadow-lg shadow-red-500/30 transition-all duration-300 hover:bg-red-600 hover:scale-110 hover:shadow-red-500/50 active:scale-95"
-        aria-label="Etkinliği Kapat"
-      >
-        <X size={24} />
-      </button>
-
-      {/* Harita Alanı - Ekranın %70'ini kaplar */}
-      <div className="relative w-full md:w-[70%] h-1/2 md:h-full flex-shrink-0 bg-slate-200 dark:bg-slate-900">
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="relative w-full h-full max-w-full max-h-full aspect-[4/3] m-auto">
-            {/* 1. Hız ve Görüntü Optimizasyonu: Next.js <Image> bileşeni ile WebP dönüşümü ve hızlı yükleme */}
-            <Image
-              src="/9/harita/turkiye-fiziki.jpg"
-              alt="Türkiye Fiziki Haritası"
-              fill
-              priority
-              className="w-full h-full object-contain"
-            />
-
-            {MAP_ELEMENTS.map((el) => (
-              <div
-                key={el.id}
-                ref={(ref) => { dropZoneRefs.current[el.id] = ref; }}
-                style={el.position}
-                className="absolute transition-all duration-500"
-              >
-                <AnimatePresence>
-                  {!completedElements.includes(el.id) && (
-                    <motion.div
-                      initial={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      // 3. Mekanik ve Estetik: Başlangıçta hedefleri bulanıklaştırma
-                      className="absolute inset-0 bg-background/20 blur-xl backdrop-blur-md rounded-lg border-2 border-dashed border-white/30"
-                    />
-                  )}
-                  {completedElements.includes(el.id) && (
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      className="absolute inset-0 flex items-center justify-center bg-emerald-600/80 rounded-lg text-white font-bold text-sm"
-                    >
-                      {el.name}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            ))}
-          </div>
+    <div className="fixed inset-0 z-50 bg-slate-950 flex flex-col overflow-hidden select-none">
+      {/* Üst Bar */}
+      <div className="p-4 flex justify-between items-center bg-black/40 backdrop-blur-md border-b border-white/10">
+        <div className="text-white">
+          <h2 className="font-bold text-xl text-emerald-400">Haritalar Nasıl Okunur?</h2>
+          <p className="text-xs text-slate-400 uppercase tracking-widest">Kazanım: COĞ.9.2.1</p>
         </div>
+        <button 
+          onClick={onClose}
+          className="bg-red-600 hover:bg-red-700 text-white px-8 py-2 rounded-full font-bold transition-all active:scale-90 shadow-lg shadow-red-900/40 flex items-center gap-2"
+        >
+          <X size={18} /> KAPAT
+        </button>
       </div>
 
-      {/* Sağ Panel: Etiketler ve Bilgiler */}
-      <div className="w-full md:w-[30%] h-1/2 md:h-full flex flex-col p-6 gap-4 overflow-y-auto">
-        <h2 className="text-2xl font-bold text-foreground">Harita Okuryazarlığı: Haritanın Elemanları</h2>
-        <p className="text-foreground/70">Aşağıdaki etiketleri harita üzerindeki doğru alanlara sürükleyerek yerleştirin.</p>
+      {/* Harita Alanı */}
+      <div className="relative flex-1 flex items-center justify-center p-6 bg-[#0a0a0a]">
+        <div className="relative w-full h-full max-w-6xl aspect-[16/9] shadow-2xl rounded-xl overflow-hidden border border-white/5">
+          <Image 
+            src="/9/harita/turkiye-fiziki.jpg" 
+            alt="Türkiye Fiziki Haritası" 
+            fill
+            priority
+            className="object-contain"
+          />
 
-        <div className="my-4">
-          <div className="flex justify-between items-center mb-1">
-            <span className="font-bold text-foreground">Puan: {score}</span>
-            <span className="text-sm font-medium text-emerald-500">{completedElements.length} / 5 Tamamlandı</span>
-          </div>
-          <div className="w-full bg-muted rounded-full h-2.5">
-            <motion.div
-              className="bg-emerald-600 h-2.5 rounded-full"
-              initial={{ width: '0%' }}
-              animate={{ width: `${score}%` }}
-              transition={{ duration: 0.5, ease: 'easeInOut' }}
+          {elements.map((el) => (
+            <div
+              key={el.id}
+              ref={(ref) => { dropZoneRefs.current[el.id] = ref; }}
+              style={el.pos}
+              className={`absolute transition-all duration-1000 
+                ${solved.includes(el.id) ? 'blur-none bg-transparent' : 'blur-2xl bg-white/5 backdrop-blur-xl border border-white/10'}
+              `}
             />
-          </div>
-        </div>
-
-        <div className="h-10 flex items-center justify-center">
-          <AnimatePresence>
-            {feedback && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium ${feedback.type === 'success' ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}`}
-              >
-                {feedback.type === 'success' ? <CheckCircle size={16} /> : <Lightbulb size={16} />}
-                {feedback.message}
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-
-        {/* 2. Estetik: Pardus tarzı koyu zeytin fümesi panel */}
-        <div className="flex flex-wrap justify-center items-center gap-4 mt-4 p-4 bg-[#2D3328]/95 rounded-2xl min-h-[160px]">
-          {MAP_ELEMENTS.map(el => (
-            <AnimatePresence key={el.id}>
-              {!completedElements.includes(el.id) && (
-                <motion.div
-                  layoutId={el.id}
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.3 } }}
-                  drag
-                  dragConstraints={activityAreaRef}
-                  dragSnapToOrigin
-                  onDragEnd={(_, info) => handleDragEnd(info, el.id)}
-                  whileDrag={{ scale: 1.1, zIndex: 50, boxShadow: "0px 10px 30px rgba(0,0,0,0.2)" }}
-                  className="px-5 py-2.5 bg-card border border-border/20 rounded-xl shadow-sm cursor-grab active:cursor-grabbing active:scale-95 hover:bg-white/10"
-                >
-                  <span className="font-semibold text-foreground select-none">{el.name}</span>
-                </motion.div>
-              )}
-            </AnimatePresence>
           ))}
-          {completedElements.length === MAP_ELEMENTS.length && (
-              <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="text-center p-4"
-              >
-                  <h3 className="text-xl font-bold text-emerald-600">Tebrikler!</h3>
-                  <p className="text-foreground/80">Haritanın tüm elemanlarını başarıyla yerleştirdin.</p>
-              </motion.div>
-          )}
         </div>
       </div>
-    </motion.div>
-  );
-};
 
-export default MapReadingActivity;
+      {/* Sürükle-Bırak Paneli */}
+      <div className="bg-[#1a1d18] p-8 flex flex-wrap justify-center gap-4 border-t border-white/5">
+        {elements.filter(e => !solved.includes(e.id)).map((el) => (
+          <motion.div
+            key={el.id}
+            drag
+            dragSnapToOrigin
+            onDragEnd={(_, info) => handleDragEnd(el.id, info)}
+            className="bg-emerald-600 hover:bg-emerald-500 text-white px-7 py-3 rounded-xl cursor-grab active:cursor-grabbing font-bold shadow-xl border border-emerald-400/20"
+          >
+            {el.label}
+          </motion.div>
+        ))}
+
+        {solved.length === elements.length && (
+          <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="flex items-center gap-3 bg-emerald-100 text-emerald-900 px-10 py-3 rounded-xl font-black shadow-2xl border-2 border-emerald-500">
+            <CheckCircle className="text-emerald-600" /> ETKİNLİK BAŞARIYLA TAMAMLANDI!
+          </motion.div>
+        )}
+      </div>
+    </div>
+  );
+}
