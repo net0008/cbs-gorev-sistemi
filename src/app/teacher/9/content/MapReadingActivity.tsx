@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, useRef, useCallback } from 'react';
-import { motion, AnimatePresence, PanInfo } from 'framer-motion';
-import { CheckCircle, Lightbulb } from 'lucide-react';
+import { motion, AnimatePresence, PanInfo, Variants } from 'framer-motion';
+import { CheckCircle, Lightbulb, X } from 'lucide-react';
 
 interface MapReadingActivityProps {
   onClose: () => void;
@@ -40,6 +40,13 @@ const MapReadingActivity = ({ onClose }: MapReadingActivityProps) => {
     setFeedback({ message, type });
     setTimeout(() => setFeedback(null), 2000);
   }, []);
+
+  const overlayVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1 },
+    exit: { opacity: 0 },
+  };
+
 
   const handleDragEnd = useCallback((info: PanInfo, elementId: string) => {
     if (!activityAreaRef.current) return;
@@ -81,122 +88,133 @@ const MapReadingActivity = ({ onClose }: MapReadingActivityProps) => {
   }, [completedElements, showFeedback]);
 
   return (
-    <div ref={activityAreaRef} className="w-full max-w-5xl mx-auto bg-card/50 p-6 rounded-3xl shadow-lg border border-border/10">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold text-foreground">Harita Okuryazarlığı: Haritanın Elemanları</h2>
-        <button
-          onClick={onClose}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 transition-all shadow-sm hover:shadow-md"
-        >
-          <Lightbulb size={16} /> {/* ArrowLeft yerine Lightbulb kullandım, çünkü ArrowLeft page.tsx'teydi ve burada import edilmemişti. */}
-          Kapat
-        </button>
-      </div>
-      
-      <p className="text-foreground/70 mb-4">Aşağıdaki etiketleri harita üzerindeki doğru alanlara sürükleyerek yerleştirin.</p>
+    // 4. Etkinlik Sayfası: Tam ekran, kaydırmasız bir katman olarak tasarlandı.
+    <motion.div
+      ref={activityAreaRef}
+      variants={overlayVariants}
+      initial="hidden"
+      animate="visible"
+      exit="exit"
+      className="fixed inset-0 z-50 flex flex-col md:flex-row bg-background/90 backdrop-blur-sm overflow-hidden"
+    >
+      {/* 4. Etkinlik Sayfası: Belirgin, parlayan ve sabit 'KAPAT' butonu */}
+      <button
+        onClick={onClose}
+        className="fixed top-4 right-4 z-[100] flex items-center justify-center w-12 h-12 bg-red-600/80 text-white rounded-full shadow-lg shadow-red-500/30 transition-all duration-300 hover:bg-red-600 hover:scale-110 hover:shadow-red-500/50 active:scale-95"
+        aria-label="Etkinliği Kapat"
+      >
+        <X size={24} />
+      </button>
 
-      <div className="mb-4">
-        <div className="flex justify-between items-center mb-1">
-          <span className="font-bold text-foreground">Puan: {score}</span>
-          <span className="text-sm font-medium text-emerald-500">{completedElements.length} / 5 Tamamlandı</span>
-        </div>
-        <div className="w-full bg-muted rounded-full h-2.5">
-          <motion.div
-            className="bg-emerald-600 h-2.5 rounded-full"
-            initial={{ width: '0%' }}
-            animate={{ width: `${score}%` }}
-            transition={{ duration: 0.5, ease: 'easeInOut' }}
-          />
-        </div>
-      </div>
+      {/* Harita Alanı - Ekranın %70'ini kaplar */}
+      <div className="relative w-full md:w-[70%] h-1/2 md:h-full flex-shrink-0 bg-slate-200 dark:bg-slate-900">
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="relative w-full h-full max-w-full max-h-full aspect-[4/3] m-auto">
+            <img
+              src="https://i.imgur.com/V3v3S8G.jpeg"
+              alt="Bergama Haritası"
+              className="w-full h-full object-contain"
+            />
 
-      <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden border-2 border-border/20">
-        <img
-          src="https://i.imgur.com/V3v3S8G.jpeg"
-          alt="Bergama Haritası"
-          className="w-full h-full object-cover"
-        />
-
-        {MAP_ELEMENTS.map((el) => (
-          <div
-            key={el.id}
-            ref={(ref) => {
-              dropZoneRefs.current[el.id] = ref;
-            }}
-            style={el.position}
-            className="absolute transition-all duration-500"
-          >
-            <AnimatePresence>
-              {!completedElements.includes(el.id) && (
-                <motion.div
-                  initial={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="absolute inset-0 bg-background/20 backdrop-blur-lg rounded-lg border-2 border-dashed border-white/30"
-                />
-              )}
-              {completedElements.includes(el.id) && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="absolute inset-0 flex items-center justify-center bg-emerald-600/20 rounded-lg text-emerald-800 font-bold text-sm"
-                >
-                  {el.name}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        ))}
-      </div>
-
-      <div className="h-10 mt-4 flex items-center justify-center">
-        <AnimatePresence>
-          {feedback && (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium ${
-                feedback.type === 'success' ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'
-              }`}
-            >
-              {feedback.type === 'success' ? <CheckCircle size={16} /> : <Lightbulb size={16} />}
-              {feedback.message}
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-
-      <div className="flex flex-wrap justify-center gap-4 mt-4 p-4 bg-muted/50 rounded-2xl">
-        {MAP_ELEMENTS.map(el => (
-          <AnimatePresence key={el.id}>
-            {!completedElements.includes(el.id) && (
-              <motion.div
-                layoutId={el.id}
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.3 } }}
-                drag
-                dragConstraints={activityAreaRef}
-                dragSnapToOrigin
-                onDragEnd={(_, info) => handleDragEnd(info, el.id)}
-                whileDrag={{ scale: 1.1, zIndex: 50, boxShadow: "0px 10px 30px rgba(0,0,0,0.2)" }}
-                className="px-5 py-2.5 bg-card border border-border/20 rounded-xl shadow-sm cursor-grab active:cursor-grabbing"
+            {MAP_ELEMENTS.map((el) => (
+              <div
+                key={el.id}
+                ref={(ref) => { dropZoneRefs.current[el.id] = ref; }}
+                style={el.position}
+                className="absolute transition-all duration-500"
               >
-                <span className="font-semibold text-foreground select-none">{el.name}</span>
+                <AnimatePresence>
+                  {!completedElements.includes(el.id) && (
+                    <motion.div
+                      initial={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="absolute inset-0 bg-background/20 backdrop-blur-lg rounded-lg border-2 border-dashed border-white/30"
+                    />
+                  )}
+                  {completedElements.includes(el.id) && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="absolute inset-0 flex items-center justify-center bg-emerald-600/80 rounded-lg text-white font-bold text-sm"
+                    >
+                      {el.name}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Sağ Panel: Etiketler ve Bilgiler */}
+      <div className="w-full md:w-[30%] h-1/2 md:h-full flex flex-col p-6 gap-4 overflow-y-auto">
+        <h2 className="text-2xl font-bold text-foreground">Harita Okuryazarlığı: Haritanın Elemanları</h2>
+        <p className="text-foreground/70">Aşağıdaki etiketleri harita üzerindeki doğru alanlara sürükleyerek yerleştirin.</p>
+
+        <div className="my-4">
+          <div className="flex justify-between items-center mb-1">
+            <span className="font-bold text-foreground">Puan: {score}</span>
+            <span className="text-sm font-medium text-emerald-500">{completedElements.length} / 5 Tamamlandı</span>
+          </div>
+          <div className="w-full bg-muted rounded-full h-2.5">
+            <motion.div
+              className="bg-emerald-600 h-2.5 rounded-full"
+              initial={{ width: '0%' }}
+              animate={{ width: `${score}%` }}
+              transition={{ duration: 0.5, ease: 'easeInOut' }}
+            />
+          </div>
+        </div>
+
+        <div className="h-10 flex items-center justify-center">
+          <AnimatePresence>
+            {feedback && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium ${feedback.type === 'success' ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}`}
+              >
+                {feedback.type === 'success' ? <CheckCircle size={16} /> : <Lightbulb size={16} />}
+                {feedback.message}
               </motion.div>
             )}
           </AnimatePresence>
-        ))}
-        {completedElements.length === MAP_ELEMENTS.length && (
-            <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="text-center p-4"
-            >
-                <h3 className="text-xl font-bold text-emerald-600">Tebrikler!</h3>
-                <p className="text-foreground/80">Haritanın tüm elemanlarını başarıyla yerleştirdin.</p>
-            </motion.div>
-        )}
+        </div>
+
+        <div className="flex flex-wrap justify-center items-center gap-4 mt-4 p-4 bg-muted/50 rounded-2xl min-h-[160px]">
+          {MAP_ELEMENTS.map(el => (
+            <AnimatePresence key={el.id}>
+              {!completedElements.includes(el.id) && (
+                <motion.div
+                  layoutId={el.id}
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.3 } }}
+                  drag
+                  dragConstraints={activityAreaRef}
+                  dragSnapToOrigin
+                  onDragEnd={(_, info) => handleDragEnd(info, el.id)}
+                  whileDrag={{ scale: 1.1, zIndex: 50, boxShadow: "0px 10px 30px rgba(0,0,0,0.2)" }}
+                  className="px-5 py-2.5 bg-card border border-border/20 rounded-xl shadow-sm cursor-grab active:cursor-grabbing active:scale-95"
+                >
+                  <span className="font-semibold text-foreground select-none">{el.name}</span>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          ))}
+          {completedElements.length === MAP_ELEMENTS.length && (
+              <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="text-center p-4"
+              >
+                  <h3 className="text-xl font-bold text-emerald-600">Tebrikler!</h3>
+                  <p className="text-foreground/80">Haritanın tüm elemanlarını başarıyla yerleştirdin.</p>
+              </motion.div>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -16,9 +16,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="tr" className="dark"> {/* Varsayılan tema karanlık */}
-      <body className="min-h-screen flex flex-col">
-        {/* Arka plan ve metin renkleri globals.css'ten CSS değişkenleri ile yönetilir */}
+    <html lang="tr" className="dark">
+      {/* 1. Global Layout: h-screen ve overflow-hidden ile tam ekran, kaydırmasız yapı. */}
+      {/* 2. Menü Etkileşimi: Header'dan yönetilecek bir state ile body'e eklenecek .menu-open sınıfı varsayılarak ana içerik flulaştırılır. */}
+      <body className="h-screen overflow-hidden flex flex-col bg-[#F9F6F0] dark:bg-slate-950 text-foreground">
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
@@ -26,9 +27,12 @@ export default function RootLayout({
           strategy="afterInteractive"
         />
         <Header />
-        <AdBanner />
-        <main className="flex-grow container mx-auto p-4">
-          {children}
+        {/* Ana içerik alanı, dikeyde kaydırılabilir ve menü etkileşimine duyarlı hale getirildi. */}
+        <main className="flex-1 overflow-y-auto transition-all duration-300 group-[.menu-open]:blur-sm group-[.menu-open]:brightness-50">
+          <div className="container mx-auto p-4 sm:p-6 lg:p-8">
+            <AdBanner />
+            {children}
+          </div>
         </main>
         <Footer />
       </body>
