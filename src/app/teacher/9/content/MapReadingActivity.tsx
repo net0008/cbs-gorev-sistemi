@@ -1,14 +1,10 @@
 'use client';
-import React, { useState, useRef, useCallback, CSSProperties } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence, PanInfo } from 'framer-motion';
 import Image from 'next/image';
 import { X, CheckCircle, Crosshair } from 'lucide-react';
 
-interface MapReadingActivityProps {
-  onClose: () => void;
-}
-
-// 🎯 Koordinatlar Güncellendi (Başlık Sabit)
+// 🎯 Güncel Koordinatlar (centerX/centerY değerleri tam istediğin gibi)
 const coordinatesBlock = {
   title:   { centerX: 50.07, centerY: 10.61, width: 65.06, height: 15.82 },
   legend:  { centerX: 88.94, centerY: 90.82, width: 15.77, height: 15.95 },
@@ -17,108 +13,119 @@ const coordinatesBlock = {
   coords:  { centerX: 4.37,  centerY: 45.56, width: 3.16,  height: 64.39 },
 };
 
-const convertCoordsToCSS = (coords: typeof coordinatesBlock[keyof typeof coordinatesBlock]): CSSProperties => {
-  return {
-    top: `${coords.centerY - coords.height / 2}%`,
-    left: `${coords.centerX - coords.width / 2}%`,
-    width: `${coords.width}%`,
-    height: `${coords.height}%`,
-  };
-};
-
-export default function MapReadingActivity({ onClose }: MapReadingActivityProps) {
+export default function MapReadingActivity({ onClose }: { onClose: () => void }) {
   const [solved, setSolved] = useState<string[]>([]);
+  const [liveCoords, setLiveCoords] = useState<{x: number, y: number} | null>(null);
   const dropZoneRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const activityAreaRef = useRef<HTMLDivElement>(null);
-  const SNAP_DISTANCE = 50;
 
-  const elements = [
-    { id: 'title', label: 'Başlık', pos: convertCoordsToCSS(coordinatesBlock.title) },
-    { id: 'legend', label: 'Lejant', pos: convertCoordsToCSS(coordinatesBlock.legend) },
-    { id: 'scale', label: 'Ölçek', pos: convertCoordsToCSS(coordinatesBlock.scale) },
-    { id: 'compass', label: 'Yön Oku', pos: convertCoordsToCSS(coordinatesBlock.compass) },
-    { id: 'coords', label: 'Koordinatlar', pos: convertCoordsToCSS(coordinatesBlock.coords) },
-  ];
+  // Haritaya tıklandığında koordinatı yakala ve kopyala
+  const handleMapClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = Number((((e.clientX - rect.left) / rect.width) * 100).toFixed(2));
+    const y = Number((((e.clientY - rect.top) / rect.height) * 100).toFixed(2));
+    setLiveCoords({ x, y });
+    const coordString = `centerX: ${x}, centerY: ${y}`;
+    if (navigator.clipboard) navigator.clipboard.writeText(coordString);
+  };
 
   const handleDragEnd = useCallback((id: string, info: PanInfo) => {
-    const dropZone = dropZoneRefs.current[id];
-    if (!dropZone) return;
- 
-    const zoneRect = dropZone.getBoundingClientRect();
-    const zoneCenterX = zoneRect.left + zoneRect.width / 2;
-    const zoneCenterY = zoneRect.top + zoneRect.height / 2;
- 
-    const distance = Math.sqrt(Math.pow(info.point.x - zoneCenterX, 2) + Math.pow(info.point.y - zoneCenterY, 2));
-
-    if (distance < SNAP_DISTANCE) {
-      if (!solved.includes(id)) setSolved(prev => [...prev, id]);
-    }
-  }, [solved]);
+    const zone = dropZoneRefs.current[id];
+    if (!zone) return;
+    const rect = zone.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const distance = Math.sqrt(Math.pow(info.point.x - centerX, 2) + Math.pow(info.point.y - centerY, 2));
+    if (distance < 50) setSolved(prev => prev.includes(id) ? prev : [...prev, id]);
+  }, []);
 
   return (
     <div ref={activityAreaRef} className="fixed inset-0 z-50 bg-slate-950 flex flex-col overflow-hidden select-none">
+      
       {/* 1. ÜST BAR */}
       <div className="p-3 px-6 flex justify-between items-center bg-black/60 border-b border-white/10 flex-shrink-0">
         <div className="text-white">
           <h2 className="font-bold text-lg text-emerald-400 leading-tight">Haritalar Nasıl Okunur?</h2>
-          <span className="text-[10px] text-slate-500 uppercase font-black tracking-widest block">Öğrenme Çıktıları ve Süreç Bileşenleri</span>
+          <span className="text-[10px] text-slate-500 uppercase font-black tracking-widest block mt-0.5">Öğrenme Çıktıları ve Süreç Bileşenleri</span>
         </div>
-        <button onClick={onClose} className="bg-red-600 hover:bg-red-700 text-white px-6 py-1.5 rounded-full font-bold text-sm transition-all active:scale-95">
-          KAPAT
-        </button>
+        <button onClick={onClose} className="bg-red-600 hover:bg-red-700 text-white px-6 py-1.5 rounded-full font-bold text-sm transition-all active:scale-95 shadow-lg">KAPAT</button>
       </div>
 
       {/* 2. SÜRÜKLENECEK ÖĞELER BANTI (YUKARI ALINDI VE DARALTILDI) */}
-      <div className="bg-[#2D3328]/95 p-2 flex flex-wrap justify-center items-center gap-3 border-b border-white/5 flex-shrink-0 min-h-[60px]">
+      <div className="bg-[#2D3328]/95 p-2 flex flex-wrap justify-center items-center gap-2 border-b border-white/5 flex-shrink-0 min-h-[55px] z-10">
         <AnimatePresence>
-          {elements.filter(e => !solved.includes(e.id)).map((el) => (
+          {Object.keys(coordinatesBlock).filter(id => !solved.includes(id)).map((id) => (
             <motion.div
-              key={el.id}
-              layoutId={el.id}
+              key={id}
+              layoutId={id}
               drag
               dragConstraints={activityAreaRef}
               dragSnapToOrigin
-              onDragEnd={(_, info) => handleDragEnd(el.id, info)}
+              onDragEnd={(_, info) => handleDragEnd(id, info)}
               whileDrag={{ scale: 1.1, zIndex: 100 }}
-              className="bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2 rounded-lg cursor-grab active:cursor-grabbing font-bold shadow-md border border-emerald-400/20 text-xs uppercase"
+              className="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-1.5 rounded-lg cursor-grab active:cursor-grabbing font-bold shadow-md border border-emerald-400/20 text-xs uppercase"
             >
-              {el.label}
+              {id === 'title' ? 'Başlık' : id === 'legend' ? 'Lejant' : id === 'scale' ? 'Ölçek' : id === 'compass' ? 'Yön Oku' : id === 'coords' ? 'Koordinat' : id}
             </motion.div>
           ))}
         </AnimatePresence>
-        {solved.length === elements.length && (
-          <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="flex items-center gap-2 bg-white text-emerald-900 px-6 py-1.5 rounded-lg font-black text-sm border-2 border-emerald-500">
-            <CheckCircle size={18} /> ETKİNLİK TAMAMLANDI!
+        {solved.length === 5 && (
+          <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="flex items-center gap-2 bg-white text-emerald-900 px-4 py-1 rounded-lg font-black text-xs border-2 border-emerald-500 shadow-xl">
+            <CheckCircle size={16} /> TAMAMLANDI!
           </motion.div>
         )}
       </div>
 
-      {/* 3. HARİTA ALANI (TAM SAYFA SIGDIRMA - MESAFE AZALTILDI) */}
+      {/* 3. HARİTA ALANI (TIKLANABİLİR VE TAM SIGDIRMA) */}
       <div className="relative flex-1 flex items-center justify-center p-1 bg-[#0a0a0a] overflow-hidden">
-        <div className="relative w-full h-full max-w-7xl aspect-video shadow-2xl overflow-hidden border border-white/5">
-          <Image src="/9/harita/map-sicaklik.jpg" alt="Harita" fill priority className="object-contain" />
+        <div 
+          onClick={handleMapClick}
+          className="relative w-full h-full max-w-7xl aspect-video shadow-2xl overflow-hidden border border-white/5 cursor-crosshair"
+        >
+          <Image src="/9/harita/map-sicaklik.jpg" alt="Harita" fill priority className="object-contain pointer-events-none select-none" />
           
-          {elements.map((el) => {
-            const isSolved = solved.includes(el.id);
-            return (
-              <div
-                key={el.id}
-                ref={(ref) => { dropZoneRefs.current[el.id] = ref; }}
-                style={el.pos}
-                className={`absolute transition-all duration-700 flex items-center justify-center
-                  ${isSolved ? 'blur-none bg-emerald-500/10 border-2 border-emerald-500/50' : 'blur-2xl bg-white/5 border-white/10 backdrop-blur-xl rounded-md'}
-                `}
-              >
-                {isSolved && (
-                  <motion.div initial={{scale:0}} animate={{scale:1}} className="bg-emerald-600/90 text-white px-2 py-0.5 rounded text-[10px] font-bold border border-emerald-400/30">
-                    {el.label}
-                  </motion.div>
-                )}
-              </div>
-            );
-          })}
+          {Object.entries(coordinatesBlock).map(([id, geo]) => (
+            <div
+              key={id}
+              ref={(ref) => { dropZoneRefs.current[id] = ref; }}
+              style={{
+                position: 'absolute',
+                top: `${geo.centerY - geo.height / 2}%`,
+                left: `${geo.centerX - geo.width / 2}%`,
+                width: `${geo.width}%`,
+                height: `${geo.height}%`,
+              }}
+              className={`transition-all duration-700 flex items-center justify-center pointer-events-none
+                ${solved.includes(id) ? 'blur-none bg-emerald-500/10 border-2 border-emerald-500/50' : 'blur-2xl bg-white/5 border-white/10 backdrop-blur-xl rounded-md'}
+              `}
+            >
+              {solved.includes(id) && (
+                <div className="bg-emerald-600/90 text-white px-2 py-0.5 rounded text-[10px] font-bold shadow-lg border border-emerald-400/30">
+                  {id === 'title' ? 'Başlık' : id === 'legend' ? 'Lejant' : id === 'scale' ? 'Ölçek' : id === 'compass' ? 'Yön Oku' : 'Koordinat'}
+                </div>
+              )}
+            </div>
+          ))}
+
+          {/* Nişangah İşaretçisi */}
+          {liveCoords && (
+            <div className="absolute w-6 h-6 border-2 border-red-500 rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none z-50 shadow-[0_0_10px_rgba(239,68,68,0.5)]"
+                 style={{ left: `${liveCoords.x}%`, top: `${liveCoords.y}%` }} />
+          )}
         </div>
       </div>
+
+      {/* 🚀 CANLI KOORDİNAT BİLGİ KUTUSU (Sayfanın en önünde durur) */}
+      {liveCoords && (
+        <div className="fixed bottom-10 left-1/2 -translate-x-1/2 bg-black/95 text-emerald-400 px-6 py-3 rounded-2xl border border-emerald-500/30 shadow-2xl z-[999] flex items-center gap-3 animate-in fade-in slide-in-from-bottom-4 duration-300">
+          <Crosshair size={18} className="animate-pulse" />
+          <div className="flex flex-col">
+            <span className="text-[9px] uppercase font-black text-slate-500">Kopyalandı</span>
+            <code className="text-sm font-mono font-bold tracking-tighter">centerX: {liveCoords.x}, centerY: {liveCoords.y}</code>
+          </div>
+          <button onClick={(e) => { e.stopPropagation(); setLiveCoords(null); }} className="ml-2 p-1 hover:bg-white/10 rounded-full text-slate-500"><X size={14} /></button>
+        </div>
+      )}
     </div>
   );
 }
