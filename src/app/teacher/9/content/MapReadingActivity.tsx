@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence, PanInfo } from 'framer-motion';
 import { CheckCircle, XCircle, Lightbulb } from 'lucide-react';
 
@@ -17,11 +17,11 @@ interface MapElement {
 }
 
 const MAP_ELEMENTS: MapElement[] = [
-  { id: 'baslik', name: 'Başlık', hint: 'Haritanın amacını ve konusunu belirtir.', position: { top: '4%', left: '30%', width: '40%', height: '10%' } },
-  { id: 'lejant', name: 'Lejant', hint: 'Haritadaki özel işaretlerin ne anlama geldiğini açıklar.', position: { top: '60%', left: '72%', width: '23%', height: '35%' } },
-  { id: 'olcek', name: 'Ölçek', hint: 'Haritadaki uzunlukların gerçekte ne kadar olduğunu gösterir.', position: { top: '88%', left: '5%', width: '30%', height: '10%' } },
-  { id: 'yon_oku', name: 'Yön Oku', hint: 'Genellikle kuzeyi göstererek haritanın yönünü belirtir.', position: { top: '15%', left: '80%', width: '10%', height: '15%' } },
-  { id: 'koordinat', name: 'Koordinat', hint: 'Enlem ve boylam çizgileriyle kesin konumu belirtir.', position: { top: '35%', left: '2%', width: '10%', height: '50%' } },
+  { id: 'baslik', name: 'Başlık', hint: 'Haritanın konusunu ve amacını belirtir.', position: { top: '4%', left: '30%', width: '40%', height: '10%' } },
+  { id: 'harita_isaretleri', name: 'Harita İşaretleri', hint: 'Haritadaki sembollerin ve renklerin anlamını açıklar.', position: { top: '60%', left: '72%', width: '23%', height: '35%' } }, // Updated name and hint
+  { id: 'olcek', name: 'Ölçek', hint: 'Haritadaki mesafelerin gerçekteki karşılığını gösterir.', position: { top: '88%', left: '5%', width: '30%', height: '10%' } },
+  { id: 'yon_oku', name: 'Yön Oku', hint: 'Haritanın yönünü, genellikle kuzeyi gösterir.', position: { top: '15%', left: '80%', width: '10%', height: '15%' } },
+  { id: 'cografi_koordinatlar', name: 'Coğrafi Koordinatlar', hint: 'Enlem ve boylam çizgileriyle konum belirlemeyi sağlar.', position: { top: '35%', left: '2%', width: '10%', height: '50%' } }, // Updated name and hint
 ];
 
 const MapReadingActivity = () => {
@@ -29,7 +29,7 @@ const MapReadingActivity = () => {
   const [feedback, setFeedback] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   const score = completedElements.length * 20;
 
-  const dropZoneRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const dropZoneRefs = useRef<Record<string, HTMLDivElement | null>>({}); // Changed to object for easier lookup
   const activityAreaRef = useRef<HTMLDivElement>(null);
 
   const showFeedback = (message: string, type: 'success' | 'error') => {
@@ -37,7 +37,7 @@ const MapReadingActivity = () => {
     setTimeout(() => setFeedback(null), 2000);
   };
 
-  const handleDragEnd = (info: PanInfo, elementId: string) => {
+  const handleDragEnd = useCallback((info: PanInfo, elementId: string) => {
     if (!activityAreaRef.current) return;
     const activityRect = activityAreaRef.current.getBoundingClientRect();
 
@@ -46,8 +46,10 @@ const MapReadingActivity = () => {
       y: info.point.y - activityRect.top,
     };
 
-    const targetZoneIndex = MAP_ELEMENTS.findIndex(el => el.id === elementId);
-    const dropZone = dropZoneRefs.current[targetZoneIndex];
+    const targetElement = MAP_ELEMENTS.find(el => el.id === elementId);
+    if (!targetElement) return;
+
+    const dropZone = dropZoneRefs.current[targetElement.id]; // Use element.id for lookup
 
     if (dropZone) {
       const zoneRect = dropZone.getBoundingClientRect();
@@ -69,16 +71,11 @@ const MapReadingActivity = () => {
           showFeedback('Harika! Doğru yerleştirdin.', 'success');
         }
       } else {
-        const wrongZone = MAP_ELEMENTS.find((el, index) => {
-            const otherZone = dropZoneRefs.current[index];
-            if (!otherZone) return false;
-            const otherRect = otherZone.getBoundingClientRect();
-            return dropPoint.x >= otherRect.left - activityRect.left && dropPoint.x <= otherRect.right - activityRect.left && dropPoint.y >= otherRect.top - activityRect.top && dropPoint.y <= otherRect.bottom - activityRect.top;
-        });
-        showFeedback(wrongZone?.hint || 'Tekrar dene, doğru yere çok yakınsın!', 'error');
+        // If dropped incorrectly, show the hint for the element that was being dragged
+        showFeedback(targetElement.hint, 'error');
       }
     }
-  };
+  }, [completedElements, showFeedback]);
 
   return (
     <div ref={activityAreaRef} className="w-full max-w-5xl mx-auto bg-card/50 p-6 rounded-3xl shadow-lg border border-border/10">
@@ -117,7 +114,7 @@ const MapReadingActivity = () => {
         {MAP_ELEMENTS.map((el, index) => (
           <div
             key={el.id}
-            ref={ref => dropZoneRefs.current[index] = ref}
+            ref={ref => dropZoneRefs.current[el.id] = ref} // Use element.id for ref key
             style={el.position}
             className="absolute transition-all duration-500"
           >
@@ -126,7 +123,17 @@ const MapReadingActivity = () => {
                 <motion.div
                   initial={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="absolute inset-0 bg-background/20 backdrop-blur-md rounded-lg border-2 border-dashed border-white/30"
+                  className="absolute inset-0 bg-background/20 backdrop-blur-lg rounded-lg border-2 border-dashed border-white/30" // Changed to backdrop-blur-lg (16px blur)
+                />
+              )}
+              {/* Display the name of the element when correctly placed */}
+              {completedElements.includes(el.id) && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="absolute inset-0 flex items-center justify-center bg-emerald-600/20 rounded-lg text-emerald-800 font-bold text-sm"
+                >
+                  {el.name}
                 />
               )}
             </AnimatePresence>
