@@ -8,13 +8,13 @@ interface MapReadingActivityProps {
   onClose: () => void;
 }
 
-// 🎯 Hasbi Hocam, Yeni % Koordinatlar İşlendi (Başlık Sabit)
+// 🎯 Koordinatlar Güncellendi (Başlık Sabit)
 const coordinatesBlock = {
-  title:   { centerX: 50.07, centerY: 10.61, width: 65.06, height: 15.82 }, // Başlık Değişmedi
-  legend:  { centerX: 88.94, centerY: 90.82, width: 15.77, height: 15.95 }, // Güncellendi
-  scale:   { centerX: 16.05, centerY: 92.98, width: 20.99, height: 13.80 }, // Güncellendi
-  compass: { centerX: 91.21, centerY: 16.83, width: 11.43, height: 25.59 }, // Güncellendi
-  coords:  { centerX: 4.37,  centerY: 45.56, width: 3.16,  height: 64.39 }, // Güncellendi
+  title:   { centerX: 50.07, centerY: 10.61, width: 65.06, height: 15.82 },
+  legend:  { centerX: 88.94, centerY: 90.82, width: 15.77, height: 15.95 },
+  scale:   { centerX: 16.05, centerY: 92.98, width: 20.99, height: 13.80 },
+  compass: { centerX: 91.21, centerY: 16.83, width: 11.43, height: 25.59 },
+  coords:  { centerX: 4.37,  centerY: 45.56, width: 3.16,  height: 64.39 },
 };
 
 const convertCoordsToCSS = (coords: typeof coordinatesBlock[keyof typeof coordinatesBlock]): CSSProperties => {
@@ -48,71 +48,28 @@ export default function MapReadingActivity({ onClose }: MapReadingActivityProps)
     const zoneCenterX = zoneRect.left + zoneRect.width / 2;
     const zoneCenterY = zoneRect.top + zoneRect.height / 2;
  
-    const distance = Math.sqrt(
-      Math.pow(info.point.x - zoneCenterX, 2) + Math.pow(info.point.y - zoneCenterY, 2)
-    );
+    const distance = Math.sqrt(Math.pow(info.point.x - zoneCenterX, 2) + Math.pow(info.point.y - zoneCenterY, 2));
 
     if (distance < SNAP_DISTANCE) {
-      if (!solved.includes(id)) {
-        setSolved(prev => [...prev, id]);
-      }
+      if (!solved.includes(id)) setSolved(prev => [...prev, id]);
     }
   }, [solved]);
 
   return (
     <div ref={activityAreaRef} className="fixed inset-0 z-50 bg-slate-950 flex flex-col overflow-hidden select-none">
-      {/* Üst Bar */}
-      <div className="p-4 flex justify-between items-center bg-black/40 backdrop-blur-md border-b border-white/10 flex-shrink-0">
+      {/* 1. ÜST BAR */}
+      <div className="p-3 px-6 flex justify-between items-center bg-black/60 border-b border-white/10 flex-shrink-0">
         <div className="text-white">
-          <h2 className="font-bold text-xl text-emerald-400">Haritalar Nasıl Okunur?</h2>
-          <p className="text-xs text-slate-400 uppercase tracking-widest">Kazanım: COĞ.9.2.1</p>
+          <h2 className="font-bold text-lg text-emerald-400 leading-tight">Haritalar Nasıl Okunur?</h2>
+          <span className="text-[10px] text-slate-500 uppercase font-black tracking-widest block">Öğrenme Çıktıları ve Süreç Bileşenleri</span>
         </div>
-        <button 
-          onClick={onClose}
-          className="bg-red-600 hover:bg-red-700 text-white px-8 py-2 rounded-full font-bold transition-all active:scale-95 shadow-lg shadow-red-900/40 flex items-center gap-2"
-        >
-          <X size={18} /> KAPAT
+        <button onClick={onClose} className="bg-red-600 hover:bg-red-700 text-white px-6 py-1.5 rounded-full font-bold text-sm transition-all active:scale-95">
+          KAPAT
         </button>
       </div>
 
-      {/* Harita Alanı */}
-      <div className="relative flex-1 flex items-center justify-center p-6 bg-[#0a0a0a]">
-        <div className="relative w-full h-full max-w-6xl aspect-[16/9] shadow-2xl rounded-xl overflow-hidden border border-white/5">
-          <Image 
-            src="/9/harita/map-sicaklik.jpg" 
-            alt="Türkiye Sıcaklık Haritası" 
-            fill
-            priority
-            className="object-contain"
-          />
-          
-          {elements.map((el) => {
-            const isSolved = solved.includes(el.id);
-            return (
-              <div
-                key={el.id}
-                ref={(ref) => { dropZoneRefs.current[el.id] = ref; }}
-                style={el.pos}
-                className={`absolute transition-all duration-700 
-                  ${isSolved ? 'blur-none bg-transparent' : 'blur-xl bg-white/5 backdrop-blur-md border border-white/10 rounded-lg'}
-                `}
-              >
-                {isSolved && (
-                  <motion.div
-                    layoutId={el.id}
-                    className="absolute inset-0 flex items-center justify-center text-white font-bold text-sm bg-emerald-600/80 rounded-lg"
-                  >
-                    {el.label}
-                  </motion.div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Sürükle-Bırak Paneli */}
-      <div className="bg-[#2D3328]/95 p-8 flex flex-wrap justify-center items-center gap-4 border-t border-white/5 flex-shrink-0">
+      {/* 2. SÜRÜKLENECEK ÖĞELER BANTI (YUKARI ALINDI VE DARALTILDI) */}
+      <div className="bg-[#2D3328]/95 p-2 flex flex-wrap justify-center items-center gap-3 border-b border-white/5 flex-shrink-0 min-h-[60px]">
         <AnimatePresence>
           {elements.filter(e => !solved.includes(e.id)).map((el) => (
             <motion.div
@@ -123,18 +80,44 @@ export default function MapReadingActivity({ onClose }: MapReadingActivityProps)
               dragSnapToOrigin
               onDragEnd={(_, info) => handleDragEnd(el.id, info)}
               whileDrag={{ scale: 1.1, zIndex: 100 }}
-              className="bg-emerald-600 hover:bg-emerald-500 text-white px-7 py-3 rounded-xl cursor-grab active:cursor-grabbing font-bold shadow-xl border border-emerald-400/20 transition-colors active:scale-95"
+              className="bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2 rounded-lg cursor-grab active:cursor-grabbing font-bold shadow-md border border-emerald-400/20 text-xs uppercase"
             >
               {el.label}
             </motion.div>
           ))}
         </AnimatePresence>
-
         {solved.length === elements.length && (
-          <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="flex items-center gap-3 bg-emerald-100 text-emerald-900 px-10 py-3 rounded-xl font-black shadow-2xl border-2 border-emerald-500">
-            <CheckCircle className="text-emerald-600" /> ETKİNLİK BAŞARIYLA TAMAMLANDI!
+          <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="flex items-center gap-2 bg-white text-emerald-900 px-6 py-1.5 rounded-lg font-black text-sm border-2 border-emerald-500">
+            <CheckCircle size={18} /> ETKİNLİK TAMAMLANDI!
           </motion.div>
         )}
+      </div>
+
+      {/* 3. HARİTA ALANI (TAM SAYFA SIGDIRMA - MESAFE AZALTILDI) */}
+      <div className="relative flex-1 flex items-center justify-center p-1 bg-[#0a0a0a] overflow-hidden">
+        <div className="relative w-full h-full max-w-7xl aspect-video shadow-2xl overflow-hidden border border-white/5">
+          <Image src="/9/harita/map-sicaklik.jpg" alt="Harita" fill priority className="object-contain" />
+          
+          {elements.map((el) => {
+            const isSolved = solved.includes(el.id);
+            return (
+              <div
+                key={el.id}
+                ref={(ref) => { dropZoneRefs.current[el.id] = ref; }}
+                style={el.pos}
+                className={`absolute transition-all duration-700 flex items-center justify-center
+                  ${isSolved ? 'blur-none bg-emerald-500/10 border-2 border-emerald-500/50' : 'blur-2xl bg-white/5 border-white/10 backdrop-blur-xl rounded-md'}
+                `}
+              >
+                {isSolved && (
+                  <motion.div initial={{scale:0}} animate={{scale:1}} className="bg-emerald-600/90 text-white px-2 py-0.5 rounded text-[10px] font-bold border border-emerald-400/30">
+                    {el.label}
+                  </motion.div>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
