@@ -216,7 +216,7 @@ const MapReadingActivity = ({ onClose }: MapReadingActivityProps) => {
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
