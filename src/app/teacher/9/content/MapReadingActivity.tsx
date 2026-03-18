@@ -4,6 +4,10 @@ import React, { useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence, PanInfo } from 'framer-motion';
 import { CheckCircle, Lightbulb } from 'lucide-react';
 
+interface MapReadingActivityProps {
+  onClose: () => void;
+}
+
 interface MapElement {
   id: string;
   name: string;
@@ -24,7 +28,7 @@ const MAP_ELEMENTS: MapElement[] = [
   { id: 'koordinatlar', name: 'Koordinatlar', hint: 'Enlem ve boylam çizgileriyle konum belirlemeyi sağlar.', position: { top: '35%', left: '2%', width: '10%', height: '50%' } },
 ];
 
-const MapReadingActivity = () => {
+const MapReadingActivity = ({ onClose }: MapReadingActivityProps) => {
   const [completedElements, setCompletedElements] = useState<string[]>([]);
   const [feedback, setFeedback] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   const score = completedElements.length * 20;
@@ -78,7 +82,17 @@ const MapReadingActivity = () => {
 
   return (
     <div ref={activityAreaRef} className="w-full max-w-5xl mx-auto bg-card/50 p-6 rounded-3xl shadow-lg border border-border/10">
-      <h2 className="text-2xl font-bold text-foreground mb-2">Harita Okuryazarlığı: Haritanın Elemanları</h2>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-bold text-foreground">Harita Okuryazarlığı: Haritanın Elemanları</h2>
+        <button
+          onClick={onClose}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 transition-all shadow-sm hover:shadow-md"
+        >
+          <Lightbulb size={16} /> {/* ArrowLeft yerine Lightbulb kullandım, çünkü ArrowLeft page.tsx'teydi ve burada import edilmemişti. */}
+          Kapat
+        </button>
+      </div>
+      
       <p className="text-foreground/70 mb-4">Aşağıdaki etiketleri harita üzerindeki doğru alanlara sürükleyerek yerleştirin.</p>
 
       <div className="mb-4">

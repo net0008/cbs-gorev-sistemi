@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { ArrowLeft } from 'lucide-react';
 import MapReadingActivity from './MapReadingActivity';
 
 const activities = [
@@ -10,7 +9,7 @@ const activities = [
     name: 'Harita Okuryazarlığı: Haritanın Elemanları',
     learningOutcome: 'COĞ.9.2.1. Harita uygulamaları yapabilme. a) Haritaya ait bileşenlerden yararlanarak haritaları okur.',
     toolset: 'Harita',
-    component: <MapReadingActivity />,
+    component: (onClose: () => void) => <MapReadingActivity onClose={onClose} />,
   },
   // Gelecekteki etkinlikler buraya eklenebilir.
 ];
@@ -23,15 +22,8 @@ export default function ContentCatalogPage() {
   // Eğer bir etkinlik seçilmişse, o etkinliği ve "Geri Dön" butonunu göster
   if (activity) {
     return (
-      <div className="w-full animate-fade-in">
-        <button
-          onClick={() => setSelectedActivity(null)}
-          className="mb-4 inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 transition-all shadow-sm hover:shadow-md"
-        >
-          <ArrowLeft size={16} />
-          Kataloğa Geri Dön
-        </button>
-        {activity.component}
+      <div className="w-full animate-fade-in">        
+        {activity.component(() => setSelectedActivity(null))}
       </div>
     );
   }
