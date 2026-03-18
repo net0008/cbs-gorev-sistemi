@@ -9,7 +9,6 @@ const coordinatesBlock = {
   legend:  { centerX: 91.1,  centerY: 90.35, width: 15.77, height: 15.95 },
   scale:   { centerX: 13.76, centerY: 94.25, width: 20.99, height: 13.8 },
   compass: { centerX: 93.46, centerY: 17.45, width: 11.43, height: 25.59 },
-  coords:  { centerX: 1.45,  centerY: 45.43, width: 3.16,  height: 64.39 },
   coords:  { centerX: 1.45,  centerY: 45.43, width: 4.00,  height: 64.39 }, // Koordinat alanı biraz genişletildi
 };
 
@@ -30,25 +29,19 @@ export default function MapReadingActivity({ onClose }: { onClose: () => void })
       Math.pow(info.point.x - centerX, 2) + Math.pow(info.point.y - centerY, 2)
     );
 
-    // Mıknatıs mesafesi: 50 piksel
-    if (distance < 50) {
     if (distance < 60) { // Mıknatıs mesafesi
       setSolved(prev => prev.includes(id) ? prev : [...prev, id]);
     }
   }, []);
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-950 flex flex-col overflow-hidden">
-      <header className="p-4 flex justify-between items-center bg-black/40 border-b border-white/10 backdrop-blur-md">
     <div className="fixed inset-0 z-50 bg-slate-950 flex flex-col overflow-hidden select-none">
       {/* 1. ÜST BAR (Logolar ve Kapat) */}
       <header className="p-4 px-8 flex justify-between items-center bg-black/60 border-b border-white/10 backdrop-blur-md z-20">
         <div>
-          <h2 className="font-bold text-xl text-emerald-400 leading-none">Haritalar Nasıl Okunur?</h2>
           <h2 className="font-bold text-xl text-emerald-400">Haritalar Nasıl Okunur?</h2>
           <span className="text-[10px] text-slate-500 uppercase font-black tracking-widest mt-1 block">Öğrenme Çıktıları ve Süreç Bileşenleri</span>
         </div>
-        <button onClick={onClose} className="bg-red-600 hover:bg-red-700 text-white px-8 py-2 rounded-full font-bold transition-all active:scale-90 shadow-lg shadow-red-900/40">
         <button onClick={onClose} className="bg-red-600 hover:bg-red-700 text-white px-8 py-2 rounded-full font-bold transition-all active:scale-90 shadow-lg">
           KAPAT
         </button>
@@ -94,8 +87,6 @@ export default function MapReadingActivity({ onClose }: { onClose: () => void })
                 width: `${geo.width}%`,
                 height: `${geo.height}%`
               }}
-              className={`transition-all duration-1000 border rounded-xl flex items-center justify-center
-                ${solved.includes(id) ? 'blur-none bg-emerald-500/10 border-emerald-500/50 shadow-[0_0_20px_rgba(16,185,129,0.2)]' : 'blur-2xl bg-white/5 border-white/10'}
             className={`transition-all duration-700 border flex items-center justify-center
               ${solved.includes(id) 
                 ? 'blur-none bg-emerald-500/10 border-emerald-500/50' 
@@ -114,29 +105,6 @@ export default function MapReadingActivity({ onClose }: { onClose: () => void })
           ))}
         </div>
       </main>
-
-      <footer className="bg-[#2D3328] p-8 flex flex-wrap justify-center gap-4 border-t border-white/5">
-        <AnimatePresence>
-          {Object.keys(coordinatesBlock).filter(id => !solved.includes(id)).map(id => (
-            <motion.div
-              key={id}
-              drag
-              dragSnapToOrigin
-              onDragEnd={(_, info) => handleDragEnd(id, info)}
-              whileDrag={{ scale: 1.1, zIndex: 100 }}
-              className="bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-3 rounded-2xl cursor-grab active:cursor-grabbing font-bold shadow-xl border border-emerald-400/20 uppercase text-xs tracking-widest"
-            >
-              {id === 'title' ? 'Başlık' : id === 'legend' ? 'Lejant' : id === 'scale' ? 'Ölçek' : id === 'compass' ? 'Yön Oku' : 'Koordinat'}
-            </motion.div>
-          ))}
-        </AnimatePresence>
-        
-        {solved.length === 5 && (
-          <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="bg-white text-emerald-900 px-12 py-3 rounded-2xl font-black flex items-center gap-3 shadow-2xl">
-            <CheckCircle className="text-emerald-600" /> ETKİNLİK TAMAMLANDI!
-          </motion.div>
-        )}
-      </footer>
     </div>
   );
 }
