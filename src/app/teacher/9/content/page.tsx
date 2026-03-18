@@ -38,7 +38,7 @@ export default function ContentCatalogPage() {
             <h2 className="text-xl font-extrabold text-emerald-900 dark:text-emerald-400 mb-4">{act.title}</h2>
             <div className="space-y-4 text-sm leading-relaxed text-foreground/70">
               <div>
-                <strong className="font-semibold text-foreground/90 block mb-1">Öğrenme Çıktıları:</strong>
+                <strong className="font-semibold text-foreground/90 block mb-1">Öğrenme Çıktıları ve Süreç Bileşenleri:</strong>
                 <ul className="list-disc list-inside space-y-1">
                   {act.outcomes.map((outcome, index) => (
                     <li key={index}>{outcome}</li>

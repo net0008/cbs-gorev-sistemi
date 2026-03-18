@@ -48,10 +48,10 @@ export default function MapReadingActivity({ onClose }: MapReadingActivityProps)
 
   // 2. Hassas Mıknatıs (Homing Snap) Mekanizması
   const handleDragEnd = useCallback((id: string, info: PanInfo) => {
-    const dropZone = dropZoneRefs.current[id];
-    if (!dropZone) return;
+    const zone = dropZoneRefs.current[id];
+    if (!zone) return;
  
-    const zoneRect = dropZone.getBoundingClientRect();
+    const zoneRect = zone.getBoundingClientRect();
     const zoneCenterX = zoneRect.left + zoneRect.width / 2;
     const zoneCenterY = zoneRect.top + zoneRect.height / 2;
  
