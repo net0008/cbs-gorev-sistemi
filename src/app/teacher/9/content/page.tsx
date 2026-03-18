@@ -1,4 +1,4 @@
-import MapReadingActivity from "@/components/activities/MapReadingActivity";
+import MapReadingActivity from "./MapReadingActivity";
 
 export default function MapElementsActivityPage() {
   return (
