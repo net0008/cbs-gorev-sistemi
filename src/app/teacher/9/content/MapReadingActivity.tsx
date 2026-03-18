@@ -2,7 +2,6 @@
 import React, { useState, useRef, useCallback, CSSProperties } from 'react';
 import { motion, AnimatePresence, PanInfo } from 'framer-motion';
 import Image from 'next/image';
-import { X, CheckCircle } from 'lucide-react';
 import { X, CheckCircle, Crosshair } from 'lucide-react';
 
 interface MapReadingActivityProps {
