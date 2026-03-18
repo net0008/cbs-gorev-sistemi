@@ -24,6 +24,7 @@ export default function MapReadingActivity({ onClose }: MapReadingActivityProps)
   const handleDragEnd = (id: string, info: any) => {
     const zone = dropZoneRefs.current[id]?.getBoundingClientRect();
     if (dropZone) {
+    if (zone) {
       if (
         info.point.x > zone.left && info.point.x < zone.right &&
         info.point.y > zone.top && info.point.y < zone.bottom
