@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useCallback } from 'react';
 import Image from 'next/image'; // Import Next.js Image component
+import Image from 'next/image';
 import { motion, AnimatePresence, PanInfo, Variants } from 'framer-motion';
 import { CheckCircle, Lightbulb, X } from 'lucide-react';
 
@@ -99,6 +100,7 @@ const MapReadingActivity = ({ onClose }: MapReadingActivityProps) => {
       // Sayfa düzeni ve hız optimizasyonu: Tam ekran overlay, scrolling yok.
       // overflow-hidden zaten fixed inset-0 ile sağlanıyor.
       className="fixed inset-0 z-50 flex flex-col md:flex-row bg-background/90 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex flex-col md:flex-row bg-slate-950" // Genel arka plan bg-slate-950 yapıldı
     >
       {/* 4. Etkinlik Sayfası: Belirgin, parlayan ve sabit 'KAPAT' butonu */}
       <button
@@ -114,8 +116,11 @@ const MapReadingActivity = ({ onClose }: MapReadingActivityProps) => {
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="relative w-full h-full max-w-full max-h-full aspect-[4/3] m-auto">
             {/* 1. Hız Optimizasyonu: Standart <img> yerine Next.js <Image /> bileşeni kullanıldı. */}
+            {/* 1. Hız ve Görüntü Optimizasyonu: Standart <img> yerine Next.js <Image /> bileşeni kullanıldı. */}
             <Image
               src="/9/harita/map-sicaklik.jpg"
+              // Kritik Görüntü Yolu (src) güncellendi ve fill, priority, object-contain eklendi.
+              src="/9/harita/turkiye-fiziki.jpg"
               alt="Türkiye Sıcaklık Haritası"
               fill
               priority
@@ -135,6 +140,7 @@ const MapReadingActivity = ({ onClose }: MapReadingActivityProps) => {
                       initial={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                       className="absolute inset-0 bg-background/20 backdrop-blur-xl rounded-lg border-2 border-dashed border-white/30"
+                      className="absolute inset-0 bg-background/20 blur-xl backdrop-blur-md rounded-lg border-2 border-dashed border-white/30" // Blur efekti güncellendi
                     />
                   )}
                   {completedElements.includes(el.id) && (
@@ -190,6 +196,8 @@ const MapReadingActivity = ({ onClose }: MapReadingActivityProps) => {
         </div>
 
         <div className="flex flex-wrap justify-center items-center gap-4 mt-4 p-4 bg-muted/50 rounded-2xl min-h-[160px]">
+        {/* Sürüklenebilir etiketler panelinin arka planı güncellendi */}
+        <div className="flex flex-wrap justify-center items-center gap-4 mt-4 p-4 bg-[#2D3328]/95 rounded-2xl min-h-[160px]">
           {MAP_ELEMENTS.map(el => (
             <AnimatePresence key={el.id}>
               {!completedElements.includes(el.id) && (
@@ -204,6 +212,8 @@ const MapReadingActivity = ({ onClose }: MapReadingActivityProps) => {
                   onDragEnd={(_, info) => handleDragEnd(info, el.id)}
                   whileDrag={{ scale: 1.1, zIndex: 50, boxShadow: "0px 10px 30px rgba(0,0,0,0.2)" }}
                   className="px-5 py-2.5 bg-card border border-border/20 rounded-xl shadow-sm cursor-grab active:cursor-grabbing active:scale-95"
+                  whileDrag={{ scale: 1.1, zIndex: 50, boxShadow: "0px 10px 30px rgba(0,0,0,0.2)" }} // Sürükleme efekti
+                  className="px-5 py-2.5 bg-card border border-border/20 rounded-xl shadow-sm cursor-grab active:cursor-grabbing active:scale-95 hover:bg-white/10" // Hover/active efektleri eklendi
                 >
                   <span className="font-semibold text-foreground select-none">{el.name}</span>
                 </motion.div>
