@@ -5,21 +5,18 @@ import Image from 'next/image';
 import { X, CheckCircle } from 'lucide-react';
 
 interface MapReadingActivityProps {
-  // Katalog sayfasına geri dönmek için kullanılacak fonksiyon
   onClose: () => void;
 }
 
-// 3. Optimize Edilmiş Yüzde Koordinat Data Bloğu
-// Base Dims: G: 2816 px, Y: 1536 px
+// 🎯 Hasbi Hocam, Yeni % Koordinat Data Bloğu (Milimetrik Snap)
 const coordinatesBlock = {
-  title: { centerX: 50.07, centerY: 10.61, width: 65.06, height: 15.82 },
-  legend: { centerX: 87.5, centerY: 87.17, width: 15.77, height: 15.95 },
-  scale: { centerX: 13.64, centerY: 89.65, width: 20.99, height: 13.8 },
-  compass: { centerX: 89.35, centerY: 17.45, width: 11.43, height: 25.59 },
-  coords: { centerX: 1.56, centerY: 63.67, width: 3.16, height: 64.39 },
+  title:   { centerX: 52.14, centerY: 11.26, width: 65.06, height: 15.82 },
+  legend:  { centerX: 91.10, centerY: 90.35, width: 15.77, height: 15.95 },
+  scale:   { centerX: 13.76, centerY: 94.25, width: 20.99, height: 13.80 },
+  compass: { centerX: 93.46, centerY: 17.45, width: 11.43, height: 25.59 },
+  coords:  { centerX: 1.45,  centerY: 45.43, width: 3.16,  height: 64.39 },
 };
 
-// Helper to convert center-based percentages to top/left-based CSS properties
 const convertCoordsToCSS = (coords: typeof coordinatesBlock[keyof typeof coordinatesBlock]): CSSProperties => {
   return {
     top: `${coords.centerY - coords.height / 2}%`,
@@ -34,10 +31,8 @@ export default function MapReadingActivity({ onClose }: MapReadingActivityProps)
   const dropZoneRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const activityAreaRef = useRef<HTMLDivElement>(null);
 
-  // Mıknatıs etkisi için piksel cinsinden maksimum mesafe
-  const SNAP_DISTANCE = 50;
+  const SNAP_DISTANCE = 60; // Mıknatıs etkisini biraz daha artırdım
 
-  // Fiziki haritadaki öğelerin gerçek yerlerine göre optimize edilmiş koordinatlar
   const elements = [
     { id: 'title', label: 'Başlık', pos: convertCoordsToCSS(coordinatesBlock.title) },
     { id: 'legend', label: 'Lejant', pos: convertCoordsToCSS(coordinatesBlock.legend) },
@@ -46,7 +41,6 @@ export default function MapReadingActivity({ onClose }: MapReadingActivityProps)
     { id: 'coords', label: 'Koordinatlar', pos: convertCoordsToCSS(coordinatesBlock.coords) },
   ];
 
-  // 2. Hassas Mıknatıs (Homing Snap) Mekanizması
   const handleDragEnd = useCallback((id: string, info: PanInfo) => {
     const dropZone = dropZoneRefs.current[id];
     if (!dropZone) return;
@@ -55,11 +49,8 @@ export default function MapReadingActivity({ onClose }: MapReadingActivityProps)
     const zoneCenterX = zoneRect.left + zoneRect.width / 2;
     const zoneCenterY = zoneRect.top + zoneRect.height / 2;
  
-    const dropPointX = info.point.x;
-    const dropPointY = info.point.y;
- 
     const distance = Math.sqrt(
-      Math.pow(dropPointX - zoneCenterX, 2) + Math.pow(dropPointY - zoneCenterY, 2)
+      Math.pow(info.point.x - zoneCenterX, 2) + Math.pow(info.point.y - zoneCenterY, 2)
     );
  
     if (distance < SNAP_DISTANCE) {
@@ -71,38 +62,36 @@ export default function MapReadingActivity({ onClose }: MapReadingActivityProps)
 
   return (
     <div ref={activityAreaRef} className="fixed inset-0 z-50 bg-slate-950 flex flex-col overflow-hidden select-none">
-      {/* Üst Bar */}
-      <div className="p-4 flex justify-between items-center bg-black/40 backdrop-blur-md border-b border-white/10 flex-shrink-0">
+      
+      {/* 🏛️ Üst Bar: Kurumsal Maarif Tasarımı */}
+      <div className="p-4 px-8 flex justify-between items-center bg-black/40 backdrop-blur-md border-b border-white/10 flex-shrink-0">
         <div className="text-white">
           <h2 className="font-bold text-xl text-emerald-400">Haritalar Nasıl Okunur?</h2>
-          <p className="text-xs text-slate-400 uppercase tracking-widest">Kazanım: COĞ.9.2.1</p>
+          <div className="flex flex-col">
+            <span className="text-[10px] text-emerald-600/70 uppercase font-black tracking-widest">
+              Öğrenme Çıktıları ve Süreç Bileşenleri
+            </span>
+            <p className="text-[11px] text-slate-400 mt-0.5">COĞ.9.2.1. Harita uygulamaları yapabilme.</p>
+          </div>
         </div>
-        {/* Estetik: KAPAT Butonu */}
+        
         <button 
           onClick={onClose}
-          className="bg-red-600 hover:bg-red-700 text-white px-8 py-2 rounded-full font-bold transition-all active:scale-95 shadow-lg shadow-red-900/40 flex items-center gap-2"
+          className="bg-red-600 hover:bg-red-700 text-white px-10 py-2.5 rounded-full font-black text-sm transition-all active:scale-90 shadow-lg shadow-red-900/40 flex items-center gap-2 border border-red-500/20"
         >
           <X size={18} /> KAPAT
         </button>
       </div>
 
-      {/* Harita Alanı */}
+      {/* 🗺️ Harita Alanı */}
       <div className="relative flex-1 flex items-center justify-center p-6 bg-[#0a0a0a]">
-        <div className="relative w-full h-full max-w-6xl aspect-[16/9] shadow-2xl rounded-xl overflow-hidden border border-white/5">
-          {/* 1. Altlık ve Görüntü Mimarisi */}
+        <div className="relative w-full h-full max-w-6xl aspect-[16/9] shadow-2xl rounded-2xl overflow-hidden border border-white/5 bg-slate-900">
           <Image 
             src="/9/harita/map-sicaklik.jpg" 
             alt="Türkiye Sıcaklık Haritası" 
             fill
             priority
             className="object-contain"
-          />
-          <Image 
-            src="/9/harita/map-sicaklik-altlik.jpg" 
-            alt="Türkiye Sıcaklık Haritası Altlık" 
-            fill
-            priority
-            className="object-contain opacity-0 pointer-events-none"
           />
 
           {elements.map((el) => {
@@ -112,14 +101,16 @@ export default function MapReadingActivity({ onClose }: MapReadingActivityProps)
                 key={el.id}
                 ref={(ref) => { dropZoneRefs.current[el.id] = ref; }}
                 style={el.pos}
-                className={`absolute transition-all duration-700 
-                  ${isSolved ? 'blur-none bg-transparent' : 'blur-xl bg-white/5 backdrop-blur-md border border-white/10 rounded-lg'}
+                className={`absolute transition-all duration-700 flex items-center justify-center
+                  ${isSolved ? 'blur-none bg-emerald-500/10 border-2 border-emerald-500/50' : 'blur-xl bg-white/5 backdrop-blur-md border border-white/10'}
+                  rounded-xl
                 `}
               >
                 {isSolved && (
                   <motion.div
-                    layoutId={el.id}
-                    className="absolute inset-0 flex items-center justify-center text-white font-bold text-sm bg-emerald-600/80 rounded-lg"
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    className="bg-emerald-600 text-white px-3 py-1 rounded text-[10px] font-bold shadow-xl"
                   >
                     {el.label}
                   </motion.div>
@@ -130,7 +121,7 @@ export default function MapReadingActivity({ onClose }: MapReadingActivityProps)
         </div>
       </div>
 
-      {/* Sürükle-Bırak Paneli */}
+      {/* 📦 Sürükle-Bırak Paneli: Pardus Zeytin Fümesi */}
       <div className="bg-[#2D3328]/95 p-8 flex flex-wrap justify-center items-center gap-4 border-t border-white/5 flex-shrink-0">
         <AnimatePresence>
           {elements.filter(e => !solved.includes(e.id)).map((el) => (
@@ -142,7 +133,7 @@ export default function MapReadingActivity({ onClose }: MapReadingActivityProps)
               dragSnapToOrigin
               onDragEnd={(_, info) => handleDragEnd(el.id, info)}
               whileDrag={{ scale: 1.1, zIndex: 100 }}
-              className="bg-emerald-600 hover:bg-emerald-500 text-white px-7 py-3 rounded-xl cursor-grab active:cursor-grabbing font-bold shadow-xl border border-emerald-400/20 transition-colors active:scale-95"
+              className="bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-3.5 rounded-2xl cursor-grab active:cursor-grabbing font-bold shadow-2xl border border-emerald-400/20 transition-all active:scale-95 text-sm uppercase tracking-wider"
             >
               {el.label}
             </motion.div>
@@ -150,8 +141,13 @@ export default function MapReadingActivity({ onClose }: MapReadingActivityProps)
         </AnimatePresence>
 
         {solved.length === elements.length && (
-          <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="flex items-center gap-3 bg-emerald-100 text-emerald-900 px-10 py-3 rounded-xl font-black shadow-2xl border-2 border-emerald-500">
-            <CheckCircle className="text-emerald-600" /> ETKİNLİK BAŞARIYLA TAMAMLANDI!
+          <motion.div 
+            initial={{ scale: 0, y: 50 }} 
+            animate={{ scale: 1, y: 0 }} 
+            className="flex items-center gap-4 bg-white text-emerald-900 px-12 py-4 rounded-2xl font-black shadow-[0_20px_50px_rgba(16,185,129,0.3)] border-2 border-emerald-500"
+          >
+            <CheckCircle className="text-emerald-600" size={28} /> 
+            TEBRİKLER! TÜM BİLEŞENLERİ DOĞRU YERLEŞTİRDİNİZ.
           </motion.div>
         )}
       </div>

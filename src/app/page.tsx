@@ -1,160 +1,159 @@
 "use client";
-import React, { useState, useRef } from 'react';
-import { Plus, X, UploadCloud, Copy, Save } from 'lucide-react';
-import Image from 'next/image';
+import React, { useState, useRef, useEffect } from 'react';
+import { X, UploadCloud, Copy, Save, Trash2, Map as MapIcon, Crosshair } from 'lucide-react';
 
-interface SavedCoord {
-  label: string;
-  x: number;
-  y: number;
-  formatted: string;
-}
-
-export default function CoordsFinderAdvanced() {
+export default function CoordsFinderPro() {
   const [coords, setCoords] = useState({ x: 0, y: 0 });
   const [label, setLabel] = useState("");
-  const [savedCoords, setSavedCoords] = useState<SavedCoord[]>([]);
-  const [imageUrl, setImageUrl] = useState("/9/harita/map-sicaklik.jpg"); // Varsayılan resim
+  const [savedCoords, setSavedCoords] = useState<string[]>([]);
+  const [imageUrl, setImageUrl] = useState("/9/harita/map-sicaklik.jpg");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Local Resim Yükleme (Upload) İşleyicisi
+  // Dosya Yükleme (Blob hatasını standart img ile çözüyoruz)
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const temporaryUrl = URL.createObjectURL(file); // Local URL oluştur
-      setImageUrl(temporaryUrl); // Resim state'ini güncelle
+      const temporaryUrl = URL.createObjectURL(file);
+      setImageUrl(temporaryUrl);
     }
   };
 
-  // Harita Tıklama (Koordinat Alma) İşleyicisi
+  // Koordinat Hesaplama
   const handleImageClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
-    const technicalX = Number(x.toFixed(2));
-    const technicalY = Number(y.toFixed(2));
-    setCoords({ x: technicalX, y: technicalY });
-    console.log(`X: %${technicalX}, Y: %${technicalY}`);
+    setCoords({ x: Number(x.toFixed(2)), y: Number(y.toFixed(2)) });
   };
 
-  // Başlık (Textbox) Değişim İşleyicisi
-  const handleLabelChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setLabel(e.target.value);
-  };
-
-  // Koordinat Kaydetme İşleyicisi (Teknik Formatıyla)
-  const handleSaveCoord = () => {
-    if (label.trim() === "" || (coords.x === 0 && coords.y === 0)) return; // Boş alan kontrolü
-    
-    // Senin İstediğin Format: Lejant: centerX: 87.50, centerY: 87.17
-    const technicalFormat = `${label}: centerX: ${coords.x.toFixed(2)}, centerY: ${coords.y.toFixed(2)}`;
-    
-    setSavedCoords(prev => [...prev, { label, x: coords.x, y: coords.y, formatted: technicalFormat }]);
-    setLabel(""); // Textbox'ı temizle
-  };
-
-  // Listeyi Kopyalama İşleyicisi
-  const handleCopyList = () => {
-    const listText = savedCoords.map(item => item.formatted).join('\n');
-    navigator.clipboard.writeText(listText);
-    alert("Koordinat listesi panoya kopyalandı!");
+  // Listeyi Kopyalama
+  const handleCopy = () => {
+    navigator.clipboard.writeText(savedCoords.join('\n'));
+    alert("Koordinatlar kopyalandı!");
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-950 flex flex-col overflow-hidden select-none p-6 text-white font-sans">
+    <div className="fixed inset-0 bg-[#0f172a] text-slate-200 flex overflow-hidden font-sans selection:bg-emerald-500/30">
       
-      {/* Genel Düzen: Sol Panel (Liste), Sağ Panel (Harita ve Kontroller) */}
-      <div className="flex-1 flex gap-6 overflow-hidden">
-        
-        {/* SOL PANEL - Kopyala-Yapıştır Listesi */}
-        <div className="w-[350px] bg-black/40 backdrop-blur-md rounded-3xl p-6 border border-white/10 flex flex-col gap-5 overflow-hidden shadow-2xl">
-          <div className="flex justify-between items-center pb-4 border-b border-white/10">
-            <h2 className="font-bold text-xl text-emerald-400">Koordinat Listesi</h2>
-            <button onClick={handleCopyList} className="text-slate-400 hover:text-emerald-400 transition-colors">
-              <Copy size={18} />
-            </button>
+      {/* SOL PANEL: Dar ve Şık Koordinat Listesi */}
+      <aside className="w-80 bg-slate-900/50 backdrop-blur-xl border-r border-white/5 flex flex-col shadow-2xl">
+        <div className="p-6 border-b border-white/5 flex justify-between items-center bg-emerald-600/5">
+          <div className="flex items-center gap-2">
+            <MapIcon className="text-emerald-500" size={20} />
+            <h2 className="font-bold text-lg tracking-tight">Koordinatlar</h2>
           </div>
-          
-          <textarea 
-            readOnly 
-            rows={10} 
-            value={savedCoords.map(item => item.formatted).join('\n')}
-            placeholder="Tıklayıp Kaydet butonuna bastığınız koordinatlar burada listelenir. Kopyalayıp koda yapıştırabilirsiniz."
-            className="flex-1 bg-transparent text-slate-300 font-mono text-sm leading-relaxed p-4 rounded-xl border border-white/5 resize-none outline-none overflow-y-auto"
-          />
+          <button onClick={handleCopy} title="Kopyala" className="p-2 hover:bg-white/5 rounded-lg transition-colors text-slate-400 hover:text-emerald-400">
+            <Copy size={18} />
+          </button>
+        </div>
+        
+        <div className="flex-1 overflow-y-auto p-4 space-y-2 custom-scrollbar">
+          {savedCoords.length === 0 ? (
+            <p className="text-xs text-slate-600 text-center mt-10 italic">Henüz kayıt yok...</p>
+          ) : (
+            savedCoords.map((c, i) => (
+              <div key={i} className="group relative bg-white/5 border border-white/5 p-3 rounded-xl text-[11px] font-mono text-emerald-300/80 hover:border-emerald-500/30 transition-all">
+                {c}
+              </div>
+            ))
+          )}
         </div>
 
-        {/* SAĞ PANEL - Harita ve Kontroller */}
-        <div className="flex-1 bg-black/30 rounded-3xl p-8 border border-white/10 flex flex-col gap-6 overflow-hidden relative">
-          
-          {/* Başlık ve Talimatlar */}
-          <div className="flex justify-between items-start gap-4">
-            <div className="text-white">
-              <h1 className="text-3xl font-bold">Hasbi Hocam, Koordinat Dedektörü v2.0</h1>
-              <p className="text-sm text-slate-400 mt-2 uppercase tracking-widest leading-loose">Harita Üzerinde Bir Noktaya Tıkla. Başlığı Yaz ve Kaydet Butonuna Bas.</p>
-            </div>
-            {/* Kapat Butonu Simülasyonu (Opsiyonel) */}
-            <div className="bg-red-600 rounded-full w-8 h-8 flex items-center justify-center text-white"><X size={18} /></div>
+        <div className="p-4 bg-black/20 border-t border-white/5">
+          <button 
+            onClick={() => setSavedCoords([])}
+            className="w-full flex items-center justify-center gap-2 py-2 text-xs text-rose-400 hover:bg-rose-500/10 rounded-lg transition-all"
+          >
+            <Trash2 size={14} /> Listeyi Temizle
+          </button>
+        </div>
+      </aside>
+
+      {/* ANA PANEL */}
+      <main className="flex-1 flex flex-col relative overflow-hidden bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-slate-900 via-[#0f172a] to-black">
+        
+        {/* Üst Bilgi Şeridi (Maarif Modeli Temalı) */}
+        <header className="h-20 border-b border-white/5 flex items-center justify-between px-8 bg-black/20 backdrop-blur-sm">
+          <div>
+            <h1 className="text-xl font-black text-white flex items-center gap-3">
+              HASBİ ERDOĞMUŞ <span className="text-emerald-500 font-light text-sm">|</span> 
+              <span className="text-emerald-500 tracking-widest text-sm uppercase">Koordinat Dedektörü v2.2</span>
+            </h1>
+            <p className="text-[10px] text-slate-500 font-bold uppercase tracking-[0.3em] mt-1">
+              Öğrenme Çıktıları ve Süreç Bileşenleri
+            </p>
           </div>
 
-          {/* Dosya Yükleme (Upload) Kontrolü */}
-          <div className="absolute top-8 right-16 flex items-center gap-2 bg-slate-800 px-4 py-1.5 rounded-full border border-white/5 shadow-lg">
-            <button onClick={() => fileInputRef.current?.click()} className="text-slate-300 hover:text-white transition-colors">
-              <UploadCloud size={20} />
+          <div className="flex items-center gap-4">
+             <div className="flex flex-col items-end">
+                <span className="text-[10px] text-slate-500 uppercase font-bold tracking-tighter">Mevcut İmleç</span>
+                <span className="font-mono text-lg text-emerald-400 tracking-tighter">X:%{coords.x} Y:%{coords.y}</span>
+             </div>
+             <button 
+              onClick={() => fileInputRef.current?.click()}
+              className="p-3 bg-white/5 hover:bg-emerald-600 rounded-2xl transition-all shadow-xl group"
+            >
+              <UploadCloud size={20} className="group-hover:scale-110 transition-transform" />
+              <input ref={fileInputRef} type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
             </button>
-            <span className="text-xs text-slate-400">Harita Yükle (Local)</span>
-            <input 
-              ref={fileInputRef}
-              type="file" 
-              accept="image/*"
-              onChange={handleFileChange} 
-              className="hidden" // Input'u gizle
-            />
           </div>
+        </header>
 
-          {/* Mevcut Koordinat Gösterimi */}
-          <div className="inline-block self-start bg-emerald-600 px-5 py-2.5 rounded-2xl shadow-lg border border-emerald-400/20">
-            <p className="text-xs text-slate-100 uppercase tracking-wider font-semibold">Son Tıklanan Koordinat</p>
-            <span className="font-mono text-2xl text-yellow-300">X: %{coords.x.toFixed(2)}, Y: %{coords.y.toFixed(2)}</span>
-          </div>
-
-          {/* Başlık (Textbox) ve Kaydet Butonu */}
-          <div className="flex gap-4 items-center bg-black/40 rounded-3xl p-6 border border-white/10 shadow-lg">
+        {/* Kontrol Çubuğu */}
+        <div className="p-4 px-8 flex gap-4 bg-emerald-600/5 items-center border-b border-white/5">
+          <div className="flex-1 relative">
             <input 
               type="text" 
               value={label}
-              onChange={handleLabelChange}
-              placeholder="Başlık Yazın (Örn: Lejant, Ölçek, Yön Oku...)"
-              className="flex-1 bg-transparent text-white px-6 py-3 rounded-xl border border-white/5 outline-none font-medium text-lg placeholder:text-slate-600"
+              onChange={(e) => setLabel(e.target.value)}
+              placeholder="Başlık (Örn: Lejant, Ölçek...)"
+              className="w-full bg-slate-950/50 border border-white/10 rounded-xl px-5 py-3 text-sm focus:border-emerald-500 outline-none transition-all placeholder:text-slate-700"
             />
-            <button 
-              onClick={handleSaveCoord}
-              className="bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-3 rounded-full font-bold transition-all active:scale-90 shadow-xl border border-emerald-400/20 flex items-center gap-2"
-            >
-              <Save size={18} /> Koordinat Kaydet
-            </button>
           </div>
-          
-          {/* Tıklanabilir Harita Alanı */}
-          <div className="relative flex-1 bg-[#0a0a0a] rounded-2xl overflow-hidden border border-white/5 flex items-center justify-center p-6 shadow-inner">
-            <div 
-              onClick={handleImageClick}
-              className="relative inline-block cursor-crosshair border-2 border-dashed border-white/10 select-none shadow-2xl rounded-lg"
-            >
-              {/* Resim Yükleme (Upload) Simülasyonu */}
-              <Image 
-                src={imageUrl} // State'ten gelen URL'yi kullan
-                alt="Hasbi Hocam Koordinat Bulucu" 
-                fill
-                priority
-                className="object-contain" // Resmin konteynerine düzgün sığmasını sağlar
-              />
-            </div>
-          </div>
-          <p className="absolute bottom-4 left-8 text-xs text-slate-500">Not: Değerler console (F12) ekranına da yazdırılıyor.</p>
+          <button 
+            onClick={() => {
+              if(!label) return;
+              const line = `${label}: centerX: ${coords.x}, centerY: ${coords.y}`;
+              setSavedCoords(prev => [...prev, line]);
+              setLabel("");
+            }}
+            className="bg-emerald-600 hover:bg-emerald-500 px-8 py-3 rounded-xl font-bold text-sm flex items-center gap-2 shadow-lg shadow-emerald-900/20 active:scale-95 transition-all"
+          >
+            <Save size={18} /> KAYDET
+          </button>
         </div>
 
-      </div>
+        {/* Harita Görüntüleme Alanı */}
+        <div className="flex-1 overflow-auto p-10 flex items-center justify-center custom-scrollbar">
+          <div 
+            onClick={handleImageClick}
+            className="relative cursor-crosshair border border-emerald-500/20 shadow-[0_0_50px_rgba(0,0,0,0.5)] bg-slate-950 rounded-lg overflow-hidden group"
+          >
+            {/* Hedef Nişangah Simülasyonu */}
+            <div 
+              className="absolute pointer-events-none border border-emerald-500/50 w-8 h-8 -translate-x-1/2 -translate-y-1/2 transition-all duration-300 ease-out"
+              style={{ left: `${coords.x}%`, top: `${coords.y}%` }}
+            >
+              <div className="absolute top-1/2 left-0 w-full h-[1px] bg-emerald-500/50"></div>
+              <div className="absolute left-1/2 top-0 w-[1px] h-full bg-emerald-500/50"></div>
+            </div>
+
+            <img 
+              src={imageUrl} 
+              alt="Harita" 
+              className="max-w-none h-auto block select-none" 
+            />
+          </div>
+        </div>
+
+      </main>
+
+      <style jsx global>{`
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.05); border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(16, 185, 129, 0.2); }
+      `}</style>
     </div>
   );
 }

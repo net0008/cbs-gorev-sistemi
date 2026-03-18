@@ -1,6 +1,5 @@
 'use client';
 import dynamic from 'next/dynamic';
-() => import('./TaskWorkspace')
 
 // Haritayı içeren çalışma alanını SSR olmadan yüklüyoruz
 const TaskWorkspace = dynamic(
