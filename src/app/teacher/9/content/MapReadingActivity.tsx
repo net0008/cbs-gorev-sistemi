@@ -54,8 +54,8 @@ export default function MapReadingActivity({ onClose }: MapReadingActivityProps)
       <div className="relative flex-1 flex items-center justify-center p-6 bg-[#0a0a0a]">
         <div className="relative w-full h-full max-w-6xl aspect-[16/9] shadow-2xl rounded-xl overflow-hidden border border-white/5">
           <Image 
-            src="/9/harita/turkiye-fiziki.jpg" 
-            alt="Türkiye Fiziki Haritası" 
+            src="/9/harita/map-sicaklik.jpg" 
+            alt="Türkiye Yıllık Ortalama Sıcaklık Haritası" 
             fill
             priority
             className="object-contain"
