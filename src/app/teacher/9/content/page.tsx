@@ -7,13 +7,16 @@ import MapReadingActivity from './MapReadingActivity';
 const activities = [
   {
     id: 'map-reading',
-    name: 'Harita Okuryazarlığı: Haritanın Elemanları',
-    kazanim: 'COĞ.9.2.1. Harita uygulamaları yapabilme.',
-    surec: 'a) Haritaya ait bileşenlerden yararlanarak haritaları okur.',
-    toolset: 'Harita',
+    id: 'map-elements',
+    title: 'Haritalar Nasıl Okunur?', // Vurgulu Başlık
+    outcomes: [
+      'COĞ.9.2.1. Harita uygulamaları yapabilme.',
+      'a) Haritaya ait bileşenlerden yararlanarak haritaları okur.'
+    ],
+    tools: 'Harita',
+    color: 'border-emerald-600',
     component: (onClose: () => void) => <MapReadingActivity onClose={onClose} />,
   },
-  // Gelecekteki etkinlikler buraya eklenebilir.
 ];
 
 export default function ContentCatalogPage() {
@@ -31,24 +34,20 @@ export default function ContentCatalogPage() {
           <div
             key={act.id}
             onClick={() => setSelectedActivity(act.id)}
-            className="cursor-pointer group bg-card/60 backdrop-blur-lg p-6 rounded-2xl shadow-lg border border-border/20 border-l-8 border-emerald-600 hover:border-emerald-500 hover:shadow-emerald-500/10 transition-all duration-300 transform hover:-translate-y-1"
+            className={`cursor-pointer group bg-card/60 backdrop-blur-lg p-6 rounded-2xl shadow-lg border border-border/20 border-l-8 ${act.color} hover:border-emerald-500 hover:shadow-emerald-500/10 transition-all duration-300 transform hover:-translate-y-1`}
           >
-            <h2 className="text-xl font-extrabold text-emerald-900 dark:text-emerald-400 mb-4">{act.name}</h2>
+            <h2 className="text-xl font-extrabold text-emerald-900 dark:text-emerald-400 mb-4">{act.title}</h2>
             <div className="space-y-4 text-sm leading-relaxed text-foreground/70">
               <div>
-                <strong className="font-semibold text-foreground/90 block mb-1">Kazanım:</strong>
+                <strong className="font-semibold text-foreground/90 block mb-1">Öğrenme Çıktıları:</strong>
                 <ul className="list-disc list-inside space-y-1">
-                  <li>{act.kazanim}</li>
-                </ul>
-              </div>
-              <div>
-                <strong className="font-semibold text-foreground/90 block mb-1">Süreç:</strong>
-                <ul className="list-disc list-inside space-y-1">
-                  <li>{act.surec}</li>
+                  {act.outcomes.map((outcome, index) => (
+                    <li key={index}>{outcome}</li>
+                  ))}
                 </ul>
               </div>
               <p>
-                <strong className="font-semibold text-foreground/90">Araç:</strong> {act.toolset}
+                <strong className="font-semibold text-foreground/90">Araç Seti:</strong> {act.tools}
               </p>
             </div>
           </div>
