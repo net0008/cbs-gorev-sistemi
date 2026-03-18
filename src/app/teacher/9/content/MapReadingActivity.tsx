@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, CSSProperties } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence, PanInfo, Variants } from 'framer-motion';
 import { CheckCircle, Lightbulb, X } from 'lucide-react';
@@ -13,20 +13,16 @@ interface MapElement {
   id: string;
   name: string;
   hint: string;
-  position: {
-    top: string;
-    left: string;
-    width: string;
-    height: string;
-  };
+  position: CSSProperties;
 }
 
 const MAP_ELEMENTS: MapElement[] = [
-  { id: 'baslik', name: 'Başlık', hint: 'Haritanın konusunu ve amacını belirtir.', position: { top: '4%', left: '30%', width: '40%', height: '10%' } },
-  { id: 'lejant', name: 'Lejant', hint: 'Haritadaki sembollerin ve renklerin anlamını açıklar.', position: { top: '60%', left: '72%', width: '23%', height: '35%' } },
-  { id: 'olcek', name: 'Ölçek', hint: 'Haritadaki mesafelerin gerçekteki karşılığını gösterir.', position: { top: '88%', left: '5%', width: '30%', height: '10%' } },
-  { id: 'yon_oku', name: 'Yön Oku', hint: 'Haritanın yönünü, genellikle kuzeyi gösterir.', position: { top: '15%', left: '80%', width: '10%', height: '15%' } },
-  { id: 'koordinatlar', name: 'Koordinatlar', hint: 'Enlem ve boylam çizgileriyle konum belirlemeyi sağlar.', position: { top: '35%', left: '2%', width: '10%', height: '50%' } },
+  // 2. Optimize Edilmiş Hotspot Yerleşimi
+  { id: 'baslik', name: 'Başlık', hint: 'Haritanın konusunu ve amacını belirtir.', position: { top: '5%', left: '35%', width: '30%', height: '8%' } },
+  { id: 'lejant', name: 'Lejant', hint: 'Haritadaki sembollerin ve renklerin anlamını açıklar.', position: { bottom: '10%', right: '2%', width: '18%', height: '25%' } },
+  { id: 'olcek', name: 'Ölçek', hint: 'Haritadaki mesafelerin gerçekteki karşılığını gösterir.', position: { bottom: '5%', left: '2%', width: '15%', height: '10%' } },
+  { id: 'yon_oku', name: 'Yön Oku', hint: 'Haritanın yönünü, genellikle kuzeyi gösterir.', position: { top: '8%', right: '2%', width: '10%', height: '15%' } },
+  { id: 'koordinatlar', name: 'Koordinatlar', hint: 'Enlem ve boylam çizgileriyle konum belirlemeyi sağlar.', position: { top: '2%', left: '2%', bottom: '2%', right: '2%' } },
 ];
 
 const MapReadingActivity = ({ onClose }: MapReadingActivityProps) => {
@@ -96,11 +92,10 @@ const MapReadingActivity = ({ onClose }: MapReadingActivityProps) => {
       initial="hidden"
       animate="visible"
       exit="exit"
-      // Sayfa düzeni ve hız optimizasyonu: Tam ekran overlay, scrolling yok.
-      // overflow-hidden zaten fixed inset-0 ile sağlanıyor.
-      className="fixed inset-0 z-50 flex flex-col md:flex-row bg-slate-950" // Genel arka plan bg-slate-950 yapıldı
+      // 1. Sayfa Düzeni: fixed inset-0 z-50 ile tam ekran ve kaydırmasız yapı.
+      className="fixed inset-0 z-50 flex flex-col md:flex-row bg-slate-950"
     >
-      {/* 4. Etkinlik Sayfası: Belirgin, parlayan ve sabit 'KAPAT' butonu */}
+      {/* 2. Estetik: Sabit, parlak kırmızı KAPAT butonu */}
       <button
         onClick={onClose}
         className="fixed top-4 right-4 z-[100] flex items-center justify-center w-12 h-12 bg-red-600/80 text-white rounded-full shadow-lg shadow-red-500/30 transition-all duration-300 hover:bg-red-600 hover:scale-110 hover:shadow-red-500/50 active:scale-95"
@@ -113,11 +108,10 @@ const MapReadingActivity = ({ onClose }: MapReadingActivityProps) => {
       <div className="relative w-full md:w-[70%] h-1/2 md:h-full flex-shrink-0 bg-slate-200 dark:bg-slate-900">
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="relative w-full h-full max-w-full max-h-full aspect-[4/3] m-auto">
-            {/* 1. Hız ve Görüntü Optimizasyonu: Standart <img> yerine Next.js <Image /> bileşeni kullanıldı. */}
+            {/* 1. Hız ve Görüntü Optimizasyonu: Next.js <Image> bileşeni ile WebP dönüşümü ve hızlı yükleme */}
             <Image
-              // Kritik Görüntü Yolu (src) güncellendi ve fill, priority, object-contain eklendi.
-              src="/9/harita/map-sicaklik.jpg"
-              alt="Türkiye Sıcaklık Haritası"
+              src="/9/harita/turkiye-fiziki.jpg"
+              alt="Türkiye Fiziki Haritası"
               fill
               priority
               className="w-full h-full object-contain"
@@ -135,7 +129,8 @@ const MapReadingActivity = ({ onClose }: MapReadingActivityProps) => {
                     <motion.div
                       initial={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
-                      className="absolute inset-0 bg-background/20 blur-xl backdrop-blur-md rounded-lg border-2 border-dashed border-white/30" // Blur efekti güncellendi
+                      // 3. Mekanik ve Estetik: Başlangıçta hedefleri bulanıklaştırma
+                      className="absolute inset-0 bg-background/20 blur-xl backdrop-blur-md rounded-lg border-2 border-dashed border-white/30"
                     />
                   )}
                   {completedElements.includes(el.id) && (
@@ -190,7 +185,7 @@ const MapReadingActivity = ({ onClose }: MapReadingActivityProps) => {
           </AnimatePresence>
         </div>
 
-        {/* Sürüklenebilir etiketler panelinin arka planı güncellendi */}
+        {/* 2. Estetik: Pardus tarzı koyu zeytin fümesi panel */}
         <div className="flex flex-wrap justify-center items-center gap-4 mt-4 p-4 bg-[#2D3328]/95 rounded-2xl min-h-[160px]">
           {MAP_ELEMENTS.map(el => (
             <AnimatePresence key={el.id}>
@@ -204,8 +199,8 @@ const MapReadingActivity = ({ onClose }: MapReadingActivityProps) => {
                   dragConstraints={activityAreaRef}
                   dragSnapToOrigin
                   onDragEnd={(_, info) => handleDragEnd(info, el.id)}
-                  whileDrag={{ scale: 1.1, zIndex: 50, boxShadow: "0px 10px 30px rgba(0,0,0,0.2)" }} // Sürükleme efekti
-                  className="px-5 py-2.5 bg-card border border-border/20 rounded-xl shadow-sm cursor-grab active:cursor-grabbing active:scale-95 hover:bg-white/10" // Hover/active efektleri eklendi
+                  whileDrag={{ scale: 1.1, zIndex: 50, boxShadow: "0px 10px 30px rgba(0,0,0,0.2)" }}
+                  className="px-5 py-2.5 bg-card border border-border/20 rounded-xl shadow-sm cursor-grab active:cursor-grabbing active:scale-95 hover:bg-white/10"
                 >
                   <span className="font-semibold text-foreground select-none">{el.name}</span>
                 </motion.div>
