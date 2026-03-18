@@ -116,7 +116,7 @@ const MapReadingActivity = ({ onClose }: MapReadingActivityProps) => {
             {/* 1. Hız ve Görüntü Optimizasyonu: Standart <img> yerine Next.js <Image /> bileşeni kullanıldı. */}
             <Image
               // Kritik Görüntü Yolu (src) güncellendi ve fill, priority, object-contain eklendi.
-              src="/9/harita/turkiye-fiziki.jpg"
+              src="/9/harita/map-sicaklik.jpg"
               alt="Türkiye Sıcaklık Haritası"
               fill
               priority
