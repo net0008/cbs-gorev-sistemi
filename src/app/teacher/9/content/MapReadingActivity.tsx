@@ -111,8 +111,8 @@ const MapReadingActivity = ({ onClose }: MapReadingActivityProps) => {
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="relative w-full h-full max-w-full max-h-full aspect-[4/3] m-auto">
             <img
-              src="https://i.imgur.com/V3v3S8G.jpeg"
-              alt="Bergama Haritası"
+              src="/9/harita/map-sicaklik.jpg"
+              alt="Türkiye Sıcaklık Haritası"
               className="w-full h-full object-contain"
             />
 
@@ -128,7 +128,7 @@ const MapReadingActivity = ({ onClose }: MapReadingActivityProps) => {
                     <motion.div
                       initial={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
-                      className="absolute inset-0 bg-background/20 backdrop-blur-lg rounded-lg border-2 border-dashed border-white/30"
+                      className="absolute inset-0 bg-background/20 backdrop-blur-xl rounded-lg border-2 border-dashed border-white/30"
                     />
                   )}
                   {completedElements.includes(el.id) && (

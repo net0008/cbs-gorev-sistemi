@@ -8,8 +8,9 @@ const activities = [
   {
     id: 'map-reading',
     name: 'Harita Okuryazarlığı: Haritanın Elemanları',
-    learningOutcome: 'COĞ.9.2.1. Harita uygulamaları yapabilme. a) Haritaya ait bileşenlerden yararlanarak haritaları okur.',
-    toolset: 'Etkileşimli Harita',
+    kazanim: 'COĞ.9.2.1. Harita uygulamaları yapabilme.',
+    surec: 'a) Haritaya ait bileşenlerden yararlanarak haritaları okur.',
+    toolset: 'Harita',
     component: (onClose: () => void) => <MapReadingActivity onClose={onClose} />,
   },
   // Gelecekteki etkinlikler buraya eklenebilir.
@@ -35,13 +36,17 @@ export default function ContentCatalogPage() {
             <h2 className="text-xl font-bold text-emerald-800 dark:text-emerald-400 mb-4">{act.name}</h2>
             <div className="space-y-4 text-sm leading-relaxed text-foreground/70">
               <div>
-                <strong className="font-semibold text-foreground/90 block mb-2">Öğrenme Çıktıları ve Süreç Bileşenleri:</strong>
+                <strong className="font-semibold text-foreground/90 block mb-1">Kazanım:</strong>
+                {act.kazanim}
+              </div>
+              <div>
+                <strong className="font-semibold text-foreground/90 block mb-1">Süreç:</strong>
                 <ul className="list-disc list-inside space-y-1">
-                  <li>{act.learningOutcome}</li>
+                  <li>{act.surec}</li>
                 </ul>
               </div>
               <p>
-                <strong className="font-semibold text-foreground/90">Araç Seti:</strong> {act.toolset}
+                <strong className="font-semibold text-foreground/90">Araç:</strong> {act.toolset}
               </p>
             </div>
           </div>
