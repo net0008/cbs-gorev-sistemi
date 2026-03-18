@@ -1,25 +1,74 @@
-'use client';
-import dynamic from 'next/dynamic';
+"use client";
+import React from 'react';
+import { ClipboardCheck, Users, BarChart3, ArrowRight } from 'lucide-react';
 
-// Haritayı içeren çalışma alanını SSR olmadan yüklüyoruz
-const TaskWorkspace = dynamic(
-  () => import('../../TaskWorkspace'),
-  { ssr: false, loading: () => <div className="animate-pulse h-[600px] w-full bg-slate-200 dark:bg-slate-800 rounded-2xl"></div> }
-);
-
-export default function StudentPerformancePage() {
+export default function Home() {
   return (
-    <div className="w-full max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-      <div className="mb-10 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 p-6 sm:p-8 rounded-3xl shadow-sm">
-        <h1 className="text-3xl md:text-4xl font-extrabold text-slate-800 dark:text-white flex items-center gap-4">
-          <div className="flex items-center justify-center w-12 h-12 bg-blue-100 dark:bg-blue-900/50 rounded-full animate-pulse ring-2 ring-blue-500 shadow-lg shadow-blue-500/20">
-            <svg className="w-7 h-7 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
-          </div>
-          Coğrafi Bilgi Sistemleri'ni Öğreniyorum
-        </h1>
-        <p className="text-slate-600 dark:text-slate-400 mt-3 text-lg">Yönergeleri izleyerek harita çizimini tamamlayın, yorumunuzu yazın ve kontrol listesini işaretleyin.</p>
+    <div className="w-full max-w-7xl mx-auto py-4">
+      {/* Karşılama Alanı */}
+      <div className="mb-10">
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">CBS Görev Sistemi</h1>
+        <p className="text-slate-500 dark:text-slate-400 font-medium">
+          Eğitim teknolojileri ve coğrafi bilgi sistemleri görev yönetim platformuna hoş geldiniz.
+        </p>
       </div>
-      <TaskWorkspace />
+
+      {/* İstatistik Kartları */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        
+        {/* Görevlerim Kartı */}
+        <div className="bg-white dark:bg-slate-900/60 rounded-[2rem] p-8 shadow-sm border border-slate-100 dark:border-slate-800 hover:shadow-md transition-shadow group">
+          <div className="flex items-center justify-between mb-8">
+            <div className="p-4 bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-2xl">
+              <ClipboardCheck size={28} />
+            </div>
+            <button className="text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+              <ArrowRight size={24} />
+            </button>
+          </div>
+          <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Görevlerim</h3>
+          <p className="text-3xl font-black text-blue-600 dark:text-blue-400 mb-5">7 Aktif Görev</p>
+          <div className="flex items-center gap-3 text-sm font-semibold">
+            <span className="text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-xl">2 Bekleyen</span>
+            <span className="text-emerald-600 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-900/40 px-3 py-1.5 rounded-xl">5 Tamamlanan</span>
+          </div>
+        </div>
+
+        {/* Sınıflarım Kartı */}
+        <div className="bg-white dark:bg-slate-900/60 rounded-[2rem] p-8 shadow-sm border border-slate-100 dark:border-slate-800 hover:shadow-md transition-shadow group">
+          <div className="flex items-center justify-between mb-8">
+            <div className="p-4 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 rounded-2xl">
+              <Users size={28} />
+            </div>
+            <button className="text-slate-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+              <ArrowRight size={24} />
+            </button>
+          </div>
+          <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Sınıflarım</h3>
+          <p className="text-3xl font-black text-emerald-600 dark:text-emerald-400 mb-5">4 Kayıtlı Sınıf</p>
+          <div className="text-sm font-semibold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-4 py-1.5 rounded-xl inline-block">
+            120 Toplam Öğrenci
+          </div>
+        </div>
+
+        {/* İstatistikler Kartı */}
+        <div className="bg-white dark:bg-slate-900/60 rounded-[2rem] p-8 shadow-sm border border-slate-100 dark:border-slate-800 hover:shadow-md transition-shadow group">
+          <div className="flex items-center justify-between mb-8">
+            <div className="p-4 bg-purple-100 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400 rounded-2xl">
+              <BarChart3 size={28} />
+            </div>
+            <button className="text-slate-400 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+              <ArrowRight size={24} />
+            </button>
+          </div>
+          <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">İstatistikler</h3>
+          <p className="text-3xl font-black text-purple-600 dark:text-purple-400 mb-5">15 Görev Tamamlama</p>
+          <div className="text-sm font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-900/40 px-4 py-1.5 rounded-xl inline-block">
+            %85 Başarı Oranı
+          </div>
+        </div>
+
+      </div>
     </div>
   );
 }
