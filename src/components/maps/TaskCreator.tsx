@@ -69,7 +69,10 @@ export default function TaskCreator() {
 
       <div className="h-[500px] w-full rounded-lg overflow-hidden border border-border shadow-inner">
         <MapContainer center={[39.12, 27.18]} zoom={13} style={{ height: '100%', width: '100%' }}>
-          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+          <TileLayer 
+            url="https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png" 
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)' 
+          />
           <FeatureGroup ref={featureGroupRef}>
             <DrawEditControl position="topright" onCreated={onCreated} onEdited={onEdited} onDeleted={onDeleted} draw={{ rectangle: false, circle: false, circlemarker: false }} />
           </FeatureGroup>

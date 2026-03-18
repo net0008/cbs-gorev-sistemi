@@ -28,7 +28,10 @@ export default function ComparativeMap({ referenceGeoJSON, studentGeoJSON }: Com
   return (
     <div className="h-full w-full min-h-[400px]">
       <MapContainer center={[39.12, 27.18]} zoom={13} className="h-full w-full relative z-0">
-        <TileLayer url="https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png" />
+        <TileLayer 
+          url="https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png" 
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)' 
+        />
         
         {/* Öğretmenin Referans Verisi (Mavi) */}
         {referenceGeoJSON && (

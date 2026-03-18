@@ -24,7 +24,7 @@ export default function Home() {
       >
         <TileLayer
           url="https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
         />
       </MapBackground>
       <div className="relative z-10 w-full max-w-2xl p-8 bg-white/15 dark:bg-black/20 backdrop-blur-md rounded-3xl shadow-2xl border border-white/20 text-center">

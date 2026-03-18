@@ -92,7 +92,10 @@ export default function TaskWorkspace() {
       <div className="flex-1 flex flex-col gap-4">
         <div className="h-[600px] w-full rounded-2xl overflow-hidden border-2 border-slate-300 dark:border-slate-700 shadow-xl relative z-0">
           <MapContainer center={[39.12, 27.18]} zoom={13} style={{ height: '100%', width: '100%' }}>
-            <TileLayer url="https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png" />
+            <TileLayer 
+              url="https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png" 
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)' 
+            />
             <FeatureGroup ref={featureGroupRef}>
               <EditControl position="topright" onCreated={onCreated} draw={{ circlemarker: false, circle: false }} />
             </FeatureGroup>
