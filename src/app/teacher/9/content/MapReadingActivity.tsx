@@ -4,13 +4,13 @@ import { motion, AnimatePresence, PanInfo } from 'framer-motion';
 import Image from 'next/image';
 import { X, CheckCircle, Crosshair } from 'lucide-react';
 
-// 🎯 Güncel Koordinatlar (centerX/centerY değerleri tam istediğin gibi)
+// 🎯 Hasbi Hocam, Yeni % Koordinatlar (Tam istediğin değerler)
 const coordinatesBlock = {
-  title:   { centerX: 50.07, centerY: 10.61, width: 65.06, height: 15.82 },
-  legend:  { centerX: 88.94, centerY: 90.82, width: 15.77, height: 15.95 },
-  scale:   { centerX: 16.05, centerY: 92.98, width: 20.99, height: 13.80 },
-  compass: { centerX: 91.21, centerY: 16.83, width: 11.43, height: 25.59 },
-  coords:  { centerX: 4.37,  centerY: 45.56, width: 3.16,  height: 64.39 },
+  title:   { centerX: 53.38, centerY: 10.51, width: 65.06, height: 15.82 },
+  legend:  { centerX: 91.97, centerY: 90.84, width: 15.77, height: 15.95 },
+  scale:   { centerX: 13.07, centerY: 94.41, width: 20.99, height: 13.80 },
+  compass: { centerX: 93.54, centerY: 17.50, width: 11.43, height: 25.59 },
+  coords:  { centerX: 1.43,  centerY: 45.75, width: 3.16,  height: 64.39 },
 };
 
 export default function MapReadingActivity({ onClose }: { onClose: () => void }) {
@@ -19,7 +19,7 @@ export default function MapReadingActivity({ onClose }: { onClose: () => void })
   const dropZoneRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const activityAreaRef = useRef<HTMLDivElement>(null);
 
-  // Haritaya tıklandığında koordinatı yakala ve kopyala
+  // Canlı koordinat yakalama ve kopyalama fonksiyonu
   const handleMapClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = Number((((e.clientX - rect.left) / rect.width) * 100).toFixed(2));
@@ -51,7 +51,7 @@ export default function MapReadingActivity({ onClose }: { onClose: () => void })
         <button onClick={onClose} className="bg-red-600 hover:bg-red-700 text-white px-6 py-1.5 rounded-full font-bold text-sm transition-all active:scale-95 shadow-lg">KAPAT</button>
       </div>
 
-      {/* 2. SÜRÜKLENECEK ÖĞELER BANTI (YUKARI ALINDI VE DARALTILDI) */}
+      {/* 2. SÜRÜKLENECEK ÖĞELER BANTI (Yukarıda ve Dar) */}
       <div className="bg-[#2D3328]/95 p-2 flex flex-wrap justify-center items-center gap-2 border-b border-white/5 flex-shrink-0 min-h-[55px] z-10">
         <AnimatePresence>
           {Object.keys(coordinatesBlock).filter(id => !solved.includes(id)).map((id) => (
@@ -76,7 +76,7 @@ export default function MapReadingActivity({ onClose }: { onClose: () => void })
         )}
       </div>
 
-      {/* 3. HARİTA ALANI (TIKLANABİLİR VE TAM SIGDIRMA) */}
+      {/* 3. HARİTA ALANI (Tıklanabilir ve Tam Sığdırma) */}
       <div className="relative flex-1 flex items-center justify-center p-1 bg-[#0a0a0a] overflow-hidden">
         <div 
           onClick={handleMapClick}
@@ -101,7 +101,7 @@ export default function MapReadingActivity({ onClose }: { onClose: () => void })
             >
               {solved.includes(id) && (
                 <div className="bg-emerald-600/90 text-white px-2 py-0.5 rounded text-[10px] font-bold shadow-lg border border-emerald-400/30">
-                  {id === 'title' ? 'Başlık' : id === 'legend' ? 'Lejant' : id === 'scale' ? 'Ölçek' : id === 'compass' ? 'Yön Oku' : 'Koordinat'}
+                  {id === 'title' ? 'Başlık' : id === 'legend' ? 'Lejant' : id === 'scale' ? 'Ölçek' : id === 'compass' ? 'Yön Oku' : id === 'coords' ? 'Koordinat' : id}
                 </div>
               )}
             </div>
@@ -115,7 +115,7 @@ export default function MapReadingActivity({ onClose }: { onClose: () => void })
         </div>
       </div>
 
-      {/* 🚀 CANLI KOORDİNAT BİLGİ KUTUSU (Sayfanın en önünde durur) */}
+      {/* 🚀 CANLI KOORDİNAT BİLGİ KUTUSU */}
       {liveCoords && (
         <div className="fixed bottom-10 left-1/2 -translate-x-1/2 bg-black/95 text-emerald-400 px-6 py-3 rounded-2xl border border-emerald-500/30 shadow-2xl z-[999] flex items-center gap-3 animate-in fade-in slide-in-from-bottom-4 duration-300">
           <Crosshair size={18} className="animate-pulse" />
