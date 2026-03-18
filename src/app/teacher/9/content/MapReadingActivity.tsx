@@ -4,7 +4,11 @@ import { motion, AnimatePresence, PanInfo } from 'framer-motion';
 import Image from 'next/image';
 import { X, CheckCircle, Crosshair } from 'lucide-react';
 
-// 🎯 Hasbi Hocam, Yeni % Koordinatlar (Tam istediğin değerler)
+interface MapReadingActivityProps {
+  onClose: () => void;
+}
+
+// 🎯 Koordinatlar (Son verilen değerler)
 const coordinatesBlock = {
   title:   { centerX: 53.38, centerY: 10.51, width: 65.06, height: 15.82 },
   legend:  { centerX: 91.97, centerY: 90.84, width: 15.77, height: 15.95 },
@@ -13,13 +17,13 @@ const coordinatesBlock = {
   coords:  { centerX: 1.43,  centerY: 45.75, width: 3.16,  height: 64.39 },
 };
 
-export default function MapReadingActivity({ onClose }: { onClose: () => void }) {
+export default function MapReadingActivity({ onClose }: MapReadingActivityProps) {
   const [solved, setSolved] = useState<string[]>([]);
   const [liveCoords, setLiveCoords] = useState<{x: number, y: number} | null>(null);
   const dropZoneRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const activityAreaRef = useRef<HTMLDivElement>(null);
 
-  // Canlı koordinat yakalama ve kopyalama fonksiyonu
+  // Tıklama ile koordinat alma fonksiyonu
   const handleMapClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = Number((((e.clientX - rect.left) / rect.width) * 100).toFixed(2));
@@ -32,12 +36,15 @@ export default function MapReadingActivity({ onClose }: { onClose: () => void })
   const handleDragEnd = useCallback((id: string, info: PanInfo) => {
     const zone = dropZoneRefs.current[id];
     if (!zone) return;
-    const rect = zone.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    const distance = Math.sqrt(Math.pow(info.point.x - centerX, 2) + Math.pow(info.point.y - centerY, 2));
-    if (distance < 50) setSolved(prev => prev.includes(id) ? prev : [...prev, id]);
-  }, []);
+    const zoneRect = zone.getBoundingClientRect();
+    const zoneCenterX = zoneRect.left + zoneRect.width / 2;
+    const zoneCenterY = zoneRect.top + zoneRect.height / 2;
+    const distance = Math.sqrt(Math.pow(info.point.x - zoneCenterX, 2) + Math.pow(info.point.y - zoneCenterY, 2));
+
+    if (distance < 50) {
+      if (!solved.includes(id)) setSolved(prev => [...prev, id]);
+    }
+  }, [solved]);
 
   return (
     <div ref={activityAreaRef} className="fixed inset-0 z-50 bg-slate-950 flex flex-col overflow-hidden select-none">
@@ -48,10 +55,12 @@ export default function MapReadingActivity({ onClose }: { onClose: () => void })
           <h2 className="font-bold text-lg text-emerald-400 leading-tight">Haritalar Nasıl Okunur?</h2>
           <span className="text-[10px] text-slate-500 uppercase font-black tracking-widest block mt-0.5">Öğrenme Çıktıları ve Süreç Bileşenleri</span>
         </div>
-        <button onClick={onClose} className="bg-red-600 hover:bg-red-700 text-white px-6 py-1.5 rounded-full font-bold text-sm transition-all active:scale-95 shadow-lg">KAPAT</button>
+        <button onClick={onClose} className="bg-red-600 hover:bg-red-700 text-white px-6 py-1.5 rounded-full font-bold text-sm transition-all active:scale-95 shadow-lg">
+          KAPAT
+        </button>
       </div>
 
-      {/* 2. SÜRÜKLENECEK ÖĞELER BANTI (Yukarıda ve Dar) */}
+      {/* 2. SÜRÜKLENECEK ÖĞELER BANTI */}
       <div className="bg-[#2D3328]/95 p-2 flex flex-wrap justify-center items-center gap-2 border-b border-white/5 flex-shrink-0 min-h-[55px] z-10">
         <AnimatePresence>
           {Object.keys(coordinatesBlock).filter(id => !solved.includes(id)).map((id) => (
@@ -76,11 +85,11 @@ export default function MapReadingActivity({ onClose }: { onClose: () => void })
         )}
       </div>
 
-      {/* 3. HARİTA ALANI (Tıklanabilir ve Tam Sığdırma) */}
+      {/* 3. HARİTA ALANI (TIKLANABİLİR VE TAM SIGDIRMA) */}
       <div className="relative flex-1 flex items-center justify-center p-1 bg-[#0a0a0a] overflow-hidden">
         <div 
           onClick={handleMapClick}
-          className="relative w-full h-full max-w-7xl aspect-video shadow-2xl overflow-hidden border border-white/5 cursor-crosshair"
+          className="relative w-full h-full max-w-7xl aspect-video shadow-2xl overflow-hidden border border-white/5 cursor-crosshair group"
         >
           <Image src="/9/harita/map-sicaklik.jpg" alt="Harita" fill priority className="object-contain pointer-events-none select-none" />
           
@@ -95,14 +104,18 @@ export default function MapReadingActivity({ onClose }: { onClose: () => void })
                 width: `${geo.width}%`,
                 height: `${geo.height}%`,
               }}
-              className={`transition-all duration-700 flex items-center justify-center pointer-events-none
-                ${solved.includes(id) ? 'blur-none bg-emerald-500/10 border-2 border-emerald-500/50' : 'blur-2xl bg-white/5 border-white/10 backdrop-blur-xl rounded-md'}
+              className={`transition-all duration-700 flex items-center justify-center pointer-events-none rounded-md
+                ${solved.includes(id) 
+                  ? 'blur-none bg-emerald-500/10 border-2 border-emerald-500/50' 
+                  // 🎯 DEĞİŞİKLİK BURADA: border-white/10 -> border-2 border-[#7F8D79]/70 (Zeytin Yeşili)
+                  : 'blur-2xl bg-white/5 border-2 border-[#7F8D79]/70 backdrop-blur-xl'
+                }
               `}
             >
               {solved.includes(id) && (
-                <div className="bg-emerald-600/90 text-white px-2 py-0.5 rounded text-[10px] font-bold shadow-lg border border-emerald-400/30">
+                <motion.div initial={{scale:0}} animate={{scale:1}} className="bg-emerald-600/90 text-white px-2 py-0.5 rounded text-[10px] font-bold shadow-lg border border-emerald-400/30">
                   {id === 'title' ? 'Başlık' : id === 'legend' ? 'Lejant' : id === 'scale' ? 'Ölçek' : id === 'compass' ? 'Yön Oku' : id === 'coords' ? 'Koordinat' : id}
-                </div>
+                </motion.div>
               )}
             </div>
           ))}
