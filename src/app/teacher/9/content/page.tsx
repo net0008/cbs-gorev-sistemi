@@ -33,11 +33,13 @@ export default function ContentCatalogPage() {
             onClick={() => setSelectedActivity(act.id)}
             className="cursor-pointer group bg-card/60 backdrop-blur-lg p-6 rounded-2xl shadow-lg border border-border/20 border-l-8 border-emerald-600 hover:border-emerald-500 hover:shadow-emerald-500/10 transition-all duration-300 transform hover:-translate-y-1"
           >
-            <h2 className="text-xl font-bold text-emerald-800 dark:text-emerald-400 mb-4">{act.name}</h2>
+            <h2 className="text-xl font-extrabold text-emerald-900 dark:text-emerald-400 mb-4">{act.name}</h2>
             <div className="space-y-4 text-sm leading-relaxed text-foreground/70">
               <div>
                 <strong className="font-semibold text-foreground/90 block mb-1">Kazanım:</strong>
-                {act.kazanim}
+                <ul className="list-disc list-inside space-y-1">
+                  <li>{act.kazanim}</li>
+                </ul>
               </div>
               <div>
                 <strong className="font-semibold text-foreground/90 block mb-1">Süreç:</strong>

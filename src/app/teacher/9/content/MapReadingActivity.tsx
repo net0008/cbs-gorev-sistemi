@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useCallback } from 'react';
+import Image from 'next/image'; // Import Next.js Image component
 import { motion, AnimatePresence, PanInfo, Variants } from 'framer-motion';
 import { CheckCircle, Lightbulb, X } from 'lucide-react';
 
@@ -95,7 +96,9 @@ const MapReadingActivity = ({ onClose }: MapReadingActivityProps) => {
       initial="hidden"
       animate="visible"
       exit="exit"
-      className="fixed inset-0 z-50 flex flex-col md:flex-row bg-background/90 backdrop-blur-sm overflow-hidden"
+      // Sayfa düzeni ve hız optimizasyonu: Tam ekran overlay, scrolling yok.
+      // overflow-hidden zaten fixed inset-0 ile sağlanıyor.
+      className="fixed inset-0 z-50 flex flex-col md:flex-row bg-background/90 backdrop-blur-sm"
     >
       {/* 4. Etkinlik Sayfası: Belirgin, parlayan ve sabit 'KAPAT' butonu */}
       <button
@@ -110,9 +113,12 @@ const MapReadingActivity = ({ onClose }: MapReadingActivityProps) => {
       <div className="relative w-full md:w-[70%] h-1/2 md:h-full flex-shrink-0 bg-slate-200 dark:bg-slate-900">
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="relative w-full h-full max-w-full max-h-full aspect-[4/3] m-auto">
-            <img
+            {/* 1. Hız Optimizasyonu: Standart <img> yerine Next.js <Image /> bileşeni kullanıldı. */}
+            <Image
               src="/9/harita/map-sicaklik.jpg"
               alt="Türkiye Sıcaklık Haritası"
+              fill
+              priority
               className="w-full h-full object-contain"
             />
 
