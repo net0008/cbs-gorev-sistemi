@@ -106,7 +106,9 @@ const MapReadingActivity = () => {
         {MAP_ELEMENTS.map((el) => (
           <div
             key={el.id}
-            ref={ref => (dropZoneRefs.current[el.id] = ref)}
+            ref={(ref) => {
+              dropZoneRefs.current[el.id] = ref;
+            }}
             style={el.position}
             className="absolute transition-all duration-500"
           >
