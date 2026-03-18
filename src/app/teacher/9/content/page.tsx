@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { Map, Tool, Target, ArrowRight, Info } from 'lucide-react';
+import { Map, Toolbox, Target, ArrowRight, Info } from 'lucide-react';
 
 // 2. Teknik Hata Giderimi: TypeScript çakışmalarını önlemek için veri tipini (interface) Activity yerine ActivityItem olarak tanımla.
 interface ActivityItem {
@@ -70,7 +70,7 @@ export default function Grade9Content() {
               {/* 1. Kart Yapısı: Araç Seti */}
               <div className="flex items-start gap-3">
                 {/* 3. Tasarım Notları: Simge Dili */}
-                <Tool size={18} className="text-[var(--color-accent-primary)] mt-1 shrink-0" />
+                <Toolbox size={18} className="text-[var(--color-accent-primary)] mt-1 shrink-0" />
                 <div>
                   <span className="text-xs font-semibold text-[var(--color-accent-primary)]/80 uppercase tracking-wider">Araç Seti</span>
                   <div className="flex flex-wrap gap-2 mt-1">
