@@ -12,21 +12,21 @@ interface MapReadingActivityProps {
 // 3. Optimize Edilmiş Yüzde Koordinat Data Bloğu
 // Base Dims: G: 2816 px, Y: 1536 px
 const coordinatesBlock = {
-  title:   { centerX: 50.07, centerY: 10.61, width: 65.06, height: 15.82 },
-  legend:  { centerX: 87.50, centerY: 87.17, width: 15.77, height: 15.95 },
-  scale:   { centerX: 13.64, centerY: 89.65, width: 20.99, height: 13.80 },
+  title: { centerX: 50.07, centerY: 10.61, width: 65.06, height: 15.82 },
+  legend: { centerX: 87.5, centerY: 87.17, width: 15.77, height: 15.95 },
+  scale: { centerX: 13.64, centerY: 89.65, width: 20.99, height: 13.8 },
   compass: { centerX: 89.35, centerY: 17.45, width: 11.43, height: 25.59 },
-  coords:  { centerX: 1.56,  centerY: 63.67, width: 3.16, height: 64.39 },
+  coords: { centerX: 1.56, centerY: 63.67, width: 3.16, height: 64.39 },
 };
 
 // Helper to convert center-based percentages to top/left-based CSS properties
 const convertCoordsToCSS = (coords: typeof coordinatesBlock[keyof typeof coordinatesBlock]): CSSProperties => {
-    return {
-        top: `${coords.centerY - coords.height / 2}%`,
-        left: `${coords.centerX - coords.width / 2}%`,
-        width: `${coords.width}%`,
-        height: `${coords.height}%`,
-    };
+  return {
+    top: `${coords.centerY - coords.height / 2}%`,
+    left: `${coords.centerX - coords.width / 2}%`,
+    width: `${coords.width}%`,
+    height: `${coords.height}%`,
+  };
 };
 
 export default function MapReadingActivity({ onClose }: MapReadingActivityProps) {
@@ -50,18 +50,18 @@ export default function MapReadingActivity({ onClose }: MapReadingActivityProps)
   const handleDragEnd = useCallback((id: string, info: PanInfo) => {
     const dropZone = dropZoneRefs.current[id];
     if (!dropZone) return;
-
+ 
     const zoneRect = dropZone.getBoundingClientRect();
     const zoneCenterX = zoneRect.left + zoneRect.width / 2;
     const zoneCenterY = zoneRect.top + zoneRect.height / 2;
-
+ 
     const dropPointX = info.point.x;
     const dropPointY = info.point.y;
-
+ 
     const distance = Math.sqrt(
       Math.pow(dropPointX - zoneCenterX, 2) + Math.pow(dropPointY - zoneCenterY, 2)
     );
-
+ 
     if (distance < SNAP_DISTANCE) {
       if (!solved.includes(id)) {
         setSolved(prev => [...prev, id]);
@@ -77,7 +77,7 @@ export default function MapReadingActivity({ onClose }: MapReadingActivityProps)
           <h2 className="font-bold text-xl text-emerald-400">Haritalar Nasıl Okunur?</h2>
           <p className="text-xs text-slate-400 uppercase tracking-widest">Kazanım: COĞ.9.2.1</p>
         </div>
-        {/* 3. Estetik: KAPAT Butonu */}
+        {/* Estetik: KAPAT Butonu */}
         <button 
           onClick={onClose}
           className="bg-red-600 hover:bg-red-700 text-white px-8 py-2 rounded-full font-bold transition-all active:scale-95 shadow-lg shadow-red-900/40 flex items-center gap-2"
