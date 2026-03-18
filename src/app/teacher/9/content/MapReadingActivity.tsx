@@ -8,7 +8,7 @@ interface MapReadingActivityProps {
   onClose: () => void;
 }
 
-// 🎯 Koordinatlar (Son verilen değerler)
+// 🎯 Hasbi Hocam, En Son Verdiğin Koordinatlar (Zerre Değişmedi)
 const coordinatesBlock = {
   title:   { centerX: 53.38, centerY: 10.51, width: 65.06, height: 15.82 },
   legend:  { centerX: 91.97, centerY: 90.84, width: 15.77, height: 15.95 },
@@ -23,7 +23,6 @@ export default function MapReadingActivity({ onClose }: MapReadingActivityProps)
   const dropZoneRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const activityAreaRef = useRef<HTMLDivElement>(null);
 
-  // Tıklama ile koordinat alma fonksiyonu
   const handleMapClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = Number((((e.clientX - rect.left) / rect.width) * 100).toFixed(2));
@@ -85,7 +84,7 @@ export default function MapReadingActivity({ onClose }: MapReadingActivityProps)
         )}
       </div>
 
-      {/* 3. HARİTA ALANI (TIKLANABİLİR VE TAM SIGDIRMA) */}
+      {/* 3. HARİTA ALANI (ZIRHLI VE OPAK MASKELEME) */}
       <div className="relative flex-1 flex items-center justify-center p-1 bg-[#0a0a0a] overflow-hidden">
         <div 
           onClick={handleMapClick}
@@ -104,11 +103,11 @@ export default function MapReadingActivity({ onClose }: MapReadingActivityProps)
                 width: `${geo.width}%`,
                 height: `${geo.height}%`,
               }}
+              // 🛡️ KRİTİK DEĞİŞİKLİK: bg-[#1a1c18] ile mat bir zırh oluşturuldu, zeytin yeşili çerçeve eklendi.
               className={`transition-all duration-700 flex items-center justify-center pointer-events-none rounded-md
                 ${solved.includes(id) 
                   ? 'blur-none bg-emerald-500/10 border-2 border-emerald-500/50' 
-                  // 🎯 DEĞİŞİKLİK BURADA: border-white/10 -> border-2 border-[#7F8D79]/70 (Zeytin Yeşili)
-                  : 'blur-2xl bg-white/5 border-2 border-[#7F8D79]/70 backdrop-blur-xl'
+                  : 'bg-[#1a1c18] border-2 border-[#7F8D79]/70 backdrop-blur-2xl'
                 }
               `}
             >
@@ -142,3 +141,4 @@ export default function MapReadingActivity({ onClose }: MapReadingActivityProps)
     </div>
   );
 }
+
