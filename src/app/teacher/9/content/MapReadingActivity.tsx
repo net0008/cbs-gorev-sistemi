@@ -1,10 +1,11 @@
 'use client';
-import React, { useState, useRef } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence, PanInfo } from 'framer-motion';
 import Image from 'next/image';
 import { X, CheckCircle } from 'lucide-react';
 
 interface MapReadingActivityProps {
+  // Katalog sayfasına geri dönmek için kullanılacak fonksiyon
   onClose: () => void;
 }
 
