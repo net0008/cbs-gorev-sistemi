@@ -18,14 +18,9 @@ export default function Home() {
   return (
     <div className="relative w-full h-[calc(100vh-150px)] flex items-center justify-center -mt-4 -mb-4">
       <MapBackground
-        center={[39.12, 27.18]} // Bergama merkezli
-        zoom={12}
+        center={[39.079, 34.146]} // Türkiye geneli
+        zoom={7}
         className="absolute top-0 left-0 w-full h-full z-0"
-        dragging={false}
-        touchZoom={false}
-        scrollWheelZoom={false}
-        doubleClickZoom={false}
-        zoomControl={false}
       >
         <TileLayer
           url="https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png"
