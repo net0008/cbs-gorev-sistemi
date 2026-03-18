@@ -53,7 +53,7 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
                 <ChevronDown size={20} className={`transition-transform ${isTeacherMenuOpen ? 'rotate-180' : ''}`} />
               </button>
               {isTeacherMenuOpen && (
-                <div className="pl-6 mt-2 flex flex-col gap-2 border-l-2 border-muted ml-3">
+                <div className="pl-6 mt-2 flex flex-col gap-2 border-l-2 border-border/30 ml-3">
                   <p className="font-semibold text-sm text-slate-400 mt-2">9. Sınıf</p>
                   <Link href="/teacher/9/content" onClick={() => setIsOpen(false)} className="flex items-center gap-2 p-2 rounded-md hover:bg-muted text-sm"><BookOpen size={16}/> Hazır İçerikler</Link>
                   <Link href="/teacher/9/create" onClick={() => setIsOpen(false)} className="flex items-center gap-2 p-2 rounded-md hover:bg-muted text-sm"><Edit3 size={16}/> İçerik Hazırla</Link>

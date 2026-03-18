@@ -1,12 +1,21 @@
 @import "tailwindcss";
 
 /* Tailwind v4 Tema Değişkenleri */
+.light,
 :root {
-  --background: white;
-  --foreground: #020617; /* slate-950 */
-  --card: white;
-  --border: #e2e8f0; /* slate-200 */
-  --muted: #f1f5f9; /* slate-100 */
+  /* Modern Topo-Tema (Aydınlık) */
+  --color-background-base: #F9F6F0; /* Hafif kemik rengi */
+  --color-text-base: #3A3F32;       /* Koyu zeytin grisi */
+  --color-accent-primary: #3B82F6;  /* Su mavisi */
+  --color-topo-contour: #F59E0B;    /* Amber/Kehribar */
+  --color-topo-landuse: #10B981;    /* Zümrüt yeşili */
+
+  --background: var(--color-background-base);
+  --foreground: var(--color-text-base);
+  --card: var(--color-background-base);
+  /* Sınır rengi, opaklığı yardımcı sınıflarla (örn. border-border/20) kontrol edilecek */
+  --border: var(--color-topo-contour);
+  --muted: #EFEAE2; /* Arkaplanın hafif koyu tonu */
 }
 
 .dark {
