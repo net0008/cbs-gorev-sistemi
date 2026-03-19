@@ -120,7 +120,7 @@ export default function MapReadingActivity({ onClose }: MapReadingActivityProps)
 
       <div className="relative flex-1 flex items-center justify-center p-1 bg-[#0a0a0a] overflow-hidden">
         <div className="relative w-full h-full max-w-7xl aspect-video shadow-2xl overflow-hidden border border-white/5">
-          <Image src="/9/harita/map-sicaklik.jpg" alt="Harita" fill priority className="object-contain pointer-events-none select-none" />
+          <Image src="/9/harita/map-sicaklik.svg" alt="Harita" fill priority className="object-contain pointer-events-none select-none" />
           {Object.entries(coordinatesBlock).map(([id, geo]) => (
             <div
               key={id} id={id} ref={(ref) => { dropZoneRefs.current[id] = ref; }}
