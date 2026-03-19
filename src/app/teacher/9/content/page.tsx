@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
-import MapReadingActivity from './MapReadingActivity';
+import MapActivitiesWrapper from './MapActivitiesWrapper';
 
 const activities = [
   {
@@ -15,7 +15,7 @@ const activities = [
     outcomeTitle: 'Öğrenme çıktıları ve süreç bileşenleri', 
     tools: 'Harita',
     color: 'border-emerald-600',
-    component: (onClose: () => void) => <MapReadingActivity onClose={onClose} />,
+    component: (onClose: () => void) => <MapActivitiesWrapper onClose={onClose} />,
   },
 ];
 
