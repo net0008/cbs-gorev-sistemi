@@ -89,8 +89,28 @@ export default function MapReadingActivity({ onClose }: MapReadingActivityProps)
 
   useEffect(() => { if (solved.length === 5) playSound('complete'); }, [solved]);
 
+  // 🚫 ZOOM VE KAYDIRMA ENGELLEYİCİ (Uygulama Modu)
+  useEffect(() => {
+    const handleWheel = (e: WheelEvent) => {
+      if (e.ctrlKey) e.preventDefault(); // Masaüstü zoom engeli
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length > 1) e.preventDefault(); // Mobil pinch-to-zoom engeli
+    };
+
+    // 'passive: false' şarttır, yoksa tarayıcı preventDefault'u ezer
+    document.addEventListener('wheel', handleWheel, { passive: false });
+    document.addEventListener('touchmove', handleTouchMove, { passive: false });
+
+    return () => {
+      document.removeEventListener('wheel', handleWheel);
+      document.removeEventListener('touchmove', handleTouchMove);
+    };
+  }, []);
+
   return (
-    <div ref={activityAreaRef} className="fixed inset-0 z-50 bg-slate-950 flex flex-col overflow-hidden select-none">
+    <div ref={activityAreaRef} className="fixed inset-0 z-50 bg-slate-950 flex flex-col overflow-hidden select-none touch-none">
       <div className="p-3 px-6 flex justify-between items-center bg-black/60 border-b border-white/10 flex-shrink-0">
         <div className="text-white">
           <h2 className="font-bold text-lg text-emerald-400 leading-tight">Haritalar Nasıl Okunur?</h2>
