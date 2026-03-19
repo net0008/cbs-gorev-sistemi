@@ -10,19 +10,20 @@ interface MapReadingActivityProps {
 
 // 🎯 Hasbi Hocam, En Son Verdiğin Koordinatlar (Zerre şaşmaz)
 const coordinatesBlock = {
-  title:   { centerX: 53.38, centerY: 10.51, width: 65.06, height: 15.82 },
-  legend:  { centerX: 91.97, centerY: 90.84, width: 15.77, height: 15.95 },
-  scale:   { centerX: 13.07, centerY: 94.41, width: 20.99, height: 13.80 },
-  compass: { centerX: 93.54, centerY: 17.50, width: 11.43, height: 25.59 },
-  coords:  { centerX: 1.43,  centerY: 45.75, width: 3.16,  height: 64.39 },
+  area_x5F_title:   { centerX: 53.38, centerY: 10.51, width: 65.06, height: 15.82 },
+  area_x5F_legend:  { centerX: 91.97, centerY: 90.84, width: 15.77, height: 15.95 },
+  area_x5F_scale:   { centerX: 13.07, centerY: 94.41, width: 20.99, height: 13.80 },
+  area_x5F_compass: { centerX: 93.54, centerY: 17.50, width: 11.43, height: 25.59 },
+  area_x5F_coords:  { centerX: 1.43,  centerY: 45.75, width: 3.16,  height: 64.39 },
 };
 
 export default function MapReadingActivity({ onClose }: MapReadingActivityProps) {
   const [solved, setSolved] = useState<string[]>([]);
+  // dropZoneRefs'i artık kullanmamıza gerek kalmadı ama yapıyı bozmamak için tutuyoruz
   const dropZoneRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const activityAreaRef = useRef<HTMLDivElement>(null);
 
-  // 🔊 MATEMATİKSEL SES ÜRETİCİ (Dosya gerektirmez)
+  // 🔊 MATEMATİKSEL SES ÜRETİCİ
   const playSound = (type: 'success' | 'complete' | 'error') => {
     if (typeof window === 'undefined') return;
     const context = new (window.AudioContext || (window as any).webkitAudioContext)();
@@ -53,15 +54,30 @@ export default function MapReadingActivity({ onClose }: MapReadingActivityProps)
     }
   };
 
+  // 🚀 YENİ VE KUSURSUZ SÜRÜKLE BIRAK MANTIĞI
   const handleDragEnd = useCallback((id: string, info: PanInfo) => {
+    // Farenin bırakıldığı tam nokta (ekran kaydırılsa bile doğru verir)
+    const clientX = info.point.x;
+    const clientY = info.point.y;
+
+    // O noktada ekranın altında hangi element var? (Gizli CSS trick)
+    // drag edilen element farenin altında olduğu için, geçici olarak pointer-events kapatmalıyız
+    // Framer motion bunu yapmaya izin vermiyor, bu yüzden ID ile hedefin yerini bulup kıyaslayacağız.
+    
     const zone = dropZoneRefs.current[id];
     if (!zone) return;
-    const rect = zone.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    const distance = Math.sqrt(Math.pow(info.point.x - centerX, 2) + Math.pow(info.point.y - centerY, 2));
 
-    if (distance < 55) {
+    // Hedefin ekrandaki YENİLENMİŞ, kesin koordinatlarını al
+    const rect = zone.getBoundingClientRect();
+    
+    // Farenin koordinatı (info.point) hedef kutunun(rect) içine düştü mü?
+    const isInside = 
+        clientX >= rect.left && 
+        clientX <= rect.right && 
+        clientY >= rect.top && 
+        clientY <= rect.bottom;
+
+    if (isInside) {
       if (!solved.includes(id)) {
         setSolved(prev => [...prev, id]);
         playSound('success');
@@ -91,7 +107,7 @@ export default function MapReadingActivity({ onClose }: MapReadingActivityProps)
               onDragEnd={(_, info) => handleDragEnd(id, info)} whileDrag={{ scale: 1.1, zIndex: 100 }}
               className="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-1.5 rounded-lg cursor-grab active:cursor-grabbing font-bold shadow-md border border-emerald-400/20 text-xs uppercase"
             >
-              {id === 'title' ? 'Başlık' : id === 'legend' ? 'Lejant' : id === 'scale' ? 'Ölçek' : id === 'compass' ? 'Yön Oku' : 'Koordinat'}
+              {id === 'area_x5F_title' ? 'Başlık' : id === 'area_x5F_legend' ? 'Lejant' : id === 'area_x5F_scale' ? 'Ölçek' : id === 'area_x5F_compass' ? 'Yön Oku' : 'Koordinat'}
             </motion.div>
           ))}
         </AnimatePresence>
@@ -107,7 +123,7 @@ export default function MapReadingActivity({ onClose }: MapReadingActivityProps)
           <Image src="/9/harita/map-sicaklik.jpg" alt="Harita" fill priority className="object-contain pointer-events-none select-none" />
           {Object.entries(coordinatesBlock).map(([id, geo]) => (
             <div
-              key={id} ref={(ref) => { dropZoneRefs.current[id] = ref; }}
+              key={id} id={id} ref={(ref) => { dropZoneRefs.current[id] = ref; }}
               style={{ position: 'absolute', top: `${geo.centerY - geo.height / 2}%`, left: `${geo.centerX - geo.width / 2}%`, width: `${geo.width}%`, height: `${geo.height}%` }}
               className={`transition-all duration-700 flex items-center justify-center pointer-events-none rounded-md
                 ${solved.includes(id) ? 'blur-none bg-emerald-500/10 border-2 border-emerald-500/50' : 'bg-[#1a1c18] border-2 border-[#7F8D79]/70 backdrop-blur-2xl'}
@@ -115,7 +131,7 @@ export default function MapReadingActivity({ onClose }: MapReadingActivityProps)
             >
               {solved.includes(id) && (
                 <div className="bg-emerald-600/90 text-white px-2 py-0.5 rounded text-[10px] font-bold shadow-lg border border-emerald-400/30">
-                  {id === 'title' ? 'Başlık' : id === 'legend' ? 'Lejant' : id === 'scale' ? 'Ölçek' : id === 'compass' ? 'Yön Oku' : 'Koordinat'}
+                  {id === 'area_x5F_title' ? 'Başlık' : id === 'area_x5F_legend' ? 'Lejant' : id === 'area_x5F_scale' ? 'Ölçek' : id === 'area_x5F_compass' ? 'Yön Oku' : 'Koordinat'}
                 </div>
               )}
             </div>
