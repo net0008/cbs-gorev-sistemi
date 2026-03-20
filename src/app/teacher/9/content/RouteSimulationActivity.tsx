@@ -13,13 +13,13 @@ interface RouteSimulationActivityProps {
 // 🛑 EXACT RE-CALIBRATED COORDINATE DATABASE (Percentage based on 1303x1019.89)
 // =========================================================================
 
-const boylamX = {
+const boylamX: Record<string, number> = {
   '10W': 10.28, '0': 16.81, '10E': 23.33, '20E': 29.62, '30E': 35.92,
   '40E': 42.52, '50E': 48.73, '60E': 55.18, '70E': 61.78, '80E': 68.00,
   '90E': 74.67, '100E': 80.81, '110E': 87.11, '120E': 93.63
 };
 
-const enlemY = {
+const enlemY: Record<string, number> = {
   '50N': 5.61, '40N': 18.26, '30N': 29.24, '20N': 39.34, '10N': 48.85,
   '0': 58.17, '10S': 67.48, '20S': 76.80, '30S': 87.09, '40S': 98.07
 };
@@ -86,8 +86,8 @@ export default function RouteSimulationActivity({ onClose }: RouteSimulationActi
     setLastCheck(isCorrect ? 'correct' : 'wrong');
 
     // Drone'un mevcut pozisyonunu al (animasyon için)
-    const currentX = boylamX[guessedBoylam];
-    const currentY = enlemY[guessedEnlem];
+    const currentX = boylamX[guessedBoylam as keyof typeof boylamX];
+    const currentY = enlemY[guessedEnlem as keyof typeof enlemY];
 
     setPrevDronePos({ x: currentX, y: currentY });
 
