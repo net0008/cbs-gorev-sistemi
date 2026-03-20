@@ -3,22 +3,22 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { Navigation, Target, Send, ShieldAlert, Crosshair, RefreshCcw, CheckCircle2 } from 'lucide-react';
+import { Navigation, Target, Send, ShieldAlert, Crosshair, RefreshCcw, CheckCircle2, Flag } from 'lucide-react';
 
 interface RouteSimulationActivityProps {
   onClose: () => void;
 }
 
-// 🛑 KOORDİNAT VERİ TABANI
+// 🛑 KOORDİNAT VERİ TABANI (Re-Calibrated Coordinates for Map - Percentage 1340x1080)
 const boylamX: Record<string, number> = {
-  '10W': 10.90, '0': 17.24, '10E': 23.58, '20E': 29.70, '30E': 35.82,
-  '40E': 42.24, '50E': 48.28, '60E': 54.55, '70E': 60.97, '80E': 67.01,
-  '90E': 73.51, '100E': 79.48, '110E': 85.60, '120E': 91.94
+  '10W': 10.90, '0': 17.24, '10E': 23.58, '20E': 29.70, '30E': 35.82, 
+  '40E': 42.24, '50E': 48.28, '60E': 54.55, '70E': 60.97, '80E': 67.01, 
+  '90E': 73.51, '100E': 79.48, '110E': 85.60, '120E': 91.94 
 };
 
 const enlemY: Record<string, number> = {
-  '50N': 8.61, '40N': 20.56, '30N': 30.93, '20N': 40.46, '10N': 49.44,
-  '0': 58.24, '10S': 67.04, '20S': 75.83, '30S': 85.56, '40S': 95.93
+  '50N': 8.61, '40N': 20.56, '30N': 30.93, '20N': 40.46, '10N': 49.44, 
+  '0': 58.24, '10S': 67.04, '20S': 75.83, '30S': 85.56, '40S': 95.93 
 };
 
 // 🚁 ÖZEL DRONE BİLEŞENİ (Pervaneleri Dönen SVG)
@@ -26,19 +26,19 @@ const DroneSVG = () => (
   <div className="relative w-12 h-12 flex items-center justify-center filter drop-shadow-[0_5px_15px_rgba(0,0,0,0.8)]">
     {/* Pervane 1 (Sol Üst) */}
     <motion.div className="absolute top-0 left-0 w-5 h-5 rounded-full border border-white/30 bg-slate-400/20 backdrop-blur-sm flex items-center justify-center" animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 0.15, ease: "linear" }}>
-      <div className="w-4 h-0.5 bg-white/80 rounded-full"></div>
+      <div className="w-4 h-0.5 bg-[#ef4444] rounded-full shadow-[0_0_5px_rgba(239,68,68,0.8)]"></div>
     </motion.div>
     {/* Pervane 2 (Sağ Üst) */}
     <motion.div className="absolute top-0 right-0 w-5 h-5 rounded-full border border-white/30 bg-slate-400/20 backdrop-blur-sm flex items-center justify-center" animate={{ rotate: -360 }} transition={{ repeat: Infinity, duration: 0.15, ease: "linear" }}>
-      <div className="w-4 h-0.5 bg-white/80 rounded-full"></div>
+      <div className="w-4 h-0.5 bg-[#ef4444] rounded-full shadow-[0_0_5px_rgba(239,68,68,0.8)]"></div>
     </motion.div>
     {/* Pervane 3 (Sol Alt) */}
     <motion.div className="absolute bottom-0 left-0 w-5 h-5 rounded-full border border-white/30 bg-slate-400/20 backdrop-blur-sm flex items-center justify-center" animate={{ rotate: -360 }} transition={{ repeat: Infinity, duration: 0.15, ease: "linear" }}>
-      <div className="w-4 h-0.5 bg-white/80 rounded-full"></div>
+      <div className="w-4 h-0.5 bg-[#ef4444] rounded-full shadow-[0_0_5px_rgba(239,68,68,0.8)]"></div>
     </motion.div>
     {/* Pervane 4 (Sağ Alt) */}
     <motion.div className="absolute bottom-0 right-0 w-5 h-5 rounded-full border border-white/30 bg-slate-400/20 backdrop-blur-sm flex items-center justify-center" animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 0.15, ease: "linear" }}>
-      <div className="w-4 h-0.5 bg-white/80 rounded-full"></div>
+      <div className="w-4 h-0.5 bg-[#ef4444] rounded-full shadow-[0_0_5px_rgba(239,68,68,0.8)]"></div>
     </motion.div>
     
     {/* Drone Gövde (0 Derecesi sağa - Doğuya bakar) */}
@@ -219,7 +219,7 @@ export default function RouteSimulationActivity({ onClose }: RouteSimulationActi
         <div className="text-white flex items-center gap-6">
           <div>
             <h2 className="font-extrabold text-xl text-blue-400 leading-tight">Dinamik Rota Simülasyonu</h2>
-            <span className="text-xs text-slate-400 uppercase font-black tracking-widest block mt-1">5 Görevli Koordinat Oyunu</span>
+            <span className="text-xs text-slate-400 uppercase font-black tracking-widest block mt-1">Görevleri Tamamla</span>
           </div>
           <div className="h-8 w-px bg-slate-700 hidden md:block"></div>
           <div className="hidden md:flex flex-col">
@@ -267,15 +267,23 @@ export default function RouteSimulationActivity({ onClose }: RouteSimulationActi
             />
           </svg>
 
-          {/* Radar Hedef (Target Ping) */}
+          {/* Radar Hedef ve Bayrak (Target) */}
           {!gameOver && targetCoord && (
-            <motion.div
-              initial={{ scale: 0, opacity: 1 }}
-              animate={{ scale: 2.5, opacity: 0 }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: "easeOut" }}
-              className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-amber-500 z-10 pointer-events-none bg-amber-500/20"
-              style={{ width: 60, height: 60, left: `${boylamX[targetCoord.boylam]}%`, top: `${enlemY[targetCoord.enlem]}%` }}
-            />
+            <div 
+              className="absolute z-20 pointer-events-none"
+              style={{ left: `${boylamX[targetCoord.boylam]}%`, top: `${enlemY[targetCoord.enlem]}%` }}
+            >
+              <motion.div
+                initial={{ scale: 0, opacity: 1 }}
+                animate={{ scale: 2.5, opacity: 0 }}
+                transition={{ duration: 1.5, repeat: Infinity, ease: "easeOut" }}
+                className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-red-500 bg-red-500/20"
+                style={{ width: 60, height: 60 }}
+              />
+              <div className="absolute -translate-x-[20%] -translate-y-[90%] drop-shadow-[0_0_10px_rgba(239,68,68,0.8)]">
+                <Flag size={36} className="text-red-500 fill-red-500" />
+              </div>
+            </div>
           )}
 
           {/* Drone İkonu */}
@@ -299,7 +307,7 @@ export default function RouteSimulationActivity({ onClose }: RouteSimulationActi
                  animate={{ opacity: 1, y: 0 }}
                  className={`absolute top-16 backdrop-blur-md text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-2xl whitespace-nowrap border ${missionStatus === 'success' ? 'bg-emerald-600/90 border-emerald-400' : 'bg-red-600/90 border-red-400'}`}
                >
-                 {missionStatus === 'success' ? '+20 Puan! Doğru İniş.' : '-5 Puan! Yanlış Koordinat.'}
+                 {missionStatus === 'success' ? '+20 Puan! Doğru İniş.' : '-5 Puan! Yanlış Hedef, Haritayı Tekrar İncele.'}
                </motion.div>
             )}
           </motion.div>
@@ -311,11 +319,6 @@ export default function RouteSimulationActivity({ onClose }: RouteSimulationActi
           <h3 className="text-blue-400 font-bold mb-5 flex items-center gap-2 text-sm uppercase tracking-wider">
             <Target size={18} /> Drone Kontrol Merkezi
           </h3>
-
-          <div className="bg-amber-500/10 border border-amber-500/30 p-4 rounded-xl text-center shadow-inner">
-            <span className="text-amber-400 text-xs font-black uppercase tracking-widest block mb-1 flex justify-center items-center gap-1"><Crosshair size={14}/> AKTİF GÖREV</span>
-            <span className="text-white text-xl font-extrabold">{targetCoord.enlem} - {targetCoord.boylam}</span>
-          </div>
           
           <div className="space-y-4">
             {/* Enlem Seçimi */}
