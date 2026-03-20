@@ -9,16 +9,16 @@ interface RouteSimulationActivityProps {
   onClose: () => void;
 }
 
-// 🛑 KOORDİNAT VERİ TABANI (Re-Calibrated Coordinates for Map - Percentage 1340x1080)
+// 🛑 KOORDİNAT VERİ TABANI (Re-Calibrated Coordinates for Map - Percentage 1303x1019.89)
 const boylamX: Record<string, number> = {
-  '10W': 10.90, '0': 17.24, '10E': 23.58, '20E': 29.70, '30E': 35.82, 
-  '40E': 42.24, '50E': 48.28, '60E': 54.55, '70E': 60.97, '80E': 67.01, 
-  '90E': 73.51, '100E': 79.48, '110E': 85.60, '120E': 91.94 
+  '10W': 10.28, '0': 16.81, '10E': 23.33, '20E': 29.62, '30E': 35.92,
+  '40E': 42.52, '50E': 48.73, '60E': 55.18, '70E': 61.78, '80E': 68.00,
+  '90E': 74.67, '100E': 80.81, '110E': 87.11, '120E': 93.63
 };
 
 const enlemY: Record<string, number> = {
-  '50N': 8.61, '40N': 20.56, '30N': 30.93, '20N': 40.46, '10N': 49.44, 
-  '0': 58.24, '10S': 67.04, '20S': 75.83, '30S': 85.56, '40S': 95.93 
+  '50N': 5.61, '40N': 18.26, '30N': 29.24, '20N': 39.34, '10N': 48.85,
+  '0': 58.17, '10S': 67.48, '20S': 76.80, '30S': 87.09, '40S': 98.07
 };
 
 // 🚁 ÖZEL DRONE BİLEŞENİ (Pervaneleri Dönen SVG)
@@ -26,19 +26,19 @@ const DroneSVG = () => (
   <div className="relative w-12 h-12 flex items-center justify-center filter drop-shadow-[0_5px_15px_rgba(0,0,0,0.8)]">
     {/* Pervane 1 (Sol Üst) */}
     <motion.div className="absolute top-0 left-0 w-5 h-5 rounded-full border border-white/30 bg-slate-400/20 backdrop-blur-sm flex items-center justify-center" animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 0.15, ease: "linear" }}>
-      <div className="w-4 h-0.5 bg-[#b91c1c] rounded-full shadow-[0_0_5px_rgba(185,28,28,0.8)]"></div>
+      <div className="w-4 h-0.5 bg-[#ef4444] rounded-full shadow-[0_0_5px_rgba(239,68,68,0.8)]"></div>
     </motion.div>
     {/* Pervane 2 (Sağ Üst) */}
     <motion.div className="absolute top-0 right-0 w-5 h-5 rounded-full border border-white/30 bg-slate-400/20 backdrop-blur-sm flex items-center justify-center" animate={{ rotate: -360 }} transition={{ repeat: Infinity, duration: 0.15, ease: "linear" }}>
-      <div className="w-4 h-0.5 bg-[#b91c1c] rounded-full shadow-[0_0_5px_rgba(185,28,28,0.8)]"></div>
+      <div className="w-4 h-0.5 bg-[#ef4444] rounded-full shadow-[0_0_5px_rgba(239,68,68,0.8)]"></div>
     </motion.div>
     {/* Pervane 3 (Sol Alt) */}
     <motion.div className="absolute bottom-0 left-0 w-5 h-5 rounded-full border border-white/30 bg-slate-400/20 backdrop-blur-sm flex items-center justify-center" animate={{ rotate: -360 }} transition={{ repeat: Infinity, duration: 0.15, ease: "linear" }}>
-      <div className="w-4 h-0.5 bg-[#b91c1c] rounded-full shadow-[0_0_5px_rgba(185,28,28,0.8)]"></div>
+      <div className="w-4 h-0.5 bg-[#ef4444] rounded-full shadow-[0_0_5px_rgba(239,68,68,0.8)]"></div>
     </motion.div>
     {/* Pervane 4 (Sağ Alt) */}
     <motion.div className="absolute bottom-0 right-0 w-5 h-5 rounded-full border border-white/30 bg-slate-400/20 backdrop-blur-sm flex items-center justify-center" animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 0.15, ease: "linear" }}>
-      <div className="w-4 h-0.5 bg-[#b91c1c] rounded-full shadow-[0_0_5px_rgba(185,28,28,0.8)]"></div>
+      <div className="w-4 h-0.5 bg-[#ef4444] rounded-full shadow-[0_0_5px_rgba(239,68,68,0.8)]"></div>
     </motion.div>
     
     {/* Drone Gövde (0 Derecesi sağa - Doğuya bakar) */}
@@ -48,7 +48,7 @@ const DroneSVG = () => (
       {/* Ana Gövde */}
       <circle cx="12" cy="12" r="5" fill="#1e293b" stroke="#38bdf8" strokeWidth="2"/>
       {/* Burun (Ön taraf - Sağ) */}
-      <path d="M17 12L21 15L21 9L17 12Z" fill="#b91c1c" />
+      <path d="M17 12L21 15L21 9L17 12Z" fill="#ef4444" />
     </svg>
   </div>
 );
@@ -219,7 +219,7 @@ export default function RouteSimulationActivity({ onClose }: RouteSimulationActi
         <div className="text-white flex items-center gap-6">
           <div>
             <h2 className="font-extrabold text-xl text-blue-400 leading-tight">Dinamik Rota Simülasyonu</h2>
-            <span className="text-xs text-slate-400 uppercase font-black tracking-widest block mt-1">Görevleri Tamamla</span>
+            <span className="text-xs text-slate-400 uppercase font-black tracking-widest block mt-1">Görevleri tamamla</span>
           </div>
           <div className="h-8 w-px bg-slate-700 hidden md:block"></div>
           <div className="hidden md:flex flex-col">
@@ -242,15 +242,15 @@ export default function RouteSimulationActivity({ onClose }: RouteSimulationActi
           style={{
              maxWidth: '100%',
              maxHeight: '100%',
-             aspectRatio: '1340 / 1080',
+             aspectRatio: '1303 / 1019.89',
              position: 'relative'
           }}
         >
           <Image 
             src="/9/harita/koordinat-01.svg" 
             alt="Koordinat Haritası" 
-            width={1340}
-            height={1080}
+            width={1303}
+            height={1020}
             priority 
             className="w-full h-auto pointer-events-none opacity-90" 
           />
