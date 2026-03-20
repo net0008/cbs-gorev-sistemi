@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { Navigation, MapPin, CheckCircle, Target } from 'lucide-react';
+import { Navigation, MapPin, CheckCircle, Target, Flag } from 'lucide-react';
 
 interface RouteSimulationActivityProps {
   onClose: () => void;
@@ -11,17 +12,23 @@ interface RouteSimulationActivityProps {
 
 // =========================================================================
 // 🛑 EXACT RE-CALIBRATED COORDINATE DATABASE (Percentage based on 1306x1020)
+// 🛑 EXACT RE-CALIBRATED COORDINATE DATABASE (Percentage based on 1303x1019.89)
 // =========================================================================
 
 const boylamX = {
   '10W': 10.26, '0': 16.77, '10E': 23.28, '20E': 29.56, '30E': 35.83,
   '40E': 42.42, '50E': 48.62, '60E': 55.05, '70E': 61.64, '80E': 67.84,
   '90E': 74.50, '100E': 80.63, '110E': 86.91, '120E': 93.42
+  '10W': 10.28, '0': 16.81, '10E': 23.33, '20E': 29.62, '30E': 35.92,
+  '40E': 42.52, '50E': 48.73, '60E': 55.18, '70E': 61.78, '80E': 68.00,
+  '90E': 74.67, '100E': 80.81, '110E': 87.11, '120E': 93.63
 };
 
 const enlemY = {
   '50N': 5.61, '40N': 18.26, '30N': 29.23, '20N': 39.33, '10N': 48.84,
   '0': 58.15, '10S': 67.46, '20S': 76.78, '30S': 87.07, '40S': 98.05
+  '50N': 5.61, '40N': 18.26, '30N': 29.24, '20N': 39.34, '10N': 48.85,
+  '0': 58.17, '10S': 67.48, '20S': 76.80, '30S': 87.09, '40S': 98.07
 };
 
 // Puanlama ve Tur Sayısı
@@ -157,6 +164,7 @@ export default function RouteSimulationActivity({ onClose }: RouteSimulationActi
         <div className="text-white">
           <h2 className="font-extrabold text-xl text-blue-400 leading-tight">Dinamik Rota Simülasyonu</h2>
           <span className="text-xs text-slate-400 uppercase font-black tracking-widest block mt-1">Görevleri Tamamla</span>
+          <span className="text-xs text-slate-400 uppercase font-black tracking-widest block mt-1">Görevleri tamamla</span>
         </div>
         <div className="flex items-center gap-4">
           <div className="text-right">
@@ -173,6 +181,7 @@ export default function RouteSimulationActivity({ onClose }: RouteSimulationActi
           className="relative w-full h-full shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden border-2 border-white/5 bg-[#0a0a0a] rounded-xl flex-shrink-0 z-10"
           style={{ 
             aspectRatio: '1306 / 1020',
+            aspectRatio: '1303 / 1019.89',
             maxWidth: '100%',
             maxHeight: '100%',
           }}
@@ -183,6 +192,7 @@ export default function RouteSimulationActivity({ onClose }: RouteSimulationActi
             fill 
             priority 
             className="object-cover pointer-events-none opacity-90"
+            className="object-fill w-full h-full pointer-events-none opacity-90"
           />
           
           {/* Animasyon Katmanı */}
@@ -203,11 +213,16 @@ export default function RouteSimulationActivity({ onClose }: RouteSimulationActi
             initial={false}
             animate={{ left: `${boylamX[currentTarget.boylam]}%`, top: `${enlemY[currentTarget.enlem]}%` }}
             className="absolute -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-none flex flex-col items-center"
+            className="absolute -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-none flex flex-col items-center justify-center"
           >
             {/* Bayrak Direği */}
             <div className="w-1 h-10 bg-white/70 rounded-full" />
             {/* Kırmızı Bayrak */}
             <div className="absolute top-0 left-0 w-8 h-6 bg-red-600 rounded-r-md rounded-bl-sm shadow-xl" />
+            {/* SVG Kırmızı Bayrak */}
+            <div className="absolute -translate-x-[20%] -translate-y-[80%] drop-shadow-[0_0_10px_rgba(239,68,68,0.8)] z-20">
+              <Flag size={36} className="text-[#ef4444] fill-[#ef4444]" />
+            </div>
             
             {/* Radar Pulse Effect */}
             <motion.div 
@@ -215,6 +230,7 @@ export default function RouteSimulationActivity({ onClose }: RouteSimulationActi
               animate={{ scale: 3, opacity: 0 }}
               transition={{ duration: 1.8, repeat: Infinity, ease: "easeOut" }}
               className="absolute w-8 h-8 rounded-full border-2 border-red-500 z-0 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+              className="absolute w-10 h-10 rounded-full border-2 border-red-500 bg-red-500/20 z-0"
             />
           </motion.div>
 
@@ -238,11 +254,19 @@ export default function RouteSimulationActivity({ onClose }: RouteSimulationActi
                   animate={{ rotate: 360 }}
                   transition={{ repeat: Infinity, duration: 0.3, ease: "linear" }}
                   className="absolute w-3 h-3 border-2 border-red-600 rounded-full"
+                  animate={{ rotate: i % 2 === 0 ? 360 : -360 }}
+                  transition={{ repeat: Infinity, duration: 0.15, ease: "linear" }}
+                  className="absolute w-5 h-5 border border-white/20 bg-slate-400/20 backdrop-blur-sm rounded-full flex items-center justify-center"
                   style={{
                     top: i < 2 ? -8 : 'auto', bottom: i >= 2 ? -8 : 'auto',
                     left: i % 2 === 0 ? -8 : 'auto', right: i % 2 !== 0 ? -8 : 'auto',
+                    top: i < 2 ? -10 : 'auto', bottom: i >= 2 ? -10 : 'auto',
+                    left: i % 2 === 0 ? -10 : 'auto', right: i % 2 !== 0 ? -10 : 'auto',
                   }}
                 />
+                >
+                  <div className="w-4 h-0.5 bg-[#ef4444] rounded-full shadow-[0_0_8px_rgba(239,68,68,0.9)]"></div>
+                </motion.div>
               ))}
             </div>
             
