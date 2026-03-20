@@ -26,19 +26,19 @@ const DroneSVG = () => (
   <div className="relative w-12 h-12 flex items-center justify-center filter drop-shadow-[0_5px_15px_rgba(0,0,0,0.8)]">
     {/* Pervane 1 (Sol Üst) */}
     <motion.div className="absolute top-0 left-0 w-5 h-5 rounded-full border border-white/30 bg-slate-400/20 backdrop-blur-sm flex items-center justify-center" animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 0.15, ease: "linear" }}>
-      <div className="w-4 h-0.5 bg-[#ef4444] rounded-full shadow-[0_0_5px_rgba(239,68,68,0.8)]"></div>
+      <div className="w-4 h-0.5 bg-[#b91c1c] rounded-full shadow-[0_0_5px_rgba(185,28,28,0.8)]"></div>
     </motion.div>
     {/* Pervane 2 (Sağ Üst) */}
     <motion.div className="absolute top-0 right-0 w-5 h-5 rounded-full border border-white/30 bg-slate-400/20 backdrop-blur-sm flex items-center justify-center" animate={{ rotate: -360 }} transition={{ repeat: Infinity, duration: 0.15, ease: "linear" }}>
-      <div className="w-4 h-0.5 bg-[#ef4444] rounded-full shadow-[0_0_5px_rgba(239,68,68,0.8)]"></div>
+      <div className="w-4 h-0.5 bg-[#b91c1c] rounded-full shadow-[0_0_5px_rgba(185,28,28,0.8)]"></div>
     </motion.div>
     {/* Pervane 3 (Sol Alt) */}
     <motion.div className="absolute bottom-0 left-0 w-5 h-5 rounded-full border border-white/30 bg-slate-400/20 backdrop-blur-sm flex items-center justify-center" animate={{ rotate: -360 }} transition={{ repeat: Infinity, duration: 0.15, ease: "linear" }}>
-      <div className="w-4 h-0.5 bg-[#ef4444] rounded-full shadow-[0_0_5px_rgba(239,68,68,0.8)]"></div>
+      <div className="w-4 h-0.5 bg-[#b91c1c] rounded-full shadow-[0_0_5px_rgba(185,28,28,0.8)]"></div>
     </motion.div>
     {/* Pervane 4 (Sağ Alt) */}
     <motion.div className="absolute bottom-0 right-0 w-5 h-5 rounded-full border border-white/30 bg-slate-400/20 backdrop-blur-sm flex items-center justify-center" animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 0.15, ease: "linear" }}>
-      <div className="w-4 h-0.5 bg-[#ef4444] rounded-full shadow-[0_0_5px_rgba(239,68,68,0.8)]"></div>
+      <div className="w-4 h-0.5 bg-[#b91c1c] rounded-full shadow-[0_0_5px_rgba(185,28,28,0.8)]"></div>
     </motion.div>
     
     {/* Drone Gövde (0 Derecesi sağa - Doğuya bakar) */}
@@ -48,7 +48,7 @@ const DroneSVG = () => (
       {/* Ana Gövde */}
       <circle cx="12" cy="12" r="5" fill="#1e293b" stroke="#38bdf8" strokeWidth="2"/>
       {/* Burun (Ön taraf - Sağ) */}
-      <path d="M17 12L21 15L21 9L17 12Z" fill="#ef4444" />
+      <path d="M17 12L21 15L21 9L17 12Z" fill="#b91c1c" />
     </svg>
   </div>
 );
@@ -240,17 +240,19 @@ export default function RouteSimulationActivity({ onClose }: RouteSimulationActi
         <div 
           className={`relative w-full h-full shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden border-4 bg-[#0a0a0a] rounded-xl flex-shrink-0 transition-colors duration-500 ${missionStatus === 'success' ? 'border-emerald-500/50' : missionStatus === 'error' ? 'border-red-500/50' : 'border-white/5'}`}
           style={{
-             maxWidth: 'min(100%, calc(100vh * 1340 / 1080))',
-             maxHeight: 'min(100%, calc(100vw * 1080 / 1340))',
-             aspectRatio: '1340 / 1080'
+             maxWidth: '100%',
+             maxHeight: '100%',
+             aspectRatio: '1340 / 1080',
+             position: 'relative'
           }}
         >
           <Image 
             src="/9/harita/koordinat-01.svg" 
             alt="Koordinat Haritası" 
-            fill 
+            width={1340}
+            height={1080}
             priority 
-            className="object-contain pointer-events-none opacity-90" 
+            className="w-full h-auto pointer-events-none opacity-90" 
           />
           
           {/* Animasyon Katmanı */}
