@@ -32,13 +32,15 @@ export default function ContentCatalogPage() {
           <div className="w-20 h-20 bg-emerald-950 border border-emerald-800 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
             <Map size={36} className="text-emerald-400" />
           </div>
-          <h2 className="text-2xl font-bold text-white mb-4">1. Etkinlik: Haritalar Nasıl Okunur?</h2>
-          <p className="text-slate-400 leading-relaxed font-medium">
-            Harita elemanlarını (Başlık, Lejant, Ölçek, Yön Oku, Koordinat) doğru yerlerine sürükleyerek eşleştirin.
-          </p>
+          <h2 className="text-2xl font-bold text-emerald-400 mb-4">1. Etkinlik: Haritalar Nasıl Okunur?</h2>
+          <div className="text-sm text-slate-400 leading-relaxed font-medium text-left w-full bg-slate-950/50 p-4 rounded-xl space-y-2">
+            <p><strong className="text-slate-300">Öğrenme Çıktıları:</strong> COĞ.9.2.1. Harita uygulamaları yapabilme</p>
+            <p><strong className="text-slate-300">Süreç Bileşeni:</strong> a) Haritaya ait bileşenlerden yararlanarak haritaları okur.</p>
+            <p><strong className="text-slate-300">Araç Seti:</strong> Harita</p>
+          </div>
         </div>
 
-        {/* 2. Kutu: Dinamik Rota Simülasyonu */}
+        {/* 2. Kutu: Coğrafi Koordinatlar */}
         <div 
           onClick={() => setActiveActivity('activity2')}
           className="group cursor-pointer bg-slate-900 border-2 border-slate-800 hover:border-blue-500 rounded-3xl p-8 transition-all duration-300 hover:shadow-[0_0_40px_rgba(59,130,246,0.15)] hover:-translate-y-2 flex flex-col items-center text-center relative overflow-hidden"
@@ -47,10 +49,12 @@ export default function ContentCatalogPage() {
           <div className="w-20 h-20 bg-blue-950 border border-blue-800 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
             <Navigation size={36} className="text-blue-400" />
           </div>
-          <h2 className="text-2xl font-bold text-white mb-4">2. Etkinlik: Dinamik Rota Simülasyonu</h2>
-          <p className="text-slate-400 leading-relaxed font-medium">
-            Mersin Limanı ve Samsun Havalimanı koordinatlarına göre gemi ve uçak rotalarını animasyonlu olarak izleyin.
-          </p>
+          <h2 className="text-2xl font-bold text-blue-400 mb-4">2. Etkinlik: Coğrafi Koordinatlar</h2>
+          <div className="text-sm text-slate-400 leading-relaxed font-medium text-left w-full bg-slate-950/50 p-4 rounded-xl space-y-2">
+            <p><strong className="text-slate-300">Öğrenme Çıktıları:</strong> COĞ.9.2.1. Harita uygulamaları yapabilme</p>
+            <p><strong className="text-slate-300">Süreç Bileşeni:</strong> a) Haritaya ait bileşenlerden yararlanarak haritaları okur.</p>
+            <p><strong className="text-slate-300">Araç Seti:</strong> Harita</p>
+          </div>
         </div>
 
       </div>
