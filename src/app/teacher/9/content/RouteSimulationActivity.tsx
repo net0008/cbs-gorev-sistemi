@@ -240,19 +240,19 @@ export default function RouteSimulationActivity({ onClose }: RouteSimulationActi
         <div 
           className={`relative w-full h-full shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden border-4 bg-[#0a0a0a] rounded-xl flex-shrink-0 transition-colors duration-500 ${missionStatus === 'success' ? 'border-emerald-500/50' : missionStatus === 'error' ? 'border-red-500/50' : 'border-white/5'}`}
           style={{
-             maxWidth: '100%',
-             maxHeight: '100%',
+             position: 'relative',
+             width: '100%',
+             height: '100%',
              aspectRatio: '1303 / 1019.89',
-             position: 'relative'
+             margin: 'auto'
           }}
         >
           <Image 
             src="/9/harita/koordinat-01.svg" 
             alt="Koordinat Haritası" 
-            width={1303}
-            height={1020}
+            fill
             priority 
-            className="w-full h-auto pointer-events-none opacity-90" 
+            className="object-contain pointer-events-none opacity-90" 
           />
           
           {/* Animasyon Katmanı */}
