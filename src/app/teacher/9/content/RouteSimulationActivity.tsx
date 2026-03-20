@@ -367,7 +367,7 @@ export default function RouteSimulationActivity({ onClose }: RouteSimulationActi
               ) : (
                 <span className="flex items-center gap-2">
                   <Send size={18} />
-                  Koordinata Git
+                  Gönder
                 </span>
               )}
             </button>
