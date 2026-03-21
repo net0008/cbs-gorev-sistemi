@@ -10,18 +10,16 @@ interface RouteSimulationActivityProps {
 }
 
 // =========================================================================
-// 🛑 EXACT RE-CALIBRATED COORDINATE DATABASE (Percentage based on 1303x1019.89)
+// 🛑 QGIS 841x595 Çıktısına Göre Kesin Yüzdeler
 // =========================================================================
 
 const boylamX: Record<string, number> = {
-  '10W': 10.90, '0': 17.24, '10E': 23.58, '20E': 29.70, '30E': 35.82,
-  '40E': 42.24, '50E': 48.28, '60E': 54.55, '70E': 60.97, '80E': 67.01,
-  '90E': 73.51, '100E': 79.48, '110E': 85.60, '120E': 91.94
+  '10E': 15.08, '20E': 23.99, '30E': 32.90, '40E': 41.81, '50E': 50.72,
+  '60E': 59.62, '70E': 68.53, '75E': 72.98, '80E': 77.44, '90E': 86.35
 };
 
 const enlemY: Record<string, number> = {
-  '50N': 8.61, '40N': 20.56, '30N': 30.93, '20N': 40.46, '10N': 49.44,
-  '0': 58.24, '10S': 67.04, '20S': 75.83, '30S': 85.56, '40S': 95.93
+  '50N': 16.10, '40N': 28.70, '30N': 41.30, '20N': 53.90, '10N': 66.51, '0': 79.11
 };
 
 // Puanlama ve Tur Sayısı
@@ -52,8 +50,8 @@ export default function RouteSimulationActivity({ onClose }: RouteSimulationActi
   // Mevcut Hedef ve Tahmin State'leri
   const [currentTarget, setCurrentTarget] = useState(getRandomTarget());
   const [guessedEnlem, setGuessedEnlem] = useState('0');
-  const [guessedBoylam, setGuessedBoylam] = useState('0');
-  const [prevDronePos, setPrevDronePos] = useState({ x: boylamX['0'], y: enlemY['0'] });
+  const [guessedBoylam, setGuessedBoylam] = useState('10E');
+  const [prevDronePos, setPrevDronePos] = useState({ x: boylamX['10E'], y: enlemY['0'] });
 
   const [lastCheck, setLastCheck] = useState<'correct' | 'wrong' | null>(null);
 
@@ -124,8 +122,8 @@ export default function RouteSimulationActivity({ onClose }: RouteSimulationActi
     setCurrentRound(1);
     setCurrentTarget(getRandomTarget());
     setGuessedEnlem('0');
-    setGuessedBoylam('0');
-    setPrevDronePos({ x: boylamX['0'], y: enlemY['0'] });
+    setGuessedBoylam('10E');
+    setPrevDronePos({ x: boylamX['10E'], y: enlemY['0'] });
     setGameState('playing');
     setLastCheck(null);
   };
@@ -173,17 +171,17 @@ export default function RouteSimulationActivity({ onClose }: RouteSimulationActi
         <div 
           className="relative w-full h-full shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden border-2 border-white/5 bg-[#0a0a0a] rounded-xl flex-shrink-0 z-10"
           style={{ 
-            aspectRatio: '1303 / 1019.89',
+            aspectRatio: '841 / 595',
             maxWidth: '100%',
             maxHeight: '100%',
           }}
         >
           <Image 
-            src="/9/harita/koordinat-01.svg" 
+            src="/9/harita/dunya_koordinat.svg" 
             alt="Koordinat Haritası" 
             fill 
             priority 
-            className="object-fill w-full h-full pointer-events-none opacity-90"
+            className="object-contain w-full h-full pointer-events-none opacity-90"
           />
           
           {/* Animasyon Katmanı */}
