@@ -1,11 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Map, Navigation } from 'lucide-react';
+import { Map, Navigation, Layers } from 'lucide-react';
 import MapReadingActivity from './MapReadingActivity';
 import RouteSimulationActivity from './RouteSimulationActivity';
+import ProjectionActivity from './Projectionactivity';
 
-type ActivityType = null | 'activity1' | 'activity2';
+type ActivityType = null | 'activity1' | 'activity2' | 'projections';
 
 export default function ContentCatalogPage() {
   const [activeActivity, setActiveActivity] = useState<ActivityType>(null);
@@ -21,7 +22,7 @@ export default function ContentCatalogPage() {
       </div>
 
       {/* CSS Grid - Etkinlik Kartları Alanı */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto w-full">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto w-full">
         
         {/* 1. Kutu: Haritalar Nasıl Okunur? */}
         <div 
@@ -57,6 +58,23 @@ export default function ContentCatalogPage() {
           </div>
         </div>
 
+        {/* 3. Kutu: Harita Projeksiyonları */}
+        <div 
+          onClick={() => setActiveActivity('projections')}
+          className="group cursor-pointer bg-slate-900 border-2 border-slate-800 hover:border-purple-500 rounded-3xl p-8 transition-all duration-300 hover:shadow-[0_0_40px_rgba(168,85,247,0.15)] hover:-translate-y-2 flex flex-col items-center text-center relative overflow-hidden"
+        >
+          <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-purple-600 to-pink-400 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div className="w-20 h-20 bg-purple-950 border border-purple-800 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
+            <Layers size={36} className="text-purple-400" />
+          </div>
+          <h2 className="text-2xl font-bold text-purple-400 mb-4">3. Etkinlik: Harita Projeksiyonları</h2>
+          <div className="text-sm text-slate-400 leading-relaxed font-medium text-left w-full bg-slate-950/50 p-4 rounded-xl space-y-2">
+            <p><strong className="text-slate-300">Öğrenme Çıktıları:</strong> COĞ.9.2.1</p>
+            <p><strong className="text-slate-300">Süreç Bileşeni:</strong> Mekânsal Çıkarım ve İlişkilendirme</p>
+            <p><strong className="text-slate-300">Zorluk:</strong> Orta</p>
+          </div>
+        </div>
+
       </div>
 
       {/* --- Aktif Modal / Tam Ekran Render Alanı --- */}
@@ -65,6 +83,9 @@ export default function ContentCatalogPage() {
       )}
       {activeActivity === 'activity2' && (
         <RouteSimulationActivity onClose={() => setActiveActivity(null)} />
+      )}
+      {activeActivity === 'projections' && (
+        <ProjectionActivity onClose={() => setActiveActivity(null)} />
       )}
     </div>
   );
