@@ -198,14 +198,14 @@ export default function RouteSimulationActivity({ onClose }: { onClose: () => vo
               <div key={i} style={{ width: "28px", height: "5px", borderRadius: "3px", transition: "background 0.3s",
                 background: i<history.length ? (history[i]==="ok"?"#00ff88":"#ff4444") : i===mission&&phase!=="idle" ? "rgba(0,200,255,0.45)" : "rgba(255,255,255,0.07)" }} />
             ))}
-            <span style={{ fontSize: "10px", color: "#1a3352", marginLeft: "6px", letterSpacing: "1px" }}>
+            <span style={{ fontSize: "11px", color: "#4a7a9a", marginLeft: "6px", letterSpacing: "1px", fontWeight: "600" }}>
               {mission+1} / 5
             </span>
           </div>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
           <div style={{ textAlign: "right" }}>
-            <div style={{ fontSize: "9px", letterSpacing: "2px", color: "#1a3352" }}>PUAN</div>
+            <div style={{ fontSize: "10px", letterSpacing: "2px", color: "#4a7a9a", fontWeight: "700" }}>PUAN</div>
             <div style={{ fontSize: "28px", fontWeight: "800", lineHeight: 1, color: score > 0 ? "#00ff88" : "#c8e0ff", transition: "color 0.3s" }}>{score}</div>
           </div>
           <button onClick={onClose}
@@ -319,23 +319,23 @@ function RightPanel({ selLon, selLat, onLon, onLat, phase, feedback, mission, sc
 
   return (
     <div style={{
-      width: "320px", flexShrink: 0,
-      borderLeft: "1px solid rgba(0,200,255,0.1)",
-      background: "linear-gradient(180deg, rgba(2,8,20,0.98) 0%, rgba(4,12,26,0.98) 100%)",
+      width: "340px", flexShrink: 0,
+      borderLeft: "1px solid rgba(0,200,255,0.12)",
+      background: "linear-gradient(180deg, #0d1929 0%, #0a1520 100%)",
       display: "flex", flexDirection: "column",
       overflowY: "auto",
     }}>
 
       {/* ── Talimat bölümü ── */}
-      <section style={{ padding: "20px 20px 0" }}>
+      <section style={{ padding: "22px 22px 0" }}>
         <SectionTitle icon="📋" label="GÖREV TALİMATI" />
-        <div style={{ background: "rgba(0,200,255,0.04)", border: "1px solid rgba(0,200,255,0.1)", borderRadius: "10px", padding: "14px 16px", marginTop: "10px" }}>
-          <p style={{ fontSize: "13px", color: "#6a9cc0", lineHeight: "1.8", margin: 0 }}>
+        <div style={{ background: "rgba(0,200,255,0.07)", border: "1px solid rgba(0,200,255,0.18)", borderRadius: "10px", padding: "16px 18px", marginTop: "12px" }}>
+          <p style={{ fontSize: "14px", color: "#a0c8e8", lineHeight: "1.85", margin: 0, fontWeight: "500" }}>
             Haritadaki{" "}
-            <span style={{ color: "#ff5555", fontWeight: "700" }}>kırmızı bayrağı</span>{" "}
+            <span style={{ color: "#ff6666", fontWeight: "800" }}>kırmızı bayrağı</span>{" "}
             bul ve hangi{" "}
-            <span style={{ color: "#00c8ff" }}>enlem</span> &{" "}
-            <span style={{ color: "#00c8ff" }}>boylam</span>{" "}
+            <span style={{ color: "#33ddff", fontWeight: "700" }}>enlem</span> &{" "}
+            <span style={{ color: "#33ddff", fontWeight: "700" }}>boylam</span>{" "}
             kesişiminde olduğunu analiz et. Seçimlerini yap ve drone&apos;u gönder.
           </p>
         </div>
@@ -345,13 +345,13 @@ function RightPanel({ selLon, selLat, onLon, onLat, phase, feedback, mission, sc
       <Divider />
 
       {/* ── Koordinat seçimi ── */}
-      <section style={{ padding: "0 20px" }}>
+      <section style={{ padding: "0 22px" }}>
         <SectionTitle icon="🧭" label="KOORDİNAT SEÇİMİ" />
 
-        <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginTop: "12px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "14px", marginTop: "12px" }}>
           {/* Boylam */}
           <div>
-            <label style={{ fontSize: "11px", color: "#4a7a9a", letterSpacing: "1.5px", display: "block", marginBottom: "6px" }}>
+            <label style={{ fontSize: "12px", color: "#7ab0cc", letterSpacing: "1px", display: "block", marginBottom: "7px", fontWeight: "700" }}>
               BOYLAM (Doğu / Batı)
             </label>
             <select
@@ -359,12 +359,12 @@ function RightPanel({ selLon, selLat, onLon, onLat, phase, feedback, mission, sc
               onChange={(e)=>onLon(e.target.value)}
               disabled={flying}
               style={{
-                width: "100%", padding: "11px 14px",
-                background: selLon ? "rgba(0,200,255,0.06)" : "rgba(0,0,0,0.4)",
-                border: `1.5px solid ${selLon ? "#00c8ff" : "rgba(0,200,255,0.15)"}`,
-                borderRadius: "8px",
-                color: selLon ? "#e0f4ff" : "#2a4a62",
-                fontSize: "13px", fontFamily: "'Courier New', monospace",
+                width: "100%", padding: "12px 14px",
+                background: selLon ? "rgba(0,200,255,0.1)" : "rgba(5,15,35,0.8)",
+                border: `2px solid ${selLon ? "#00c8ff" : "rgba(0,200,255,0.2)"}`,
+                borderRadius: "9px",
+                color: selLon ? "#e8f8ff" : "#3a6080",
+                fontSize: "14px", fontFamily: "'Courier New', monospace", fontWeight: "600",
                 cursor: flying ? "not-allowed" : "pointer",
                 outline: "none", transition: "all 0.2s",
                 appearance: "auto",
@@ -372,14 +372,14 @@ function RightPanel({ selLon, selLat, onLon, onLat, phase, feedback, mission, sc
             >
               <option value="">— Boylam seç —</option>
               {LON_OPTIONS.map(l=>(
-                <option key={l} value={String(l)} style={{background:"#071020",color:"#c8e0ff"}}>{fmtLon(l)}</option>
+                <option key={l} value={String(l)} style={{background:"#0d1929",color:"#c8e8ff",fontSize:"14px"}}>{fmtLon(l)}</option>
               ))}
             </select>
           </div>
 
           {/* Enlem */}
           <div>
-            <label style={{ fontSize: "11px", color: "#4a7a9a", letterSpacing: "1.5px", display: "block", marginBottom: "6px" }}>
+            <label style={{ fontSize: "12px", color: "#7ab0cc", letterSpacing: "1px", display: "block", marginBottom: "7px", fontWeight: "700" }}>
               ENLEM (Kuzey / Güney)
             </label>
             <select
@@ -387,12 +387,12 @@ function RightPanel({ selLon, selLat, onLon, onLat, phase, feedback, mission, sc
               onChange={(e)=>onLat(e.target.value)}
               disabled={flying}
               style={{
-                width: "100%", padding: "11px 14px",
-                background: selLat ? "rgba(0,200,255,0.06)" : "rgba(0,0,0,0.4)",
-                border: `1.5px solid ${selLat ? "#00c8ff" : "rgba(0,200,255,0.15)"}`,
-                borderRadius: "8px",
-                color: selLat ? "#e0f4ff" : "#2a4a62",
-                fontSize: "13px", fontFamily: "'Courier New', monospace",
+                width: "100%", padding: "12px 14px",
+                background: selLat ? "rgba(0,200,255,0.1)" : "rgba(5,15,35,0.8)",
+                border: `2px solid ${selLat ? "#00c8ff" : "rgba(0,200,255,0.2)"}`,
+                borderRadius: "9px",
+                color: selLat ? "#e8f8ff" : "#3a6080",
+                fontSize: "14px", fontFamily: "'Courier New', monospace", fontWeight: "600",
                 cursor: flying ? "not-allowed" : "pointer",
                 outline: "none", transition: "all 0.2s",
                 appearance: "auto",
@@ -400,16 +400,16 @@ function RightPanel({ selLon, selLat, onLon, onLat, phase, feedback, mission, sc
             >
               <option value="">— Enlem seç —</option>
               {LAT_OPTIONS.map(l=>(
-                <option key={l} value={String(l)} style={{background:"#071020",color:"#c8e0ff"}}>{fmtLat(l)}</option>
+                <option key={l} value={String(l)} style={{background:"#0d1929",color:"#c8e8ff",fontSize:"14px"}}>{fmtLat(l)}</option>
               ))}
             </select>
           </div>
 
           {/* Seçim önizleme */}
           {(selLon || selLat) && (
-            <div style={{ padding: "9px 12px", background: "rgba(0,200,255,0.04)", border: "1px solid rgba(0,200,255,0.1)", borderRadius: "7px", fontSize: "12px", color: "#4a7a9a", display: "flex", alignItems: "center", gap: "8px" }}>
-              <span style={{ opacity: 0.6 }}>Seçilen:</span>
-              <span style={{ color: "#00c8ff", fontWeight: "700" }}>
+            <div style={{ padding: "10px 14px", background: "rgba(0,200,255,0.07)", border: "1.5px solid rgba(0,200,255,0.2)", borderRadius: "8px", display: "flex", alignItems: "center", gap: "10px" }}>
+              <span style={{ fontSize: "13px", color: "#5a8aaa", fontWeight: "600" }}>Seçilen:</span>
+              <span style={{ color: "#33ddff", fontWeight: "800", fontSize: "14px" }}>
                 {selLat ? fmtLat(Number(selLat)) : "??"} &nbsp;/&nbsp; {selLon ? fmtLon(Number(selLon)) : "??"}
               </span>
             </div>
@@ -420,21 +420,22 @@ function RightPanel({ selLon, selLat, onLon, onLat, phase, feedback, mission, sc
       <Divider />
 
       {/* ── Gönder butonu ── */}
-      <section style={{ padding: "0 20px" }}>
+      <section style={{ padding: "0 22px" }}>
         <button
           onClick={onSend}
           disabled={!canSend}
           style={{
-            width: "100%", padding: "15px",
+            width: "100%", padding: "16px",
             background: canSend
               ? "linear-gradient(90deg, #0050e0 0%, #00a8e8 50%, #00c8ff 100%)"
-              : "rgba(0,30,60,0.35)",
-            border: "none", borderRadius: "10px",
-            color: canSend ? "#000" : "#1a3040",
-            fontSize: "13px", fontWeight: "800", letterSpacing: "2.5px",
+              : "rgba(0,25,55,0.6)",
+            border: canSend ? "none" : "1.5px solid rgba(0,200,255,0.1)",
+            borderRadius: "10px",
+            color: canSend ? "#000" : "#2a4a62",
+            fontSize: "14px", fontWeight: "800", letterSpacing: "2px",
             cursor: canSend ? "pointer" : "not-allowed",
             fontFamily: "inherit", transition: "all 0.2s",
-            boxShadow: canSend ? "0 4px 20px rgba(0,150,255,0.3)" : "none",
+            boxShadow: canSend ? "0 4px 24px rgba(0,150,255,0.35)" : "none",
           }}
         >
           {flying ? "🚁  UÇUŞTA..." : "🚁  DRONE'U GÖNDER"}
@@ -445,7 +446,7 @@ function RightPanel({ selLon, selLat, onLon, onLat, phase, feedback, mission, sc
       {feedback && (
         <>
           <Divider />
-          <section style={{ padding: "0 20px" }}>
+          <section style={{ padding: "0 22px" }}>
             <FeedbackBox phase={phase} text={feedback} />
           </section>
         </>
@@ -453,12 +454,12 @@ function RightPanel({ selLon, selLat, onLon, onLat, phase, feedback, mission, sc
 
       {/* ── Sonraki görev ── */}
       {(phase === "success" || phase === "fail") && (
-        <section style={{ padding: "12px 20px 0" }}>
+        <section style={{ padding: "12px 22px 0" }}>
           <button
             onClick={onNext}
-            style={{ width: "100%", padding: "13px", background: "transparent", border: "1.5px solid rgba(0,200,255,0.25)", borderRadius: "9px", color: "#00c8ff", fontSize: "12px", fontWeight: "700", letterSpacing: "2px", cursor: "pointer", fontFamily: "inherit", transition: "all 0.18s" }}
-            onMouseEnter={(e)=>{e.currentTarget.style.background="rgba(0,200,255,0.07)";e.currentTarget.style.borderColor="rgba(0,200,255,0.5)";}}
-            onMouseLeave={(e)=>{e.currentTarget.style.background="transparent";e.currentTarget.style.borderColor="rgba(0,200,255,0.25)";}}>
+            style={{ width: "100%", padding: "14px", background: "rgba(0,200,255,0.08)", border: "2px solid rgba(0,200,255,0.3)", borderRadius: "9px", color: "#33ddff", fontSize: "13px", fontWeight: "800", letterSpacing: "1.5px", cursor: "pointer", fontFamily: "inherit", transition: "all 0.18s" }}
+            onMouseEnter={(e)=>{e.currentTarget.style.background="rgba(0,200,255,0.15)";e.currentTarget.style.borderColor="rgba(0,200,255,0.6)";}}
+            onMouseLeave={(e)=>{e.currentTarget.style.background="rgba(0,200,255,0.08)";e.currentTarget.style.borderColor="rgba(0,200,255,0.3)";}}>
             {mission>=4 ? "🏁  SONUÇLARI GÖR" : "⏭  SONRAKI GÖREV"}
           </button>
         </section>
@@ -469,25 +470,25 @@ function RightPanel({ selLon, selLat, onLon, onLat, phase, feedback, mission, sc
 
       {/* ── Puan tablosu ── */}
       <Divider />
-      <section style={{ padding: "0 20px 20px" }}>
+      <section style={{ padding: "0 22px 22px" }}>
         <SectionTitle icon="📊" label="PUAN SİSTEMİ" />
-        <div style={{ marginTop: "10px", display: "flex", flexDirection: "column", gap: "8px" }}>
+        <div style={{ marginTop: "12px", display: "flex", flexDirection: "column", gap: "8px" }}>
           <ScoreRow icon="✓" label="Doğru koordinat" value="+20 puan" color="#00ff88" />
           <ScoreRow icon="✗" label="Yanlış hamle" value="−5 puan" color="#ff7070" />
-          <ScoreRow icon="🎯" label="Maksimum puan" value="100 puan" color="#00c8ff" />
+          <ScoreRow icon="🎯" label="Maksimum puan" value="100 puan" color="#33ddff" />
         </div>
 
-        {/* İlerleme göstergesi */}
-        <div style={{ marginTop: "16px", padding: "12px 14px", background: "rgba(0,0,0,0.2)", border: "1px solid rgba(255,255,255,0.04)", borderRadius: "8px" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
-            <span style={{ fontSize: "10px", color: "#1a3352", letterSpacing: "1.5px" }}>TOPLAM İLERLEME</span>
-            <span style={{ fontSize: "12px", color: "#00c8ff", fontWeight: "700" }}>{score} / 100</span>
+        {/* İlerleme */}
+        <div style={{ marginTop: "16px", padding: "14px 16px", background: "rgba(0,200,255,0.05)", border: "1px solid rgba(0,200,255,0.12)", borderRadius: "10px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
+            <span style={{ fontSize: "11px", color: "#4a7a9a", letterSpacing: "1px", fontWeight: "700" }}>TOPLAM İLERLEME</span>
+            <span style={{ fontSize: "15px", color: "#33ddff", fontWeight: "800" }}>{score} / 100</span>
           </div>
-          <div style={{ height: "5px", background: "rgba(255,255,255,0.05)", borderRadius: "3px", overflow: "hidden" }}>
-            <div style={{ height: "100%", width: `${Math.min(100,score)}%`, background: score>=80?"#00ff88":score>=50?"#00c8ff":"#4a7aff", borderRadius: "3px", transition: "width 0.5s ease" }} />
+          <div style={{ height: "7px", background: "rgba(255,255,255,0.06)", borderRadius: "4px", overflow: "hidden" }}>
+            <div style={{ height: "100%", width: `${Math.min(100,score)}%`, background: score>=80?"#00ff88":score>=50?"#00c8ff":"#4a7aff", borderRadius: "4px", transition: "width 0.5s ease" }} />
           </div>
-          <div style={{ fontSize: "10px", color: "#1a3352", marginTop: "6px", letterSpacing: "0.5px" }}>
-            Grid: 30° aralıklı · {LON_OPTIONS.length} boylam × {LAT_OPTIONS.length} enlem = {ALL_TARGETS.length} nokta
+          <div style={{ fontSize: "11px", color: "#3a6080", marginTop: "8px", fontWeight: "500" }}>
+            Grid: 30° · {LON_OPTIONS.length} boylam × {LAT_OPTIONS.length} enlem = {ALL_TARGETS.length} nokta
           </div>
         </div>
       </section>
@@ -498,40 +499,43 @@ function RightPanel({ selLon, selLat, onLon, onLat, phase, feedback, mission, sc
 // ─── Yardımcı bileşenler ──────────────────────────────────────────────────────
 function SectionTitle({ icon, label }: { icon: string; label: string }) {
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-      <span style={{ fontSize: "13px" }}>{icon}</span>
-      <span style={{ fontSize: "9px", letterSpacing: "2.5px", color: "#1a3a55", fontWeight: "700" }}>{label}</span>
+    <div style={{ display: "flex", alignItems: "center", gap: "9px" }}>
+      <span style={{ fontSize: "16px" }}>{icon}</span>
+      <span style={{ fontSize: "12px", letterSpacing: "2px", color: "#5a9abf", fontWeight: "800" }}>{label}</span>
     </div>
   );
 }
 
 function Divider() {
-  return <div style={{ height: "1px", background: "rgba(0,200,255,0.07)", margin: "16px 0" }} />;
+  return <div style={{ height: "1px", background: "rgba(0,200,255,0.1)", margin: "18px 0" }} />;
 }
 
 function ScoreRow({ icon, label, value, color }: { icon: string; label: string; value: string; color: string }) {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 12px", background: "rgba(0,0,0,0.15)", borderRadius: "6px" }}>
-      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-        <span style={{ fontSize: "12px", color, fontWeight: "700" }}>{icon}</span>
-        <span style={{ fontSize: "12px", color: "#3a6080" }}>{label}</span>
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 14px", background: "rgba(0,200,255,0.04)", border: "1px solid rgba(0,200,255,0.1)", borderRadius: "8px" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+        <span style={{ fontSize: "14px", color, fontWeight: "800" }}>{icon}</span>
+        <span style={{ fontSize: "13px", color: "#7ab0cc", fontWeight: "600" }}>{label}</span>
       </div>
-      <span style={{ fontSize: "12px", color, fontWeight: "700" }}>{value}</span>
+      <span style={{ fontSize: "14px", color, fontWeight: "800" }}>{value}</span>
     </div>
   );
 }
 
 function FeedbackBox({ phase, text }: { phase: Phase; text: string }) {
-  const ok = phase === "success";
+  const ok   = phase === "success";
   const fail = phase === "fail";
-  const c  = ok ? "#00ff88" : fail ? "#ff7070" : "#ffc040";
-  const bg = ok ? "rgba(0,255,136,0.06)" : fail ? "rgba(255,100,100,0.06)" : "rgba(255,180,0,0.06)";
-  const br = ok ? "rgba(0,255,136,0.2)" : fail ? "rgba(255,100,100,0.2)" : "rgba(255,180,0,0.2)";
-  const ic = ok ? "✅" : fail ? "❌" : "⚠️";
+  const c    = ok ? "#44ff99" : fail ? "#ff8080" : "#ffd060";
+  const bg   = ok ? "rgba(0,220,100,0.1)"  : fail ? "rgba(255,80,80,0.1)"  : "rgba(255,180,0,0.08)";
+  const br   = ok ? "rgba(0,220,100,0.28)" : fail ? "rgba(255,80,80,0.28)" : "rgba(255,180,0,0.25)";
+  const ic   = ok ? "✅" : fail ? "❌" : "⚠️";
+  const ttl  = ok ? "DOĞRU!" : fail ? "YANLIŞ!" : "UYARI";
   return (
-    <div style={{ padding: "14px 16px", background: bg, border: `1.5px solid ${br}`, borderRadius: "10px" }}>
-      <div style={{ fontSize: "12px", color: c, fontWeight: "700", marginBottom: "4px" }}>{ic} {ok?"DOĞRU!":fail?"YANLIŞ!":"UYARI"}</div>
-      <div style={{ fontSize: "12px", color: c, opacity: 0.85, lineHeight: "1.65" }}>{text}</div>
+    <div style={{ padding: "16px 18px", background: bg, border: `2px solid ${br}`, borderRadius: "10px" }}>
+      <div style={{ fontSize: "14px", color: c, fontWeight: "800", marginBottom: "6px", letterSpacing: "0.5px" }}>
+        {ic} &nbsp;{ttl}
+      </div>
+      <div style={{ fontSize: "13px", color: c, opacity: 0.9, lineHeight: "1.7", fontWeight: "500" }}>{text}</div>
     </div>
   );
 }
