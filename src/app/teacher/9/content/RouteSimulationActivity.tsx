@@ -14,14 +14,14 @@ interface RouteSimulationActivityProps {
 // =========================================================================
 
 const boylamX: Record<string, number> = {
-  '10W': 10.28, '0': 16.81, '10E': 23.33, '20E': 29.62, '30E': 35.92,
-  '40E': 42.52, '50E': 48.73, '60E': 55.18, '70E': 61.78, '80E': 68.00,
-  '90E': 74.67, '100E': 80.81, '110E': 87.11, '120E': 93.63
+  '10W': 10.90, '0': 17.24, '10E': 23.58, '20E': 29.70, '30E': 35.82,
+  '40E': 42.24, '50E': 48.28, '60E': 54.55, '70E': 60.97, '80E': 67.01,
+  '90E': 73.51, '100E': 79.48, '110E': 85.60, '120E': 91.94
 };
 
 const enlemY: Record<string, number> = {
-  '50N': 5.61, '40N': 18.26, '30N': 29.24, '20N': 39.34, '10N': 48.85,
-  '0': 58.17, '10S': 67.48, '20S': 76.80, '30S': 87.09, '40S': 98.07
+  '50N': 8.61, '40N': 20.56, '30N': 30.93, '20N': 40.46, '10N': 49.44,
+  '0': 58.24, '10S': 67.04, '20S': 75.83, '30S': 85.56, '40S': 95.93
 };
 
 // Puanlama ve Tur Sayısı
@@ -109,6 +109,7 @@ export default function RouteSimulationActivity({ onClose }: RouteSimulationActi
       }, 3500);
 
     } else {
+      setScore(prev => Math.max(0, prev - 5)); // Yanlış cevapta 5 puan düşür
       setTimeout(() => playSound(150, 0.5, 'sawtooth'), 500); // Hata Sesi
       // Hata durumunda 2 saniye sonra tekrar oynamaya izin ver
       setTimeout(() => {
@@ -155,8 +156,8 @@ export default function RouteSimulationActivity({ onClose }: RouteSimulationActi
       {/* Header */}
       <div className="p-4 px-6 flex justify-between items-center bg-black/80 border-b border-white/10 flex-shrink-0 z-50">
         <div className="text-white">
-          <h2 className="font-extrabold text-xl text-blue-400 leading-tight">Dinamik Rota Simülasyonu</h2>
-          <span className="text-xs text-slate-400 uppercase font-black tracking-widest block mt-1">Görevleri tamamla</span>
+          <h2 className="font-extrabold text-xl text-blue-400 leading-tight">Görevleri Tamamla</h2>
+          <span className="text-xs text-slate-400 uppercase font-black tracking-widest block mt-1">Dinamik Rota Simülasyonu</span>
         </div>
         <div className="flex items-center gap-4">
           <div className="text-right">
@@ -235,7 +236,7 @@ export default function RouteSimulationActivity({ onClose }: RouteSimulationActi
               {[...Array(4)].map((_, i) => (
                 <motion.div
                   key={i}
-                  animate={{ rotate: i % 2 === 0 ? 360 : -360 }}
+                  animate={{ rotate: 360 }}
                   transition={{ repeat: Infinity, duration: 0.15, ease: "linear" }}
                   className="absolute w-5 h-5 border border-white/20 bg-slate-400/20 backdrop-blur-sm rounded-full flex items-center justify-center"
                   style={{
@@ -253,7 +254,7 @@ export default function RouteSimulationActivity({ onClose }: RouteSimulationActi
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="absolute top-12 bg-green-600/90 backdrop-blur-md text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-xl whitespace-nowrap border border-green-400/50">Hedefe Varıldı!</motion.div>
             )}
             {gameState === 'playing' && lastCheck === 'wrong' && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="absolute top-12 bg-red-700/90 backdrop-blur-md text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-xl whitespace-nowrap border border-red-400/50">Hatalı Koordinat, Tekrar İncele!</motion.div>
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="absolute top-12 bg-red-700/90 backdrop-blur-md text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-xl whitespace-nowrap border border-red-400/50">Yanlış Hedef, Haritayı Tekrar İncele!</motion.div>
             )}
           </motion.div>
         </div>
