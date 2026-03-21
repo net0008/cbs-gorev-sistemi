@@ -7,9 +7,8 @@ import { motion, AnimatePresence, useMotionValue, animate } from "framer-motion"
 // 1. TİPLER VE SABİTLER
 // ------------------------------
 
-// Bileşenin alacağı prop'lar
 interface RouteSimulationActivityProps {
-  onClose?: () => void; // Geri dönüş / kapatma fonksiyonu
+  onClose?: () => void;
 }
 
 const ENLEM_DEGERLERI = [60, 30, 0, -30, -60] as const;
@@ -368,7 +367,10 @@ export default function RouteSimulationActivity({ onClose }: RouteSimulationActi
             <label className="block text-slate-300 text-sm mb-1">Enlem (Latitude)</label>
             <select
               value={selectedEnlem}
-              onChange={(e) => setSelectedEnlem(e.target.value as EnlemTipi)}
+              onChange={(e) => {
+                const val = e.target.value;
+                setSelectedEnlem(val === "" ? "" : Number(val) as EnlemTipi);
+              }}
               className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white focus:ring-2 focus:ring-blue-500"
               disabled={oyunBitti || isMoving}
             >
@@ -382,7 +384,10 @@ export default function RouteSimulationActivity({ onClose }: RouteSimulationActi
             <label className="block text-slate-300 text-sm mb-1">Boylam (Longitude)</label>
             <select
               value={selectedBoylam}
-              onChange={(e) => setSelectedBoylam(Number(e.target.value) as BoylamTipi)}
+              onChange={(e) => {
+                const val = e.target.value;
+                setSelectedBoylam(val === "" ? "" : Number(val) as BoylamTipi);
+              }}
               className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white focus:ring-2 focus:ring-blue-500"
               disabled={oyunBitti || isMoving}
             >
