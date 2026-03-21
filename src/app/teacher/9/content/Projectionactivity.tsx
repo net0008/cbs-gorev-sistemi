@@ -193,7 +193,7 @@ export default function ProjectionActivity({ onClose }: { onClose: () => void })
           />
         )}
 
-        {phase === "quiz" && phase !== "done" && (
+        {phase === "quiz" && (
           <QuizPanel
             question={QUESTIONS[qIdx]}
             qIdx={qIdx}
