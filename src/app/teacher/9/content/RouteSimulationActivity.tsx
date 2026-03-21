@@ -442,7 +442,7 @@ export default function RouteSimulationActivity({ onClose }: { onClose: () => vo
             >
               {/* Haritayı buraya inline embed ediyoruz — SVG image tag ile */}
               <image
-                href="/harita/dunya_koordinat.svg"
+                href="/9/harita/dunya_koordinat.svg"
                 x="0"
                 y="0"
                 width="841"
