@@ -1,326 +1,481 @@
-'use client';
+"use client";
 
-import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import Image from 'next/image';
-import { Navigation, MapPin, CheckCircle, Target, Flag } from 'lucide-react';
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { motion, AnimatePresence, useMotionValue, useTransform, animate } from "framer-motion";
+import Image from "next/image";
 
-interface RouteSimulationActivityProps {
-  onClose: () => void;
-}
+// ------------------------------
+// 1. TİPLER VE SABİTLER
+// ------------------------------
 
-// =========================================================================
-// 🛑 QGIS 841x595 Çıktısına Göre Kesin Yüzdeler
-// =========================================================================
+// Koordinat listeleri (harita üzerindeki etiketlere göre)
+const ENLEM_DEGERLERI = [60, 30, 0, -30, -60] as const;
+type EnlemTipi = typeof ENLEM_DEGERLERI[number];
 
-const boylamX: Record<string, number> = {
-  '10E': 15.08, '20E': 23.99, '30E': 32.90, '40E': 41.81, '50E': 50.72,
-  '60E': 59.62, '70E': 68.53, '75E': 72.98, '80E': 77.44, '90E': 86.35
+const BOYLAM_DEGERLERI = [-120, -90, -60, -30, 0, 30, 60, 90, 120] as const;
+type BoylamTipi = typeof BOYLAM_DEGERLERI[number];
+
+// Görev yapısı: her görevde bir enlem ve bir boylam (hedef koordinat)
+type Gorev = {
+  enlem: EnlemTipi;
+  boylam: BoylamTipi;
 };
 
-const enlemY: Record<string, number> = {
-  '50N': 16.10, '40N': 28.70, '30N': 41.30, '20N': 53.90, '10N': 66.51, '0': 79.11
+// SVG konumlandırma sabitleri (harita 841x595, koordinatlar -180..180 ve -90..90 aralığında)
+const HARITA_GENISLIK = 841;
+const HARITA_YUKSEKLIK = 595;
+const MIN_BOYLAM = -180;
+const MAX_BOYLAM = 180;
+const MIN_ENLEM = -90;
+const MAX_ENLEM = 90;
+
+// Koordinatları SVG pixel koordinatlarına çeviren fonksiyon
+const koordinatToPixel = (boylam: number, enlem: number): { x: number; y: number } => {
+  const x = ((boylam - MIN_BOYLAM) / (MAX_BOYLAM - MIN_BOYLAM)) * HARITA_GENISLIK;
+  const y = HARITA_YUKSEKLIK - ((enlem - MIN_ENLEM) / (MAX_ENLEM - MIN_ENLEM)) * HARITA_YUKSEKLIK;
+  return { x, y };
 };
 
-// Puanlama ve Tur Sayısı
-const TOTAL_ROUNDS = 5;
-const SUCCESS_POINTS = 20;
+// Başlangıç noktası (0,0) - harita merkezi
+const BASLANGIC_NOKTASI = koordinatToPixel(0, 0);
 
-export default function RouteSimulationActivity({ onClose }: RouteSimulationActivityProps) {
-  const [score, setScore] = useState(0);
-  const [currentRound, setCurrentRound] = useState(1);
-  const [gameState, setGameState] = useState<'playing' | 'checking' | 'next_round' | 'finished'>('playing');
-  
-  // Kombinasyon havuzunu sabitleyelim
-  const allCoordinates = useMemo(() => {
-    const coords: { enlem: string; boylam: string }[] = [];
-    Object.keys(enlemY).forEach(enlem => {
-      Object.keys(boylamX).forEach(boylam => {
-        coords.push({ enlem, boylam });
-      });
-    });
-    return coords;
+// ------------------------------
+// 2. SES YÖNETİCİSİ (Web Audio API)
+// ------------------------------
+const useAudioEffects = () => {
+  const audioCtxRef = useRef<AudioContext | null>(null);
+
+  const initAudio = useCallback(() => {
+    if (!audioCtxRef.current) {
+      audioCtxRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+    }
+    if (audioCtxRef.current.state === "suspended") {
+      audioCtxRef.current.resume();
+    }
   }, []);
 
-  // Rastgele Hedef Belirleme
-  const getRandomTarget = useCallback(() => {
-    return allCoordinates[Math.floor(Math.random() * allCoordinates.length)];
-  }, [allCoordinates]);
-
-  // Mevcut Hedef ve Tahmin State'leri
-  const [currentTarget, setCurrentTarget] = useState(getRandomTarget());
-  const [guessedEnlem, setGuessedEnlem] = useState('0');
-  const [guessedBoylam, setGuessedBoylam] = useState('10E');
-  const [prevDronePos, setPrevDronePos] = useState({ x: boylamX['10E'], y: enlemY['0'] });
-
-  const [lastCheck, setLastCheck] = useState<'correct' | 'wrong' | null>(null);
-
-  // Ses Üretici
-  const playSound = (frequency: number, duration: number, type: OscillatorType = 'sine') => {
-    if (typeof window === 'undefined') return;
-    const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+  const playBeep = useCallback(() => {
+    initAudio();
+    const ctx = audioCtxRef.current!;
+    const now = ctx.currentTime;
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
-    osc.type = type;
-    osc.frequency.setValueAtTime(frequency, ctx.currentTime);
     osc.connect(gain);
     gain.connect(ctx.destination);
-    gain.gain.setValueAtTime(0.1, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+    osc.frequency.value = 880;
+    gain.gain.setValueAtTime(0.2, now);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.5);
     osc.start();
-    osc.stop(ctx.currentTime + duration);
-  };
+    osc.stop(now + 0.5);
+  }, [initAudio]);
 
-  // 🚀 DRONE'U GÖNDER & KONTROL ET
-  const handleSendDrone = () => {
-    if (gameState !== 'playing') return;
+  const playError = useCallback(() => {
+    initAudio();
+    const ctx = audioCtxRef.current!;
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.frequency.value = 440;
+    gain.gain.setValueAtTime(0.3, now);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.8);
+    osc.start();
+    osc.stop(now + 0.8);
+  }, [initAudio]);
 
-    setGameState('checking');
-    
-    // Ses
-    playSound(440, 0.2, 'square'); // Telsiz/Başlangıç Sesi
+  const playSuccessMelody = useCallback(() => {
+    initAudio();
+    const ctx = audioCtxRef.current!;
+    const now = ctx.currentTime;
+    const notes = [523.25, 659.25, 783.99, 1046.5]; // C5, E5, G5, C6
+    notes.forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.15, now + i * 0.2);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.2 + 0.5);
+      osc.start(now + i * 0.2);
+      osc.stop(now + i * 0.2 + 0.5);
+    });
+  }, [initAudio]);
 
-    const isCorrect = guessedEnlem === currentTarget.enlem && guessedBoylam === currentTarget.boylam;
-    setLastCheck(isCorrect ? 'correct' : 'wrong');
+  return { playBeep, playError, playSuccessMelody };
+};
 
-    // Drone'un mevcut pozisyonunu al (animasyon için)
-    const currentX = boylamX[guessedBoylam as keyof typeof boylamX];
-    const currentY = enlemY[guessedEnlem as keyof typeof enlemY];
+// ------------------------------
+// 3. DRONE BİLEŞENİ (Framer Motion ile dönen pervaneler)
+// ------------------------------
+const Drone = ({ x, y, angle }: { x: number; y: number; angle: number }) => {
+  return (
+    <motion.div
+      className="absolute z-20"
+      style={{
+        left: x - 20,
+        top: y - 20,
+        width: 40,
+        height: 40,
+        transform: `rotate(${angle}rad)`,
+      }}
+      transition={{ type: "spring", stiffness: 200, damping: 20 }}
+    >
+      <svg viewBox="0 0 100 100" className="w-full h-full">
+        {/* Gövde */}
+        <circle cx="50" cy="50" r="20" fill="#2c3e66" stroke="#60a5fa" strokeWidth="2" />
+        {/* Pervaneler (4 adet, kırmızı, dönen) */}
+        {[[20, 20], [80, 20], [20, 80], [80, 80]].map(([cx, cy], idx) => (
+          <motion.g
+            key={idx}
+            animate={{ rotate: 360 }}
+            transition={{ repeat: Infinity, duration: 0.8, ease: "linear" }}
+            style={{ originX: cx, originY: cy }}
+          >
+            <line x1={cx - 12} y1={cy} x2={cx + 12} y2={cy} stroke="#ef4444" strokeWidth="3" />
+            <line x1={cx} y1={cy - 12} x2={cx} y2={cy + 12} stroke="#ef4444" strokeWidth="3" />
+          </motion.g>
+        ))}
+        {/* Kamera gözü */}
+        <circle cx="50" cy="50" r="6" fill="#facc15" />
+      </svg>
+    </motion.div>
+  );
+};
 
-    setPrevDronePos({ x: currentX, y: currentY });
+// ------------------------------
+// 4. HEDEF BAYRAK BİLEŞENİ (pulse efekti)
+// ------------------------------
+const HedefBayrak = ({ x, y }: { x: number; y: number }) => {
+  return (
+    <div className="absolute z-10" style={{ left: x - 12, top: y - 30 }}>
+      {/* Radar halkaları (pulse) */}
+      <motion.div
+        className="absolute rounded-full border-2 border-red-500 opacity-70"
+        style={{ width: 30, height: 30, left: -3, top: -3 }}
+        animate={{ scale: [1, 1.5, 2], opacity: [0.7, 0.3, 0] }}
+        transition={{ repeat: Infinity, duration: 1.5, ease: "easeOut" }}
+      />
+      <motion.div
+        className="absolute rounded-full border-2 border-red-500 opacity-70"
+        style={{ width: 20, height: 20, left: 2, top: 2 }}
+        animate={{ scale: [1, 1.8, 2.5], opacity: [0.7, 0.3, 0] }}
+        transition={{ repeat: Infinity, duration: 1.5, delay: 0.3, ease: "easeOut" }}
+      />
+      {/* Bayrak SVG */}
+      <svg width="30" height="40" viewBox="0 0 30 40" fill="none">
+        <rect x="5" y="5" width="20" height="25" fill="#ef4444" />
+        <path d="M5 5 L25 17.5 L5 30 Z" fill="#b91c1c" />
+        <rect x="13" y="30" width="4" height="10" fill="#6b7280" />
+      </svg>
+    </div>
+  );
+};
 
-    if (isCorrect) {
-      setScore(prev => prev + SUCCESS_POINTS);
-      setGameState('next_round');
-      setTimeout(() => playSound(880, 0.4, 'sine'), 1500); // Başarı Ses (Gecikmeli)
+// ------------------------------
+// 5. ANA BİLEŞEN: RouteSimulationActivity
+// ------------------------------
+export default function RouteSimulationActivity() {
+  // Oyun durumu
+  const [gorevler, setGorevler] = useState<Gorev[]>([]);
+  const [aktifGorevIndex, setAktifGorevIndex] = useState(0);
+  const [puan, setPuan] = useState(0);
+  const [oyunBitti, setOyunBitti] = useState(false);
+  const [dogruCevapSayisi, setDogruCevapSayisi] = useState(0); // modal için
+  const [yanlisCevapSayisi, setYanlisCevapSayisi] = useState(0);
 
-      // 2 Saniye sonra yeni tura geç
-      setTimeout(() => {
-        if (currentRound < TOTAL_ROUNDS) {
-          setCurrentTarget(getRandomTarget());
-          setCurrentRound(prev => prev + 1);
-          setGameState('playing');
-          setLastCheck(null);
-        } else {
-          setGameState('finished');
-        }
-      }, 3500);
+  // UI durumları
+  const [selectedEnlem, setSelectedEnlem] = useState<EnlemTipi | "">("");
+  const [selectedBoylam, setSelectedBoylam] = useState<BoylamTipi | "">("");
+  const [mesaj, setMesaj] = useState<{ text: string; type: "success" | "error" | "info" } | null>(null);
+  const [dronePos, setDronePos] = useState(BASLANGIC_NOKTASI);
+  const [isMoving, setIsMoving] = useState(false);
+  const [rotaYolu, setRotaYolu] = useState<{ d: string; key: number }[]>([]);
 
-    } else {
-      setScore(prev => Math.max(0, prev - 5)); // Yanlış cevapta 5 puan düşür
-      setTimeout(() => playSound(150, 0.5, 'sawtooth'), 500); // Hata Sesi
-      // Hata durumunda 2 saniye sonra tekrar oynamaya izin ver
-      setTimeout(() => {
-        setGameState('playing');
-        setLastCheck(null);
-      }, 2000);
+  // Ses efektleri
+  const { playBeep, playError, playSuccessMelody } = useAudioEffects();
+
+  // Referanslar
+  const svgRef = useRef<SVGSVGElement>(null);
+  const animationRef = useRef<any>(null);
+
+  // Rastgele görevler oluştur (toplam 5)
+  const rastgeleGorevlerOlustur = useCallback((): Gorev[] => {
+    const yeniGorevler: Gorev[] = [];
+    for (let i = 0; i < 5; i++) {
+      const rastEnlem = ENLEM_DEGERLERI[Math.floor(Math.random() * ENLEM_DEGERLERI.length)];
+      const rastBoylam = BOYLAM_DEGERLERI[Math.floor(Math.random() * BOYLAM_DEGERLERI.length)];
+      yeniGorevler.push({ enlem: rastEnlem, boylam: rastBoylam });
     }
-  };
-
-  const resetGame = () => {
-    setScore(0);
-    setCurrentRound(1);
-    setCurrentTarget(getRandomTarget());
-    setGuessedEnlem('0');
-    setGuessedBoylam('10E');
-    setPrevDronePos({ x: boylamX['10E'], y: enlemY['0'] });
-    setGameState('playing');
-    setLastCheck(null);
-  };
-
-  // Dönüş Açısını Hesapla
-  const getDroneRotation = () => {
-    const dx = boylamX[guessedBoylam] - prevDronePos.x;
-    const dy = enlemY[guessedEnlem] - prevDronePos.y;
-    if (dx === 0 && dy === 0) return 45; // Hareket yoksa
-    return Math.atan2(dy, dx) * (180 / Math.PI) + 45;
-  };
-
-  // 🚫 ZOOM VE KAYDIRMA ENGELLEYİCİ
-  useEffect(() => {
-    const handleWheel = (e: WheelEvent) => { if (e.ctrlKey) e.preventDefault(); };
-    const handleTouchMove = (e: TouchEvent) => { if (e.touches.length > 1) e.preventDefault(); };
-    document.addEventListener('wheel', handleWheel, { passive: false });
-    document.addEventListener('touchmove', handleTouchMove, { passive: false });
-    return () => {
-      document.removeEventListener('wheel', handleWheel);
-      document.removeEventListener('touchmove', handleTouchMove);
-    };
+    return yeniGorevler;
   }, []);
 
+  // Oyunu başlat / sıfırla
+  const oyunuBaslat = useCallback(() => {
+    const yeniGorevler = rastgeleGorevlerOlustur();
+    setGorevler(yeniGorevler);
+    setAktifGorevIndex(0);
+    setPuan(0);
+    setOyunBitti(false);
+    setDogruCevapSayisi(0);
+    setYanlisCevapSayisi(0);
+    setDronePos(BASLANGIC_NOKTASI);
+    setIsMoving(false);
+    setRotaYolu([]);
+    setSelectedEnlem("");
+    setSelectedBoylam("");
+    setMesaj(null);
+  }, [rastgeleGorevlerOlustur]);
+
+  // Hedef koordinata drone uçuşu ve rota çizimi
+  const droneHareketEt = useCallback((hedefX: number, hedefY: number) => {
+    if (isMoving) return;
+    setIsMoving(true);
+
+    // Rota çizgisi için path oluştur
+    const start = dronePos;
+    const end = { x: hedefX, y: hedefY };
+    const pathD = `M ${start.x} ${start.y} L ${end.x} ${end.y}`;
+    const yeniRota = { d: pathD, key: Date.now() };
+    setRotaYolu((prev) => [...prev, yeniRota]);
+
+    // Hareket animasyonu (x, y interpolasyon)
+    const xMotion = useMotionValue(start.x);
+    const yMotion = useMotionValue(start.y);
+
+    const controlsX = animate(xMotion, end.x, { duration: 1.2, ease: "easeInOut" });
+    const controlsY = animate(yMotion, end.y, { duration: 1.2, ease: "easeInOut" });
+
+    const unsubscribeX = xMotion.on("change", (latestX) => {
+      const latestY = yMotion.get();
+      setDronePos({ x: latestX, y: latestY });
+    });
+
+    Promise.all([controlsX, controlsY]).then(() => {
+      unsubscribeX();
+      setIsMoving(false);
+    });
+  }, [dronePos, isMoving]);
+
+  // Gönder butonu işleyicisi
+  const gonderTahmin = useCallback(() => {
+    if (oyunBitti || isMoving) return;
+    if (!selectedEnlem || !selectedBoylam) {
+      setMesaj({ text: "Lütfen bir enlem ve boylam seçin!", type: "info" });
+      return;
+    }
+
+    const mevcutGorev = gorevler[aktifGorevIndex];
+    if (!mevcutGorev) return;
+
+    const dogruMu = selectedEnlem === mevcutGorev.enlem && selectedBoylam === mevcutGorev.boylam;
+
+    if (dogruMu) {
+      // Doğru tahmin
+      const yeniPuan = puan + 20;
+      setPuan(yeniPuan);
+      setDogruCevapSayisi((prev) => prev + 1);
+      setMesaj({ text: "✅ Doğru! +20 puan", type: "success" });
+      playSuccessMelody();
+
+      // Hedef koordinatın pixel karşılığı
+      const hedefPixel = koordinatToPixel(mevcutGorev.boylam, mevcutGorev.enlem);
+      droneHareketEt(hedefPixel.x, hedefPixel.y);
+
+      // Sonraki göreve geç veya oyunu bitir
+      if (aktifGorevIndex + 1 < gorevler.length) {
+        setTimeout(() => {
+          setAktifGorevIndex((prev) => prev + 1);
+          setSelectedEnlem("");
+          setSelectedBoylam("");
+          setMesaj(null);
+          // Yeni görev için hedef bayrak otomatik olarak render olacak
+        }, 1500);
+      } else {
+        // Oyun bitti
+        setTimeout(() => {
+          setOyunBitti(true);
+          setMesaj(null);
+        }, 1500);
+      }
+    } else {
+      // Yanlış tahmin
+      const yeniPuan = puan - 5;
+      setPuan(yeniPuan);
+      setYanlisCevapSayisi((prev) => prev + 1);
+      setMesaj({ text: "❌ Yanlış! -5 puan", type: "error" });
+      playError();
+      // Yanlışta drone hareket etmez, sadece ceza puanı
+    }
+  }, [selectedEnlem, selectedBoylam, gorevler, aktifGorevIndex, puan, oyunBitti, isMoving, playSuccessMelody, playError, droneHareketEt]);
+
+  // Yeni görev geldiğinde yeni hedef için bip sesi (hedef çıktığında)
+  useEffect(() => {
+    if (gorevler.length > 0 && aktifGorevIndex < gorevler.length && !oyunBitti) {
+      playBeep();
+    }
+  }, [aktifGorevIndex, gorevler, oyunBitti, playBeep]);
+
+  // İlk yüklemede oyunu başlat
+  useEffect(() => {
+    oyunuBaslat();
+  }, [oyunuBaslat]);
+
+  // Aktif görevin koordinatları (hedef bayrak konumu)
+  const aktifGorev = gorevler[aktifGorevIndex];
+  const hedefPixel = aktifGorev ? koordinatToPixel(aktifGorev.boylam, aktifGorev.enlem) : null;
+
+  // Drone açısı (hedefe doğru yön)
+  let droneAngle = 0;
+  if (hedefPixel && !isMoving) {
+    const dx = hedefPixel.x - dronePos.x;
+    const dy = hedefPixel.y - dronePos.y;
+    droneAngle = Math.atan2(dy, dx);
+  }
+
   return (
-    <div className="fixed inset-0 z-50 bg-slate-950 flex flex-col overflow-hidden select-none font-sans">
-      
-      {/* Header */}
-      <div className="p-4 px-6 flex justify-between items-center bg-black/80 border-b border-white/10 flex-shrink-0 z-50">
-        <div className="text-white">
-          <h2 className="font-extrabold text-xl text-blue-400 leading-tight">Görevleri Tamamla</h2>
-          <span className="text-xs text-slate-400 uppercase font-black tracking-widest block mt-1">Dinamik Rota Simülasyonu</span>
-        </div>
-        <div className="flex items-center gap-4">
-          <div className="text-right">
-            <div className="text-[10px] text-slate-500 font-black uppercase tracking-widest">PUAN</div>
-            <div className="text-2xl font-black text-emerald-400">{score}</div>
+    <div className="relative min-h-screen bg-slate-900 flex items-center justify-center p-4">
+      {/* Ana oyun kartı */}
+      <div className="w-full max-w-6xl bg-slate-800/50 backdrop-blur-md rounded-2xl shadow-2xl p-4 border border-slate-700">
+        {/* Skor ve görev bilgisi */}
+        <div className="flex justify-between items-center mb-4 px-2">
+          <div className="bg-slate-900/80 backdrop-blur rounded-lg px-4 py-2 border border-slate-600">
+            <span className="text-slate-300 text-sm">⭐ PUAN</span>
+            <span className="text-2xl font-bold text-yellow-400 ml-2">{puan}</span>
           </div>
-          <button onClick={onClose} className="bg-red-600 hover:bg-red-700 text-white px-6 py-1.5 rounded-full font-bold text-sm transition-all active:scale-95">KAPAT</button>
-        </div>
-      </div>
-
-      <div className="relative flex-1 flex items-center justify-center p-4 bg-[#050505] overflow-hidden">
-        {/* Harita Alanı & Konteyner Kilit */}
-        <div 
-          className="relative w-full h-full shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden border-2 border-white/5 bg-[#0a0a0a] rounded-xl flex-shrink-0 z-10"
-          style={{ 
-            aspectRatio: '841 / 595',
-            maxWidth: '100%',
-            maxHeight: '100%',
-          }}
-        >
-          <Image 
-            src="/9/harita/dunya_koordinat.svg" 
-            alt="Koordinat Haritası" 
-            fill 
-            priority 
-            className="object-contain w-full h-full pointer-events-none opacity-90"
-          />
-          
-          {/* Animasyon Katmanı */}
-          <svg className="absolute inset-0 w-full h-full pointer-events-none z-10 overflow-visible">
-            {/* Gidiş Yolu (Dashed Path) */}
-            <motion.line
-              x1={`${prevDronePos.x}%`} y1={`${prevDronePos.y}%`}
-              x2={`${boylamX[guessedBoylam]}%`} y2={`${enlemY[guessedEnlem]}%`}
-              stroke="#3b82f6" strokeWidth="2.5" strokeDasharray="8 8" strokeLinecap="round"
-              initial={{ pathLength: 0, opacity: 0 }}
-              animate={gameState !== 'playing' ? { pathLength: 1, opacity: 0.6 } : { pathLength: 0, opacity: 0 }}
-              transition={{ duration: 1.5, ease: "easeInOut" }}
-            />
-          </svg>
-
-          {/* 🏁 Hedef Bayrağı & Radar Pulse (GİZLİ HEDEF) */}
-          <motion.div 
-            initial={false}
-            animate={{ left: `${boylamX[currentTarget.boylam]}%`, top: `${enlemY[currentTarget.enlem]}%` }}
-            className="absolute -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-none flex flex-col items-center justify-center"
-          >
-            {/* SVG Kırmızı Bayrak */}
-            <div className="absolute -translate-x-[20%] -translate-y-[80%] drop-shadow-[0_0_10px_rgba(239,68,68,0.8)] z-20">
-              <Flag size={36} className="text-[#ef4444] fill-[#ef4444]" />
-            </div>
-            
-            {/* Radar Pulse Effect */}
-            <motion.div 
-              initial={{ scale: 0.5, opacity: 1 }}
-              animate={{ scale: 3, opacity: 0 }}
-              transition={{ duration: 1.8, repeat: Infinity, ease: "easeOut" }}
-              className="absolute w-10 h-10 rounded-full border-2 border-red-500 bg-red-500/20 z-0"
-            />
-          </motion.div>
-
-          {/* 🛸 Drone İkonu (KIRMIZI PERVANELİ) */}
-          <motion.div
-            initial={false}
-            animate={{ left: `${boylamX[guessedBoylam]}%`, top: `${enlemY[guessedEnlem]}%` }}
-            transition={{ duration: 1.5, ease: "easeInOut" }}
-            className="absolute -translate-x-1/2 -translate-y-1/2 z-20 flex flex-col items-center justify-center pointer-events-none"
-          >
-            {/* Drone Gövdesi & Navigation Aracı */}
-            <div className="relative flex items-center justify-center bg-red-600/20 rounded-full p-2 border border-red-500/30 backdrop-blur-sm shadow-2xl">
-              <motion.div animate={{ rotate: getDroneRotation() }} transition={{ duration: 0.5 }}>
-                <Navigation size={28} className="text-red-500 fill-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.7)]" />
-              </motion.div>
-              
-              {/* Pervaneler (Animate Rotating Circles) */}
-              {[...Array(4)].map((_, i) => (
-                <motion.div
-                  key={i}
-                  animate={{ rotate: 360 }}
-                  transition={{ repeat: Infinity, duration: 0.15, ease: "linear" }}
-                  className="absolute w-5 h-5 border border-white/20 bg-slate-400/20 backdrop-blur-sm rounded-full flex items-center justify-center"
-                  style={{
-                    top: i < 2 ? -10 : 'auto', bottom: i >= 2 ? -10 : 'auto',
-                    left: i % 2 === 0 ? -10 : 'auto', right: i % 2 !== 0 ? -10 : 'auto',
-                  }}
-                >
-                  <div className="w-4 h-0.5 bg-[#ef4444] rounded-full shadow-[0_0_8px_rgba(239,68,68,0.9)]"></div>
-                </motion.div>
-              ))}
-            </div>
-            
-            {/* Durum Bildirimi Overlay */}
-            {gameState === 'next_round' && lastCheck === 'correct' && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="absolute top-12 bg-green-600/90 backdrop-blur-md text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-xl whitespace-nowrap border border-green-400/50">Hedefe Varıldı!</motion.div>
-            )}
-            {gameState === 'playing' && lastCheck === 'wrong' && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="absolute top-12 bg-red-700/90 backdrop-blur-md text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-xl whitespace-nowrap border border-red-400/50">Yanlış Hedef, Haritayı Tekrar İncele!</motion.div>
-            )}
-          </motion.div>
-        </div>
-
-        {/* 🎮 Kontrol Merkezi & Görev Paneli */}
-        <div className="absolute bottom-6 right-6 lg:bottom-10 lg:right-10 z-30 w-[320px] bg-slate-900/90 backdrop-blur-xl p-6 rounded-3xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
-          <div className="flex justify-between items-center mb-5 border-b border-white/10 pb-3">
-            <h3 className="text-blue-400 font-bold flex items-center gap-2 text-sm uppercase tracking-wider">
-              <Target size={18} /> GÖREV PANELİ
-            </h3>
-            <div className="text-[11px] text-slate-400 font-medium">Tur: <span className="text-white font-black">{currentRound}/{TOTAL_ROUNDS}</span></div>
+          <div className="bg-slate-900/80 backdrop-blur rounded-lg px-4 py-2 border border-slate-600">
+            <span className="text-slate-300 text-sm">🎯 GÖREV</span>
+            <span className="text-xl font-bold text-white ml-2">{aktifGorevIndex + 1} / 5</span>
           </div>
-          
-          <div className="space-y-4">
-            {/* Enlem Seçimi */}
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Enlem (Latitude)</label>
-              <select
-                value={guessedEnlem}
-                onChange={(e) => setGuessedEnlem(e.target.value)}
-                disabled={gameState !== 'playing'}
-                className="bg-[#0f172a] border border-slate-700 text-white rounded-xl px-4 py-2.5 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 disabled:opacity-50 appearance-none font-medium cursor-pointer"
-              >
-                {Object.keys(enlemY).map(key => <option key={key} value={key}>{key}</option>)}
-              </select>
+        </div>
+
+        {/* Harita konteyneri (841/595 aspect ratio) */}
+        <div className="relative w-full aspect-[841/595] bg-slate-900 rounded-xl overflow-hidden border border-slate-600">
+          <div className="relative w-full h-full">
+            {/* Arkaplan harita SVG */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <img
+                src="/9/harita/dunya_koordinat.svg"
+                alt="Dünya Koordinat Haritası"
+                className="w-full h-full object-contain"
+              />
             </div>
-            {/* Boylam Seçimi */}
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Boylam (Longitude)</label>
-              <select
-                value={guessedBoylam}
-                onChange={(e) => setGuessedBoylam(e.target.value)}
-                disabled={gameState !== 'playing'}
-                className="bg-[#0f172a] border border-slate-700 text-white rounded-xl px-4 py-2.5 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 disabled:opacity-50 appearance-none font-medium cursor-pointer"
-              >
-                {Object.keys(boylamX).map(key => <option key={key} value={key}>{key}</option>)}
-              </select>
-            </div>
-            {/* Gönder Butonu */}
-            <button
-              onClick={handleSendDrone}
-              disabled={gameState !== 'playing'}
-              className="w-full mt-2 bg-blue-600 hover:bg-blue-500 disabled:bg-blue-800 text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-blue-900/40 active:scale-95 border border-blue-500/50"
+
+            {/* SVG katmanı (rota çizgileri, drone, bayrak) */}
+            <svg
+              ref={svgRef}
+              className="absolute top-0 left-0 w-full h-full pointer-events-none"
+              viewBox={`0 0 ${HARITA_GENISLIK} ${HARITA_YUKSEKLIK}`}
+              preserveAspectRatio="none"
             >
-              {gameState === 'checking' ? 'Menzil Hesaplanıyor...' : gameState === 'next_round' ? 'İniş Başarılı!' : 'Dronu Gönder'}
-            </button>
+              {/* Rota çizgileri (kesik mavi, animasyonlu) */}
+              {rotaYolu.map((rota) => (
+                <motion.path
+                  key={rota.key}
+                  d={rota.d}
+                  stroke="#3b82f6"
+                  strokeWidth="2"
+                  strokeDasharray="8 6"
+                  fill="none"
+                  initial={{ pathLength: 0 }}
+                  animate={{ pathLength: 1 }}
+                  transition={{ duration: 1, ease: "easeInOut" }}
+                />
+              ))}
+            </svg>
+
+            {/* Hedef bayrak (sadece aktif görev varsa) */}
+            {hedefPixel && (
+              <div style={{ position: "absolute", left: hedefPixel.x, top: hedefPixel.y, transform: "translate(-50%, -50%)" }}>
+                <HedefBayrak x={0} y={0} />
+              </div>
+            )}
+
+            {/* Drone */}
+            <Drone x={dronePos.x} y={dronePos.y} angle={droneAngle} />
           </div>
         </div>
 
-        {/* 🏆 Oyun Sonu Ekranı */}
-        <AnimatePresence>
-          {gameState === 'finished' && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-50 bg-black/90 backdrop-blur-lg flex flex-col items-center justify-center p-10 text-center">
-              <motion.div initial={{ scale: 0 }} animate={{ scale: 1, transition: { type: 'spring', delay: 0.2 } }} className="flex flex-col items-center">
-                <CheckCircle size={80} className="text-emerald-500 mb-6" />
-                <h2 className="text-5xl font-black text-white mb-2">Görevler Tamamlandı!</h2>
-                <p className="text-slate-400 text-lg mb-10 max-w-lg">Bergama Hava Kontrol Merkezi adına tebrik ederiz. Tüm coğrafi hedefleri başarıyla keşfettiniz.</p>
-                <div className="flex items-end gap-1 mb-14">
-                  <span className="text-xs text-slate-500 font-black uppercase tracking-widest pb-1">TOPLAM PUAN</span>
-                  <span className="text-8xl font-black text-emerald-400 leading-none">{score}<span className="text-4xl text-emerald-700">/100</span></span>
-                </div>
-                <button onClick={resetGame} className="bg-emerald-600 hover:bg-emerald-500 text-white px-10 py-4 rounded-full font-extrabold text-lg transition-all active:scale-95 shadow-xl shadow-emerald-950">Yeniden Başla</button>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
+        {/* Alt panel: Dropdownlar + Gönder butonu + mesaj */}
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+          <div>
+            <label className="block text-slate-300 text-sm mb-1">Enlem (Latitude)</label>
+            <select
+              value={selectedEnlem}
+              onChange={(e) => setSelectedEnlem(e.target.value as EnlemTipi)}
+              className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white focus:ring-2 focus:ring-blue-500"
+              disabled={oyunBitti || isMoving}
+            >
+              <option value="">Seçiniz</option>
+              {ENLEM_DEGERLERI.map((enlem) => (
+                <option key={enlem} value={enlem}>{enlem}°</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block text-slate-300 text-sm mb-1">Boylam (Longitude)</label>
+            <select
+              value={selectedBoylam}
+              onChange={(e) => setSelectedBoylam(Number(e.target.value) as BoylamTipi)}
+              className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white focus:ring-2 focus:ring-blue-500"
+              disabled={oyunBitti || isMoving}
+            >
+              <option value="">Seçiniz</option>
+              {BOYLAM_DEGERLERI.map((boylam) => (
+                <option key={boylam} value={boylam}>{boylam}°</option>
+              ))}
+            </select>
+          </div>
+          <button
+            onClick={gonderTahmin}
+            disabled={oyunBitti || isMoving}
+            className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-2 px-6 rounded-lg transition-colors shadow-lg"
+          >
+            🚀 GÖNDER
+          </button>
+        </div>
+        {mesaj && (
+          <div className={`mt-3 text-center font-medium ${
+            mesaj.type === "success" ? "text-green-400" : mesaj.type === "error" ? "text-red-400" : "text-yellow-400"
+          }`}>
+            {mesaj.text}
+          </div>
+        )}
       </div>
+
+      {/* Oyun Bitti Modal */}
+      <AnimatePresence>
+        {oyunBitti && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50"
+          >
+            <motion.div
+              initial={{ scale: 0.8, y: 30 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.8, y: 30 }}
+              className="bg-slate-800 border border-slate-600 rounded-2xl p-6 max-w-md w-full mx-4 shadow-2xl"
+            >
+              <h2 className="text-3xl font-bold text-center text-white mb-4">🎉 Oyun Bitti 🎉</h2>
+              <div className="space-y-2 text-center text-slate-300">
+                <p>Toplam Puan: <span className="text-yellow-400 font-bold text-xl">{puan}</span></p>
+                <p>✅ Doğru Tahmin: {dogruCevapSayisi}</p>
+                <p>❌ Yanlış Tahmin: {yanlisCevapSayisi}</p>
+              </div>
+              <div className="mt-6 flex justify-center">
+                <button
+                  onClick={oyunuBaslat}
+                  className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-lg transition-colors"
+                >
+                  🔄 Tekrar Oyna
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
