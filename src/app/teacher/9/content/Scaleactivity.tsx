@@ -507,7 +507,7 @@ const REAL_KM: Record<string, number> = {
   "van-diyarbakir":390,"diyarbakir-van":390,
   "ankara-kayseri":320,"kayseri-ankara":320,
   "adana-gaziantep":195,"gaziantep-adana":195,
-  "istanbul-ankara":450,"samsun-trabzon":160,"trabzon-samsun":160,
+  "samsun-trabzon":160,"trabzon-samsun":160,
   "istanbul-edirne":230,"edirne-istanbul":230,
   "izmir-antalya":490,"antalya-izmir":490,
   "ankara-adana":490,"adana-ankara":490,
