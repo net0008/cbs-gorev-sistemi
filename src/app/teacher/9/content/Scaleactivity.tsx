@@ -717,15 +717,15 @@ function MeasureTab() {
   };
 
   // Hesaplama
-  const mapCm = (() => {
+  const trueBirdseyeKm = (() => {
     if (!cityA || !cityB) return 0;
-    const dLon = (cityB.lon - cityA.lon) * 111.32 * Math.cos(cityA.lat * Math.PI/180);
+    const avgLat = (cityA.lat + cityB.lat) / 2;
+    const dLon = (cityB.lon - cityA.lon) * 111.32 * Math.cos(avgLat * Math.PI/180);
     const dLat = (cityB.lat - cityA.lat) * 110.574;
-    const realDistKm = Math.sqrt(dLon*dLon + dLat*dLat);
-    const mapWidthCm = (1500*100000)/selScale;
-    // Harita genişliği (piksel) ≈ 760px → 1500km
-    return (realDistKm/1500) * mapWidthCm;
+    return Math.sqrt(dLon*dLon + dLat*dLat);
   })();
+
+  const mapCm = (trueBirdseyeKm * 100000) / selScale;
 
   return (
     <div style={{ flex:1, display:"flex", overflow:"hidden" }}>
@@ -768,9 +768,14 @@ function MeasureTab() {
               </div>
             </div>
             <div style={{ padding:"16px 18px", background:"rgba(16,185,129,0.08)", border:`1.5px solid ${C_GREEN}30`, borderRadius:"10px" }}>
-              <div style={{ fontSize:"13px",color:C_GREEN,fontWeight:"700",marginBottom:"6px",letterSpacing:"1px",fontFamily:FONT_BODY }}>GERÇEK MESAFE</div>
-              <div style={{ fontSize:"30px",fontWeight:"800",color:C_GREEN,fontFamily:FONT_MONO }}>{knownReal||realKm.toFixed(0)} km</div>
-              {knownReal&&<div style={{ fontSize:"12px",color:"#065f46",marginTop:"4px",fontFamily:FONT_BODY }}>KGM karayolu verisi</div>}
+                  <div style={{ fontSize:"13px",color:C_GREEN,fontWeight:"700",marginBottom:"8px",letterSpacing:"1px",fontFamily:FONT_BODY }}>SONUÇLAR</div>
+                  <div style={{ fontSize:"17px",fontWeight:"800",color:C_GREEN,fontFamily:FONT_MONO, marginBottom:"6px" }}>
+                    Kuş Uçuşu Mesafe: {trueBirdseyeKm.toFixed(0)} km
+                  </div>
+                  <div style={{ fontSize:"17px",fontWeight:"800",color:C_GREEN,fontFamily:FONT_MONO }}>
+                    Gerçek Mesafe: {knownReal||realKm.toFixed(0)} km
+                  </div>
+                  {knownReal&&<div style={{ fontSize:"12px",color:"#065f46",marginTop:"8px",fontFamily:FONT_BODY }}>Not: Gerçek Mesafe KGM karayolu verisidir.</div>}
             </div>
             <button onClick={reset}
               style={{ padding:"11px", background:"transparent", border:`1.5px solid ${C_GOLD}30`, borderRadius:"8px", color:C_GOLD_DIM, fontSize:"13px", fontWeight:"700", cursor:"pointer", fontFamily:FONT_BODY }}
