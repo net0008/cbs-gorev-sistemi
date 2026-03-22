@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 
 // ─── Tipler ───────────────────────────────────────────────────────────────────
-type Tab       = "learn" | "measure" | "convert" | "test";
+type Tab       = "learn" | "measure" | "convert" | "mapScaleRel" | "test";
 type ScaleType = "fraction" | "line";
 
 // ─── Ses ─────────────────────────────────────────────────────────────────────
@@ -97,6 +97,7 @@ export default function ScaleActivity({ onClose }: { onClose: () => void }) {
     { id: "learn",   icon: "📖", label: "ÖĞREN"    },
     { id: "measure", icon: "📐", label: "ÖLÇÜM YAP" },
     { id: "convert", icon: "🔄", label: "DÖNÜŞTÜR"  },
+    { id: "mapScaleRel", icon: "🗺️", label: "HARİTA - ÖLÇEK" },
     { id: "test",    icon: "✏️", label: "TEST"      },
   ];
 
@@ -138,6 +139,7 @@ export default function ScaleActivity({ onClose }: { onClose: () => void }) {
         {tab === "learn"   && <LearnTab />}
         {tab === "measure" && <MeasureTab />}
         {tab === "convert" && <ConvertTab />}
+        {tab === "mapScaleRel" && <MapScaleRelTab />}
         {tab === "test"    && <TestTab />}
       </div>
     </div>
@@ -906,6 +908,27 @@ function ConvertTab() {
             ))}
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// HARİTA - ÖLÇEK İLİŞKİSİ SEKMESİ
+// ═══════════════════════════════════════════════════════════════════════════════
+function MapScaleRelTab() {
+  return (
+    <div style={{ flex: 1, display: "flex", flexDirection: "column", padding: "24px", background: `radial-gradient(ellipse at center,#0e1a2e 0%,${C_BG} 100%)` }}>
+      <div style={{ fontSize: "13px", letterSpacing: "3px", color: C_GOLD_DIM, textAlign: "center", fontFamily: FONT_MONO, marginBottom: "20px" }}>
+        HARİTA VE ÖLÇEK İLİŞKİSİ İNTERAKTİF UYGULAMASI
+      </div>
+      <div style={{ flex: 1, borderRadius: "16px", border: "2px solid rgba(251,191,36,0.16)", overflow: "hidden", background: "#000", boxShadow: "0 8px 32px rgba(0,0,0,0.5)" }}>
+        <iframe
+          src="https://hasbierdogmus.com.tr/projeler/Harita_Olcek_iliskisi/index.html"
+          style={{ width: "100%", height: "100%", border: "none" }}
+          title="Harita - Ölçek İlişkisi"
+          allowFullScreen
+        />
       </div>
     </div>
   );
