@@ -686,7 +686,7 @@ function TurkeyMapSVG() {
       overflow: "hidden",
     }}>
       <img
-        src="/9/harita/Türkiye_Haritası6.svg"
+        src="/9/harita/Turkiye_Haritasi6.svg"
         alt="Türkiye il haritası"
         draggable={false}
         style={{
