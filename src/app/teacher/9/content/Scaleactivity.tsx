@@ -719,10 +719,15 @@ function MeasureTab() {
   // Hesaplama
   const trueBirdseyeKm = (() => {
     if (!cityA || !cityB) return 0;
-    const avgLat = (cityA.lat + cityB.lat) / 2;
-    const dLon = (cityB.lon - cityA.lon) * 111.32 * Math.cos(avgLat * Math.PI/180);
-    const dLat = (cityB.lat - cityA.lat) * 110.574;
-    return Math.sqrt(dLon*dLon + dLat*dLat);
+    
+    const L = (window as any).L;
+    if (L) {
+      // Leaflet'in kendi tam küresel (Haversine) algoritması ile %100 kesin ölçüm
+      const ptA = L.latLng(cityA.lat, cityA.lon);
+      const ptB = L.latLng(cityB.lat, cityB.lon);
+      return ptA.distanceTo(ptB) / 1000;
+    }
+    return 0;
   })();
 
   const mapCm = (trueBirdseyeKm * 100000) / selScale;
