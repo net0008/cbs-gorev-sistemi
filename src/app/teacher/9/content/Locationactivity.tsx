@@ -354,7 +354,7 @@ function TurkeyNeighborMap() {
             <g key={c.id} onMouseEnter={()=>setHov(c.id)} onMouseLeave={()=>setHov(null)} style={{ cursor:"pointer" }}>
               <rect x={c.x} y={c.y} width={c.w} height={c.h}
                 fill={isHov?c.fill:`${c.fill}60`} stroke={isHov?c.fill:`${c.fill}80`}
-                strokeWidth={isHov?2.5:1.5} rx="4" transition="all 0.18s"/>
+                strokeWidth={isHov?2.5:1.5} rx="4" style={{ transition: "all 0.18s" }}/>
               <text x={c.x+c.w/2} y={c.y+c.h/2+4} textAnchor="middle" fontSize={c.id==="turkiye"?14:10}
                 fill={c.id==="turkiye"?"#fff":isHov?"#fff":"rgba(255,255,255,0.7)"}
                 fontFamily={FONT} fontWeight={c.id==="turkiye"?"800":"600"}>{c.name}</text>
