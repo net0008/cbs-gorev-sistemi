@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Map, Navigation, Layers, Maximize, Database, Mountain } from 'lucide-react';
+import { Map, Navigation, Layers, Maximize, Database, Mountain, Compass } from 'lucide-react';
 import MapReadingActivity from './MapReadingActivity';
 import RouteSimulationActivity from './RouteSimulationActivity';
 import ProjectionActivity from './Projectionactivity';
@@ -9,8 +9,9 @@ import ScaleActivity from './Scaleactivity';
 import DistributionMethodsActivity from './DistributionMethodsActivity';
 import MapTypesActivity from './MapTypesActivity';
 import Topoactivity from './Topoactivity';
+import LocationActivity from './Locationactivity';
 
-type ActivityType = null | 'activity1' | 'activity2' | 'projections' | 'scale' | 'distribution' | 'mapTypes' | 'topoactivity';
+type ActivityType = null | 'activity1' | 'activity2' | 'projections' | 'scale' | 'distribution' | 'mapTypes' | 'topoactivity' | 'location';
 
 export default function ContentCatalogPage() {
   const [activeActivity, setActiveActivity] = useState<ActivityType>(null);
@@ -148,6 +149,25 @@ export default function ContentCatalogPage() {
           </div>
         </div>
 
+        {/* 8. Kutu: Türkiye'nin Coğrafi Konumu */}
+        <div 
+          onClick={() => setActiveActivity('location')}
+          className="group cursor-pointer bg-slate-900 border-2 border-slate-800 hover:border-indigo-500 rounded-3xl p-8 transition-all duration-300 hover:shadow-[0_0_40px_rgba(99,102,241,0.15)] hover:-translate-y-2 flex flex-col items-center text-center relative overflow-hidden"
+        >
+          <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-indigo-600 to-blue-400 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div className="w-20 h-20 bg-indigo-950 border border-indigo-800 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
+            <Compass size={36} className="text-indigo-400" />
+          </div>
+          <h2 className="text-2xl font-bold text-indigo-400 mb-4">8. Etkinlik: Türkiye’nin Coğrafi Konumu</h2>
+          <div className="text-sm text-slate-400 leading-relaxed font-medium text-left w-full bg-slate-950/50 p-4 rounded-xl space-y-2">
+            <p><strong className="text-slate-300">Öğrenme Çıktıları:</strong> COĞ.9.2.2. Türkiye’nin konum özelliklerini algılayabilme</p>
+            <p><strong className="text-slate-300">Süreç Bileşeni:</strong> a) Türkiye’nin konum özelliklerini belirler.</p>
+            <p><strong className="text-slate-300">Süreç Bileşeni:</strong> b) Türkiye’nin konum özelliklerini görselleştirir.</p>
+            <p><strong className="text-slate-300">Süreç Bileşeni:</strong> c) Türkiye’nin konum özelliklerini özetler.</p>
+            <p><strong className="text-slate-300">Araç Seti:</strong> Harita</p>
+          </div>
+        </div>
+
       </div>
 
       {/* --- Aktif Modal / Tam Ekran Render Alanı --- */}
@@ -171,6 +191,9 @@ export default function ContentCatalogPage() {
       )}
       {activeActivity === 'topoactivity' && (
         <Topoactivity onClose={() => setActiveActivity(null)} />
+      )}
+      {activeActivity === 'location' && (
+        <LocationActivity onClose={() => setActiveActivity(null)} />
       )}
     </div>
   );
