@@ -102,7 +102,7 @@ interface Soru {
   ipucu: string;
 }
 
-const KOORDINAT_SORULARI = [
+const KOORDINAT_SORULARI: Soru[] = [
   { 
     id: 1, 
     soru: "Türkiye'nin en kuzey noktası (Sinop/İnceburun) hangi paralele yakındır?", 
