@@ -90,19 +90,6 @@ const TEST_ITEMS = [
   { q:"Kibris Adasi Dogu Akdeniz'de buyukluk siralamasi nedir?", opts:["En buyuk ada","Ikinci buyuk","Ucuncu","Dorduncu"], correct:0, exp:"Kibris (9.251 km2) Dogu Akdeniz'in en buyuk adasidir." },
 ];
 
-// ─── Koordinat soruları
-interface Soru { id:number; soru:string; cevap:string; ipucu:string; }
-const KOORDINAT_SORULARI: Soru[] = [
-  { id:1, soru:"Turkiye'nin en kuzey noktasi hangi paralele yakindir?", cevap:"42 Kuzey", ipucu:"Haritada en ustteki yatay cizgiyi incele. Sinop kiyisi en kuzey noktamizdir." },
-  { id:2, soru:"Turkiye'nin en guney noktasi hangi paralele yakindir?", cevap:"36 Kuzey", ipucu:"En alttaki yatay cizgiye bak. Hatay kiyilari en guney noktamizdir." },
-  { id:3, soru:"Turkiye'nin en bati noktasi hangi meridyene yakindir?", cevap:"26 Dogu", ipucu:"Soldan ilk dikey cizgiye bak. Canakkale kiyilari en bati noktamizdir." },
-  { id:4, soru:"Turkiye'nin en dogu noktasi hangi meridyene yakindir?", cevap:"45 Dogu", ipucu:"Sagdaki son dikey cizgiye bak. Igdir ili en dogu noktamizdir." },
-  { id:5, soru:"Ankara'nin koordinatlari yaklasik olarak nedir?", cevap:"40 Kuzey, 33 Dogu", ipucu:"Haritada Turkiye'nin ortasina bak. Baskentimiz orta Anadolu'dadir." },
-  { id:6, soru:"Turkiye kuzey mi guney yarim kurede yer alir?", cevap:"Kuzey Yarim Kure", ipucu:"Ekvator cizgisi (0) nerede? Turkiye'nin paralelleri (36-42) onun kuzeyindedir." },
-  { id:7, soru:"Turkiye dogu mu bati yarim kurede yer alir?", cevap:"Dogu Yarim Kure", ipucu:"Baslangic meridyeni 0'dir. Turkiye'nin meridyenleri (26-45) onun dogusundadir." },
-  { id:8, soru:"Turkiye'nin kuzey-guney genisligi (enlem farki) kac derecedir?", cevap:"6 derece (36-42 arasi)", ipucu:"En kuzey ve en guney paraleli haritadan bul, farkini hesapla." },
-];
-
 // ═══════════════════════════════════════════════════════════════════════════════
 export default function LocationActivity({ onClose }: { onClose: () => void }) {
   const [tab, setTab] = useState<Tab>("learn");
@@ -186,13 +173,9 @@ function LearnTab() {
           <InfoCard color={C}><p style={{ fontSize:"14px", color:"#c7d2fe", lineHeight:"1.9", margin:0, fontWeight:"500" }}>Ekvator ve baslangic meridyenine gore belirlenen kesin konum <strong style={{ color:C }}>mutlak konum</strong>'dur.</p></InfoCard>
           <div style={{ width:"100%", maxWidth:"840px", margin:"0 auto", padding:"16px 20px", background:"rgba(0,0,0,0.28)", border:`1px solid ${C}18`, borderRadius:"12px" }}>
             <div style={{ fontSize:"11px", color:C, letterSpacing:"2px", fontWeight:"800", marginBottom:"12px", fontFamily:FONT }}>TURKIYE'NIN KOORDINATLARI</div>
-            <iframe 
-              style={{ width: "100%", height: "500px", border: 0, borderRadius: "8px" }} 
-              allowFullScreen 
-              allow="geolocation"
-              src="//umap.openstreetmap.fr/tr/map/turkiyenin-matematik-konumu_1380349?scaleControl=false&miniMap=false&scrollWheelZoom=true&zoomControl=false&editMode=disabled&moreControl=false&searchControl=false&tilelayersControl=false&embedControl=false&datalayersControl=false&onLoadPanel=none&captionBar=false&captionMenus=false&homeControl=false&fullscreenControl=false&captionControl=false&locateControl=false&measureControl=false&printControl=false#5/39.044786/36.210938"
-              title="Turkiye Matematik Konumu"
-            />
+            <iframe style={{ width:"100%", height:"500px", border:0, borderRadius:"8px" }} allowFullScreen allow="geolocation"
+              src="//umap.openstreetmap.fr/tr/map/turkiyenin-matematik-konumu_1380349?scaleControl=false&miniMap=false&scrollWheelZoom=true&zoomControl=false&editMode=disabled&moreControl=false&searchControl=false&tilelayersControl=false&embedControl=false&datalayersControl=true&onLoadPanel=none&captionBar=false&captionMenus=false&homeControl=false&fullscreenControl=false&captionControl=false&locateControl=false&measureControl=false&printControl=false#5/39.044786/36.210938"
+              title="Turkiye Matematik Konumu"/>
           </div>
           <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"14px" }}>
             <InfoBox color="#10b981" title="KUZEY YARI KURE" icon="⬆️"><div style={{ fontSize:"13px", color:"#3a6a50", lineHeight:"1.8" }}>Turkiye <strong style={{ color:"#10b981" }}>36 - 42 Kuzey</strong> paralelleri arasindadir.</div></InfoBox>
