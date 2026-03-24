@@ -203,7 +203,7 @@ function LearnTab() {
                 Dünya üzerindeki herhangi bir yerin <strong style={{ color:C }}>Ekvator'a</strong> ve <strong style={{ color:C }}>başlangıç meridyenine</strong> göre konumu <strong style={{ color:C }}>mutlak konum</strong> olarak adlandırılır. Mutlak konum; bir yerin Dünya üzerinde nerede bulunduğunun kesin olarak tanımlanmasını sağlar ve navigasyon ile haritalarda kullanılır.
               </p>
             </InfoCard>
-            <div style={{ width:"100%", maxWidth:"660px", padding:"16px 20px", background:"rgba(0,0,0,0.28)", border:`1px solid ${C}18`, borderRadius:"12px" }}>
+            <div style={{ width:"100%", maxWidth:"840px", margin:"0 auto", padding:"16px 20px", background:"rgba(0,0,0,0.28)", border:`1px solid ${C}18`, borderRadius:"12px" }}>
               <div style={{ fontSize:"11px", color:C, letterSpacing:"2px", fontWeight:"800", marginBottom:"12px", fontFamily:FONT }}>TÜRKİYE'NİN KOORDİNATLARI</div>
               <iframe style={{ width: "100%", height: "500px", border: 0, borderRadius: "8px" }} allowFullScreen allow="geolocation" src="//umap.openstreetmap.fr/tr/map/turkiyenin-matematik-konumu_1380349?scaleControl=false&miniMap=false&scrollWheelZoom=true&zoomControl=false&editMode=disabled&moreControl=false&searchControl=false&tilelayersControl=null&embedControl=false&datalayersControl=true&onLoadPanel=none&captionBar=false&captionMenus=false&homeControl=false&fullscreenControl=false&captionControl=false#6/39.155622/35.354004" title="Türkiye'nin Matematik Konumu"></iframe>
             </div>
