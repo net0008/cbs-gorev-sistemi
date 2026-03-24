@@ -412,146 +412,166 @@ function Act1KoordinatOyunu() {
   );
 }
 
-// ═══ ETK-2: Komsulari Siniflandir — DUZELTME ═════════════════════════════════
+// ═══ ETK-2: uMap Entegrasyonlu Komşu Sınıflandırma ═════════════════════════════
 function Act2Komsular() {
   const ALL = [
-    ...KARA_KOMSULAR.map(k=>({...k, tip:"kara" as const})),
-    ...DENIZ_KOMSULAR.map(k=>({...k, tip:"deniz" as const})),
+    ...KARA_KOMSULAR.map(k => ({ ...k, tip: "kara" as const })),
+    ...DENIZ_KOMSULAR.map(k => ({ ...k, tip: "deniz" as const })),
   ];
-  const [cards] = useState<typeof ALL>(()=>{
-    const arr=[...ALL];
-    for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}
-    return arr.slice(0,12);
-  });
-  const [placed,   setPlaced]    = useState<Record<string,string>>({});
-  const [wrong,    setWrong]     = useState<Record<string,boolean>>({});
-  const [score,    setScore]     = useState(0);
-  const [done,     setDone]      = useState(false);
-  const [dragId,   setDragId]    = useState<string|null>(null);
-  const [hovBucket,setHovBucket] = useState<string|null>(null);
 
-  const BUCKETS=[
-    { id:"kara",      label:"KARA SINIRI",  sub:"8 komsu",  color:"#ef4444", icon:"🤝" },
-    { id:"karadeniz", label:"KARADENIZ",    sub:"5 komsu",  color:"#0ea5e9", icon:"🌊" },
-    { id:"ege",       label:"EGE DENIZI",   sub:"1 komsu",  color:"#6366f1", icon:"🌊" },
-    { id:"akdeniz",   label:"AKDENIZ",      sub:"7 komsu",  color:"#10b981", icon:"🌊" },
+  // Rastgele 10 komşu seçelim (ekranı boğmamak için)
+  const [cards] = useState<typeof ALL>(() => {
+    const arr = [...ALL];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr.slice(0, 10);
+  });
+
+  const [placed, setPlaced] = useState<Record<string, string>>({});
+  const [wrong, setWrong] = useState<Record<string, boolean>>({});
+  const [score, setScore] = useState(0);
+  const [done, setDone] = useState(false);
+  const [dragId, setDragId] = useState<string|null>(null);
+  const [hovBucket, setHovBucket] = useState<string|null>(null);
+
+  const BUCKETS = [
+    { id: "kara", label: "KARA SINIRI", color: "#ef4444", icon: "🤝" },
+    { id: "karadeniz", label: "KARADENİZ", color: "#0ea5e9", icon: "🌊" },
+    { id: "ege", label: "EGE DENİZİ", color: "#6366f1", icon: "🌊" },
+    { id: "akdeniz", label: "AKDENİZ", color: "#10b981", icon: "🌊" },
   ];
-  const getCorrect=(item:typeof ALL[0])=>{
-    if(item.tip==="kara")return "kara";
-    const d=(item as typeof DENIZ_KOMSULAR[0]).deniz;
-    if(d==="Karadeniz")return "karadeniz";
-    if(d==="Ege Denizi")return "ege";
+
+  const getCorrect = (item: typeof ALL[0]) => {
+    if (item.tip === "kara") return "kara";
+    const d = (item as typeof DENIZ_KOMSULAR[0]).deniz;
+    if (d === "Karadeniz") return "karadeniz";
+    if (d === "Ege Denizi") return "ege";
     return "akdeniz";
   };
-  const doDrop=(bucketId:string)=>{
-    if(!dragId)return;
-    const item=cards.find(a=>a.id===dragId);
-    if(!item||placed[dragId])return;
-    const isOk=bucketId===getCorrect(item);
-    sndDrop(); if(isOk){sndOK();setScore(s=>s+1);}else sndFail();
-    const np={...placed,[dragId]:bucketId};
-    const nw={...wrong, [dragId]:!isOk};
-    setPlaced(np);setWrong(nw);setDragId(null);setHovBucket(null);
-    if(Object.keys(np).length===cards.length)setTimeout(()=>setDone(true),400);
-  };
-  const retry=()=>{setPlaced({});setWrong({});setScore(0);setDone(false);setDragId(null);setHovBucket(null);};
 
-  if(done)return(
-    <div style={{ flex:1,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:"16px",background:`radial-gradient(ellipse at center,${C}0a 0%,${BG} 100%)` }}>
-      <div style={{ fontSize:"52px" }}>🗺️</div>
-      <div style={{ fontSize:"28px",fontWeight:"800",color:"#c7d2fe" }}>ETK 2 TAMAMLANDI!</div>
-      <div style={{ fontSize:"44px",fontWeight:"800",color:C,fontFamily:MONO }}>{score}/{cards.length}</div>
-      <div style={{ fontSize:"14px",color:"#4a4a8a" }}>komsu dogru siniflandirildi</div>
-      <button onClick={retry} style={{ padding:"12px 28px",background:`linear-gradient(90deg,#3730a3,${C})`,border:"none",borderRadius:"10px",color:"#fff",fontSize:"14px",fontWeight:"800",cursor:"pointer",fontFamily:FONT }}>Tekrar</button>
+  const doDrop = (bucketId: string) => {
+    if (!dragId) return;
+    const item = cards.find(a => a.id === dragId);
+    if (!item || placed[dragId]) return;
+
+    const isOk = bucketId === getCorrect(item);
+    sndDrop();
+    if (isOk) { sndOK(); setScore(s => s + 1); } else { sndFail(); }
+
+    const np = { ...placed, [dragId]: bucketId };
+    const nw = { ...wrong, [dragId]: !isOk };
+    setPlaced(np);
+    setWrong(nw);
+    setDragId(null);
+    setHovBucket(null);
+
+    if (Object.keys(np).length === cards.length) {
+      setTimeout(() => setDone(true), 600);
+    }
+  };
+
+  const retry = () => {
+    setPlaced({}); setWrong({}); setScore(0); setDone(false); setDragId(null); setHovBucket(null);
+  };
+
+  if (done) return (
+    <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "16px", background: `radial-gradient(ellipse at center,${C}0a 0%,${BG} 100%)` }}>
+      <div style={{ fontSize: "60px" }}>🏆</div>
+      <div style={{ fontSize: "24px", fontWeight: "800", color: "#c7d2fe" }}>TEBRİKLER OPERATÖR!</div>
+      <div style={{ fontSize: "48px", fontWeight: "800", color: C, fontFamily: MONO }}>{score}/{cards.length}</div>
+      <div style={{ fontSize: "14px", color: "#4a4a8a" }}>Komşuluk ilişkilerini başarıyla analiz ettin.</div>
+      <button onClick={retry} style={{ padding: "12px 32px", background: C, border: "none", borderRadius: "10px", color: "#fff", fontWeight: "800", cursor: "pointer" }}>TEKRAR DENE</button>
     </div>
   );
 
-  const pending=cards.filter(it=>!placed[it.id]);
-  return(
-    <div style={{ flex:1,display:"flex",flexDirection:"column",padding:"20px 24px",gap:"16px",overflowY:"auto",background:`radial-gradient(ellipse at center,${C}08 0%,${BG} 100%)` }}>
-      <div>
-        <div style={{ fontSize:"10px",letterSpacing:"3px",color:C,fontFamily:MONO,marginBottom:"4px" }}>ETK 2</div>
-        <div style={{ fontSize:"18px",fontWeight:"800",color:"#c7d2fe" }}>Komsulari Siniflandir</div>
-        <div style={{ fontSize:"13px",color:"#4a4a8a",marginTop:"4px" }}>Ulke kartini uygun kutuya surukle birak</div>
-      </div>
+  const pending = cards.filter(it => !placed[it.id]);
 
-      {/* Suruklenecek kartlar */}
-      <div style={{ padding:"12px 14px",background:"rgba(0,0,0,0.28)",border:"1px solid rgba(99,102,241,0.12)",borderRadius:"10px",minHeight:"60px" }}>
-        <div style={{ fontSize:"11px",color:C,letterSpacing:"2px",fontWeight:"800",marginBottom:"10px" }}>SINIFLANDIRILACAK ULKELER</div>
-        <div style={{ display:"flex",flexWrap:"wrap",gap:"8px" }}>
-          {pending.map(item=>(
-            <div key={item.id} draggable
-              onDragStart={e=>{setDragId(item.id);e.dataTransfer.effectAllowed="move";e.dataTransfer.setData("text/plain",item.id);}}
-              onDragEnd={()=>{setDragId(null);setHovBucket(null);}}
-              style={{
-                padding:"9px 14px",
-                background:dragId===item.id?`${C}30`:"rgba(0,0,0,0.4)",
-                border:`1.5px solid ${dragId===item.id?C:`${C}35`}`,
-                borderRadius:"8px",cursor:"grab",
-                fontSize:"13px",fontWeight:"700",color:"#c7d2fe",fontFamily:FONT,
-                transition:"all 0.15s",opacity:dragId===item.id?0.55:1,
-                boxShadow:dragId===item.id?`0 0 14px ${C}55`:"none",
-                userSelect:"none",WebkitUserSelect:"none",
-              }}>
-              {item.name}
-            </div>
-          ))}
-          {cards.filter(it=>placed[it.id]).map(item=>(
-            <div key={item.id}
-              style={{
-                padding:"9px 14px",
-                background:wrong[item.id]?"rgba(239,68,68,0.08)":"rgba(16,185,129,0.08)",
-                border:`1.5px solid ${wrong[item.id]?"#ef444430":"#10b98130"}`,
-                borderRadius:"8px",fontSize:"13px",fontWeight:"700",
-                color:wrong[item.id]?"#ef4444":"#10b981",fontFamily:FONT,opacity:0.65,
-              }}>
-              {wrong[item.id]?"X ":"OK "}{item.name}
-            </div>
-          ))}
+  return (
+    <div style={{ flex: 1, display: "flex", overflow: "hidden" }}>
+      {/* SOL PANEL: Etkileşimli uMap Haritası */}
+      <div style={{ flex: 1.2, display: "flex", flexDirection: "column", padding: "16px", gap: "12px", borderRight: "1px solid rgba(99,102,241,0.15)" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div style={{ fontSize: "11px", color: C, letterSpacing: "2px", fontWeight: "800", fontFamily: MONO }}>
+            SİSMİK REFERANS HARİTASI (uMAP)
+          </div>
+          <div style={{ fontSize: "10px", color: "#4a4a8a" }}>İpucu: Haritayı kaydırarak sınırları incele</div>
+        </div>
+        
+        <div style={{ flex: 1, borderRadius: "12px", overflow: "hidden", border: `2px solid ${C}20`, background: "#000" }}>
+          <iframe 
+            style={{ width: "100%", height: "100%", border: 0 }} 
+            allowFullScreen 
+            allow="geolocation" 
+            src="//umap.openstreetmap.fr/tr/map/turkiye-koordinatl_1380468?scaleControl=false&miniMap=false&scrollWheelZoom=true&zoomControl=false&editMode=disabled&moreControl=false&searchControl=false&tilelayersControl=false&embedControl=false&datalayersControl=false&onLoadPanel=none&captionBar=false&captionMenus=false&homeControl=false&fullscreenControl=false&captionControl=false&locateControl=false&measureControl=false&printControl=false#5/40.195659/38.188477"
+          ></iframe>
         </div>
       </div>
 
-      {/* Kutular */}
-      <div style={{ display:"grid",gridTemplateColumns:"1fr 1fr",gap:"12px",flex:1 }}>
-        {BUCKETS.map(bucket=>(
-          <div key={bucket.id}
-            onDragOver={e=>{e.preventDefault();e.dataTransfer.dropEffect="move";setHovBucket(bucket.id);}}
-            onDragLeave={()=>setHovBucket(null)}
-            onDrop={e=>{e.preventDefault();const id=e.dataTransfer.getData("text/plain");if(id){setDragId(id);setTimeout(()=>doDrop(bucket.id),0);}else doDrop(bucket.id);}}
-            style={{
-              minHeight:"130px",padding:"14px 16px",
-              background:hovBucket===bucket.id?`${bucket.color}18`:`${bucket.color}08`,
-              border:`2px ${hovBucket===bucket.id?"solid":"dashed"} ${bucket.color}${hovBucket===bucket.id?"80":"40"}`,
-              borderRadius:"12px",transition:"all 0.2s",
-            }}>
-            <div style={{ fontSize:"13px",fontWeight:"800",color:bucket.color,marginBottom:"4px" }}>{bucket.icon} {bucket.label}</div>
-            <div style={{ fontSize:"11px",color:`${bucket.color}88`,marginBottom:"10px" }}>{bucket.sub}</div>
-            <div style={{ display:"flex",flexWrap:"wrap",gap:"5px" }}>
-              {cards.filter(it=>placed[it.id]===bucket.id).map(it=>(
-                <div key={it.id}
-                  style={{
-                    padding:"5px 10px",
-                    background:wrong[it.id]?"rgba(239,68,68,0.15)":"rgba(16,185,129,0.15)",
-                    border:`1px solid ${wrong[it.id]?"#ef444450":"#10b98150"}`,
-                    borderRadius:"6px",fontSize:"12px",
-                    color:wrong[it.id]?"#ef4444":"#10b981",fontWeight:"700",
-                  }}>
-                  {wrong[it.id]?"X ":"OK "}{it.name}
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
+      {/* SAĞ PANEL: Sürükle Bırak Arayüzü */}
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", padding: "20px", gap: "16px", background: "rgba(3,4,10,0.4)", overflowY: "auto" }}>
+        <div>
+          <div style={{ fontSize: "18px", fontWeight: "800", color: "#c7d2fe" }}>Komşuları Sınıflandır</div>
+          <div style={{ fontSize: "12px", color: "#4a4a8a", marginTop:"4px" }}>Aşağıdaki ülkeleri haritadaki konumlarına göre ilgili kutuya bırak.</div>
+        </div>
 
-      <div style={{ padding:"10px 14px",background:`${C}08`,border:`1px solid ${C}15`,borderRadius:"8px",display:"flex",justifyContent:"space-between" }}>
-        <span style={{ fontSize:"12px",color:"#4a4a8a" }}>Kalan: {pending.length} kart</span>
-        <span style={{ fontSize:"14px",fontWeight:"800",color:C,fontFamily:MONO }}>{score} dogru</span>
+        {/* Bekleyen Kartlar */}
+        <div style={{ minHeight: "100px", padding: "12px", background: "rgba(0,0,0,0.3)", borderRadius: "10px", border: "1px dashed rgba(99,102,241,0.2)" }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+            {pending.map(item => (
+              <div key={item.id} draggable
+                onDragStart={e => { setDragId(item.id); e.dataTransfer.setData("text/plain", item.id); }}
+                style={{ 
+                  padding: "8px 14px", background: "rgba(99,102,241,0.15)", border: `1px solid ${C}50`, 
+                  borderRadius: "6px", cursor: "grab", color: "#fff", fontSize: "13px", fontWeight: "600" 
+                }}>
+                {item.name}
+              </div>
+            ))}
+            {pending.length === 0 && <div style={{ fontSize: "12px", color: "#3a3a6a", textAlign: "center", width: "100%" }}>Tüm kartlar yerleştirildi!</div>}
+          </div>
+        </div>
+
+        {/* Hedef Kutular */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+          {BUCKETS.map(b => (
+            <div key={b.id}
+              onDragOver={e => { e.preventDefault(); setHovBucket(b.id); }}
+              onDragLeave={() => setHovBucket(null)}
+              onDrop={() => doDrop(b.id)}
+              style={{ 
+                minHeight: "110px", padding: "12px", borderRadius: "10px", transition: "all 0.2s",
+                background: hovBucket === b.id ? `${b.color}20` : "rgba(0,0,0,0.2)",
+                border: `2px ${hovBucket === b.id ? "solid" : "dashed"} ${b.color}${hovBucket === b.id ? "99" : "40"}`,
+              }}>
+              <div style={{ fontSize: "12px", fontWeight: "800", color: b.color, marginBottom: "8px" }}>
+                {b.icon} {b.label}
+              </div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "4px" }}>
+                {cards.filter(it => placed[it.id] === b.id).map(it => (
+                  <div key={it.id} style={{ 
+                    fontSize: "10px", padding: "4px 8px", borderRadius: "4px", 
+                    background: wrong[it.id] ? "#ef444420" : "#10b98120",
+                    color: wrong[it.id] ? "#ef4444" : "#10b981",
+                    border: `1px solid ${wrong[it.id] ? "#ef444440" : "#10b98140"}`
+                  }}>
+                    {wrong[it.id] ? "✕ " : "✓ "}{it.name}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div style={{ marginTop: "auto", padding: "12px", background: `${C}10`, borderRadius: "8px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <span style={{ fontSize: "12px", color: "#4a4a8a" }}>Doğru Sayısı:</span>
+          <span style={{ fontSize: "18px", fontWeight: "800", color: C, fontFamily: MONO }}>{score} / {cards.length}</span>
+        </div>
       </div>
     </div>
   );
 }
-
 // ═══ ETK-3: GZFT ═════════════════════════════════════════════════════════════
 function Act3Gzft() {
   const [placed, setPlaced] = useState<Record<string,GzftCat>>({});
