@@ -90,6 +90,19 @@ const TEST_ITEMS = [
   { q:"Kibris Adasi Dogu Akdeniz'de buyukluk siralamasi nedir?", opts:["En buyuk ada","Ikinci buyuk","Ucuncu","Dorduncu"], correct:0, exp:"Kibris (9.251 km2) Dogu Akdeniz'in en buyuk adasidir." },
 ];
 
+// ─── Koordinat soruları
+interface Soru { id:number; soru:string; cevap:string; ipucu:string; }
+const KOORDINAT_SORULARI: Soru[] = [
+  { id:1, soru:"Turkiye'nin en kuzey noktasi hangi paralele yakindir?", cevap:"42 Kuzey", ipucu:"Haritada en ustteki yatay cizgiyi incele. Sinop kiyisi en kuzey noktamizdir." },
+  { id:2, soru:"Turkiye'nin en guney noktasi hangi paralele yakindir?", cevap:"36 Kuzey", ipucu:"En alttaki yatay cizgiye bak. Hatay kiyilari en guney noktamizdir." },
+  { id:3, soru:"Turkiye'nin en bati noktasi hangi meridyene yakindir?", cevap:"26 Dogu", ipucu:"Soldan ilk dikey cizgiye bak. Canakkale kiyilari en bati noktamizdir." },
+  { id:4, soru:"Turkiye'nin en dogu noktasi hangi meridyene yakindir?", cevap:"45 Dogu", ipucu:"Sagdaki son dikey cizgiye bak. Igdir ili en dogu noktamizdir." },
+  { id:5, soru:"Ankara'nin koordinatlari yaklasik olarak nedir?", cevap:"40 Kuzey, 33 Dogu", ipucu:"Haritada Turkiye'nin ortasina bak. Baskentimiz orta Anadolu'dadir." },
+  { id:6, soru:"Turkiye kuzey mi guney yarim kurede yer alir?", cevap:"Kuzey Yarim Kure", ipucu:"Ekvator cizgisi (0) nerede? Turkiye'nin paralelleri (36-42) onun kuzeyindedir." },
+  { id:7, soru:"Turkiye dogu mu bati yarim kurede yer alir?", cevap:"Dogu Yarim Kure", ipucu:"Baslangic meridyeni 0'dir. Turkiye'nin meridyenleri (26-45) onun dogusundadir." },
+  { id:8, soru:"Turkiye'nin kuzey-guney genisligi (enlem farki) kac derecedir?", cevap:"6 derece (36-42 arasi)", ipucu:"En kuzey ve en guney paraleli haritadan bul, farkini hesapla." },
+];
+
 // ═══════════════════════════════════════════════════════════════════════════════
 export default function LocationActivity({ onClose }: { onClose: () => void }) {
   const [tab, setTab] = useState<Tab>("learn");
@@ -293,25 +306,26 @@ const KOORDINAT_SORULARI = [
 ];
 function Act1KoordinatOyunu() {
   const [qIdx, setQIdx] = useState(0);
-  const [shown, setShown] = useState(false);
   const [score, setScore] = useState(0);
   const [done, setDone] = useState(false);
   const [timeLeft, setTimeLeft] = useState(15);
   const [isShaking, setIsShaking] = useState(false);
+  
+  // YENİ STATE'LER
+  const [status, setStatus] = useState<'idle' | 'success' | 'hint'>('idle');
   const [selectedOpt, setSelectedOpt] = useState<string | null>(null);
 
   const q = KOORDINAT_SORULARI[qIdx];
 
   // Zamanlayıcı Kontrolü
   useEffect(() => {
-    if (timeLeft > 0 && !shown && !done) {
+    if (timeLeft > 0 && status === 'idle' && !done) {
       const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
       return () => clearTimeout(timer);
-    } else if (timeLeft === 0 && !shown) {
-      triggerShake();
+    } else if (timeLeft === 0 && status === 'idle') {
       handleAnswer(null); // Süre biterse yanlış say
     }
-  }, [timeLeft, shown, done]);
+  }, [timeLeft, status, done]);
 
   const triggerShake = () => {
     setIsShaking(true);
@@ -320,13 +334,16 @@ function Act1KoordinatOyunu() {
   };
 
   const handleAnswer = (choice: string | null) => {
-    if (shown) return;
+    if (status === 'success') return; // Zaten bildiyse işlem yapma
+
     setSelectedOpt(choice);
-    setShown(true);
+    
     if (choice === q.cevap) {
+      setStatus('success');
       setScore(s => s + 1);
       sndOK();
     } else {
+      setStatus('hint'); // Yanlışta ipucu moduna geç
       triggerShake();
     }
   };
@@ -336,11 +353,18 @@ function Act1KoordinatOyunu() {
       setDone(true);
     } else {
       setQIdx(i => i + 1);
-      setShown(false);
+      setStatus('idle');
       setSelectedOpt(null);
       setTimeLeft(15);
       sndClick();
     }
+  };
+
+  const tryAgain = () => {
+    setStatus('idle');
+    setSelectedOpt(null);
+    sndClick();
+    // Süreyi sıfırlamak yerine kaldığı yerden veya küçük bir bonusla devam ettirebiliriz
   };
 
   if (done) {
@@ -354,7 +378,7 @@ function Act1KoordinatOyunu() {
           setQIdx(0);
           setScore(0);
           setDone(false);
-          setShown(false);
+          setStatus('idle');
           setSelectedOpt(null);
           setTimeLeft(15);
         }} className="px-8 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg font-bold transition-colors">
@@ -379,14 +403,14 @@ function Act1KoordinatOyunu() {
         }
       `}</style>
       <div className={`flex flex-1 overflow-hidden ${isShaking ? "animate-shake" : ""}`}>
-      {/* SOL: Dinamik uMap Haritası */}
+      {/* SOL: Harita */}
       <div className="flex-1 flex flex-col p-4 gap-2 bg-slate-950">
         <div className="text-[10px] text-blue-400 tracking-widest font-mono">SİSMİK ODAKLAMA: AKTİF</div>
         <div className="flex-1 rounded-xl overflow-hidden border-2 border-blue-500/20">
           <iframe
             key={q.id} // Soru değiştikçe haritayı yeniden yükler (Zoom için)
             className="w-full h-full border-0"
-            src={`//umap.openstreetmap.fr/tr/map/turkiye-koordinatl_1380468?scaleControl=false&miniMap=false&scrollWheelZoom=true&zoomControl=false&editMode=disabled&moreControl=false&searchControl=false&tilelayersControl=false&embedControl=false&datalayersControl=false&onLoadPanel=none&captionBar=false&captionMenus=false&homeControl=false&fullscreenControl=false&captionControl=false&locateControl=false&measureControl=false&printControl=false#${q.zoom}/${q.lat}/${q.lon}`}
+            src={`//umap.openstreetmap.fr/tr/map/turkiye-koordinatl_1380468?scaleControl=false&zoomControl=false&editMode=disabled#${q.zoom}/${q.lat}/${q.lon}`}
           />
         </div>
       </div>
@@ -412,10 +436,11 @@ function Act1KoordinatOyunu() {
               <button
                 key={i}
                 onClick={() => handleAnswer(opt)}
-                disabled={shown}
+                disabled={status === 'success'} // Sadece doğru bilince butonlar kilitlenir
                 className={`p-4 rounded-lg text-left text-sm font-semibold transition-all duration-200 border-2 
-                  ${shown ? (isCorrect ? "bg-green-500/20 border-green-500 text-green-200" : isSelected ? "bg-red-500/20 border-red-500 text-red-200" : "bg-slate-800/50 border-slate-700 text-slate-500") 
-                  : "bg-slate-800 border-slate-700 text-slate-300 hover:border-blue-500 hover:bg-slate-700"}`}
+                  ${status === 'success' && isCorrect ? "bg-green-500/30 border-green-500 text-green-200 shadow-[0_0_15px_rgba(34,197,94,0.3)]" : 
+                    status === 'hint' && isSelected ? "bg-red-500/10 border-red-500/50 text-red-400" :
+                    "bg-slate-800 border-slate-700 text-slate-300 hover:border-blue-500"}`}
               >
                 {opt}
               </button>
@@ -423,16 +448,28 @@ function Act1KoordinatOyunu() {
           })}
         </div>
 
-        {shown && (
-          <div className="mt-auto p-4 bg-blue-500/5 border border-blue-500/20 rounded-lg">
-            <p className="text-xs text-blue-300 leading-relaxed italic">
-              <span className="font-bold">Analiz:</span> {q.ipucu}
-            </p>
-            <button onClick={next} className="w-full mt-4 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-bold transition-colors">
-              SONRAKİ ANALİZ
-            </button>
-          </div>
-        )}
+        {/* GERİ BİLDİRİM ALANI */}
+        <div className="mt-auto min-h-[120px]">
+          {status === 'success' && (
+            <div className="p-4 bg-green-500/10 border border-green-500/30 rounded-lg animate-in fade-in zoom-in">
+              <div className="text-green-400 font-bold mb-1">✓ HARİKA OPERATÖR!</div>
+              <p className="text-xs text-green-200/70 mb-3">Koordinat verisi doğrulandı. Bir sonraki göreve hazırsın.</p>
+              <button onClick={next} className="w-full py-2 bg-green-600 hover:bg-green-500 text-white rounded-md font-bold transition-colors">
+                SONRAKİ GÖREV
+              </button>
+            </div>
+          )}
+
+          {status === 'hint' && (
+            <div className="p-4 bg-amber-500/10 border border-amber-500/30 rounded-lg animate-in slide-in-from-bottom-2">
+              <div className="text-amber-400 font-bold mb-1">⚠️ SİSMİK UYARI</div>
+              <p className="text-xs text-amber-200/80 mb-3"><span className="font-bold">İpucu:</span> {q.ipucu}</p>
+              <button onClick={tryAgain} className="w-full py-2 bg-amber-600 hover:bg-amber-500 text-white rounded-md font-bold transition-colors">
+                TEKRAR DENE
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
     </>
