@@ -90,19 +90,6 @@ const TEST_ITEMS = [
   { q:"Kibris Adasi Dogu Akdeniz'de buyukluk siralamasi nedir?", opts:["En buyuk ada","Ikinci buyuk","Ucuncu","Dorduncu"], correct:0, exp:"Kibris (9.251 km2) Dogu Akdeniz'in en buyuk adasidir." },
 ];
 
-// ─── Koordinat soruları
-interface Soru { id:number; soru:string; cevap:string; ipucu:string; }
-const KOORDINAT_SORULARI: Soru[] = [
-  { id:1, soru:"Turkiye'nin en kuzey noktasi hangi paralele yakindir?", cevap:"42 Kuzey", ipucu:"Haritada en ustteki yatay cizgiyi incele. Sinop kiyisi en kuzey noktamizdir." },
-  { id:2, soru:"Turkiye'nin en guney noktasi hangi paralele yakindir?", cevap:"36 Kuzey", ipucu:"En alttaki yatay cizgiye bak. Hatay kiyilari en guney noktamizdir." },
-  { id:3, soru:"Turkiye'nin en bati noktasi hangi meridyene yakindir?", cevap:"26 Dogu", ipucu:"Soldan ilk dikey cizgiye bak. Canakkale kiyilari en bati noktamizdir." },
-  { id:4, soru:"Turkiye'nin en dogu noktasi hangi meridyene yakindir?", cevap:"45 Dogu", ipucu:"Sagdaki son dikey cizgiye bak. Igdir ili en dogu noktamizdir." },
-  { id:5, soru:"Ankara'nin koordinatlari yaklasik olarak nedir?", cevap:"40 Kuzey, 33 Dogu", ipucu:"Haritada Turkiye'nin ortasina bak. Baskentimiz orta Anadolu'dadir." },
-  { id:6, soru:"Turkiye kuzey mi guney yarim kurede yer alir?", cevap:"Kuzey Yarim Kure", ipucu:"Ekvator cizgisi (0) nerede? Turkiye'nin paralelleri (36-42) onun kuzeyindedir." },
-  { id:7, soru:"Turkiye dogu mu bati yarim kurede yer alir?", cevap:"Dogu Yarim Kure", ipucu:"Baslangic meridyeni 0'dir. Turkiye'nin meridyenleri (26-45) onun dogusundadir." },
-  { id:8, soru:"Turkiye'nin kuzey-guney genisligi (enlem farki) kac derecedir?", cevap:"6 derece (36-42 arasi)", ipucu:"En kuzey ve en guney paraleli haritadan bul, farkini hesapla." },
-];
-
 // ═══════════════════════════════════════════════════════════════════════════════
 export default function LocationActivity({ onClose }: { onClose: () => void }) {
   const [tab, setTab] = useState<Tab>("learn");
