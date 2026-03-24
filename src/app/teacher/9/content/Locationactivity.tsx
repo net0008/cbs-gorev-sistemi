@@ -103,70 +103,14 @@ interface Soru {
 }
 
 const KOORDINAT_SORULARI: Soru[] = [
-  { 
-    id: 1, 
-    soru: "Türkiye'nin en kuzey noktası (Sinop/İnceburun) hangi paralele yakındır?", 
-    cevap: "42° Kuzey", 
-    options: ["36° Kuzey", "38° Kuzey", "40° Kuzey", "42° Kuzey"],
-    lat: 42.02, lon: 35.15, zoom: 8, 
-    ipucu: "Sinop İnceburun'a, yani haritanın en üst noktasına odaklan." 
-  },
-  { 
-    id: 2, 
-    soru: "Türkiye'nin en güney noktası (Hatay/Beysun) hangi paralele yakındır?", 
-    cevap: "36° Kuzey", 
-    options: ["36° Kuzey", "38° Kuzey", "42° Kuzey", "45° Kuzey"],
-    lat: 35.90, lon: 36.15, zoom: 8, 
-    ipucu: "Hatay'ın en güney ucundaki bölgeye, yani en alt yatay çizgiye bak." 
-  },
-  { 
-    id: 3, 
-    soru: "Türkiye'nin en batı noktası (Gökçeada/Avlaka) hangi meridyene yakındır?", 
-    cevap: "26° Doğu", 
-    options: ["26° Doğu", "36° Doğu", "42° Doğu", "45° Doğu"],
-    lat: 40.10, lon: 25.66, zoom: 8, 
-    ipucu: "Gökçeada açıklarındaki en sol dikey çizgiyi incele." 
-  },
-  { 
-    id: 4, 
-    soru: "Türkiye'nin en doğu noktası (Iğdır/Dilucu) hangi meridyene yakındır?", 
-    cevap: "45° Doğu", 
-    options: ["26° Doğu", "36° Doğu", "42° Doğu", "45° Doğu"],
-    lat: 39.65, lon: 44.80, zoom: 8, 
-    ipucu: "Iğdır bölgesindeki en sağ dikey çizgiyi kontrol et." 
-  },
-  { 
-    id: 5, 
-    soru: "Ankara'nın koordinatları yaklaşık olarak nedir?", 
-    cevap: "40° Kuzey - 33° Doğu", 
-    options: ["36°K - 30°D", "40° Kuzey - 33° Doğu", "42°K - 35°D", "38°K - 28°D"],
-    lat: 39.93, lon: 32.85, zoom: 7, 
-    ipucu: "İç Anadolu'nun merkezindeki kesişim noktasına odaklan." 
-  },
-  { 
-    id: 6, 
-    soru: "Türkiye, Ekvator çizgisine göre hangi yarım kürede yer alır?", 
-    cevap: "Kuzey Yarım Küre", 
-    options: ["Kuzey Yarım Küre", "Güney Yarım Küre", "Batı Yarım Küre", "Doğu Yarım Küre"],
-    lat: 39.00, lon: 35.00, zoom: 4, 
-    ipucu: "Ekvator (0°) çizgisinin kuzeyinde mi yoksa güneyinde miyiz?" 
-  },
-  { 
-    id: 7, 
-    soru: "Türkiye, Başlangıç Meridyeni'ne (Greenwich) göre hangi taraftadır?", 
-    cevap: "Doğu Yarım Küre", 
-    options: ["Kuzey Yarım Küre", "Güney Yarım Küre", "Batı Yarım Küre", "Doğu Yarım Küre"],
-    lat: 39.00, lon: 35.00, zoom: 4, 
-    ipucu: "0° meridyeninin sağında (doğusunda) yer aldığımızı hatırla." 
-  },
-  { 
-    id: 8, 
-    soru: "Türkiye'nin en kuzeyi ile en güneyi arasındaki enlem farkı kaçtır?", 
-    cevap: "6 Derece", 
-    options: ["6 Derece", "19 Derece", "76 Derece", "10 Derece"],
-    lat: 39.00, lon: 35.00, zoom: 5, 
-    ipucu: "36° ve 42° Kuzey paralelleri arasındaki farkı hesapla." 
-  }
+  { id: 1, soru: "Türkiye'nin en kuzey noktası (Sinop/İnceburun) hangi paralele yakındır?", cevap: "42° Kuzey", options: ["36° Kuzey", "38° Kuzey", "40° Kuzey", "42° Kuzey"], lat: 42.02, lon: 35.15, zoom: 8, ipucu: "Sinop İnceburun'a, haritanın en üst noktasına odaklan." },
+  { id: 2, soru: "Türkiye'nin en güney noktası (Hatay/Beysun) hangi paralele yakındır?", cevap: "36° Kuzey", options: ["36° Kuzey", "38° Kuzey", "42° Kuzey", "45° Kuzey"], lat: 35.90, lon: 36.15, zoom: 8, ipucu: "Hatay'ın en güney ucuna, en alt yatay çizgiye bak." },
+  { id: 3, soru: "Türkiye'nin en batı noktası (Gökçeada/Avlaka) hangi meridyene yakındır?", cevap: "26° Doğu", options: ["26° Doğu", "36° Doğu", "42° Doğu", "45° Doğu"], lat: 40.10, lon: 25.66, zoom: 8, ipucu: "Gökçeada açıklarındaki en sol dikey çizgiyi incele." },
+  { id: 4, soru: "Türkiye'nin en doğu noktası (Iğdır/Dilucu) hangi meridyene yakındır?", cevap: "45° Doğu", options: ["26° Doğu", "36° Doğu", "42° Doğu", "45° Doğu"], lat: 39.65, lon: 44.80, zoom: 8, ipucu: "Iğdır bölgesindeki en sağ dikey çizgiyi kontrol et." },
+  { id: 5, soru: "Ankara'nın koordinatları yaklaşık olarak nedir?", cevap: "40° Kuzey - 33° Doğu", options: ["36°K - 30°D", "40° Kuzey - 33° Doğu", "42°K - 35°D", "38°K - 28°D"], lat: 39.93, lon: 32.85, zoom: 7, ipucu: "İç Anadolu'nun merkezindeki kesişim noktasına odaklan." },
+  { id: 6, soru: "Türkiye, Ekvator çizgisine göre hangi yarım kürede yer alır?", cevap: "Kuzey Yarım Küre", options: ["Kuzey Yarım Küre", "Güney Yarım Küre", "Batı Yarım Küre", "Doğu Yarım Küre"], lat: 39.00, lon: 35.00, zoom: 4, ipucu: "Ekvator (0°) çizgisinin kuzeyinde miyiz yoksa güneyinde mi?" },
+  { id: 7, soru: "Türkiye, Başlangıç Meridyeni'ne (Greenwich) göre hangi taraftadır?", cevap: "Doğu Yarım Küre", options: ["Kuzey Yarım Küre", "Güney Yarım Küre", "Batı Yarım Küre", "Doğu Yarım Küre"], lat: 39.00, lon: 35.00, zoom: 4, ipucu: "0° meridyeninin sağında (doğusunda) yer aldığımızı hatırla." },
+  { id: 8, soru: "Türkiye'nin en kuzeyi ile en güneyi arasındaki enlem farkı kaçtır?", cevap: "6 Derece", options: ["6 Derece", "19 Derece", "76 Derece", "10 Derece"], lat: 39.00, lon: 35.00, zoom: 5, ipucu: "36° ve 42° Kuzey paralelleri arasındaki farkı hesapla." }
 ];
 
 // ═══════════════════════════════════════════════════════════════════════════════
