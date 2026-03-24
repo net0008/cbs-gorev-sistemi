@@ -203,8 +203,10 @@ function LearnTab() {
                 Dünya üzerindeki herhangi bir yerin <strong style={{ color:C }}>Ekvator'a</strong> ve <strong style={{ color:C }}>başlangıç meridyenine</strong> göre konumu <strong style={{ color:C }}>mutlak konum</strong> olarak adlandırılır. Mutlak konum; bir yerin Dünya üzerinde nerede bulunduğunun kesin olarak tanımlanmasını sağlar ve navigasyon ile haritalarda kullanılır.
               </p>
             </InfoCard>
-            {/* Türkiye koordinat görseli */}
-            <CoordDiagram />
+            <div style={{ width:"100%", maxWidth:"660px", padding:"16px 20px", background:"rgba(0,0,0,0.28)", border:`1px solid ${C}18`, borderRadius:"12px" }}>
+              <div style={{ fontSize:"11px", color:C, letterSpacing:"2px", fontWeight:"800", marginBottom:"12px", fontFamily:FONT }}>TÜRKİYE'NİN KOORDİNATLARI</div>
+              <iframe style={{ width: "100%", height: "300px", border: 0, borderRadius: "8px" }} allowFullScreen allow="geolocation" src="//umap.openstreetmap.fr/tr/map/turkiyenin-matematik-konumu_1380349?scaleControl=false&miniMap=false&scrollWheelZoom=true&zoomControl=false&editMode=disabled&moreControl=false&searchControl=false&tilelayersControl=null&embedControl=false&datalayersControl=true&onLoadPanel=none&captionBar=false&captionMenus=false&homeControl=false&fullscreenControl=false&captionControl=false#6/40.120090/34.035645" title="Türkiye'nin Matematik Konumu"></iframe>
+            </div>
             <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"14px" }}>
               <InfoBox color="#10b981" title="KUZEY YARI KÜRE" icon="⬆️">
                 <div style={{ fontSize:"13px", color:"#3a6a50", lineHeight:"1.8" }}>
@@ -288,36 +290,6 @@ function LearnTab() {
           </>
         )}
       </div>
-    </div>
-  );
-}
-
-// ─── Koordinat diyagramı ──────────────────────────────────────────────────────
-function CoordDiagram() {
-  return (
-    <div style={{ width:"100%", maxWidth:"660px", padding:"16px 20px", background:"rgba(0,0,0,0.28)", border:`1px solid ${C}18`, borderRadius:"12px" }}>
-      <div style={{ fontSize:"11px", color:C, letterSpacing:"2px", fontWeight:"800", marginBottom:"12px", fontFamily:FONT }}>TÜRKİYE'NİN KOORDİNATLARI</div>
-      <svg width="640" height="160" viewBox="0 0 640 160" style={{ width:"100%" }}>
-        {/* Dünya dikdörtgeni */}
-        <rect x="20" y="20" width="600" height="120" fill="rgba(99,102,241,0.06)" stroke={`${C}30`} strokeWidth="1" rx="6"/>
-        {/* Ekvator */}
-        <line x1="20" y1="80" x2="620" y2="80" stroke="#10b981" strokeWidth="1.5" strokeDasharray="5,3" opacity="0.7"/>
-        <text x="25" y="77" fontSize="9" fill="#10b981" fontFamily={MONO}>Ekvator 0°</text>
-        {/* 0. Meridyen */}
-        <line x1="310" y1="20" x2="310" y2="140" stroke="#f59e0b" strokeWidth="1.5" strokeDasharray="5,3" opacity="0.7"/>
-        <text x="312" y="35" fontSize="9" fill="#f59e0b" fontFamily={MONO}>0° Meridyen</text>
-        {/* Türkiye kutusu */}
-        <rect x="395" y="27" width="124" height="47" fill={`${C}25`} stroke={C} strokeWidth="2" rx="4"/>
-        <text x="457" y="52" textAnchor="middle" fontSize="13" fill={C} fontFamily={FONT} fontWeight="800">TÜRKİYE</text>
-        {/* Kuzey ok */}
-        <text x="400" y="25" fontSize="10" fill="#10b981" fontFamily={MONO}>42°K</text>
-        <text x="400" y="75" fontSize="10" fill="#10b981" fontFamily={MONO}>36°K</text>
-        {/* Doğu/Batı */}
-        <text x="390" y="55" textAnchor="end" fontSize="10" fill="#f59e0b" fontFamily={MONO}>26°D</text>
-        <text x="525" y="55" fontSize="10" fill="#f59e0b" fontFamily={MONO}>45°D</text>
-        {/* Ok işaretleri */}
-        <text x="457" y="145" textAnchor="middle" fontSize="11" fill={C} fontFamily={FONT} fontWeight="700">Kuzey Yarım Küre · Doğu Yarım Küre</text>
-      </svg>
     </div>
   );
 }
