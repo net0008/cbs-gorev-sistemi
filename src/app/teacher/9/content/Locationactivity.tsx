@@ -27,7 +27,7 @@ type Tab = "learn"|"act1"|"act2"|"act3"|"test";
 // Komsu ulkeler
 const KARA_KOMSULAR = [
   { id:"ermenistan", name:"Ermenistan",            yon:"Dogu",  renk:"#ef4444" },
-  { id:"gurcistan",  name:"Gucistan",              yon:"Dogu",  renk:"#ef4444" },
+  { id:"gurcistan",  name:"Gurcistan",             yon:"Dogu",  renk:"#ef4444" },
   { id:"azerbaycan", name:"Azerbaycan (Nahcivan)",  yon:"Dogu",  renk:"#ef4444" },
   { id:"iran",       name:"Iran",                  yon:"Dogu",  renk:"#ef4444" },
   { id:"irak",       name:"Irak",                  yon:"Guney", renk:"#f97316" },
@@ -40,7 +40,7 @@ const DENIZ_KOMSULAR = [
   { id:"d_romanya",     name:"Romanya",               deniz:"Karadeniz",  renk:"#0ea5e9" },
   { id:"d_ukrayna",     name:"Ukrayna",               deniz:"Karadeniz",  renk:"#0ea5e9" },
   { id:"d_rusya",       name:"Rusya Federasyonu",     deniz:"Karadeniz",  renk:"#0ea5e9" },
-  { id:"d_gurcistan",   name:"Gucistan",              deniz:"Karadeniz",  renk:"#0ea5e9" },
+  { id:"d_gurcistan",   name:"Gurcistan",             deniz:"Karadeniz",  renk:"#0ea5e9" },
   { id:"d_yunanistan",  name:"Yunanistan",             deniz:"Ege Denizi", renk:"#6366f1" },
   { id:"d_kktc",        name:"Kuzey Kibris Turk C.",  deniz:"Akdeniz",    renk:"#10b981" },
   { id:"d_libya",       name:"Libya",                 deniz:"Akdeniz",    renk:"#10b981" },
@@ -278,139 +278,183 @@ function TurkeyNeighborMap() {
 }
 
 // ═══ ETK-1: uMap iframe + soru kartlari ══════════════════════════════════════
+const KOORDINAT_SORULARI = [
+  { 
+    id: 1, 
+    soru: "Türkiye'nin en kuzey noktası (Sinop/İnceburun) hangi paralele yakındır?", 
+    cevap: "42° Kuzey", 
+    options: ["36° Kuzey", "40° Kuzey", "42° Kuzey", "45° Kuzey"],
+    lat: 42.02, lon: 35.15, zoom: 8, 
+    ipucu: "Haritadaki en üst yatay çizgiyi takip et." 
+  },
+  { 
+    id: 2, 
+    soru: "Ankara'nın (Başkent) yaklaşık koordinatları hangisidir?", 
+    cevap: "40°K - 33°D", 
+    options: ["36°K - 30°D", "40°K - 33°D", "42°K - 35°D", "38°K - 28°D"],
+    lat: 39.93, lon: 32.85, zoom: 7, 
+    ipucu: "İç Anadolu'nun merkezine odaklan." 
+  },
+  { 
+    id: 3, 
+    soru: "Türkiye'nin en batı ucundaki meridyen değeri nedir?", 
+    cevap: "26° Doğu", 
+    options: ["26° Doğu", "36° Doğu", "45° Doğu", "10° Doğu"],
+    lat: 40.10, lon: 25.66, zoom: 8, 
+    ipucu: "Gökçeada ve Çanakkale kıyılarını incele." 
+  }
+];
 function Act1KoordinatOyunu() {
-  const [qIdx,    setQIdx]    = useState(0);
-  const [shown,   setShown]   = useState(false);
-  const [correct, setCorrect] = useState<boolean|null>(null);
-  const [score,   setScore]   = useState(0);
-  const [done,    setDone]    = useState(false);
+  const [qIdx, setQIdx] = useState(0);
+  const [shown, setShown] = useState(false);
+  const [score, setScore] = useState(0);
+  const [done, setDone] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(15);
+  const [isShaking, setIsShaking] = useState(false);
+  const [selectedOpt, setSelectedOpt] = useState<string | null>(null);
+
   const q = KOORDINAT_SORULARI[qIdx];
 
-  const handleAnswer = (ok: boolean) => {
-    if (shown) return;
-    setShown(true); setCorrect(ok);
-    if (ok) { setScore(s=>s+1); sndOK(); } else sndFail();
-  };
-  const next = () => {
-    sndClick();
-    if (qIdx >= KOORDINAT_SORULARI.length-1) { setDone(true); return; }
-    setQIdx(i=>i+1); setShown(false); setCorrect(null);
-  };
-  const retry = () => { setQIdx(0); setShown(false); setCorrect(null); setScore(0); setDone(false); };
+  // Zamanlayıcı Kontrolü
+  useEffect(() => {
+    if (timeLeft > 0 && !shown && !done) {
+      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+      return () => clearTimeout(timer);
+    } else if (timeLeft === 0 && !shown) {
+      triggerShake();
+      handleAnswer(null); // Süre biterse yanlış say
+    }
+  }, [timeLeft, shown, done]);
 
-  if (done) return (
-    <div style={{ flex:1, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", gap:"16px", background:`radial-gradient(ellipse at center,${C}0a 0%,${BG} 100%)` }}>
-      <div style={{ fontSize:"52px" }}>🎯</div>
-      <div style={{ fontSize:"28px", fontWeight:"800", color:"#c7d2fe", fontFamily:FONT }}>ETK 1 TAMAMLANDI!</div>
-      <div style={{ fontSize:"48px", fontWeight:"800", color:C, fontFamily:MONO }}>{score}/{KOORDINAT_SORULARI.length}</div>
-      <div style={{ fontSize:"14px", color:"#4a4a8a" }}>soruya dogru cevap verdin</div>
-      <button onClick={retry} style={{ padding:"12px 28px", background:`linear-gradient(90deg,#3730a3,${C})`, border:"none", borderRadius:"10px", color:"#fff", fontSize:"14px", fontWeight:"800", cursor:"pointer", fontFamily:FONT }}>Tekrar Dene</button>
-    </div>
-  );
+  const triggerShake = () => {
+    setIsShaking(true);
+    sndFail();
+    setTimeout(() => setIsShaking(false), 500);
+  };
+
+  const handleAnswer = (choice: string | null) => {
+    if (shown) return;
+    setSelectedOpt(choice);
+    setShown(true);
+    if (choice === q.cevap) {
+      setScore(s => s + 1);
+      sndOK();
+    } else {
+      triggerShake();
+    }
+  };
+
+  const next = () => {
+    if (qIdx >= KOORDINAT_SORULARI.length - 1) {
+      setDone(true);
+    } else {
+      setQIdx(i => i + 1);
+      setShown(false);
+      setSelectedOpt(null);
+      setTimeLeft(15);
+      sndClick();
+    }
+  };
+
+  if (done) {
+    return (
+      <div className="flex-1 flex flex-col items-center justify-center gap-4" style={{ background: `radial-gradient(ellipse at center,${C}0a 0%,${BG} 100%)` }}>
+        <div className="text-6xl">🎯</div>
+        <div className="text-2xl font-black text-indigo-200">GÖREV TAMAMLANDI!</div>
+        <div className="text-5xl font-black text-indigo-500 font-mono">{score} / {KOORDINAT_SORULARI.length}</div>
+        <div className="text-sm text-slate-400">Tüm koordinat analizlerini bitirdin.</div>
+        <button onClick={() => {
+          setQIdx(0);
+          setScore(0);
+          setDone(false);
+          setShown(false);
+          setSelectedOpt(null);
+          setTimeLeft(15);
+        }} className="px-8 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg font-bold transition-colors">
+          TEKRAR DENE
+        </button>
+      </div>
+    );
+  }
 
   return (
-    <div style={{ flex:1, display:"flex", overflow:"hidden" }}>
-      {/* Sol: Harita */}
-      <div style={{ flex:1, display:"flex", flexDirection:"column", padding:"16px", gap:"10px", background:BG, minWidth:0 }}>
-        <div style={{ fontSize:"11px", color:C, letterSpacing:"2px", fontWeight:"800", fontFamily:MONO, flexShrink:0 }}>
-          HARITAYI INCELE - KOORDINATLARI BUL
-        </div>
-        <div style={{ flex:1, borderRadius:"10px", overflow:"hidden", border:`1px solid ${C}25`, minHeight:0 }}>
+    <>
+      <style>{`
+        @keyframes shake {
+          0%, 100% { transform: translateX(0); }
+          25% { transform: translateX(-5px) rotate(-1deg); }
+          50% { transform: translateX(5px) rotate(1deg); }
+          75% { transform: translateX(-5px); }
+        }
+        .animate-shake {
+          animation: shake 0.2s ease-in-out 0s 2;
+          border: 2px solid #ef4444;
+        }
+      `}</style>
+      <div className={`flex flex-1 overflow-hidden ${isShaking ? "animate-shake" : ""}`}>
+      {/* SOL: Dinamik uMap Haritası */}
+      <div className="flex-1 flex flex-col p-4 gap-2 bg-slate-950">
+        <div className="text-[10px] text-blue-400 tracking-widest font-mono">SİSMİK ODAKLAMA: AKTİF</div>
+        <div className="flex-1 rounded-xl overflow-hidden border-2 border-blue-500/20">
           <iframe
-            style={{ width:"100%", height:"100%", border:0, display:"block" }}
-            allowFullScreen
-            allow="geolocation"
-            src="//umap.openstreetmap.fr/tr/map/turkiye-koordinatl_1380468?scaleControl=false&miniMap=false&scrollWheelZoom=true&zoomControl=false&editMode=disabled&moreControl=false&searchControl=false&tilelayersControl=false&embedControl=false&datalayersControl=false&onLoadPanel=none&captionBar=false&captionMenus=false&homeControl=false&fullscreenControl=false&captionControl=false&locateControl=false&measureControl=false&printControl=false#5/39.078908/35.332031"
-            title="Turkiye Koordinat Haritasi"
+            key={q.id} // Soru değiştikçe haritayı yeniden yükler (Zoom için)
+            className="w-full h-full border-0"
+            src={`//umap.openstreetmap.fr/tr/map/turkiye-koordinatl_1380468?scaleControl=false&zoomControl=false&editMode=disabled#${q.zoom}/${q.lat}/${q.lon}`}
           />
         </div>
-        {/* Ilerleme barciklari */}
-        <div style={{ display:"flex", gap:"6px", justifyContent:"center", flexShrink:0 }}>
-          {KOORDINAT_SORULARI.map((_,i)=>(
-            <div key={i} style={{ width:"28px", height:"6px", borderRadius:"3px", background:i<qIdx?"#10b981":i===qIdx?C:"rgba(255,255,255,0.1)", transition:"background 0.3s" }}/>
-          ))}
-        </div>
       </div>
 
-      {/* Sag: Soru paneli */}
-      <div style={{ width:"340px", flexShrink:0, borderLeft:`1px solid rgba(99,102,241,0.15)`, background:"rgba(3,4,10,0.7)", display:"flex", flexDirection:"column", padding:"20px 18px", gap:"14px", overflowY:"auto" }}>
-        <div>
-          <div style={{ fontSize:"10px", letterSpacing:"3px", color:C, fontFamily:MONO, marginBottom:"4px" }}>ETK 1 - KOORDINAT OYUNU</div>
-          <div style={{ fontSize:"16px", fontWeight:"800", color:"#c7d2fe" }}>Haritaya Bakarak Cevapla</div>
-          <div style={{ fontSize:"12px", color:"#3a3a6a", marginTop:"3px" }}>Sol taraftaki haritayi inceleyerek soruyu cevapla</div>
-        </div>
-        <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between" }}>
-          <span style={{ fontSize:"12px", color:"#4a4a8a" }}>Soru {qIdx+1} / {KOORDINAT_SORULARI.length}</span>
-          <span style={{ fontSize:"14px", fontWeight:"800", color:C, fontFamily:MONO }}>{score} puan</span>
-        </div>
-        <div style={{ height:"4px", background:`${C}18`, borderRadius:"2px" }}>
-          <div style={{ height:"100%", width:`${(qIdx/KOORDINAT_SORULARI.length)*100}%`, background:`linear-gradient(90deg,#3730a3,${C})`, borderRadius:"2px", transition:"width 0.4s" }}/>
-        </div>
-
-        {/* Soru */}
-        <div style={{ padding:"18px 16px", background:`${C}0e`, border:`2px solid ${C}28`, borderRadius:"12px" }}>
-          <div style={{ fontSize:"11px", color:C, letterSpacing:"2px", marginBottom:"8px", fontFamily:MONO }}>SORU {q.id}</div>
-          <p style={{ fontSize:"15px", color:"#c7d2fe", lineHeight:"1.8", margin:0, fontWeight:"600" }}>{q.soru}</p>
-        </div>
-
-        {/* Ipucu (cevap acilmadan) */}
-        {!shown && (
-          <div style={{ padding:"12px 14px", background:"rgba(245,158,11,0.06)", border:"1px solid rgba(245,158,11,0.2)", borderRadius:"9px" }}>
-            <div style={{ fontSize:"11px", color:"#f59e0b", fontWeight:"800", marginBottom:"5px" }}>IPUCU</div>
-            <div style={{ fontSize:"12px", color:"#6a5a30", lineHeight:"1.7" }}>{q.ipucu}</div>
+      {/* SAĞ: Operasyon Paneli */}
+      <div className="w-[360px] bg-slate-900/80 p-6 flex flex-col gap-6 border-l border-blue-500/10">
+        <div className="space-y-1">
+          <div className="flex justify-between items-center">
+            <span className="text-xs text-blue-400 font-mono">GÖREV {q.id}</span>
+            <span className={`text-xl font-black font-mono ${timeLeft < 5 ? "text-red-500 animate-pulse" : "text-blue-400"}`}>
+              00:{timeLeft < 10 ? `0${timeLeft}` : timeLeft}
+            </span>
           </div>
-        )}
+          <h3 className="text-lg font-bold text-slate-100 leading-tight">{q.soru}</h3>
+        </div>
 
-        {/* Cevap gosterilince */}
+        {/* Seçenekler */}
+        <div className="grid grid-cols-1 gap-3">
+          {q.options.map((opt, i) => {
+            const isCorrect = opt === q.cevap;
+            const isSelected = opt === selectedOpt;
+            return (
+              <button
+                key={i}
+                onClick={() => handleAnswer(opt)}
+                disabled={shown}
+                className={`p-4 rounded-lg text-left text-sm font-semibold transition-all duration-200 border-2 
+                  ${shown ? (isCorrect ? "bg-green-500/20 border-green-500 text-green-200" : isSelected ? "bg-red-500/20 border-red-500 text-red-200" : "bg-slate-800/50 border-slate-700 text-slate-500") 
+                  : "bg-slate-800 border-slate-700 text-slate-300 hover:border-blue-500 hover:bg-slate-700"}`}
+              >
+                {opt}
+              </button>
+            );
+          })}
+        </div>
+
         {shown && (
-          <div style={{ padding:"14px 16px", background:"rgba(16,185,129,0.08)", border:"2px solid rgba(16,185,129,0.3)", borderRadius:"10px" }}>
-            <div style={{ fontSize:"11px", color:"#10b981", fontWeight:"800", marginBottom:"6px" }}>DOGRU CEVAP</div>
-            <div style={{ fontSize:"16px", color:"#10b981", fontWeight:"800", fontFamily:MONO }}>{q.cevap}</div>
-            <div style={{ marginTop:"8px", fontSize:"12px", color:"#3a6a50", lineHeight:"1.7" }}>{q.ipucu}</div>
-          </div>
-        )}
-
-        {/* Butonlar */}
-        {!shown ? (
-          <div style={{ display:"flex", flexDirection:"column", gap:"8px", marginTop:"auto" }}>
-            <div style={{ fontSize:"12px", color:"#4a4a8a", textAlign:"center", marginBottom:"4px" }}>Haritaya baktin mi? Cevabini biliyor musun?</div>
-            <button onClick={()=>handleAnswer(true)}
-              style={{ padding:"12px", background:"rgba(16,185,129,0.1)", border:"2px solid rgba(16,185,129,0.4)", borderRadius:"10px", color:"#10b981", fontSize:"14px", fontWeight:"800", cursor:"pointer", fontFamily:FONT, transition:"all 0.18s" }}
-              onMouseEnter={e=>e.currentTarget.style.background="rgba(16,185,129,0.2)"}
-              onMouseLeave={e=>e.currentTarget.style.background="rgba(16,185,129,0.1)"}>
-              Cevabi biliyorum
-            </button>
-            <button onClick={()=>handleAnswer(false)}
-              style={{ padding:"12px", background:"rgba(239,68,68,0.08)", border:"2px solid rgba(239,68,68,0.3)", borderRadius:"10px", color:"#ef4444", fontSize:"14px", fontWeight:"800", cursor:"pointer", fontFamily:FONT, transition:"all 0.18s" }}
-              onMouseEnter={e=>e.currentTarget.style.background="rgba(239,68,68,0.16)"}
-              onMouseLeave={e=>e.currentTarget.style.background="rgba(239,68,68,0.08)"}>
-              Emin degilim / Goster
-            </button>
-          </div>
-        ) : (
-          <div style={{ display:"flex", flexDirection:"column", gap:"8px", marginTop:"auto" }}>
-            {correct!==null && (
-              <div style={{ padding:"10px 14px", background:correct?"rgba(16,185,129,0.1)":"rgba(239,68,68,0.1)", border:`1px solid ${correct?"rgba(16,185,129,0.3)":"rgba(239,68,68,0.3)"}`, borderRadius:"8px", textAlign:"center" }}>
-                <span style={{ fontSize:"14px", fontWeight:"800", color:correct?"#10b981":"#ef4444" }}>
-                  {correct ? "+1 puan kazandin!" : "Bir sonrakinde basarilar!"}
-                </span>
-              </div>
-            )}
-            <button onClick={next}
-              style={{ padding:"12px", background:`linear-gradient(90deg,#3730a3,${C})`, border:"none", borderRadius:"10px", color:"#fff", fontSize:"14px", fontWeight:"800", cursor:"pointer", fontFamily:FONT }}>
-              {qIdx>=KOORDINAT_SORULARI.length-1?"Sonuclari Gor":"Sonraki Soru"}
+          <div className="mt-auto p-4 bg-blue-500/5 border border-blue-500/20 rounded-lg">
+            <p className="text-xs text-blue-300 leading-relaxed italic">
+              <span className="font-bold">Analiz:</span> {q.ipucu}
+            </p>
+            <button onClick={next} className="w-full mt-4 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-bold transition-colors">
+              SONRAKİ ANALİZ
             </button>
           </div>
         )}
-
-        <div style={{ padding:"10px 14px", background:`${C}08`, border:`1px solid ${C}12`, borderRadius:"8px", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
-          <span style={{ fontSize:"11px", color:"#3a3a6a" }}>Toplam Puan</span>
-          <span style={{ fontSize:"20px", fontWeight:"800", color:C, fontFamily:MONO }}>{score} / {KOORDINAT_SORULARI.length}</span>
-        </div>
       </div>
     </div>
+    </>
   );
 }
+
+
+
+
 
 // ═══ ETK-2: uMap Entegrasyonlu Komşu Sınıflandırma ═════════════════════════════
 function Act2Komsular() {
@@ -539,7 +583,7 @@ function Act2Komsular() {
             <div key={b.id}
               onDragOver={e => { e.preventDefault(); setHovBucket(b.id); }}
               onDragLeave={() => setHovBucket(null)}
-              onDrop={() => doDrop(b.id)}
+              onDrop={(e) => { e.preventDefault(); doDrop(b.id); }}
               style={{ 
                 minHeight: "110px", padding: "12px", borderRadius: "10px", transition: "all 0.2s",
                 background: hovBucket === b.id ? `${b.color}20` : "rgba(0,0,0,0.2)",
