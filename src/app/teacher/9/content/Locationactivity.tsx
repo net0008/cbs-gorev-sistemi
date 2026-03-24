@@ -386,7 +386,7 @@ function Act1KoordinatOyunu() {
           <iframe
             key={q.id} // Soru değiştikçe haritayı yeniden yükler (Zoom için)
             className="w-full h-full border-0"
-            src={`//umap.openstreetmap.fr/tr/map/turkiye-koordinatl_1380468?scaleControl=false&zoomControl=false&editMode=disabled#${q.zoom}/${q.lat}/${q.lon}`}
+            src={`//umap.openstreetmap.fr/tr/map/turkiye-koordinatl_1380468?scaleControl=false&miniMap=false&scrollWheelZoom=true&zoomControl=false&editMode=disabled&moreControl=false&searchControl=false&tilelayersControl=false&embedControl=false&datalayersControl=false&onLoadPanel=none&captionBar=false&captionMenus=false&homeControl=false&fullscreenControl=false&captionControl=false&locateControl=false&measureControl=false&printControl=false#${q.zoom}/${q.lat}/${q.lon}`}
           />
         </div>
       </div>
