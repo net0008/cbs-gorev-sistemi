@@ -39,7 +39,7 @@ const ELEVATION_COLORS = [
   { min:1300,  max:1600,  color:"#c47820", label:"Yüksek dağ" },
   { min:1600,  max:1900,  color:"#a05010", label:"Çok yüksek dağ" },
   { min:1900,  max:2500,  color:"#784030", label:"Alpin" },
-  { min:2500,  max:3932,  color:"#5a3040", label:"Kar sınırı üstü""Bulunduğu enleme göre değişir" },
+  { min:2500,  max:3932,  color:"#5a3040", label:"Kar sınırı üstü (Bulunduğu enleme göre değişir)" },
 ];
 
 // ─── Yer şekilleri verisi ─────────────────────────────────────────────────────

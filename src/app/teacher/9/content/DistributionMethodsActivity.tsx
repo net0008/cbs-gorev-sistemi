@@ -1,4 +1,4 @@
-﻿"use client";
+﻿﻿"use client";
 
 import { useMemo, useState } from "react";
 import MapReadingActivity from "./MapReadingActivity";
@@ -202,7 +202,7 @@ function MetricCard({ label, value }: { label: string; value: string }) {
         border: "1px solid rgba(255,255,255,0.08)",
       }}
     >
-      <div style={{ fontSize: "10px", letterSpacing: "2px", color: "#7dd3fc", marginBottom: "5px", fontFamily: MONO }}>
+      <div style={{ fontSize: "10px", letterSpacing: "2px", color: "#7dd3fc", marginBottom: "5px", fontFamily: FONT_MONO }}>
         ÖZET
       </div>
       <div style={{ fontSize: "13px", fontWeight: 700, color: "#f8fafc" }}>{label}</div>
@@ -250,7 +250,7 @@ function LearnPanel() {
           overflowY: "auto",
         }}
       >
-        <div style={{ fontSize: "11px", letterSpacing: "3px", color: PRIMARY, fontFamily: MONO, marginBottom: "14px" }}>
+        <div style={{ fontSize: "11px", letterSpacing: "3px", color: COLOR_PRIMARY, fontFamily: FONT_MONO, marginBottom: "14px" }}>
           KONU BAŞLIKLARI
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
@@ -406,8 +406,8 @@ function ActivityPanel() {
       </p>
 
       <div style={{ display: "grid", gridTemplateColumns: "1.1fr 0.9fr", gap: "18px", marginTop: "24px" }}>
-        <div style={{ padding: "22px", borderRadius: "20px", background: PANEL, border: `1px solid ${PRIMARY}28` }}>
-          <div style={{ fontSize: "12px", letterSpacing: "3px", color: PRIMARY, fontFamily: MONO, marginBottom: "10px" }}>GÖREV 1</div>
+        <div style={{ padding: "22px", borderRadius: "20px", background: PANEL_DARK, border: `1px solid ${COLOR_PRIMARY}28` }}>
+          <div style={{ fontSize: "12px", letterSpacing: "3px", color: COLOR_PRIMARY, fontFamily: FONT_MONO, marginBottom: "10px" }}>GÖREV 1</div>
           <div style={{ fontSize: "22px", fontWeight: 800, color: "#f8fafc", marginBottom: "10px" }}>Bir çizimin harita olma koşulları</div>
           <p style={{ fontSize: "14px", lineHeight: 1.8, color: "#cbd5e1", marginTop: 0 }}>
             Aşağıdaki seçeneklerden harita için zorunlu olanları işaretle. Hepsini seçince "Kontrol Et" butonuna bas.
@@ -629,7 +629,7 @@ function TestPanel() {
                 borderRadius: "7px",
               }}
             >
-              <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: doneItem ? answers[i] ? "#34d399" : "#ef4444" : cur ? ACCENT : "rgba(255,255,255,0.06)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "10px", fontWeight: 800, color: "#fff", flexShrink: 0, fontFamily: MONO }}>
+              <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: doneItem ? answers[i] ? "#34d399" : "#ef4444" : cur ? COLOR_ACCENT : "rgba(255,255,255,0.06)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "10px", fontWeight: 800, color: "#fff", flexShrink: 0, fontFamily: FONT_MONO }}>
                 {doneItem ? answers[i] ? "OK" : "X" : i + 1}
               </div>
               <div>
@@ -660,7 +660,7 @@ function TestPanel() {
           </div>
         </div>
 
-        <div style={{ maxWidth: "640px", width: "100%", padding: "22px 24px", background: `rgba(245,158,11,0.08)`, border: `1.5px solid rgba(245,158,11,0.2)`, borderRadius: "14px" }}>
+        <div style={{ maxWidth: "640px", width: "100%", padding: "22px 24px", background: `rgba(245,158,11,0.08)`, border: `1.5px solid ${COLOR_ACCENT}20`, borderRadius: "14px" }}>
           <p style={{ fontSize: "15px", color: "#e2e8f0", lineHeight: "1.9", margin: 0, fontWeight: 600, fontFamily: FONT_SANS }}>{q.question}</p>
         </div>
 

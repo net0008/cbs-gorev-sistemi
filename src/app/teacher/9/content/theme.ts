@@ -10,8 +10,6 @@ export const COLOR_INFO_BRIGHT = "#00aaff";
 export const COLOR_BLUE_STRONG = "#0055ff";
 export const COLOR_INFO_LIGHT = "#c8e0ff";
 export const COLOR_INFO_DARK = "#4a7a9a";
-export const COLOR_INFO_LIGHT = "#c8e0ff";
-export const COLOR_INFO_DARK = "#4a7a9a";
 export const COLOR_BLUE = "#3b82f6";
 export const COLOR_PINK = "#ec4899";
 
