@@ -109,6 +109,10 @@ const KOORDINAT_SORULARI: Soru[] = [
   { id: 8, soru: "Türkiye'nin en kuzeyi ile en güneyi arasındaki enlem farkı kaçtır?", cevap: "6 Derece", options: ["6 Derece", "19 Derece", "76 Derece", "10 Derece"], lat: 39.00, lon: 35.00, zoom: 5, ipucu: "36° ve 42° paralelleri arasındaki farkı hesapla." }
 ];
 
+const BG = BG_DARK;
+const FONT = FONT_SANS;
+const C = COLOR_LOCATION;
+
 // ═══════════════════════════════════════════════════════════════════════════════
 export default function LocationActivity({ onClose }: { onClose: () => void }) {
   const [tab, setTab] = useState<Tab>("learn");

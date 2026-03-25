@@ -4,6 +4,8 @@ import { useMemo, useState } from "react";
 import MapReadingActivity from "./MapReadingActivity";
 import { FONT_SANS, FONT_MONO, BG_DARK, COLOR_PRIMARY, COLOR_SECONDARY, COLOR_ACCENT, PANEL_DARK, COLOR_UA } from "./theme";
 
+const ACCENT = "#fbbf24";
+
 // ─── Ses ─────────────────────────────────────────────────────────────────────
 function beep(f: number, d: number, t: OscillatorType = "sine", v = 0.15) {
   try {
