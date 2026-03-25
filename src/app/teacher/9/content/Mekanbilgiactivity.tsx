@@ -34,41 +34,41 @@ type LearnSec = "cbs" | "ua" | "gps";
 interface QItem { q: string; opts: string[]; correct: number; exp: string; cat: "cbs"|"ua"|"gps"; }
 const TEST_ITEMS: QItem[] = [
   { cat:"cbs", q:"CBS'nin temel bileşenlerinden biri DEĞİLDİR?",
-    opts:["Kullanıcı","Donanım","Uydu anteni","Yazılım"], correct:2, // Kullanici -> Kullanıcı, Donanim -> Donanım
+    opts:["Kullanıcı","Donanım","Uydu anteni","Yazılım"], correct:2,
     exp:"CBS'nin 5 temel bileşeni şunlardır: Kullanıcı, Veri, Donanım, Yazılım, Yöntem. 'Uydu anteni' CBS'nin bir bileşeni değildir; GPS sisteminin parçasıdır." },
   { cat:"cbs", q:"CBS'de farklı coğrafi unsurlara ait bilgiler nasıl haritalanır?",
-    opts:["Tek bir katmanda birleştirilir","Ayrı katmanlar hâlinde haritalanır","Yalnızca sayısal verilerle gösterilir","Sadece 2D harita formatında gösterilir"], correct:1, // birlestirilir -> birleştirilir
+    opts:["Tek bir katmanda birleştirilir","Ayrı katmanlar hâlinde haritalanır","Yalnızca sayısal verilerle gösterilir","Sadece 2D harita formatında gösterilir"], correct:1,
     exp:"CBS ile bir yerdeki farklı coğrafi unsurlara ait bilgiler (yükselti, arazi kullanımı, parsel, taşkın alanı vb.) ayrı katmanlar hâlinde haritalanabilir. Bu katmanlar üst üste getirilerek analiz yapılır." },
   { cat:"cbs", q:"CBS'nin 'Yöntem' bileşeni ne işe yarar?",
-    opts:["Harita çizmek için kullanılan donanımdır","Verilerin bilgiye dönüştürülme biçimini belirler","Kullanıcıların sisteme erişim yetkisini düzenler","Coğrafi koordinatları hesaplar"], correct:1, // donusturulme -> dönüştürülme
+    opts:["Harita çizmek için kullanılan donanımdır","Verilerin bilgiye dönüştürülme biçimini belirler","Kullanıcıların sisteme erişim yetkisini düzenler","Coğrafi koordinatları hesaplar"], correct:1,
     exp:"CBS'de Yöntem; veri toplama, depolama, analiz ve görüntülemenin nasıl olacağı ile ilgili kullanıcı tercihlerini içerir. Verileri bilgiye dönüştürmede kullanılan yaklaşımı tanımlar." },
   { cat:"ua", q:"Uzaktan algılamada uydular yalnızca görünür ışığı algılar. Bu ifade doğru mudur?",
-    opts:["Evet, sadece görünür ışık algılanır","Hayır, kızılötesi ve morötesi ışınları da algılar","Evet, çünkü kameralar sadece görünür ışıkla çalışır","Hayır, sadece radar dalgalarını algılar"], correct:1, // isik -> ışık, isinlari -> ışınları, calisir -> çalışır
+    opts:["Evet, sadece görünür ışık algılanır","Hayır, kızılötesi ve morötesi ışınları da algılar","Evet, çünkü kameralar sadece görünür ışıkla çalışır","Hayır, sadece radar dalgalarını algılar"], correct:1,
     exp:"Uydular, görünür dalga boyunun yanında insan duyularının algılayamayacağı kızılötesi ve morötesi ışınları da algılama sistemleriyle donatılmıştır. Bu sayede bitkiler, sıcaklık, nem gibi veriler toplanabilir." },
   { cat:"ua", q:"Uzaktan algılama teknolojisiyle aşağıdakilerden hangisi takip EDİLEMEZ?",
-    opts:["İklim değişikliği","Kentleşme","Bitki örtüsü dağılımı","Bir kişinin düşünceleri"], correct:3, // degisikligi -> değişikliği, dagilimi -> dağılımı, kisinin dusunceleri -> kişinin düşünceleri
+    opts:["İklim değişikliği","Kentleşme","Bitki örtüsü dağılımı","Bir kişinin düşünceleri"], correct:3,
     exp:"Uzaktan algılama; sıcaklık, iklim değişikliği, kentleşme, bitki örtüsü, toprak nemi, arazi kullanımı gibi mekânsal verileri izleyebilir. Ancak bir kişinin düşünceleri gibi fiziksel olmayan veriler algılanamaz." },
   { cat:"ua", q:"Uzaktan algılamada mekânsal veri nasıl gösterilir?",
-    opts:["Yalnızca tablo biçiminde","Grafik ve diyagramlarla","Nokta, çizgi veya alan olarak","Sadece metin formatında"], correct:2, // cizgi -> çizgi
+    opts:["Yalnızca tablo biçiminde","Grafik ve diyagramlarla","Nokta, çizgi veya alan olarak","Sadece metin formatında"], correct:2,
     exp:"Mekânsal veri; haritası oluşturulabilen, konumsal özelliğe sahip her türlü coğrafi veridir. Mekânsal veriler; nokta, çizgi veya alan olarak gösterilir." },
   { cat:"gps", q:"GPS sisteminin kaç temel bileşeni vardır?",
-    opts:["İki (uydu + alıcı)","Dört","Üç (uydu + yer kontrol ağı + alıcı)","Beş"], correct:2, // agi -> ağı
+    opts:["İki (uydu + alıcı)","Dört","Üç (uydu + yer kontrol ağı + alıcı)","Beş"], correct:2,
     exp:"GPS'nin üç temel bileşeni vardır: 1) Uydu Ağı (radyo sinyali gönderir), 2) Yer Kontrol Ağı (uyduları izler ve yönlendirir), 3) GPS Alıcıları (koordinatları belirler)." },
   { cat:"gps", q:"GPS'in yer kontrol ağının temel amacı nedir?",
-    opts:["Kullanıcılara konum verisi iletmek","Uyduların konumunu takip edip sistemin doğru çalışmasını sağlamak","Harita üretmek","CBS yazılımlarını güncellemek"], correct:1, // calismasini saglamak -> çalışmasını sağlamak
+    opts:["Kullanıcılara konum verisi iletmek","Uyduların konumunu takip edip sistemin doğru çalışmasını sağlamak","Harita üretmek","CBS yazılımlarını güncellemek"], correct:1,
     exp:"Yer kontrol istasyonları, uyduların konumu ve hareketlerini takip ederek gerekli yönlendirmeleri yapar. Amaç, GPS uydularının kontrolünü yaparak sistemin hatasız çalışmasını sağlamaktır." },
   { cat:"gps", q:"GPS ile aşağıdakilerden hangisi ölçülemez?",
-    opts:["Enlem ve boylam","Yükselti","Anlık hız","Hava sıcaklığı"], correct:3, // yukselti -> yükselti, hiz -> hız, sicakligi -> sıcaklığı
+    opts:["Enlem ve boylam","Yükselti","Anlık hız","Hava sıcaklığı"], correct:3,
     exp:"GPS ile bir noktanın enlem, boylam ve yükselti bilgilerine ek olarak yerel saat bilgileri ve anlık hız bilgisi elde edilir. Hava sıcaklığı ölçmek için termometre gibi meteorolojik araçlar gerekir." },
   { cat:"gps", q:"Alzheimer hastasının kaybolma riskine karşı GPS nasıl kullanılabilir?",
-    opts:["Haritada yeni yollar çizmek için","Hastanın üzerindeki cihazla konumunu sürekli takip etmek için","Hastaneye navigasyon sağlamak için","Hastanın tıbbi kayıtlarını depolamak için"], correct:1, // Hastanin -> Hastanın, konumunu -> konumunu
+    opts:["Haritada yeni yollar çizmek için","Hastanın üzerindeki cihazla konumunu sürekli takip etmek için","Hastaneye navigasyon sağlamak için","Hastanın tıbbi kayıtlarını depolamak için"], correct:1,
     exp:"GPS teknolojisi; insan, hayvan, araç veya nesnelerin hareketlerinin izlenmesinde kullanılabilir. Alzheimer hastasına takılan GPS cihazı, ailelerin hastanın konumunu sürekli izlemesine olanak tanır." },
 ];
 
 // ─── Bartın Aktivite Verileri ───────────────────────────────────────────────
 interface CbsComponent { id: string; label: string; color: string; description: string; example: string; }
 const CBS_COMPONENTS: CbsComponent[] = [
-  { id:"kullanici", label:"Kullanıcı",  color:C_CBS, // Kullanici -> Kullanıcı
+  { id:"kullanici", label:"Kullanıcı",  color:C_CBS,
     description:"CBS uygulamalarının başarısında bilgi ve becerisi önemli rol oynar; sistemi yönetir.",
     example:"Orman yangını risk haritasını oluşturan uzman coğrafyacılar ve CBS uzmanları" },
   { id:"veri",      label:"Veri",       color:"#60a5fa",
@@ -76,13 +76,13 @@ const CBS_COMPONENTS: CbsComponent[] = [
     example:"Arazi kullanımı için uydu görüntüleri; sıcaklık ve nem için Meteoroloji Genel Müdürlüğü verileri" },
   { id:"donanim",   label:"Donanım",    color:"#f59e0b",
     description:"CBS'nin işlemesini sağlayan bilgisayar, tablet, yazıcı, tarayıcı gibi teknolojik araçların bütünüdür.",
-    example:"Harita üretimi için kullanılan bilgisayar, CBS yazılımının kurulu olduğu sunucu" }, // yaziliminin -> yazılımının
+    example:"Harita üretimi için kullanılan bilgisayar, CBS yazılımının kurulu olduğu sunucu" },
   { id:"yazilim",   label:"Yazılım",    color:"#a78bfa",
     description:"Coğrafi verileri işlemek, harita üretmek ve analiz yapmak için gereken programlardır.",
-    example:"CBS yazılımıyla yakınlık analizi yapılması, analiz haritalarının elde edilmesi" }, // yazilimiyla -> yazılımıyla, yakinlik -> yakınlık
+    example:"CBS yazılımıyla yakınlık analizi yapılması, analiz haritalarının elde edilmesi" },
   { id:"yontem",    label:"Yöntem",     color:"#34d399",
     description:"Verileri bilgiye dönüştürmede kullanılır; veri toplama, depolama, analiz ve görüntüleme tercihlerini kapsar.",
-    example:"Yangın faktörlerinin belirlenmesi, haritaların üretilme sırası, katmanların birleştirilme yöntemi" }, // Yangin -> Yangın
+    example:"Yangın faktörlerinin belirlenmesi, haritaların üretilme sırası, katmanların birleştirilme yöntemi" },
 ];
 
 // ─── ÖĞREN: CBS bileşenleri diyagramı ───────────────────────────────────────
@@ -113,12 +113,12 @@ function CbsDiagram() {
             );
           })}
         </svg>
-        <p style={{ fontSize:"11px", color:"#4a5568", textAlign:"center", fontFamily:FONT, marginTop:"4px" }}>Bileşene tıkla → ayrıntıları gör</p> // ayrintilari -> ayrıntıları
+        <p style={{ fontSize:"11px", color:"#4a5568", textAlign:"center", fontFamily:FONT, marginTop:"4px" }}>Bileşene tıkla → ayrıntıları gör</p>
       </div>
       {/* Açıklama paneli */}
       <div style={{ flex:1 }}>
         {comp ? (
-          <div style={{ padding:"18px 20px", background:`${comp.color}0d`, border:`1.5px solid ${comp.color}30`, borderRadius:"12px", animation:"fadeIn 0.2s ease" }}> // aciklamasini -> açıklamasını
+          <div style={{ padding:"18px 20px", background:`${comp.color}0d`, border:`1.5px solid ${comp.color}30`, borderRadius:"12px", animation:"fadeIn 0.2s ease" }}>
             <div style={{ fontSize:"14px", fontWeight:"800", color:comp.color, marginBottom:"10px", fontFamily:FONT, letterSpacing:"0.5px" }}>
               {comp.label}
             </div>
@@ -132,7 +132,7 @@ function CbsDiagram() {
           <div style={{ padding:"20px", background:"rgba(6,182,212,0.05)", border:"1.5px dashed rgba(6,182,212,0.2)", borderRadius:"12px", textAlign:"center" }}>
             <div style={{ fontSize:"28px", marginBottom:"10px" }}>🗺️</div>
             <p style={{ fontSize:"13px", color:"#4a5568", lineHeight:"1.8", fontFamily:FONT, margin:0 }}>
-              Soldaki diyagramda bir bileşene tıklayarak<br/>açıklamasını ve Bartın orman yangını<br/>örneğindeki karşılığını öğren. // aciklamasini -> açıklamasını, ornegindeki karsiligini -> örneğindeki karşılığını
+              Soldaki diyagramda bir bileşene tıklayarak<br/>açıklamasını ve Bartın orman yangını<br/>örneğindeki karşılığını öğren.
             </p>
           </div>
         )}
@@ -154,11 +154,11 @@ function CbsDiagram() {
 function GpsDiagram() {
   const [active, setActive] = useState<number|null>(null);
   const parts = [
-    { icon:"🛰️", label:"Uydu Ağı", color:"#f59e0b", // Agi -> Ağı
+    { icon:"🛰️", label:"Uydu Ağı", color:"#f59e0b",
       desc:"Dünya yörüngesinde hareket eden uydular, kullanıcılara coğrafi konum ve yerel saat verisi içeren radyo sinyalleri iletir." },
-    { icon:"📡", label:"Yer Kontrol Ağı", color:"#ef4444", // Agi -> Ağı
+    { icon:"📡", label:"Yer Kontrol Ağı", color:"#ef4444",
       desc:"Antenlerin bulunduğu izleme ve kontrol istasyonları uyduların gönderdiği radyo sinyallerini yakalar, uyduların konumu ve hareketlerini takip ederek yönlendirme yapar." },
-    { icon:"📱", label:"GPS Alıcıları", color:C_GPS, // Alicilari -> Alıcıları
+    { icon:"📱", label:"GPS Alıcıları", color:C_GPS,
       desc:"Saat, akıllı telefon, araç içi navigasyon, el tipi ve ayaklı cihazlar gibi farklı tiplerde geliştirilmiştir. Koordinatlar uydular tarafından belirlenir." },
   ];
   return (
@@ -193,11 +193,11 @@ function GpsDiagram() {
 // ─── ETKİNLİK: Eşleştirme oyunu ────────────────────────────────────────────
 interface MatchItem { id: string; text: string; category: "cbs"|"ua"|"gps"; catLabel: string; }
 const MATCH_ITEMS: MatchItem[] = [
-  { id:"m1",  text:"Donanım, yazılım, veri, kullanıcı ve yöntem bileşenlerinden oluşur",    category:"cbs", catLabel:"CBS" }, // Donanim -> Donanım
-  { id:"m2",  text:"Farklı coğrafi unsurları katmanlar hâlinde haritalayabilir",              category:"cbs", catLabel:"CBS" }, // unsurlari -> unsurları
-  { id:"m3",  text:"Kızılötesi ve morötesi ışınları algılayan uydular kullanır",              category:"ua",  catLabel:"Uzaktan Algılama" }, // isinlari -> ışınları
-  { id:"m4",  text:"Uydu görüntüleri ile arazi kullanımı ve bitki türleri sınıflandırılır",  category:"ua",  catLabel:"Uzaktan Algılama" }, // goruntuleri -> görüntüleri, kullanimi -> kullanımı, turleri siniflandirilir -> türleri sınıflandırılır
-  { id:"m5",  text:"Uydu ağı, yer kontrol ağı ve alıcılar olmak üzere 3 bileşeni vardır",   category:"gps", catLabel:"GPS" }, // agi, agi, alicilar -> ağı, ağı, alıcılar
+  { id:"m1",  text:"Donanım, yazılım, veri, kullanıcı ve yöntem bileşenlerinden oluşur",    category:"cbs", catLabel:"CBS" },
+  { id:"m2",  text:"Farklı coğrafi unsurları katmanlar hâlinde haritalayabilir",              category:"cbs", catLabel:"CBS" },
+  { id:"m3",  text:"Kızılötesi ve morötesi ışınları algılayan uydular kullanır",              category:"ua",  catLabel:"Uzaktan Algılama" },
+  { id:"m4",  text:"Uydu görüntüleri ile arazi kullanımı ve bitki türleri sınıflandırılır",  category:"ua",  catLabel:"Uzaktan Algılama" },
+  { id:"m5",  text:"Uydu ağı, yer kontrol ağı ve alıcılar olmak üzere 3 bileşeni vardır",   category:"gps", catLabel:"GPS" },
   { id:"m6",  text:"Navigasyon, araç takip ve arama-kurtarma gibi alanlarda kullanılır",     category:"gps", catLabel:"GPS" },
   { id:"m7",  text:"Enlem, boylam, yükselti ve yerel saat bilgisi verir",                    category:"gps", catLabel:"GPS" },
   { id:"m8",  text:"Mekânsal sorgulama ve yakınlık analizi yapılabilir",                     category:"cbs", catLabel:"CBS" },
@@ -238,9 +238,9 @@ function MatchGame() {
   if (done) return (
     <div style={{ display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:"16px",padding:"40px 20px",textAlign:"center" }}>
       <div style={{ fontSize:"48px" }}>🎯</div>
-      <div style={{ fontSize:"24px",fontWeight:"800",color:"#e2e8f0",fontFamily:FONT }}>Eşleştirme Tamamlandı!</div> // Eslestirme -> Eşleştirme
+      <div style={{ fontSize:"24px",fontWeight:"800",color:"#e2e8f0",fontFamily:FONT }}>Eşleştirme Tamamlandı!</div>
       <div style={{ fontSize:"44px",fontWeight:"800",color:C_CBS,fontFamily:MONO }}>{score}/{shuffled.length}</div>
-      <div style={{ fontSize:"14px",color:"#64748b",fontFamily:FONT }}>doğru eşleştirme</div> // dogru -> doğru
+      <div style={{ fontSize:"14px",color:"#64748b",fontFamily:FONT }}>doğru eşleştirme</div>
       <button onClick={retry} style={{ padding:"12px 28px",background:`linear-gradient(90deg,#0e7490,${C_CBS})`,border:"none",borderRadius:"10px",color:"#fff",fontSize:"14px",fontWeight:"800",cursor:"pointer",fontFamily:FONT }}>🔄 Tekrar Oyna</button>
     </div>
   );
@@ -250,13 +250,13 @@ function MatchGame() {
     <div style={{ display:"flex",flexDirection:"column",gap:"16px" }}>
       <div>
         <div style={{ fontSize:"10px",color:C_CBS,letterSpacing:"3px",fontWeight:"800",fontFamily:MONO,marginBottom:"4px" }}>ETKİNLİK</div>
-        <div style={{ fontSize:"17px",fontWeight:"800",color:"#e2e8f0",fontFamily:FONT }}>🔗 Teknolojileri Eşleştir</div> // Eslestir -> Eşleştir
-        <div style={{ fontSize:"12px",color:"#4a5568",marginTop:"3px",fontFamily:FONT }}>Her ifadeyi doğru teknoloji kategorisine sürükle bırak</div> // ifadeyi dogru -> ifadeyi doğru
+        <div style={{ fontSize:"17px",fontWeight:"800",color:"#e2e8f0",fontFamily:FONT }}>🔗 Teknolojileri Eşleştir</div>
+        <div style={{ fontSize:"12px",color:"#4a5568",marginTop:"3px",fontFamily:FONT }}>Her ifadeyi doğru teknoloji kategorisine sürükle bırak</div>
       </div>
 
       {/* Sürüklenecek kartlar */}
       <div style={{ padding:"14px",background:"rgba(0,0,0,0.3)",border:"1px solid rgba(255,255,255,0.06)",borderRadius:"12px",minHeight:"52px" }}>
-        <div style={{ fontSize:"10px",color:"#4a5568",letterSpacing:"2px",fontWeight:"800",marginBottom:"10px",fontFamily:FONT }}>EŞLEŞTİRİLECEK İFADELER</div> // ESLESTIRILECEK -> EŞLEŞTİRİLECEK
+        <div style={{ fontSize:"10px",color:"#4a5568",letterSpacing:"2px",fontWeight:"800",marginBottom:"10px",fontFamily:FONT }}>EŞLEŞTİRİLECEK İFADELER</div>
         <div style={{ display:"flex",flexWrap:"wrap",gap:"7px" }}>
           {pending.map(item=>(
             <div key={item.id} draggable
@@ -297,7 +297,7 @@ function MatchGame() {
 
       <div style={{ padding:"9px 14px",background:"rgba(0,0,0,0.2)",border:"1px solid rgba(255,255,255,0.05)",borderRadius:"8px",display:"flex",justifyContent:"space-between" }}>
         <span style={{ fontSize:"12px",color:"#4a5568",fontFamily:FONT }}>Kalan: {pending.length} kart</span>
-        <span style={{ fontSize:"14px",fontWeight:"800",color:C_CBS,fontFamily:MONO }}>{score} doğru</span> // dogru -> doğru
+        <span style={{ fontSize:"14px",fontWeight:"800",color:C_CBS,fontFamily:MONO }}>{score} doğru</span>
       </div>
     </div>
   );
@@ -332,15 +332,15 @@ function TestTab() {
     return(
       <div style={{ flex:1,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:"18px",padding:"32px 24px",textAlign:"center" }}>
         <div style={{ fontSize:"52px" }}>🌍</div>
-        <div style={{ fontSize:"26px",fontWeight:"800",color:"#e2e8f0",fontFamily:FONT }}>Test Tamamlandı!</div> // Tamamlandi -> Tamamlandı
+        <div style={{ fontSize:"26px",fontWeight:"800",color:"#e2e8f0",fontFamily:FONT }}>Test Tamamlandı!</div>
         <div style={{ fontSize:"50px",fontWeight:"800",color:pct>=80?C_GPS:pct>=50?"#f59e0b":"#ef4444",fontFamily:MONO }}>{score} PUAN</div>
-        <div style={{ fontSize:"14px",color:"#64748b",fontFamily:FONT }}>{answers.filter(Boolean).length}/{TEST_ITEMS.length} doğru · %{pct}</div> // dogru -> doğru
+        <div style={{ fontSize:"14px",color:"#64748b",fontFamily:FONT }}>{answers.filter(Boolean).length}/{TEST_ITEMS.length} doğru · %{pct}</div>
         {/* Kategori bazlı skor */}
         <div style={{ display:"flex",gap:"10px" }}>
           {[{label:"CBS",score:cbsScore,total:4,color:C_CBS},{label:"Uzak. Alg.",score:uaScore,total:3,color:C_UA},{label:"GPS",score:gpsScore,total:3,color:C_GPS}].map(c=>(
             <div key={c.label} style={{ padding:"12px 16px",background:`${c.color}10`,border:`1.5px solid ${c.color}30`,borderRadius:"10px",textAlign:"center" }}>
               <div style={{ fontSize:"13px",fontWeight:"800",color:c.color,fontFamily:FONT }}>{c.label}</div>
-              <div style={{ fontSize:"20px",fontWeight:"800",color:c.color,fontFamily:MONO }}>{c.score}/{c.total}</div> // dogru -> doğru
+              <div style={{ fontSize:"20px",fontWeight:"800",color:c.color,fontFamily:MONO }}>{c.score}/{c.total}</div>
             </div>
           ))}
         </div>
@@ -422,8 +422,8 @@ function TestTab() {
 
         {/* Açıklama */}
         {sel!==null&&(
-          <div style={{ maxWidth:"640px",width:"100%",padding:"15px 18px",background:sel===q.correct?"rgba(52,211,153,0.07)":"rgba(239,68,68,0.07)",border:`1.5px solid ${sel===q.correct?"rgba(52,211,153,0.25)":"rgba(239,68,68,0.25)"}`,borderRadius:"12px" }}> // DOGRU -> DOĞRU, YANLIS -> YANLIŞ
-            <div style={{ fontSize:"14px",fontWeight:"800",color:sel===q.correct?"#34d399":"#ef4444",marginBottom:"8px",fontFamily:FONT }}>{sel===q.correct?"✅ DOĞRU!":"❌ YANLIŞ!"}</div> // DOGRU -> DOĞRU, YANLIS -> YANLIŞ
+          <div style={{ maxWidth:"640px",width:"100%",padding:"15px 18px",background:sel===q.correct?"rgba(52,211,153,0.07)":"rgba(239,68,68,0.07)",border:`1.5px solid ${sel===q.correct?"rgba(52,211,153,0.25)":"rgba(239,68,68,0.25)"}`,borderRadius:"12px" }}>
+            <div style={{ fontSize:"14px",fontWeight:"800",color:sel===q.correct?"#34d399":"#ef4444",marginBottom:"8px",fontFamily:FONT }}>{sel===q.correct?"✅ DOĞRU!":"❌ YANLIŞ!"}</div>
             <p style={{ fontSize:"13px",color:"#64748b",lineHeight:"1.85",margin:0,fontFamily:FONT }}>{q.exp}</p>
           </div>
         )}
@@ -432,7 +432,7 @@ function TestTab() {
           <button onClick={next} style={{ padding:"12px 34px",background:`linear-gradient(90deg,#0e7490,${C_CBS})`,border:"none",borderRadius:"10px",color:"#fff",fontSize:"14px",fontWeight:"800",cursor:"pointer",fontFamily:FONT }}
             onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-2px)";}}
             onMouseLeave={e=>{e.currentTarget.style.transform="none";}}>
-            {qIdx>=TEST_ITEMS.length-1?"🏁 Sonuçları Gör":"⏭ Sonraki Soru"} // Sonuclari -> Sonuçları
+            {qIdx>=TEST_ITEMS.length-1?"🏁 Sonuçları Gör":"⏭ Sonraki Soru"}
           </button>
         )}
       </div>
@@ -453,7 +453,7 @@ export default function MekanBilgiActivity({ onClose }: { onClose: () => void })
 
   const SECTIONS: { id: LearnSec; icon: string; label: string; color: string; sub: string }[] = [
     { id:"cbs", icon:"🗺️", label:"Coğrafi Bilgi Sistemleri",  color:C_CBS,  sub:"Bileşenler & Avantajlar" },
-    { id:"ua",  icon:"🛰️", label:"Uzaktan Algılama",           color:C_UA,   sub:"Uydu Teknolojisi" }, // Algilama -> Algılama
+    { id:"ua",  icon:"🛰️", label:"Uzaktan Algılama",           color:C_UA,   sub:"Uydu Teknolojisi" },
     { id:"gps", icon:"📡", label:"GPS",                        color:C_GPS,  sub:"Küresel Konumlandırma" },
   ];
 
@@ -466,7 +466,7 @@ export default function MekanBilgiActivity({ onClose }: { onClose: () => void })
         <div style={{ display:"flex",alignItems:"center",gap:"24px" }}>
           <div>
             <div style={{ fontSize:"10px",letterSpacing:"4px",color:C_CBS,opacity:0.6,fontFamily:MONO }}>MEKÂNSAL BİLGİ TEKNOLOJİLERİ</div>
-            <div style={{ fontSize:"19px",fontWeight:"800",color:"#e2e8f0",letterSpacing:"0.3px" }}>CBS · Uzaktan Algılama · GPS</div> // Algilama -> Algılama
+            <div style={{ fontSize:"19px",fontWeight:"800",color:"#e2e8f0",letterSpacing:"0.3px" }}>CBS · Uzaktan Algılama · GPS</div>
           </div>
           <div style={{ display:"flex",gap:"3px",background:"rgba(0,0,0,0.4)",padding:"4px",borderRadius:"10px" }}>
             {TABS.map(t=>(
@@ -508,7 +508,7 @@ export default function MekanBilgiActivity({ onClose }: { onClose: () => void })
               <div style={{ height:"1px",background:"rgba(6,182,212,0.1)",margin:"20px 0" }} />
               <div style={{ fontSize:"11px",letterSpacing:"2px",color:"#334155",fontWeight:"800",fontFamily:FONT,marginBottom:"10px" }}>HIZLI ÖZET</div>
               <div style={{ display:"flex",flexDirection:"column",gap:"6px" }}>
-                {[["CBS","5 bileşen — K/V/D/Y/Y",C_CBS],["Uzaktan Alg.","Uydu + ışın algılama",C_UA],["GPS","3 bileşen — U/YK/A",C_GPS]].map(([k,v,c])=>( // isin -> ışın
+                {[["CBS","5 bileşen — K/V/D/Y/Y",C_CBS],["Uzaktan Alg.","Uydu + ışın algılama",C_UA],["GPS","3 bileşen — U/YK/A",C_GPS]].map(([k,v,c])=>(
                   <div key={k} style={{ padding:"8px 10px",background:"rgba(0,0,0,0.2)",borderRadius:"7px",borderLeft:`3px solid ${c}` }}>
                     <div style={{ fontSize:"11px",color:String(c),fontWeight:"800",fontFamily:FONT }}>{k}</div>
                     <div style={{ fontSize:"11px",color:"#334155",fontFamily:FONT,marginTop:"2px" }}>{v}</div>
@@ -526,7 +526,7 @@ export default function MekanBilgiActivity({ onClose }: { onClose: () => void })
                   <div style={{ display:"flex",alignItems:"center",gap:"12px",marginBottom:"8px" }}>
                     <span style={{ fontSize:"30px" }}>🗺️</span>
                     <div>
-                      <div style={{ fontSize:"22px",fontWeight:"800",color:"#e2e8f0",fontFamily:FONT }}>Coğrafi Bilgi Sistemleri</div> // Cografi -> Coğrafi
+                      <div style={{ fontSize:"22px",fontWeight:"800",color:"#e2e8f0",fontFamily:FONT }}>Coğrafi Bilgi Sistemleri</div>
                       <div style={{ fontSize:"13px",color:C_CBS,fontWeight:"600",fontFamily:FONT }}>CBS — Mekânsal verinin dijital yönetimi</div>
                     </div>
                   </div>
@@ -536,7 +536,7 @@ export default function MekanBilgiActivity({ onClose }: { onClose: () => void })
                 {/* Tanım */}
                 <div style={{ padding:"18px 22px",background:`${C_CBS}0a`,border:`1.5px solid ${C_CBS}22`,borderRadius:"14px" }}>
                   <p style={{ fontSize:"14px",color:"#94a3b8",lineHeight:"1.95",margin:0,fontFamily:FONT }}>
-                    <strong style={{ color:C_CBS }}>Coğrafi Bilgi Sistemleri (CBS);</strong> doğal ortam, insan ve zaman ilişkisine ait veri toplama, depolama ve analiz çalışmalarıyla elde edilen mekânsal bilgilerin <strong style={{ color:"#e2e8f0" }}>harita, tablo veya grafiklerle görüntülenmesine</strong> imkân sağlayan bilgisayar tabanlı bilgi yönetimidir. // Cografi -> Coğrafi, iliskisine -> ilişkisine, calismalariyla -> çalışmalarıyla, yonetimidir -> yönetimidir
+                    <strong style={{ color:C_CBS }}>Coğrafi Bilgi Sistemleri (CBS);</strong> doğal ortam, insan ve zaman ilişkisine ait veri toplama, depolama ve analiz çalışmalarıyla elde edilen mekânsal bilgilerin <strong style={{ color:"#e2e8f0" }}>harita, tablo veya grafiklerle görüntülenmesine</strong> imkân sağlayan bilgisayar tabanlı bilgi yönetimidir.
                   </p>
                 </div>
 
@@ -545,12 +545,12 @@ export default function MekanBilgiActivity({ onClose }: { onClose: () => void })
                   <div style={{ fontSize:"12px",color:C_CBS,letterSpacing:"2px",fontWeight:"800",marginBottom:"12px",fontFamily:FONT }}>CBS'NİN BAŞLICA AVANTAJLARI</div>
                   <div style={{ display:"grid",gridTemplateColumns:"1fr 1fr",gap:"8px" }}>
                     {[
-                      ["⚡","Veri toplama daha hızlı","Bilgi yönetimi kolaylaşır"], // yonetimi -> yönetimi
+                      ["⚡","Veri toplama daha hızlı","Bilgi yönetimi kolaylaşır"],
                       ["🔗","Mekânsal & sözel veri","Birlikte kullanılabilir"],
-                      ["📐","Uzunluk, alan, eğim","Ölçümleri doğru yapılır"], // Olcumleri -> Ölçümleri
-                      ["🕐","Zaman serisi","Değişimler izlenebilir"], // Degisimler -> Değişimler
-                      ["🔄","Harita güncelleme","Kolaylıkla yapılabilir"], // guncelleme -> güncelleme
-                      ["🌐","Dijital paylaşım","Ürünler hızlıca yayılır"], // paylasim -> paylaşım
+                      ["📐","Uzunluk, alan, eğim","Ölçümleri doğru yapılır"],
+                      ["🕐","Zaman serisi","Değişimler izlenebilir"],
+                      ["🔄","Harita güncelleme","Kolaylıkla yapılabilir"],
+                      ["🌐","Dijital paylaşım","Ürünler hızlıca yayılır"],
                     ].map(([icon,title,sub])=>(
                       <div key={title} style={{ padding:"12px 14px",background:`${C_CBS}08`,border:`1px solid ${C_CBS}15`,borderRadius:"9px",display:"flex",gap:"10px",alignItems:"flex-start" }}>
                         <span style={{ fontSize:"18px",flexShrink:0 }}>{icon}</span>
@@ -576,7 +576,7 @@ export default function MekanBilgiActivity({ onClose }: { onClose: () => void })
                     Bartın'da orman yangını açısından riskli alanların belirlenmesi amacıyla CBS'den yararlanılmıştır. Yangını etkileyen faktörler (arazi kullanımı, yükseklik, eğim, bakı, sıcaklık, nem) ve acil durum müdahalelerine yakınlık verileri toplanmıştır.
                   </p>
                   <div style={{ display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"8px" }}>
-                    {[["Arazi Kullanımı","Uydu görüntüsü","🛰️"],["Sıcaklık & Nem","Meteoroloji","🌡️"],["Risk Haritası","CBS yazılımı","🗺️"]].map(([title,src,icon])=>( // goruntusu -> görüntüsü
+                    {[["Arazi Kullanımı","Uydu görüntüsü","🛰️"],["Sıcaklık & Nem","Meteoroloji","🌡️"],["Risk Haritası","CBS yazılımı","🗺️"]].map(([title,src,icon])=>(
                       <div key={title} style={{ padding:"10px",background:"rgba(0,0,0,0.25)",borderRadius:"8px",textAlign:"center" }}>
                         <div style={{ fontSize:"20px",marginBottom:"4px" }}>{icon}</div>
                         <div style={{ fontSize:"11px",fontWeight:"700",color:"#94a3b8",fontFamily:FONT }}>{title}</div>
@@ -592,7 +592,7 @@ export default function MekanBilgiActivity({ onClose }: { onClose: () => void })
                   <div style={{ display:"flex",alignItems:"center",gap:"12px",marginBottom:"8px" }}>
                     <span style={{ fontSize:"30px" }}>🛰️</span>
                     <div>
-                      <div style={{ fontSize:"22px",fontWeight:"800",color:"#e2e8f0",fontFamily:FONT }}>Uzaktan Algılama</div> // Algilama -> Algılama
+                      <div style={{ fontSize:"22px",fontWeight:"800",color:"#e2e8f0",fontFamily:FONT }}>Uzaktan Algılama</div>
                       <div style={{ fontSize:"13px",color:C_UA,fontWeight:"600",fontFamily:FONT }}>Dünya'yı Uzaydan Haritalamak</div>
                     </div>
                   </div>
@@ -602,7 +602,7 @@ export default function MekanBilgiActivity({ onClose }: { onClose: () => void })
                 <div style={{ padding:"18px 22px",background:`${C_UA}0a`,border:`1.5px solid ${C_UA}22`,borderRadius:"14px" }}>
                   <p style={{ fontSize:"14px",color:"#94a3b8",lineHeight:"1.95",margin:0,fontFamily:FONT }}>
                     Uydular; <strong style={{ color:C_UA }}>görünür dalga boyunun yanında kızılötesi ve morötesi ışınları</strong> algılama sistemleriyle donatılmıştır. Bu sayede insan gözünün algılayamayacağı veriler toplanarak farklı haritalar üretilir.
-                  </p> // isinlari -> ışınları, gozunun -> gözünün
+                  </p>
                 </div>
 
                 {/* Uydu veri akışı */}
@@ -626,7 +626,7 @@ export default function MekanBilgiActivity({ onClose }: { onClose: () => void })
                 <div>
                   <div style={{ fontSize:"12px",color:C_UA,letterSpacing:"2px",fontWeight:"800",marginBottom:"12px",fontFamily:FONT }}>UYDU İLE TOPLANAN VERİLER</div>
                   <div style={{ display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"8px" }}>
-                    {[["🌡️","Sıcaklık"],["🏭","Atmosfer kirliliği"],["🌊","Deniz suyu tuzluluğu"],["🌿","Bitki örtüsü"],["🏔️","Yer şekilleri"],["💧","Toprak nemi"],["🏙️","Kentleşme"],["🌾","Tarım alanları"],["📈","İklim değişikliği"]].map(([icon,label])=>( // kirliligi -> kirliliği, tuzlulugu -> tuzluluğu, ortusu -> örtüsü, sekilleri -> şekilleri, degisikligi -> değişikliği
+                    {[["🌡️","Sıcaklık"],["🏭","Atmosfer kirliliği"],["🌊","Deniz suyu tuzluluğu"],["🌿","Bitki örtüsü"],["🏔️","Yer şekilleri"],["💧","Toprak nemi"],["🏙️","Kentleşme"],["🌾","Tarım alanları"],["📈","İklim değişikliği"]].map(([icon,label])=>(
                       <div key={label} style={{ padding:"10px",background:`${C_UA}08`,border:`1px solid ${C_UA}18`,borderRadius:"8px",display:"flex",gap:"8px",alignItems:"center" }}>
                         <span style={{ fontSize:"16px" }}>{icon}</span>
                         <span style={{ fontSize:"11px",fontWeight:"700",color:"#64748b",fontFamily:FONT }}>{label}</span>
@@ -639,11 +639,11 @@ export default function MekanBilgiActivity({ onClose }: { onClose: () => void })
                 <div style={{ padding:"16px 20px",background:`${C_UA}0a`,border:`1.5px solid ${C_UA}20`,borderRadius:"12px" }}>
                   <div style={{ fontSize:"12px",color:C_UA,letterSpacing:"2px",fontWeight:"800",marginBottom:"10px",fontFamily:FONT }}>MEKÂNSAL VERİ NEDİR?</div>
                   <p style={{ fontSize:"13px",color:"#64748b",lineHeight:"1.85",margin:"0 0 12px",fontFamily:FONT }}>
-                    Haritası oluşturulabilen, konumsal özelliğe sahip her türlü coğrafi veridir. // ozellige -> özelliğe
+                    Haritası oluşturulabilen, konumsal özelliğe sahip her türlü coğrafi veridir.
                   </p>
                   <div style={{ display:"flex",gap:"10px" }}>
                     {[["📍","Nokta","Kent merkezi, dağ zirvesi"],["📏","Çizgi","Yol, nehir, sınır"],["⬛","Alan","Orman, göl, tarım arazisi"]].map(([icon,title,ex])=>(
-                      <div key={title} style={{ flex:1,padding:"12px",background:"rgba(0,0,0,0.2)",borderRadius:"8px",textAlign:"center" }}> // dag -> dağ, cizgi -> çizgi, sinir -> sınır
+                      <div key={title} style={{ flex:1,padding:"12px",background:"rgba(0,0,0,0.2)",borderRadius:"8px",textAlign:"center" }}>
                         <div style={{ fontSize:"20px",marginBottom:"5px" }}>{icon}</div>
                         <div style={{ fontSize:"12px",fontWeight:"800",color:C_UA,fontFamily:FONT }}>{title}</div>
                         <div style={{ fontSize:"10px",color:"#334155",fontFamily:FONT,marginTop:"3px" }}>{ex}</div>
@@ -667,7 +667,7 @@ export default function MekanBilgiActivity({ onClose }: { onClose: () => void })
 
                 <div style={{ padding:"18px 22px",background:`${C_GPS}0a`,border:`1.5px solid ${C_GPS}22`,borderRadius:"14px" }}>
                   <p style={{ fontSize:"14px",color:"#94a3b8",lineHeight:"1.95",margin:0,fontFamily:FONT }}>
-                    <strong style={{ color:C_GPS }}>GPS (Küresel Konumlandırma Sistemi);</strong> uydu teknolojisi kullanılarak canlı veya nesnelere ait coğrafi koordinatlara dayalı konum belirlemeyi sağlar. Her türlü hava koşulunda ve dünyanın her yerinde <strong style={{ color:"#e2e8f0" }}>24 saat</strong> çalışır. // Kuresel -> Küresel, cografi -> coğrafi, kosulunda -> koşulunda, calisir -> çalışır
+                    <strong style={{ color:C_GPS }}>GPS (Küresel Konumlandırma Sistemi);</strong> uydu teknolojisi kullanılarak canlı veya nesnelere ait coğrafi koordinatlara dayalı konum belirlemeyi sağlar. Her türlü hava koşulunda ve dünyanın her yerinde <strong style={{ color:"#e2e8f0" }}>24 saat</strong> çalışır.
                   </p>
                 </div>
 
@@ -681,7 +681,7 @@ export default function MekanBilgiActivity({ onClose }: { onClose: () => void })
                 <div>
                   <div style={{ fontSize:"12px",color:C_GPS,letterSpacing:"2px",fontWeight:"800",marginBottom:"12px",fontFamily:FONT }}>GPS İLE HANGİ BİLGİLERE ULAŞILIR?</div>
                   <div style={{ display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:"8px" }}>
-                    {[["🌐","Enlem & Boylam","Yatay konum bilgisi"],["⛰️","Yükselti","Denizden yükseklik"],["🕐","Yerel Saat","Hassas zaman bilgisi"],["⚡","Anlık Hız","Atomik saatlerden hesaplanır"]].map(([icon,title,sub])=>( // Yukselti -> Yükselti, yukseklik -> yükseklik, Hiz -> Hız
+                    {[["🌐","Enlem & Boylam","Yatay konum bilgisi"],["⛰️","Yükselti","Denizden yükseklik"],["🕐","Yerel Saat","Hassas zaman bilgisi"],["⚡","Anlık Hız","Atomik saatlerden hesaplanır"]].map(([icon,title,sub])=>(
                       <div key={title} style={{ padding:"12px 14px",background:`${C_GPS}08`,border:`1px solid ${C_GPS}18`,borderRadius:"9px",display:"flex",gap:"10px",alignItems:"center" }}>
                         <span style={{ fontSize:"22px",flexShrink:0 }}>{icon}</span>
                         <div>
@@ -697,7 +697,7 @@ export default function MekanBilgiActivity({ onClose }: { onClose: () => void })
                 <div>
                   <div style={{ fontSize:"12px",color:C_GPS,letterSpacing:"2px",fontWeight:"800",marginBottom:"12px",fontFamily:FONT }}>GPS KULLANIM ALANLARI</div>
                   <div style={{ display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"8px" }}>
-                    {[["🚗","Navigasyon","Araç içi yön bulma"],["✈️","Havacılık","Uçak güzergâhı"],["🚢","Denizcilik","Gemi konum takibi"],["🔍","Arama-Kurtarma","Kayıp kişi bulma"],["🐾","Yaban Hayatı","Göç izleme"],["🏦","ATM","Konuma dayalı finans"],["📡","İHA","İnsansız hava araçları"],["🏗️","Altyapı","Yerel yönetim hizmetleri"],["🧭","Harita Yapımı","Coğrafi unsur ekleme"]].map(([icon,title,sub])=>( // Arac ici -> Araç içi, Ucak guzergahi -> Uçak güzergâhı, Kayip kisi -> Kayıp kişi, Goc -> Göç, Insansiz -> İnsansız, araclari -> araçları, yonetim -> yönetim, Cografi -> Coğrafi
+                    {[["🚗","Navigasyon","Araç içi yön bulma"],["✈️","Havacılık","Uçak güzergâhı"],["🚢","Denizcilik","Gemi konum takibi"],["🔍","Arama-Kurtarma","Kayıp kişi bulma"],["🐾","Yaban Hayatı","Göç izleme"],["🏦","ATM","Konuma dayalı finans"],["📡","İHA","İnsansız hava araçları"],["🏗️","Altyapı","Yerel yönetim hizmetleri"],["🧭","Harita Yapımı","Coğrafi unsur ekleme"]].map(([icon,title,sub])=>(
                       <div key={title} style={{ padding:"10px",background:`${C_GPS}08`,border:`1px solid ${C_GPS}15`,borderRadius:"8px",textAlign:"center" }}>
                         <div style={{ fontSize:"18px",marginBottom:"3px" }}>{icon}</div>
                         <div style={{ fontSize:"11px",fontWeight:"700",color:C_GPS,fontFamily:FONT }}>{title}</div>

@@ -9,7 +9,7 @@ import ScaleActivity from './Scaleactivity';
 import MapTypesActivity from './MapTypesActivity';
 import TopoActivity from './Topoactivity';
 import LocationActivity from './Locationactivity';
-import MekanBilgiActivity from './MekanBilgiActivity';
+import MekanBilgiActivity from './Mekanbilgiactivity';
 import TimeZonesActivity from './TimeZonesActivity';
 import DistributionMethodsActivity from './DistributionMethodsActivity';
 
