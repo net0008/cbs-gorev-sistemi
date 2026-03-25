@@ -13,7 +13,7 @@ const coordinatesBlock = {
   area_x5F_coords:  { centerX: 1.43,  centerY: 45.75, width: 3.16,  height: 64.39 },
 };
 
-export default function MapReadingActivity() {
+export default function MapReadingActivity({ onClose }: { onClose: () => void }) {
   const [solved, setSolved] = useState<string[]>([]);
   // dropZoneRefs'i artık kullanmamıza gerek kalmadı ama yapıyı bozmamak için tutuyoruz
   const dropZoneRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
@@ -106,24 +106,32 @@ export default function MapReadingActivity() {
   }, []);
 
   return (
-    <div ref={activityAreaRef} className="h-full bg-slate-950 flex flex-col overflow-hidden select-none touch-none">
-      <div className="bg-[#2D3328]/95 p-2 flex flex-wrap justify-center items-center gap-2 border-b border-white/5 flex-shrink-0 min-h-[55px] z-10">
-        <AnimatePresence>
-          {Object.keys(coordinatesBlock).filter(id => !solved.includes(id)).map((id) => (
-            <motion.div
-              key={id} layoutId={id} drag dragConstraints={activityAreaRef} dragSnapToOrigin
-              onDragEnd={(_, info) => handleDragEnd(id, info)} whileDrag={{ scale: 1.1, zIndex: 100 }}
-              className="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-1.5 rounded-lg cursor-grab active:cursor-grabbing font-bold shadow-md border border-emerald-400/20 text-xs uppercase"
-            >
-              {id === 'area_x5F_title' ? 'Başlık' : id === 'area_x5F_legend' ? 'Lejant' : id === 'area_x5F_scale' ? 'Ölçek' : id === 'area_x5F_compass' ? 'Yön Oku' : 'Koordinat'}
+    <div ref={activityAreaRef} className="h-full bg-slate-950 flex flex-col overflow-hidden select-none touch-none">      
+      <div className="bg-[#2D3328]/95 p-2 px-4 flex justify-between items-center gap-2 border-b border-white/5 flex-shrink-0 min-h-[55px] z-10">
+        <div className="flex flex-wrap justify-center items-center gap-2">
+          <AnimatePresence>
+            {Object.keys(coordinatesBlock).filter(id => !solved.includes(id)).map((id) => (
+              <motion.div
+                key={id} layoutId={id} drag dragConstraints={activityAreaRef} dragSnapToOrigin
+                onDragEnd={(_, info) => handleDragEnd(id, info)} whileDrag={{ scale: 1.1, zIndex: 100 }}
+                className="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-1.5 rounded-lg cursor-grab active:cursor-grabbing font-bold shadow-md border border-emerald-400/20 text-xs uppercase"
+              >
+                {id === 'area_x5F_title' ? 'Başlık' : id === 'area_x5F_legend' ? 'Lejant' : id === 'area_x5F_scale' ? 'Ölçek' : id === 'area_x5F_compass' ? 'Yön Oku' : 'Koordinat'}
+              </motion.div>
+            ))}
+          </AnimatePresence>
+          {solved.length === 5 && (
+            <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="flex items-center gap-2 bg-white text-emerald-900 px-4 py-1 rounded-lg font-black text-xs border-2 border-emerald-500">
+              <CheckCircle size={16} /> TAMAMLANDI!
             </motion.div>
-          ))}
-        </AnimatePresence>
-        {solved.length === 5 && (
-          <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="flex items-center gap-2 bg-white text-emerald-900 px-4 py-1 rounded-lg font-black text-xs border-2 border-emerald-500">
-            <CheckCircle size={16} /> TAMAMLANDI!
-          </motion.div>
-        )}
+          )}
+        </div>
+        <button 
+          onClick={onClose} 
+          className="bg-red-500/10 hover:bg-red-500/20 text-red-400 px-3 py-1.5 rounded-lg font-bold text-xs transition-all border border-red-500/20"
+        >
+          KAPAT
+        </button>
       </div>
 
       <div className="relative flex-1 flex items-center justify-center p-1 bg-[#0a0a0a] overflow-hidden">

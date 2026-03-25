@@ -809,7 +809,7 @@ export default function DistributionMethodsActivity({ onClose }: { onClose: () =
       <div style={{ flex: 1, minHeight: 0 }}>
         {tab === "learn" && <LearnPanel />}
         {tab === "activity" && <ActivityPanel />}
-        {tab === "map_reading" && <MapReadingActivity />}
+        {tab === "map_reading" && <MapReadingActivity onClose={onClose} />}
         {tab === "test" && <TestPanel />}
       </div>
     </div>

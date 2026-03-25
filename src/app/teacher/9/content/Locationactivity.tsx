@@ -112,6 +112,7 @@ const KOORDINAT_SORULARI: Soru[] = [
 const BG = BG_DARK;
 const FONT = FONT_SANS;
 const C = COLOR_LOCATION;
+const MONO = FONT_MONO;
 
 // ═══════════════════════════════════════════════════════════════════════════════
 export default function LocationActivity({ onClose }: { onClose: () => void }) {

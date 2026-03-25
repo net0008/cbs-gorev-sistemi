@@ -2,6 +2,14 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { FONT_SANS, FONT_MONO, BG_DARK, COLOR_CBS, COLOR_UA, COLOR_GPS, PANEL_DARK } from "./theme";
 
+const C_CBS = COLOR_CBS;
+const C_UA = COLOR_UA;
+const C_GPS = COLOR_GPS;
+const C_PANEL = PANEL_DARK;
+const FONT = FONT_SANS;
+const BG = BG_DARK;
+const MONO = FONT_MONO;
+
 // ─── Ses ─────────────────────────────────────────────────────────────────────
 function beep(f: number, d: number, t: OscillatorType = "sine", v = 0.15) {
   try {

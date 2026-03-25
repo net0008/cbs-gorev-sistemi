@@ -3,6 +3,13 @@
 import { useState, useRef, useEffect } from "react";
 import { FONT_SANS, FONT_MONO, BG_DARK, PANEL_DARK, COLOR_SCALE, COLOR_SCALE_DIM, COLOR_SCALE_DARK, COLOR_SUCCESS, COLOR_ERROR } from "./theme";
 
+const C_PANEL = PANEL_DARK;
+const C_GOLD = COLOR_SCALE;
+const C_GOLD_DIM = COLOR_SCALE_DIM;
+const C_GOLD_DARK = COLOR_SCALE_DARK;
+const FONT_BODY = FONT_SANS;
+const C_GREEN = COLOR_SUCCESS;
+
 // ─── Tipler ───────────────────────────────────────────────────────────────────
 type Tab       = "learn" | "measure" | "convert" | "mapScaleRel" | "test";
 type ScaleType = "fraction" | "line";
