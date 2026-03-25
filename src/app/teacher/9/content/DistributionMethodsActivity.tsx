@@ -2,6 +2,23 @@
 
 import { useMemo, useState } from "react";
 
+// ─── Ses ─────────────────────────────────────────────────────────────────────
+function beep(f: number, d: number, t: OscillatorType = "sine", v = 0.15) {
+  try {
+    const ctx = new AudioContext();
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.frequency.value = f; o.type = t;
+    g.gain.setValueAtTime(v, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + d);
+    o.start(); o.stop(ctx.currentTime + d);
+    setTimeout(() => ctx.close(), d * 1000 + 200);
+  } catch (_) {}
+}
+const sndOK    = () => [440,554,660].forEach((f,i) => setTimeout(() => beep(f,0.22,"sine",0.14), i*80));
+const sndFail  = () => beep(200,0.32,"sawtooth",0.12);
+const sndClick = () => beep(700,0.07,"square",0.07);
+
 const FONT = "'Segoe UI','Helvetica Neue',Arial,sans-serif";
 const MONO = "'Courier New',Courier,monospace";
 const BG = "#06111f";
@@ -120,64 +137,64 @@ const MAP_ELEMENTS = [
 
 const QUIZ_ITEMS: QuizItem[] = [
   {
-    question: "A?a??dakilerden hangisi bir ?izimin harita say?labilmesi i?in zorunlu ?zelliklerden biri de?ildir?",
-    options: ["Ku? bak??? g?r?n?m", "?l?ek", "D?zlem ?zerine ?izim", "Renkli olmas?"],
+    question: "Aşağıdakilerden hangisi bir çizimin harita sayılabilmesi için zorunlu özelliklerden biri değildir?",
+    options: ["Kuş bakışı görünüm", "Ölçek", "Düzlem üzerine çizim", "Renkli olması"],
     correct: 3,
-    explanation: "Haritan?n renkli olmas? zorunlu de?ildir; ancak ku? bak???, ?l?ek ve d?zlem ko?ullar? gereklidir.",
+    explanation: "Haritanın renkli olması zorunlu değildir; ancak kuş bakışı, ölçek ve düzlem koşulları gereklidir.",
   },
   {
-    question: "Haritada kullan?lan renk ve sembollerin ne anlama geldi?ini hangi eleman a??klar?",
-    options: ["?l?ek", "Lejant", "Y?n oku", "Ba?l?k"],
+    question: "Haritada kullanılan renk ve sembollerin ne anlama geldiğini hangi eleman açıklar?",
+    options: ["Ölçek", "Lejant", "Yön oku", "Başlık"],
     correct: 1,
-    explanation: "Lejant, haritada yer alan sembol ve renklerin anlam?n? g?steren listedir.",
+    explanation: "Lejant, haritada yer alan sembol ve renklerin anlamını gösteren listedir.",
   },
   {
-    question: "N?fusun da??l???n? incelemek isteyen biri hangi harita t?r?n? se?melidir?",
-    options: ["Siyasi harita", "N?fus haritas?", "Fiziki harita", "Kroki"],
+    question: "Nüfusun dağılışını incelemek isteyen biri hangi harita türünü seçmelidir?",
+    options: ["Siyasi harita", "Nüfus haritası", "Fiziki harita", "Kroki"],
     correct: 1,
-    explanation: "N?fus haritas? tematik bir haritad?r ve n?fus da??l???n? g?stermek i?in kullan?l?r.",
+    explanation: "Nüfus haritası tematik bir haritadır ve nüfus dağılışını göstermek için kullanılır.",
   },
   {
-    question: "Bir noktan?n Ekvator'a olan a??sal uzakl???na ne ad verilir?",
-    options: ["Boylam", "Y?kselti", "Enlem", "?zohips"],
+    question: "Bir noktanın Ekvator'a olan açısal uzaklığına ne ad verilir?",
+    options: ["Boylam", "Yükselti", "Enlem", "İzohips"],
     correct: 2,
-    explanation: "Ekvator'a g?re olan a??sal uzakl?k enlem olarak adland?r?l?r.",
+    explanation: "Ekvator'a göre olan açısal uzaklık enlem olarak adlandırılır.",
   },
   {
-    question: "GPS teknolojisinin temel i?levi a?a??dakilerden hangisidir?",
-    options: ["Hava s?cakl???n? ?l?mek", "Bir yerin koordinatlar?n? uydularla belirlemek", "Haritan?n renklerini belirlemek", "N?fus miktar?n? hesaplamak"],
+    question: "GPS teknolojisinin temel işlevi aşağıdakilerden hangisidir?",
+    options: ["Hava sıcaklığını ölçmek", "Bir yerin koordinatlarını uydularla belirlemek", "Haritanın renklerini belirlemek", "Nüfus miktarını hesaplamak"],
     correct: 1,
-    explanation: "GPS, uydular yard?m?yla bir konumun koordinatlar?n? belirlemeyi sa?layan k?resel konumland?rma sistemidir.",
+    explanation: "GPS, uydular yardımıyla bir konumun koordinatlarını belirlemeyi sağlayan küresel konumlandırma sistemidir.",
   },
   {
-    question: "?l?ek kullan?lmadan ?izilen kaba taslak g?sterimlere ne ad verilir?",
+    question: "Ölçek kullanılmadan çizilen kaba taslak gösterimlere ne ad verilir?",
     options: ["Plan", "Lejant", "Kroki", "Projeksiyon"],
     correct: 2,
-    explanation: "?l?eksiz yap?lan kaba taslak ?izimler kroki olarak adland?r?l?r; bu nedenle uzunluk ve alan hesab? yap?lamaz.",
+    explanation: "Ölçeksiz yapılan kaba taslak çizimler kroki olarak adlandırılır; bu nedenle uzunluk ve alan hesabı yapılamaz.",
   },
   {
-    question: "A?a??dakilerden hangisi haritan?n temel elemanlar?ndan biridir?",
-    options: ["Paragraf", "Lejant", "Deneme", "Foto?raf alb?m?"],
+    question: "Aşağıdakilerden hangisi haritanın temel elemanlarından biridir?",
+    options: ["Paragraf", "Lejant", "Deneme", "Fotoğraf albümü"],
     correct: 1,
-    explanation: "Lejant, haritadaki sembol ve renklerin anlam?n? veren temel harita elemanlar?ndan biridir.",
+    explanation: "Lejant, haritadaki sembol ve renklerin anlamını veren temel harita elemanlarından biridir.",
   },
   {
-    question: "Yer ?ekillerini genel hatlar?yla g?rmek isteyen biri ?ncelikle hangi haritaya bakmal?d?r?",
-    options: ["Fiziki harita", "N?fus haritas?", "Turizm haritas?", "Ula??m haritas?"],
+    question: "Yer şekillerini genel hatlarıyla görmek isteyen biri öncelikle hangi haritaya bakmalıdır?",
+    options: ["Fiziki harita", "Nüfus haritası", "Turizm haritası", "Ulaşım haritası"],
     correct: 0,
-    explanation: "Fiziki haritalar da?, ova, plato ve y?kselti gibi yer ?ekillerini g?stermede kullan?l?r.",
+    explanation: "Fiziki haritalar dağ, ova, plato ve yükselti gibi yer şekillerini göstermede kullanılır.",
   },
   {
-    question: "Ba?lang?? meridyenine g?re bir yerin do?uda veya bat?da oldu?unu g?steren bilgi a?a??dakilerden hangisidir?",
-    options: ["Y?kselti", "Boylam", "Lejant", "?l?ek"],
+    question: "Başlangıç meridyenine göre bir yerin doğuda veya batıda olduğunu gösteren bilgi aşağıdakilerden hangisidir?",
+    options: ["Yükselti", "Boylam", "Lejant", "Ölçek"],
     correct: 1,
-    explanation: "Boylam, bir noktan?n ba?lang?? meridyenine olan a??sal uzakl???n? ifade eder ve do?u-bat? konumunu belirler.",
+    explanation: "Boylam, bir noktanın başlangıç meridyenine olan açısal uzaklığını ifade eder ve doğu-batı konumunu belirler.",
   },
   {
-    question: "Haritan?n neyi g?sterdi?ini ilk bak??ta anlamam?z? sa?layan eleman hangisidir?",
-    options: ["Ba?l?k", "Renk tonu", "?er?eve kal?nl???", "K???t boyutu"],
+    question: "Haritanın neyi gösterdiğini ilk bakışta anlamamızı sağlayan eleman hangisidir?",
+    options: ["Başlık", "Renk tonu", "Çerçeve kalınlığı", "Kâğıt boyutu"],
     correct: 0,
-    explanation: "Ba?l?k, haritan?n konusunu ve g?sterdi?i alan? a??k?a belirterek ilk okumay? kolayla?t?r?r.",
+    explanation: "Başlık, haritanın konusunu ve gösterdiği alanı açıkça belirterek ilk okumayı kolaylaştırır.",
   },
 ];
 
@@ -246,7 +263,7 @@ function LearnPanel() {
           {(Object.entries(LEARN_CONTENT) as [LearnSection, (typeof LEARN_CONTENT)[LearnSection]][]).map(([key, value]) => (
             <button
               key={key}
-              onClick={() => setSection(key)}
+              onClick={() => { sndClick(); setSection(key); }}
               style={{
                 textAlign: "left",
                 padding: "14px",
@@ -380,7 +397,7 @@ function ActivityPanel() {
 
   const toggleRule = (rule: string) => {
     setSelectedRules((prev) => (prev.includes(rule) ? prev.filter((item) => item !== rule) : [...prev, rule]));
-    setRuleChecked(false);
+    setRuleChecked(false); sndClick();
   };
 
   const isPerfectRuleAnswer = selectedRules.length === MAP_RULES.length && MAP_RULES.every((rule) => selectedRules.includes(rule.label));
@@ -430,7 +447,7 @@ function ActivityPanel() {
 
           <div style={{ display: "flex", gap: "12px", alignItems: "center", marginTop: "18px", flexWrap: "wrap" }}>
             <button
-              onClick={() => setRuleChecked(true)}
+              onClick={() => { setRuleChecked(true); sndClick(); }}
               style={{
                 padding: "11px 16px",
                 borderRadius: "12px",
@@ -477,7 +494,7 @@ function ActivityPanel() {
               return (
                 <button
                   key={item.id}
-                  onClick={() => setSelectedElement(item.id)}
+                  onClick={() => { setSelectedElement(item.id); sndClick(); }}
                   style={{
                     padding: "14px 12px",
                     borderRadius: "14px",
@@ -544,11 +561,12 @@ function TestPanel() {
     if (sel !== null) return;
     setSel(index);
     const correct = index === q.correct;
-    if (correct) setScore((prev) => prev + 10);
+    if (correct) { setScore((prev) => prev + 10); sndOK(); } else { sndFail(); }
     setAnswers((prev) => [...prev, correct]);
   };
 
   const next = () => {
+    sndClick();
     if (qIdx >= QUIZ_ITEMS.length - 1) {
       setDone(true);
       return;
@@ -558,6 +576,7 @@ function TestPanel() {
   };
 
   const retry = () => {
+    sndClick();
     setQIdx(0);
     setSel(null);
     setScore(0);
@@ -570,21 +589,21 @@ function TestPanel() {
     return (
       <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "18px", padding: "32px 24px", textAlign: "center", background: "linear-gradient(180deg, rgba(3,7,18,0.98), rgba(6,17,31,1))" }}>
         <div style={{ fontSize: "52px" }}>Harita</div>
-        <div style={{ fontSize: "26px", fontWeight: 800, color: "#e2e8f0", fontFamily: FONT }}>Test Tamamlandi</div>
+        <div style={{ fontSize: "26px", fontWeight: 800, color: "#e2e8f0", fontFamily: FONT }}>Test Tamamlandı</div>
         <div style={{ fontSize: "50px", fontWeight: 800, color: pct >= 80 ? PRIMARY : pct >= 50 ? ACCENT : "#ef4444", fontFamily: MONO }}>{score} PUAN</div>
-        <div style={{ fontSize: "14px", color: "#94a3b8", fontFamily: FONT }}>{answers.filter(Boolean).length}/{QUIZ_ITEMS.length} dogru - %{pct}</div>
+        <div style={{ fontSize: "14px", color: "#94a3b8", fontFamily: FONT }}>{answers.filter(Boolean).length}/{QUIZ_ITEMS.length} doğru - %{pct}</div>
         <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", justifyContent: "center" }}>
           <div style={{ padding: "12px 16px", background: `${PRIMARY}10`, border: `1.5px solid ${PRIMARY}30`, borderRadius: "10px", textAlign: "center" }}>
-            <div style={{ fontSize: "13px", fontWeight: 800, color: PRIMARY, fontFamily: FONT }}>Dogru</div>
+            <div style={{ fontSize: "13px", fontWeight: 800, color: PRIMARY, fontFamily: FONT }}>Doğru</div>
             <div style={{ fontSize: "20px", fontWeight: 800, color: PRIMARY, fontFamily: MONO }}>{answers.filter(Boolean).length}/{QUIZ_ITEMS.length}</div>
           </div>
           <div style={{ padding: "12px 16px", background: `rgba(245,158,11,0.1)`, border: `1.5px solid rgba(245,158,11,0.3)`, borderRadius: "10px", textAlign: "center" }}>
-            <div style={{ fontSize: "13px", fontWeight: 800, color: ACCENT, fontFamily: FONT }}>Basari</div>
+            <div style={{ fontSize: "13px", fontWeight: 800, color: ACCENT, fontFamily: FONT }}>Başarı</div>
             <div style={{ fontSize: "20px", fontWeight: 800, color: ACCENT, fontFamily: MONO }}>%{pct}</div>
           </div>
         </div>
         <div style={{ fontSize: "14px", color: "#94a3b8", maxWidth: "420px", lineHeight: "1.8", fontFamily: FONT }}>
-          {pct >= 80 ? "Harita okuryazarligi konularini cok iyi kavradin." : pct >= 50 ? "Iyi gidiyorsun. Ogren sekmesine donup kisa bir tekrar yaparsan daha da guclenir." : "Ogren sekmesindeki konu ozetlerini tekrar inceleyip testi yeniden cozebilirsin."}
+          {pct >= 80 ? "Harita okuryazarlığı konularını çok iyi kavradın." : pct >= 50 ? "İyi gidiyorsun. Öğren sekmesine dönüp kısa bir tekrar yaparsan daha da güçlenir." : "Öğren sekmesindeki konu özetlerini tekrar inceleyip testi yeniden çözebilirsin."}
         </div>
         <button
           onClick={retry}
@@ -692,7 +711,7 @@ function TestPanel() {
 
         {sel !== null && (
           <div style={{ maxWidth: "640px", width: "100%", padding: "15px 18px", background: sel === q.correct ? "rgba(52,211,153,0.07)" : "rgba(239,68,68,0.07)", border: `1.5px solid ${sel === q.correct ? "rgba(52,211,153,0.25)" : "rgba(239,68,68,0.25)"}`, borderRadius: "12px" }}>
-            <div style={{ fontSize: "14px", fontWeight: 800, color: sel === q.correct ? "#34d399" : "#ef4444", marginBottom: "8px", fontFamily: FONT }}>{sel === q.correct ? "Dogru" : "Yanlis"}</div>
+            <div style={{ fontSize: "14px", fontWeight: 800, color: sel === q.correct ? "#34d399" : "#ef4444", marginBottom: "8px", fontFamily: FONT }}>{sel === q.correct ? "Doğru" : "Yanlış"}</div>
             <p style={{ fontSize: "13px", color: "#cbd5e1", lineHeight: "1.85", margin: 0, fontFamily: FONT }}>{q.explanation}</p>
           </div>
         )}
@@ -702,7 +721,7 @@ function TestPanel() {
             onClick={next}
             style={{ padding: "12px 34px", background: `linear-gradient(90deg, #0f766e, ${PRIMARY})`, border: "none", borderRadius: "10px", color: "#fff", fontSize: "14px", fontWeight: 800, cursor: "pointer", fontFamily: FONT }}
           >
-            {qIdx >= QUIZ_ITEMS.length - 1 ? "Sonuclari Gor" : "Sonraki Soru"}
+            {qIdx >= QUIZ_ITEMS.length - 1 ? "Sonuçları Gör" : "Sonraki Soru"}
           </button>
         )}
       </div>
@@ -754,7 +773,7 @@ export default function DistributionMethodsActivity({ onClose }: { onClose: () =
             {tabs.map((item) => (
               <button
                 key={item.id}
-                onClick={() => setTab(item.id)}
+                onClick={() => { setTab(item.id); sndClick(); }}
                 style={{
                   border: "none",
                   cursor: "pointer",
