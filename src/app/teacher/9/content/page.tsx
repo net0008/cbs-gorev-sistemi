@@ -20,18 +20,18 @@ export default function ContentCatalogPage() {
 
   return (
     <div className="w-full min-h-[calc(100vh-8rem)] bg-slate-950/50 p-6 md:p-12 rounded-3xl text-slate-100 flex flex-col">
-      {/* BaÅŸlÄ±k ve AÃ§Ä±klama BÃ¶lÃ¼mÃ¼ */}
+      {/* Başlık ve Açıklama Bölümü */}
       <div className="mb-12 text-center">
-        <h1 className="text-4xl font-extrabold text-white mb-4 tracking-tight">9. SÄ±nÄ±f Etkinlik KataloÄŸu</h1>
+        <h1 className="text-4xl font-extrabold text-white mb-4 tracking-tight">9. Sınıf Etkinlik Kataloğu</h1>
         <p className="text-lg text-slate-400 max-w-2xl mx-auto">
-          LÃ¼tfen baÅŸlamak istediÄŸiniz etkileÅŸimli harita gÃ¶revini seÃ§iniz.
+          Lütfen başlamak istediğiniz etkileşimli harita görevini seçiniz.
         </p>
       </div>
 
-      {/* CSS Grid - Etkinlik KartlarÄ± AlanÄ± */}
+      {/* CSS Grid - Etkinlik Kartları Alanı */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto w-full">
         
-        {/* 1. Kutu: Haritalar NasÄ±l Okunur? */}
+        {/* 1. Kutu: Haritalar Nasıl Okunur? */}
         <div 
           onClick={() => setActiveActivity('activity1')}
           className="group cursor-pointer bg-slate-900 border-2 border-slate-800 hover:border-emerald-500 rounded-3xl p-8 transition-all duration-300 hover:shadow-[0_0_40px_rgba(16,185,129,0.15)] hover:-translate-y-2 flex flex-col items-center text-center relative overflow-hidden"
@@ -40,15 +40,15 @@ export default function ContentCatalogPage() {
           <div className="w-20 h-20 bg-emerald-950 border border-emerald-800 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
             <Map size={36} className="text-emerald-400" />
           </div>
-          <h2 className="text-2xl font-bold text-emerald-400 mb-4">1. Etkinlik: Haritalar NasÄ±l Okunur?</h2>
+          <h2 className="text-2xl font-bold text-emerald-400 mb-4">1. Etkinlik: Haritalar Nasıl Okunur?</h2>
           <div className="text-sm text-slate-400 leading-relaxed font-medium text-left w-full bg-slate-950/50 p-4 rounded-xl space-y-2">
-            <p><strong className="text-slate-300">Ã–ÄŸrenme Ã‡Ä±ktÄ±larÄ±:</strong> COÄ.9.2.1. Harita uygulamalarÄ± yapabilme</p>
-            <p><strong className="text-slate-300">SÃ¼reÃ§ BileÅŸeni:</strong> a) Haritaya ait bileÅŸenlerden yararlanarak haritalarÄ± okur.</p>
-            <p><strong className="text-slate-300">AraÃ§ Seti:</strong> Harita</p>
+            <p><strong className="text-slate-300">Öğrenme Çıktıları:</strong> COĞ.9.2.1. Harita uygulamaları yapabilme</p>
+            <p><strong className="text-slate-300">Süreç Bileşeni:</strong> a) Haritaya ait bileşenlerden yararlanarak haritaları okur.</p>
+            <p><strong className="text-slate-300">Araç Seti:</strong> Harita</p>
           </div>
         </div>
 
-        {/* 2. Kutu: CoÄŸrafi Koordinatlar */}
+        {/* 2. Kutu: Coğrafi Koordinatlar */}
         <div 
           onClick={() => setActiveActivity('activity2')}
           className="group cursor-pointer bg-slate-900 border-2 border-slate-800 hover:border-blue-500 rounded-3xl p-8 transition-all duration-300 hover:shadow-[0_0_40px_rgba(59,130,246,0.15)] hover:-translate-y-2 flex flex-col items-center text-center relative overflow-hidden"
@@ -57,15 +57,15 @@ export default function ContentCatalogPage() {
           <div className="w-20 h-20 bg-blue-950 border border-blue-800 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
             <Navigation size={36} className="text-blue-400" />
           </div>
-          <h2 className="text-2xl font-bold text-blue-400 mb-4">2. Etkinlik: CoÄŸrafi Koordinatlar</h2>
+          <h2 className="text-2xl font-bold text-blue-400 mb-4">2. Etkinlik: Coğrafi Koordinatlar</h2>
           <div className="text-sm text-slate-400 leading-relaxed font-medium text-left w-full bg-slate-950/50 p-4 rounded-xl space-y-2">
-            <p><strong className="text-slate-300">Ã–ÄŸrenme Ã‡Ä±ktÄ±larÄ±:</strong> COÄ.9.2.1. Harita uygulamalarÄ± yapabilme</p>
-            <p><strong className="text-slate-300">SÃ¼reÃ§ BileÅŸeni:</strong> a) Haritaya ait bileÅŸenlerden yararlanarak haritalarÄ± okur.</p>
-            <p><strong className="text-slate-300">AraÃ§ Seti:</strong> Harita</p>
+            <p><strong className="text-slate-300">Öğrenme Çıktıları:</strong> COĞ.9.2.1. Harita uygulamaları yapabilme</p>
+            <p><strong className="text-slate-300">Süreç Bileşeni:</strong> a) Haritaya ait bileşenlerden yararlanarak haritaları okur.</p>
+            <p><strong className="text-slate-300">Araç Seti:</strong> Harita</p>
           </div>
         </div>
 
-        {/* 3. Kutu: Yerel ve Ulusal Saat HesaplamalarÄ± */}
+        {/* 3. Kutu: Yerel ve Ulusal Saat Hesaplamaları */}
         <div 
           onClick={() => setActiveActivity('time-zones')}
           className="group cursor-pointer bg-slate-900 border-2 border-slate-800 hover:border-cyan-500 rounded-3xl p-8 transition-all duration-300 hover:shadow-[0_0_40px_rgba(6,182,212,0.15)] hover:-translate-y-2 flex flex-col items-center text-center relative overflow-hidden"
@@ -74,15 +74,15 @@ export default function ContentCatalogPage() {
           <div className="w-20 h-20 bg-cyan-950 border border-cyan-800 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
             <Clock size={36} className="text-cyan-400" />
           </div>
-          <h2 className="text-2xl font-bold text-cyan-400 mb-4">3. Etkinlik: Yerel ve Ulusal Saat HesaplamalarÄ±</h2>
+          <h2 className="text-2xl font-bold text-cyan-400 mb-4">3. Etkinlik: Yerel ve Ulusal Saat Hesaplamaları</h2>
           <div className="text-sm text-slate-400 leading-relaxed font-medium text-left w-full bg-slate-950/50 p-4 rounded-xl space-y-2">
-            <p><strong className="text-slate-300">Ã–ÄŸrenme Ã‡Ä±ktÄ±larÄ±:</strong> COÄ.9.2.2. DÃ¼nyaâ€™nÄ±n gÃ¼nlÃ¼k hareketine baÄŸlÄ± olarak yerel saat farklarÄ±nÄ± analiz eder.</p>
-            <p><strong className="text-slate-300">AraÃ§ Seti:</strong> DÃ¼nya Saati</p>
-            <p><strong className="text-slate-300">AÃ§Ä±klama:</strong> Meridyenler arasÄ± zaman farkÄ±nÄ± ve uluslararasÄ± saat dilimlerini interaktif olarak hesaplayÄ±n.</p>
+            <p><strong className="text-slate-300">Öğrenme Çıktıları:</strong> COĞ.9.2.2. Dünya’nın günlük hareketine bağlı olarak yerel saat farklarını analiz eder.</p>
+            <p><strong className="text-slate-300">Araç Seti:</strong> Dünya Saati</p>
+            <p><strong className="text-slate-300">Açıklama:</strong> Meridyenler arası zaman farkını ve uluslararası saat dilimlerini interaktif olarak hesaplayın.</p>
           </div>
         </div>
 
-        {/* 3. Kutu: Harita ProjeksiyonlarÄ± */}
+        {/* 3. Kutu: Harita Projeksiyonları */}
         <div 
           onClick={() => setActiveActivity('projections')}
           className="group cursor-pointer bg-slate-900 border-2 border-slate-800 hover:border-purple-500 rounded-3xl p-8 transition-all duration-300 hover:shadow-[0_0_40px_rgba(168,85,247,0.15)] hover:-translate-y-2 flex flex-col items-center text-center relative overflow-hidden"
@@ -91,15 +91,15 @@ export default function ContentCatalogPage() {
           <div className="w-20 h-20 bg-purple-950 border border-purple-800 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
             <Layers size={36} className="text-purple-400" />
           </div>
-          <h2 className="text-2xl font-bold text-purple-400 mb-4">4. Etkinlik: Harita ProjeksiyonlarÄ±</h2>
+          <h2 className="text-2xl font-bold text-purple-400 mb-4">4. Etkinlik: Harita Projeksiyonları</h2>
           <div className="text-sm text-slate-400 leading-relaxed font-medium text-left w-full bg-slate-950/50 p-4 rounded-xl space-y-2">
-            <p><strong className="text-slate-300">Ã–ÄŸrenme Ã‡Ä±ktÄ±larÄ±:</strong> COÄ.9.2.1</p>
-            <p><strong className="text-slate-300">SÃ¼reÃ§ BileÅŸeni:</strong> MekÃ¢nsal Ã‡Ä±karÄ±m ve Ä°liÅŸkilendirme</p>
+            <p><strong className="text-slate-300">Öğrenme Çıktıları:</strong> COĞ.9.2.1</p>
+            <p><strong className="text-slate-300">Süreç Bileşeni:</strong> Mekânsal Çıkarım ve İlişkilendirme</p>
             <p><strong className="text-slate-300">Zorluk:</strong> Orta</p>
           </div>
         </div>
 
-        {/* 4. Kutu: Harita Ã–lÃ§eÄŸi */}
+        {/* 4. Kutu: Harita Ölçeği */}
         <div 
           onClick={() => setActiveActivity('scale')}
           className="group cursor-pointer bg-slate-900 border-2 border-slate-800 hover:border-amber-500 rounded-3xl p-8 transition-all duration-300 hover:shadow-[0_0_40px_rgba(245,158,11,0.15)] hover:-translate-y-2 flex flex-col items-center text-center relative overflow-hidden"
@@ -108,15 +108,15 @@ export default function ContentCatalogPage() {
           <div className="w-20 h-20 bg-amber-950 border border-amber-800 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
             <Maximize size={36} className="text-amber-400" />
           </div>
-          <h2 className="text-2xl font-bold text-amber-400 mb-4">5. Etkinlik: Harita Ã–lÃ§eÄŸi ve Okuma</h2>
+          <h2 className="text-2xl font-bold text-amber-400 mb-4">5. Etkinlik: Harita Ölçeği ve Okuma</h2>
           <div className="text-sm text-slate-400 leading-relaxed font-medium text-left w-full bg-slate-950/50 p-4 rounded-xl space-y-2">
-            <p><strong className="text-slate-300">Ã–ÄŸrenme Ã‡Ä±ktÄ±larÄ±:</strong> COÄ.9.2.1.a</p>
-            <p><strong className="text-slate-300">SÃ¼reÃ§ BileÅŸeni:</strong> Harita BileÅŸenlerini Analiz Etme</p>
+            <p><strong className="text-slate-300">Öğrenme Çıktıları:</strong> COĞ.9.2.1.a</p>
+            <p><strong className="text-slate-300">Süreç Bileşeni:</strong> Harita Bileşenlerini Analiz Etme</p>
             <p><strong className="text-slate-300">Zorluk:</strong> Kolay</p>
           </div>
         </div>
 
-        {/* 6. Kutu: Harita TÃ¼rleri */}
+        {/* 6. Kutu: Harita Türleri */}
         <div 
           onClick={() => setActiveActivity('mapTypes')}
           className="group cursor-pointer bg-slate-900 border-2 border-slate-800 hover:border-violet-500 rounded-3xl p-8 transition-all duration-300 hover:shadow-[0_0_40px_rgba(139,92,246,0.15)] hover:-translate-y-2 flex flex-col items-center text-center relative overflow-hidden"
@@ -125,15 +125,15 @@ export default function ContentCatalogPage() {
           <div className="w-20 h-20 bg-violet-950 border border-violet-800 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
             <Layers size={36} className="text-violet-400" />
           </div>
-          <h2 className="text-2xl font-bold text-violet-400 mb-4">6. Etkinlik: Harita TÃ¼rleri</h2>
+          <h2 className="text-2xl font-bold text-violet-400 mb-4">6. Etkinlik: Harita Türleri</h2>
           <div className="text-sm text-slate-400 leading-relaxed font-medium text-left w-full bg-slate-950/50 p-4 rounded-xl space-y-2">
-            <p><strong className="text-slate-300">Ã–ÄŸrenme Ã‡Ä±ktÄ±larÄ±:</strong> COÄ.9.2.1.a</p>
-            <p><strong className="text-slate-300">SÃ¼reÃ§ BileÅŸeni:</strong> Harita BileÅŸenlerini Analiz Etme</p>
-            <p><strong className="text-slate-300">AraÃ§ Seti:</strong> Harita</p>
+            <p><strong className="text-slate-300">Öğrenme Çıktıları:</strong> COĞ.9.2.1.a</p>
+            <p><strong className="text-slate-300">Süreç Bileşeni:</strong> Harita Bileşenlerini Analiz Etme</p>
+            <p><strong className="text-slate-300">Araç Seti:</strong> Harita</p>
           </div>
         </div>
 
-        {/* 7. Kutu: Haritada YÃ¼kselti ve Yer Åekilleri */}
+        {/* 7. Kutu: Haritada Yükselti ve Yer Şekilleri */}
         <div 
           onClick={() => setActiveActivity('topoactivity')}
           className="group cursor-pointer bg-slate-900 border-2 border-slate-800 hover:border-orange-500 rounded-3xl p-8 transition-all duration-300 hover:shadow-[0_0_40px_rgba(249,115,22,0.15)] hover:-translate-y-2 flex flex-col items-center text-center relative overflow-hidden"
@@ -142,16 +142,16 @@ export default function ContentCatalogPage() {
           <div className="w-20 h-20 bg-orange-950 border border-orange-800 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
             <Mountain size={36} className="text-orange-400" />
           </div>
-          <h2 className="text-2xl font-bold text-orange-400 mb-4">7. Etkinlik: Haritada YÃ¼kselti ve Yer Åekilleri</h2>
+          <h2 className="text-2xl font-bold text-orange-400 mb-4">7. Etkinlik: Haritada Yükselti ve Yer Şekilleri</h2>
           <div className="text-sm text-slate-400 leading-relaxed font-medium text-left w-full bg-slate-950/50 p-4 rounded-xl space-y-2">
-            <p><strong className="text-slate-300">Ã–ÄŸrenme Ã‡Ä±ktÄ±larÄ±:</strong> COÄ.9.2.1. Harita uygulamalarÄ± yapabilme</p>
-            <p><strong className="text-slate-300">SÃ¼reÃ§ BileÅŸeni:</strong> a) Haritaya ait bileÅŸenlerden yararlanarak haritalarÄ± okur.</p>
-            <p><strong className="text-slate-300">SÃ¼reÃ§ BileÅŸeni:</strong> b) Haritaya ait bileÅŸenlerden yararlanarak haritadaki olay, olgu ve mekÃ¢nlar arasÄ± iliÅŸkileri Ã§Ã¶zÃ¼mler.</p>
-            <p><strong className="text-slate-300">AraÃ§ Seti:</strong> Harita</p>
+            <p><strong className="text-slate-300">Öğrenme Çıktıları:</strong> COĞ.9.2.1. Harita uygulamaları yapabilme</p>
+            <p><strong className="text-slate-300">Süreç Bileşeni:</strong> a) Haritaya ait bileşenlerden yararlanarak haritaları okur.</p>
+            <p><strong className="text-slate-300">Süreç Bileşeni:</strong> b) Haritaya ait bileşenlerden yararlanarak haritadaki olay, olgu ve mekânlar arası ilişkileri çözümler.</p>
+            <p><strong className="text-slate-300">Araç Seti:</strong> Harita</p>
           </div>
         </div>
 
-        {/* 8. Kutu: TÃ¼rkiye'nin CoÄŸrafi Konumu */}
+        {/* 8. Kutu: Türkiye'nin Coğrafi Konumu */}
         <div 
           onClick={() => setActiveActivity('location')}
           className="group cursor-pointer bg-slate-900 border-2 border-slate-800 hover:border-indigo-500 rounded-3xl p-8 transition-all duration-300 hover:shadow-[0_0_40px_rgba(99,102,241,0.15)] hover:-translate-y-2 flex flex-col items-center text-center relative overflow-hidden"
@@ -160,17 +160,17 @@ export default function ContentCatalogPage() {
           <div className="w-20 h-20 bg-indigo-950 border border-indigo-800 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
             <Compass size={36} className="text-indigo-400" />
           </div>
-          <h2 className="text-2xl font-bold text-indigo-400 mb-4">8. Etkinlik: TÃ¼rkiyeâ€™nin CoÄŸrafi Konumu</h2>
+          <h2 className="text-2xl font-bold text-indigo-400 mb-4">8. Etkinlik: Türkiye’nin Coğrafi Konumu</h2>
           <div className="text-sm text-slate-400 leading-relaxed font-medium text-left w-full bg-slate-950/50 p-4 rounded-xl space-y-2">
-            <p><strong className="text-slate-300">Ã–ÄŸrenme Ã‡Ä±ktÄ±larÄ±:</strong> COÄ.9.2.2. TÃ¼rkiyeâ€™nin konum Ã¶zelliklerini algÄ±layabilme</p>
-            <p><strong className="text-slate-300">SÃ¼reÃ§ BileÅŸeni:</strong> a) TÃ¼rkiyeâ€™nin konum Ã¶zelliklerini belirler.</p>
-            <p><strong className="text-slate-300">SÃ¼reÃ§ BileÅŸeni:</strong> b) TÃ¼rkiyeâ€™nin konum Ã¶zelliklerini gÃ¶rselleÅŸtirir.</p>
-            <p><strong className="text-slate-300">SÃ¼reÃ§ BileÅŸeni:</strong> c) TÃ¼rkiyeâ€™nin konum Ã¶zelliklerini Ã¶zetler.</p>
-            <p><strong className="text-slate-300">AraÃ§ Seti:</strong> Harita</p>
+            <p><strong className="text-slate-300">Öğrenme Çıktıları:</strong> COĞ.9.2.2. Türkiye’nin konum özelliklerini algılayabilme</p>
+            <p><strong className="text-slate-300">Süreç Bileşeni:</strong> a) Türkiye’nin konum özelliklerini belirler.</p>
+            <p><strong className="text-slate-300">Süreç Bileşeni:</strong> b) Türkiye’nin konum özelliklerini görselleştirir.</p>
+            <p><strong className="text-slate-300">Süreç Bileşeni:</strong> c) Türkiye’nin konum özelliklerini özetler.</p>
+            <p><strong className="text-slate-300">Araç Seti:</strong> Harita</p>
           </div>
         </div>
 
-        {/* 9. Kutu: MekÃ¢nsal Bilgi Teknolojileri */}
+        {/* 9. Kutu: Mekânsal Bilgi Teknolojileri */}
         <div 
           onClick={() => setActiveActivity('mekanBilgi')}
           className="group cursor-pointer bg-slate-900 border-2 border-slate-800 hover:border-pink-500 rounded-3xl p-8 transition-all duration-300 hover:shadow-[0_0_40px_rgba(236,72,153,0.15)] hover:-translate-y-2 flex flex-col items-center text-center relative overflow-hidden"
@@ -179,11 +179,11 @@ export default function ContentCatalogPage() {
           <div className="w-20 h-20 bg-pink-950 border border-pink-800 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
             <Database size={36} className="text-pink-400" />
           </div>
-          <h2 className="text-2xl font-bold text-pink-400 mb-4">9. Etkinlik: MekÃ¢nsal Bilgi Teknolojileri</h2>
+          <h2 className="text-2xl font-bold text-pink-400 mb-4">9. Etkinlik: Mekânsal Bilgi Teknolojileri</h2>
           <div className="text-sm text-slate-400 leading-relaxed font-medium text-left w-full bg-slate-950/50 p-4 rounded-xl space-y-2">
-            <p><strong className="text-slate-300">Ã–ÄŸrenme Ã‡Ä±ktÄ±larÄ±:</strong> COÄ.9.2.1. Harita uygulamalarÄ± yapabilme</p>
-            <p><strong className="text-slate-300">SÃ¼reÃ§ BileÅŸeni:</strong> b) Haritaya ait bileÅŸenlerden yararlanarak haritadaki olay, olgu ve mekÃ¢nlar arasÄ± iliÅŸkileri Ã§Ã¶zÃ¼mler.</p>
-            <p><strong className="text-slate-300">AraÃ§ Seti:</strong> Harita</p>
+            <p><strong className="text-slate-300">Öğrenme Çıktıları:</strong> COĞ.9.2.1. Harita uygulamaları yapabilme</p>
+            <p><strong className="text-slate-300">Süreç Bileşeni:</strong> b) Haritaya ait bileşenlerden yararlanarak haritadaki olay, olgu ve mekânlar arası ilişkileri çözümler.</p>
+            <p><strong className="text-slate-300">Araç Seti:</strong> Harita</p>
           </div>
         </div>
 
@@ -205,7 +205,7 @@ export default function ContentCatalogPage() {
         </div>
       </div>
 
-      {/* --- Aktif Modal / Tam Ekran Render AlanÄ± --- */}
+      {/* --- Aktif Modal / Tam Ekran Render Alanı --- */}
       {activeActivity === 'activity1' && (
         <MapReadingActivity onClose={() => setActiveActivity(null)} />
       )}
