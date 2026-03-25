@@ -31,15 +31,15 @@ const ELEVATION_COLORS = [
   { min:-3000, max:-1000, color:"#0a2a6e", label:"Derin deniz" },
   { min:-1000, max:-250,  color:"#1a4a9e", label:"Derin" },
   { min:-250,  max:0,     color:"#3a7acc", label:"Sığ deniz" },
-  { min:0,     max:250,   color:"#5ab85a", label:"Alçak ova (0-250m)" },
-  { min:250,   max:500,   color:"#92cc60", label:"Ova (250-500m)" },
-  { min:500,   max:750,   color:"#d4e060", label:"Yüksek ova (500-750m)" },
+  { min:0,     max:250,   color:"#5ab85a", label:"(0-250m)" },
+  { min:250,   max:500,   color:"#92cc60", label:"(250-500m)" },
+  { min:500,   max:750,   color:"#d4e060", label:"(500-750m)" },
   { min:750,   max:1000,  color:"#e8c840", label:"Yüksek alan" },
-  { min:1000,  max:1300,  color:"#d4a020", label:"Dağlık" },
+  { min:1000,  max:1300,  color:"#d4a020", label:"Dağlık alan" },
   { min:1300,  max:1600,  color:"#c47820", label:"Yüksek dağ" },
   { min:1600,  max:1900,  color:"#a05010", label:"Çok yüksek dağ" },
   { min:1900,  max:2500,  color:"#784030", label:"Alpin" },
-  { min:2500,  max:3932,  color:"#5a3040", label:"Kar sınırı üstü" },
+  { min:2500,  max:3932,  color:"#5a3040", label:"Kar sınırı üstü""Bulunduğu enleme göre değişir" },
 ];
 
 // ─── Yer şekilleri verisi ─────────────────────────────────────────────────────

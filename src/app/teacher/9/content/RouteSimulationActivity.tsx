@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
+import { FONT_MONO, BG_DARK, COLOR_INFO, COLOR_INFO_LIGHT, COLOR_INFO_DARK, COLOR_SUCCESS_BRIGHT, COLOR_ERROR, COLOR_ERROR_BRIGHT, COLOR_INFO_BRIGHT, COLOR_BLUE_STRONG } from "./theme";
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // KESİN KALİBRASYON — QGIS SVG + resim doğrulaması
@@ -182,35 +183,35 @@ export default function RouteSimulationActivity({ onClose }: { onClose: () => vo
 
   return (
     <div
-      style={{ position: "fixed", inset: 0, zIndex: 1000, background: "#060c18", display: "flex", flexDirection: "column", fontFamily: "'Courier New', monospace", touchAction: "none", userSelect: "none", WebkitUserSelect: "none", overscrollBehavior: "none" }}
+      style={{ position: "fixed", inset: 0, zIndex: 1000, background: BG_DARK, display: "flex", flexDirection: "column", fontFamily: FONT_MONO, touchAction: "none", userSelect: "none", WebkitUserSelect: "none", overscrollBehavior: "none" }}
       onWheel={(e) => e.preventDefault()}
     >
       {/* ── Üst bar ──────────────────────────────────────────────────────── */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 24px", height: "60px", borderBottom: "1px solid rgba(0,200,255,0.1)", background: "rgba(2,6,16,0.6)", flexShrink: 0, gap: "16px" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
           <div>
-            <div style={{ fontSize: "9px", letterSpacing: "3px", color: "#00c8ff", opacity: 0.55 }}>COĞRAFİ KOORDİNAT</div>
-            <div style={{ fontSize: "17px", fontWeight: "800", color: "#c8e0ff" }}>Drone Simülasyonu</div>
+            <div style={{ fontSize: "9px", letterSpacing: "3px", color: COLOR_INFO, opacity: 0.55 }}>COĞRAFİ KOORDİNAT</div>
+            <div style={{ fontSize: "17px", fontWeight: "800", color: COLOR_INFO_LIGHT }}>Drone Simülasyonu</div>
           </div>
           {/* Görev barı */}
           <div style={{ display: "flex", gap: "5px", alignItems: "center" }}>
             {[0,1,2,3,4].map((i) => (
               <div key={i} style={{ width: "28px", height: "5px", borderRadius: "3px", transition: "background 0.3s",
-                background: i<history.length ? (history[i]==="ok"?"#00ff88":"#ff4444") : i===mission&&phase!=="idle" ? "rgba(0,200,255,0.45)" : "rgba(255,255,255,0.07)" }} />
+                background: i<history.length ? (history[i]==="ok"?COLOR_SUCCESS_BRIGHT:COLOR_ERROR) : i===mission&&phase!=="idle" ? "rgba(0,200,255,0.45)" : "rgba(255,255,255,0.07)" }} />
             ))}
-            <span style={{ fontSize: "11px", color: "#4a7a9a", marginLeft: "6px", letterSpacing: "1px", fontWeight: "600" }}>
+            <span style={{ fontSize: "11px", color: COLOR_INFO_DARK, marginLeft: "6px", letterSpacing: "1px", fontWeight: "600" }}>
               {mission+1} / 5
             </span>
           </div>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
           <div style={{ textAlign: "right" }}>
-            <div style={{ fontSize: "10px", letterSpacing: "2px", color: "#4a7a9a", fontWeight: "700" }}>PUAN</div>
-            <div style={{ fontSize: "28px", fontWeight: "800", lineHeight: 1, color: score > 0 ? "#00ff88" : "#c8e0ff", transition: "color 0.3s" }}>{score}</div>
+            <div style={{ fontSize: "10px", letterSpacing: "2px", color: COLOR_INFO_DARK, fontWeight: "700" }}>PUAN</div>
+            <div style={{ fontSize: "28px", fontWeight: "800", lineHeight: 1, color: score > 0 ? COLOR_SUCCESS_BRIGHT : COLOR_INFO_LIGHT, transition: "color 0.3s" }}>{score}</div>
           </div>
           <button onClick={onClose}
-            style={{ padding: "8px 18px", background: "transparent", border: "1px solid rgba(255,80,80,0.3)", borderRadius: "7px", color: "#ff7070", fontSize: "12px", fontWeight: "700", letterSpacing: "1.5px", cursor: "pointer", fontFamily: "inherit", transition: "all 0.18s" }}
-            onMouseEnter={(e)=>{e.currentTarget.style.background="rgba(255,80,80,0.1)";e.currentTarget.style.borderColor="#ff7070";}}
+            style={{ padding: "8px 18px", background: "transparent", border: "1px solid rgba(255,80,80,0.3)", borderRadius: "7px", color: COLOR_ERROR_BRIGHT, fontSize: "12px", fontWeight: "700", letterSpacing: "1.5px", cursor: "pointer", fontFamily: "inherit", transition: "all 0.18s" }}
+            onMouseEnter={(e)=>{e.currentTarget.style.background="rgba(255,80,80,0.1)";e.currentTarget.style.borderColor=COLOR_ERROR_BRIGHT;}}
             onMouseLeave={(e)=>{e.currentTarget.style.background="transparent";e.currentTarget.style.borderColor="rgba(255,80,80,0.3)";}}>
             ✕ KAPAT
           </button>
@@ -221,7 +222,7 @@ export default function RouteSimulationActivity({ onClose }: { onClose: () => vo
       <div style={{ display: "flex", flex: 1, overflow: "hidden", minHeight: 0 }}>
 
         {/* Harita alanı */}
-        <div style={{ flex: 1, position: "relative", display: "flex", alignItems: "center", justifyContent: "center", padding: "8px 4px 8px 8px", background: "#060c18", overflow: "hidden" }}>
+        <div style={{ flex: 1, position: "relative", display: "flex", alignItems: "center", justifyContent: "center", padding: "8px 4px 8px 8px", background: BG_DARK, overflow: "hidden" }}>
           {/*
             Harita wrapper:
             - aspect ratio 841:595 korunur
@@ -266,7 +267,7 @@ export default function RouteSimulationActivity({ onClose }: { onClose: () => vo
                   {trail.length > 1 && (
                     <polyline
                       points={trail.map(p=>`${p.x},${p.y}`).join(" ")}
-                      fill="none" stroke="#00aaff" strokeWidth="1.6"
+                      fill="none" stroke={COLOR_INFO_BRIGHT} strokeWidth="1.6"
                       strokeDasharray="5,4" strokeLinecap="round" opacity="0.65"
                     />
                   )}
@@ -280,12 +281,12 @@ export default function RouteSimulationActivity({ onClose }: { onClose: () => vo
             {phase === "done" && (
               <div style={{ position: "absolute", inset: 0, background: "rgba(4,10,22,0.94)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "16px", zIndex: 10, borderRadius: "4px" }}>
                 <div style={{ fontSize: "52px" }}>🎯</div>
-                <div style={{ fontSize: "22px", fontWeight: "800", color: "#00ff88" }}>TÜM GÖREVLER TAMAMLANDI</div>
-                <div style={{ fontSize: "44px", fontWeight: "800", color: "#00c8ff" }}>{score} PUAN</div>
+                <div style={{ fontSize: "22px", fontWeight: "800", color: COLOR_SUCCESS_BRIGHT }}>TÜM GÖREVLER TAMAMLANDI</div>
+                <div style={{ fontSize: "44px", fontWeight: "800", color: COLOR_INFO }}>{score} PUAN</div>
                 <div style={{ fontSize: "14px", color: "#2a4a65", textAlign: "center", maxWidth: "340px" }}>
                   {score>=80?"🏆 MÜKEMMEL — Koordinat ustası!":score>=50?"👍 İYİ — Biraz daha pratik yap.":"📚 TEKRAR DENEYELİM — Haritayı dikkatli incele!"}
                 </div>
-                <button onClick={onClose} style={{ marginTop: "8px", padding: "12px 30px", background: "linear-gradient(90deg,#00c8ff,#0055ff)", border: "none", borderRadius: "8px", color: "#000", fontSize: "14px", fontWeight: "800", letterSpacing: "1.5px", cursor: "pointer", fontFamily: "inherit" }}>
+                <button onClick={onClose} style={{ marginTop: "8px", padding: "12px 30px", background: `linear-gradient(90deg,${COLOR_INFO},${COLOR_BLUE_STRONG})`, border: "none", borderRadius: "8px", color: "#000", fontSize: "14px", fontWeight: "800", letterSpacing: "1.5px", cursor: "pointer", fontFamily: "inherit" }}>
                   ANA MENÜYE DÖN
                 </button>
               </div>
@@ -332,7 +333,7 @@ function RightPanel({ selLon, selLat, onLon, onLat, phase, feedback, mission, sc
         <div style={{ background: "rgba(0,200,255,0.07)", border: "1px solid rgba(0,200,255,0.18)", borderRadius: "10px", padding: "16px 18px", marginTop: "12px" }}>
           <p style={{ fontSize: "14px", color: "#a0c8e8", lineHeight: "1.85", margin: 0, fontWeight: "500" }}>
             Haritadaki{" "}
-            <span style={{ color: "#ff6666", fontWeight: "800" }}>kırmızı bayrağı</span>{" "}
+            <span style={{ color: COLOR_ERROR_BRIGHT, fontWeight: "800" }}>kırmızı bayrağı</span>{" "}
             bul ve hangi{" "}
             <span style={{ color: "#33ddff", fontWeight: "700" }}>enlem</span> &{" "}
             <span style={{ color: "#33ddff", fontWeight: "700" }}>boylam</span>{" "}
@@ -360,10 +361,10 @@ function RightPanel({ selLon, selLat, onLon, onLat, phase, feedback, mission, sc
               disabled={flying}
               style={{
                 width: "100%", padding: "12px 14px",
-                background: selLon ? "rgba(0,200,255,0.1)" : "rgba(5,15,35,0.8)",
-                border: `2px solid ${selLon ? "#00c8ff" : "rgba(0,200,255,0.2)"}`,
+                background: selLat ? "rgba(0,200,255,0.1)" : "rgba(5,15,35,0.8)",
+                border: `2px solid ${selLat ? COLOR_INFO : "rgba(0,200,255,0.2)"}`,
                 borderRadius: "9px",
-                color: selLon ? "#e8f8ff" : "#3a6080",
+                color: selLat ? "#e8f8ff" : COLOR_INFO_DARK,
                 fontSize: "14px", fontFamily: "'Courier New', monospace", fontWeight: "600",
                 cursor: flying ? "not-allowed" : "pointer",
                 outline: "none", transition: "all 0.2s",
@@ -427,7 +428,7 @@ function RightPanel({ selLon, selLat, onLon, onLat, phase, feedback, mission, sc
           style={{
             width: "100%", padding: "16px",
             background: canSend
-              ? "linear-gradient(90deg, #0050e0 0%, #00a8e8 50%, #00c8ff 100%)"
+              ? `linear-gradient(90deg, #0050e0 0%, #00a8e8 50%, ${COLOR_INFO} 100%)`
               : "rgba(0,25,55,0.6)",
             border: canSend ? "none" : "1.5px solid rgba(0,200,255,0.1)",
             borderRadius: "10px",
@@ -525,7 +526,7 @@ function ScoreRow({ icon, label, value, color }: { icon: string; label: string; 
 function FeedbackBox({ phase, text }: { phase: Phase; text: string }) {
   const ok   = phase === "success";
   const fail = phase === "fail";
-  const c    = ok ? "#44ff99" : fail ? "#ff8080" : "#ffd060";
+  const c    = ok ? "#44ff99" : fail ? COLOR_ERROR_BRIGHT : "#ffd060";
   const bg   = ok ? "rgba(0,220,100,0.1)"  : fail ? "rgba(255,80,80,0.1)"  : "rgba(255,180,0,0.08)";
   const br   = ok ? "rgba(0,220,100,0.28)" : fail ? "rgba(255,80,80,0.28)" : "rgba(255,180,0,0.25)";
   const ic   = ok ? "✅" : fail ? "❌" : "⚠️";
@@ -555,7 +556,7 @@ function TargetMarker({ x, y, pulse, hit }: { x:number; y:number; pulse:number; 
       <circle cx={x} cy={y} r={4} fill={c} opacity="0.9" />
       <line x1={x} y1={y} x2={x} y2={y-28} stroke={c2} strokeWidth="1.8" strokeLinecap="round" />
       <polygon points={`${x},${y-28} ${x+16},${y-21} ${x},${y-14}`} fill={c} opacity="0.93" />
-      {hit&&<><circle cx={x} cy={y} r={20} fill="none" stroke="#00ff88" strokeWidth="2" opacity="0.35"/><circle cx={x} cy={y} r={30} fill="none" stroke="#00ff88" strokeWidth="1" opacity="0.18"/></>}
+      {hit&&<><circle cx={x} cy={y} r={20} fill="none" stroke={COLOR_SUCCESS_BRIGHT} strokeWidth="2" opacity="0.35"/><circle cx={x} cy={y} r={30} fill="none" stroke={COLOR_SUCCESS_BRIGHT} strokeWidth="1" opacity="0.18"/></>}
     </g>
   );
 }
@@ -583,11 +584,11 @@ function DroneMarker({ x, y, heading, propA }: { x:number; y:number; heading:num
           </g>
         );
       })}
-      <polygon points="-9,0 -5,-8 5,-8 9,0 5,8 -5,8" fill="#0e1e38" stroke="#00c8ff" strokeWidth="1.6" strokeLinejoin="round" />
+      <polygon points="-9,0 -5,-8 5,-8 9,0 5,8 -5,8" fill="#0e1e38" stroke={COLOR_INFO} strokeWidth="1.6" strokeLinejoin="round" />
       <polygon points="-5,0 -3,-4 3,-4 5,0 3,4 -3,4" fill="#162840" />
-      <circle r="2.8" fill="#00c8ff" opacity="0.55" />
+      <circle r="2.8" fill={COLOR_INFO} opacity="0.55" />
       <circle r="1.2" fill="#ffffff" opacity="0.5" />
-      <polygon points="0,-11 -3,-6 3,-6" fill="#00c8ff" opacity="0.6" />
+      <polygon points="0,-11 -3,-6 3,-6" fill={COLOR_INFO} opacity="0.6" />
       <line x1="-7" y1="7" x2="-7" y2="11" stroke="#162840" strokeWidth="1.2" />
       <line x1="7"  y1="7" x2="7"  y2="11" stroke="#162840" strokeWidth="1.2" />
       <line x1="-10" y1="11" x2="10" y2="11" stroke="#162840" strokeWidth="1.8" strokeLinecap="round" />

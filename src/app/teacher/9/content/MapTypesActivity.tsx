@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { FONT_SANS, FONT_MONO, BG_DARK, COLOR_SUCCESS, COLOR_ACCENT, COLOR_ERROR, COLOR_UA, COLOR_CBS, COLOR_BLUE, COLOR_PINK } from "./theme";
 
 // ─── Ses ─────────────────────────────────────────────────────────────────────
 function beep(f: number, d: number, t: OscillatorType = "sine", v = 0.15) {
@@ -61,7 +62,7 @@ const MAP_TYPES: MapType[] = [
     notFor: "Nokta ya da çizgi verilerini göstermek",
   },
   {
-    id: "izoplet", no: 3, name: "İzoplet / İzometrik Harita", color: "#8b5cf6", icon: "〰️",
+    id: "izoplet", no: 3, name: "İzoplet / İzometrik Harita", color: COLOR_UA, icon: "〰️",
     tagline: "Eşit değerleri birleştiren hatlar",
     description: "Belirli bir ögenin eşit yoğunluk veya dağılım değerlerinin birleştirilmesiyle oluşan hatların gösterildiği tematik haritalardır. İzometrik haritalarda aletle ölçülen değerler (yükselti, sıcaklık, yağış) kullanılır.",
     features: ["Eşdeğer noktalar çizgiyle birleştirilir","Sürekli alan verisi kabul edilir","Hatlar arası alanlar benzer değerleri gösterir","Hem doğal hem beşerî veriler için kullanılır"],
@@ -69,7 +70,7 @@ const MAP_TYPES: MapType[] = [
     notFor: "Sınırlarla ayrılmış bölge verilerini göstermek",
   },
   {
-    id: "noktalama", no: 4, name: "Noktalama Haritası", color: "#f59e0b", icon: "⚫",
+    id: "noktalama", no: 4, name: "Noktalama Haritası", color: COLOR_ACCENT, icon: "⚫",
     tagline: "Her nokta belirli bir miktarı temsil eder",
     description: "Mekânsal bir verinin dağılışını göstermek için sembollerin (daire, kare, üçgen vb.) kullanıldığı haritalardır. Harita üzerindeki her bir nokta belirli bir miktarı temsil eder. Nokta yoğunluğu = veri yoğunluğu.",
     features: ["Her nokta belirli miktarı temsil eder","Daire, kare, üçgen gibi semboller kullanılır","Yoğun nokta = yoğun dağılış","Görsel olarak kolayca okunur"],
@@ -77,7 +78,7 @@ const MAP_TYPES: MapType[] = [
     notFor: "Kesin sayısal değerleri göstermek",
   },
   {
-    id: "oransal", no: 5, name: "Oransal Sembol Haritası", color: "#ef4444", icon: "🔵",
+    id: "oransal", no: 5, name: "Oransal Sembol Haritası", color: COLOR_ERROR, icon: "🔵",
     tagline: "Büyüklük = değer miktarı",
     description: "Bir konuya ait verilerin ölçeklendirilmiş sembol ya da şekillerle gösterildiği haritalardır. Gösterilmek istenen coğrafi unsurun değerine göre sembolün boyutu değişir. En yaygın sembol dairedir.",
     features: ["Sembol boyutu veriyle orantılıdır","Daire, kare, çubuk veya ikon kullanılır","Değerler arasında görsel karşılaştırma sağlar","Konum ve miktar aynı anda gösterilir"],
@@ -85,7 +86,7 @@ const MAP_TYPES: MapType[] = [
     notFor: "Yoğunluk veya dağılış alanı göstermek",
   },
   {
-    id: "akis", no: 6, name: "Akış Haritası", color: "#06b6d4", icon: "➡️",
+    id: "akis", no: 6, name: "Akış Haritası", color: COLOR_CBS, icon: "➡️",
     tagline: "Hareket, yön ve miktar",
     description: "Akım ya da dinamik haritalar olarak da adlandırılır. Bir coğrafi unsurun hareket miktarını ve yönünü gösterir. Oklar yönü, ok kalınlığı ise miktarı ifade eder.",
     features: ["Hareket/göç yönünü gösterir","Ok kalınlığı miktarı ifade eder","Başlangıç ve bitiş noktaları bellidir","Zamana bağlı değişimi aktarabilir"],
@@ -93,7 +94,7 @@ const MAP_TYPES: MapType[] = [
     notFor: "Statik dağılış veya miktarları göstermek",
   },
   {
-    id: "kartogram", no: 7, name: "Kartogram Harita", color: "#ec4899", icon: "🗂️",
+    id: "kartogram", no: 7, name: "Kartogram Harita", color: COLOR_PINK, icon: "🗂️",
     tagline: "Alan boyutu = istatistiksel değer",
     description: "Kartogram haritalarda kıta, ülke veya il alanı bir istatistiksel verinin değerine göre boyutlandırılıp gösterilir. Gerçek coğrafi alan değil, veri büyüklüğü ön plandadır.",
     features: ["Coğrafi alan veri değerine göre şekillenir","Sosyoekonomik değişkenler için idealdir","Gerçek coğrafi şekil bozulur","CBS ve bilgisayar teknolojileriyle yaygınlaşmıştır"],
@@ -115,12 +116,6 @@ const TEST_ITEMS: TestQuestion[] = [
   { type:"compare",  q:"Haritada sembol kullanılıyor ve sembolün büyüklüğü değerle doğru orantılı. Bu hangi yöntemdir?", opts:["Noktalama","Oransal Sembol","Kartogram","Akış"], correct:1, exp:"Oransal sembol haritasında sembol büyüklüğü veriyle orantılıdır (büyük daire = büyük değer). Noktalama haritasında ise sabit büyüklükte semboller kullanılır ve nokta sayısı değeri temsil eder." },
 ];
 
-// ─── Stil sabitleri ───────────────────────────────────────────────────────────
-const FONT = "'Segoe UI','Helvetica Neue',Arial,sans-serif";
-const MONO = "'Courier New',monospace";
-const BG   = "#07120e";
-const C_GREEN = "#10b981";
-
 // ═══════════════════════════════════════════════════════════════════════════════
 export default function MapTypesActivity({ onClose }: { onClose: () => void }) {
   const [phase, setPhase] = useState<Phase>("learn");
@@ -140,21 +135,21 @@ export default function MapTypesActivity({ onClose }: { onClose: () => void }) {
 
   return (
     <div
-      style={{ position:"fixed", inset:0, zIndex:1000, background:BG, display:"flex", flexDirection:"column", fontFamily:FONT, touchAction:"none", userSelect:"none", WebkitUserSelect:"none" }}
+      style={{ position:"fixed", inset:0, zIndex:1000, background:BG_DARK, display:"flex", flexDirection:"column", fontFamily:FONT_SANS, touchAction:"none", userSelect:"none", WebkitUserSelect:"none" }}
       onWheel={e=>e.preventDefault()}
     >
       {/* Üst bar */}
       <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", padding:"0 28px", height:"64px", borderBottom:"1px solid rgba(16,185,129,0.2)", background:"rgba(2,8,6,0.8)", flexShrink:0 }}>
         <div style={{ display:"flex", alignItems:"center", gap:"28px" }}>
           <div>
-            <div style={{ fontSize:"10px", letterSpacing:"4px", color:C_GREEN, opacity:0.6, fontFamily:MONO }}>HARİTA TÜRLERİ</div>
+            <div style={{ fontSize:"10px", letterSpacing:"4px", color:COLOR_SUCCESS, opacity:0.6, fontFamily:FONT_MONO }}>HARİTA TÜRLERİ</div>
             <div style={{ fontSize:"20px", fontWeight:"800", color:"#d1fae5", letterSpacing:"-0.3px" }}>Dağılış & Tematik Haritalar</div>
           </div>
           <div style={{ display:"flex", gap:"3px", background:"rgba(0,0,0,0.4)", padding:"4px", borderRadius:"10px" }}>
             {TABS.map(t=>(
               <button key={t.id} onClick={()=>{sndClick();setPhase(t.id);}}
-                style={{ padding:"8px 20px", borderRadius:"7px", border:"none", cursor:"pointer", fontFamily:FONT, fontSize:"12px", fontWeight:"700", letterSpacing:"0.5px", transition:"all 0.18s",
-                  background: phase===t.id ? C_GREEN : "transparent",
+                style={{ padding:"8px 20px", borderRadius:"7px", border:"none", cursor:"pointer", fontFamily:FONT_SANS, fontSize:"12px", fontWeight:"700", letterSpacing:"0.5px", transition:"all 0.18s",
+                  background: phase===t.id ? COLOR_SUCCESS : "transparent",
                   color:      phase===t.id ? "#000"   : "#1a6040" }}>
                 {t.icon} {t.label}
               </button>
@@ -162,7 +157,7 @@ export default function MapTypesActivity({ onClose }: { onClose: () => void }) {
           </div>
         </div>
         <button onClick={onClose}
-          style={{ padding:"8px 18px", background:"transparent", border:"1px solid rgba(255,80,80,0.3)", borderRadius:"8px", color:"#ff7070", fontSize:"12px", fontWeight:"700", cursor:"pointer", fontFamily:FONT }}
+          style={{ padding:"8px 18px", background:"transparent", border:"1px solid rgba(255,80,80,0.3)", borderRadius:"8px", color:"#ff7070", fontSize:"12px", fontWeight:"700", cursor:"pointer", fontFamily:FONT_SANS }}
           onMouseEnter={e=>{e.currentTarget.style.background="rgba(255,80,80,0.1)";}}
           onMouseLeave={e=>{e.currentTarget.style.background="transparent";}}>
           ✕ KAPAT
@@ -187,13 +182,13 @@ function LearnPanel({ selected, onSelect }: { selected: MapType; onSelect: (t: M
 
       {/* Sol: harita türü listesi */}
       <div style={{ width:"280px", flexShrink:0, borderRight:"1px solid rgba(16,185,129,0.12)", background:"rgba(2,10,6,0.6)", overflowY:"auto", padding:"20px 16px" }}>
-        <div style={{ fontSize:"11px", letterSpacing:"2px", color:"#1a6040", fontWeight:"800", marginBottom:"14px", fontFamily:FONT }}>7 HARİTA TÜRÜ</div>
+        <div style={{ fontSize:"11px", letterSpacing:"2px", color:"#1a6040", fontWeight:"800", marginBottom:"14px", fontFamily:FONT_SANS }}>7 HARİTA TÜRÜ</div>
         <div style={{ display:"flex", flexDirection:"column", gap:"6px" }}>
           {MAP_TYPES.map(mt=>{
             const active = selected.id === mt.id;
             return (
               <button key={mt.id} onClick={()=>onSelect(mt)}
-                style={{ padding:"12px 14px", background:active?`${mt.color}18`:"rgba(0,0,0,0.2)", border:`2px solid ${active?mt.color:"rgba(16,185,129,0.08)"}`, borderRadius:"10px", cursor:"pointer", textAlign:"left", fontFamily:FONT, transition:"all 0.18s" }}>
+                style={{ padding:"12px 14px", background:active?`${mt.color}18`:"rgba(0,0,0,0.2)", border:`2px solid ${active?mt.color:"rgba(16,185,129,0.08)"}`, borderRadius:"10px", cursor:"pointer", textAlign:"left", fontFamily:FONT_SANS, transition:"all 0.18s" }}>
                 <div style={{ display:"flex", alignItems:"center", gap:"10px" }}>
                   <span style={{ fontSize:"20px", lineHeight:1 }}>{mt.icon}</span>
                   <div>
@@ -206,20 +201,20 @@ function LearnPanel({ selected, onSelect }: { selected: MapType; onSelect: (t: M
           })}
         </div>
         <div style={{ marginTop:"20px", padding:"12px 14px", background:"rgba(16,185,129,0.05)", border:"1px solid rgba(16,185,129,0.1)", borderRadius:"8px" }}>
-          <div style={{ fontSize:"11px", color:C_GREEN, fontWeight:"800", marginBottom:"6px" }}>💡 BİLGİ</div>
-          <p style={{ fontSize:"12px", color:"#1a5030", lineHeight:"1.7", margin:0 }}>Harita türü, görselleştirilmek istenen <strong style={{ color:C_GREEN }}>veri türü</strong> ve iletilmek istenen <strong style={{ color:C_GREEN }}>mesaja</strong> göre seçilir.</p>
+          <div style={{ fontSize:"11px", color:COLOR_SUCCESS, fontWeight:"800", marginBottom:"6px" }}>💡 BİLGİ</div>
+          <p style={{ fontSize:"12px", color:"#1a5030", lineHeight:"1.7", margin:0 }}>Harita türü, görselleştirilmek istenen <strong style={{ color:COLOR_SUCCESS }}>veri türü</strong> ve iletilmek istenen <strong style={{ color:COLOR_SUCCESS }}>mesaja</strong> göre seçilir.</p>
         </div>
       </div>
 
       {/* Orta: detay bilgi */}
-      <div style={{ flex:1, overflowY:"auto", padding:"28px 32px", display:"flex", flexDirection:"column", gap:"22px", background:`radial-gradient(ellipse at 20% 20%, ${selected.color}08 0%, ${BG} 60%)` }}>
+      <div style={{ flex:1, overflowY:"auto", padding:"28px 32px", display:"flex", flexDirection:"column", gap:"22px", background:`radial-gradient(ellipse at 20% 20%, ${selected.color}08 0%, ${BG_DARK} 60%)` }}>
 
         {/* Başlık */}
         <div>
           <div style={{ display:"flex", alignItems:"center", gap:"14px", marginBottom:"12px" }}>
             <span style={{ fontSize:"44px", lineHeight:1 }}>{selected.icon}</span>
             <div>
-              <div style={{ fontSize:"11px", letterSpacing:"2px", color:selected.color, opacity:0.7, fontFamily:MONO }}>{selected.no}. HARİTA TÜRÜ</div>
+              <div style={{ fontSize:"11px", letterSpacing:"2px", color:selected.color, opacity:0.7, fontFamily:FONT_MONO }}>{selected.no}. HARİTA TÜRÜ</div>
               <div style={{ fontSize:"26px", fontWeight:"800", color:"#d1fae5" }}>{selected.name}</div>
               <div style={{ fontSize:"14px", color:selected.color, fontWeight:"600", marginTop:"3px" }}>{selected.tagline}</div>
             </div>
@@ -235,7 +230,7 @@ function LearnPanel({ selected, onSelect }: { selected: MapType; onSelect: (t: M
         {/* Özellikler + Örnekler */}
         <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"16px" }}>
           <div style={{ padding:"18px 20px", background:"rgba(0,0,0,0.3)", border:`1px solid ${selected.color}18`, borderRadius:"12px" }}>
-            <div style={{ fontSize:"12px", color:selected.color, fontWeight:"800", letterSpacing:"1px", marginBottom:"12px", fontFamily:FONT }}>✓ ÖZELLİKLER</div>
+            <div style={{ fontSize:"12px", color:selected.color, fontWeight:"800", letterSpacing:"1px", marginBottom:"12px", fontFamily:FONT_SANS }}>✓ ÖZELLİKLER</div>
             <div style={{ display:"flex", flexDirection:"column", gap:"8px" }}>
               {selected.features.map(f=>(
                 <div key={f} style={{ display:"flex", gap:"8px", alignItems:"flex-start" }}>
@@ -246,7 +241,7 @@ function LearnPanel({ selected, onSelect }: { selected: MapType; onSelect: (t: M
             </div>
           </div>
           <div style={{ padding:"18px 20px", background:"rgba(0,0,0,0.3)", border:`1px solid ${selected.color}18`, borderRadius:"12px" }}>
-            <div style={{ fontSize:"12px", color:selected.color, fontWeight:"800", letterSpacing:"1px", marginBottom:"12px", fontFamily:FONT }}>📌 ÖRNEK KULLANIM</div>
+            <div style={{ fontSize:"12px", color:selected.color, fontWeight:"800", letterSpacing:"1px", marginBottom:"12px", fontFamily:FONT_SANS }}>📌 ÖRNEK KULLANIM</div>
             <div style={{ display:"flex", flexDirection:"column", gap:"8px" }}>
               {selected.examples.map(e=>(
                 <div key={e} style={{ display:"flex", gap:"8px", alignItems:"flex-start" }}>
@@ -273,7 +268,7 @@ function LearnPanel({ selected, onSelect }: { selected: MapType; onSelect: (t: M
 
       {/* Sağ: karşılaştırma tablosu */}
       <div style={{ width:"300px", flexShrink:0, borderLeft:"1px solid rgba(16,185,129,0.12)", background:"rgba(2,10,6,0.6)", overflowY:"auto", padding:"20px 16px" }}>
-        <div style={{ fontSize:"11px", letterSpacing:"2px", color:"#1a6040", fontWeight:"800", marginBottom:"14px", fontFamily:FONT }}>KARŞILAŞTIRMA</div>
+        <div style={{ fontSize:"11px", letterSpacing:"2px", color:"#1a6040", fontWeight:"800", marginBottom:"14px", fontFamily:FONT_SANS }}>KARŞILAŞTIRMA</div>
         <div style={{ display:"flex", flexDirection:"column", gap:"6px" }}>
           {[
             { label:"Veri türü",       vals:{korokromatik:"Alan",koroplet:"Nicel",izoplet:"Sürekli",noktalama:"Dağılış",oransal:"Miktar",akis:"Hareket",kartogram:"İstatistik"} },
@@ -301,7 +296,7 @@ function LearnPanel({ selected, onSelect }: { selected: MapType; onSelect: (t: M
             { sembol:"Alan",  ornekler:["Ülke","Göl","Orman","Tarım alanı"] },
           ].map(s=>(
             <div key={s.sembol} style={{ padding:"10px 12px", background:"rgba(0,0,0,0.2)", border:"1px solid rgba(16,185,129,0.08)", borderRadius:"8px" }}>
-              <div style={{ fontSize:"12px", color:C_GREEN, fontWeight:"700", marginBottom:"5px" }}>{s.sembol}</div>
+              <div style={{ fontSize:"12px", color:COLOR_SUCCESS, fontWeight:"700", marginBottom:"5px" }}>{s.sembol}</div>
               <div style={{ fontSize:"11px", color:"#2a5040" }}>{s.ornekler.join(" · ")}</div>
             </div>
           ))}
@@ -312,7 +307,7 @@ function LearnPanel({ selected, onSelect }: { selected: MapType; onSelect: (t: M
         <div style={{ display:"flex", flexWrap:"wrap", gap:"5px" }}>
           {MAP_TYPES.map(mt=>(
             <button key={mt.id} onClick={()=>onSelect(mt)}
-              style={{ padding:"5px 10px", background:selected.id===mt.id?`${mt.color}20`:"rgba(0,0,0,0.2)", border:`1px solid ${selected.id===mt.id?mt.color:"rgba(16,185,129,0.1)"}`, borderRadius:"6px", cursor:"pointer", fontSize:"11px", color:selected.id===mt.id?mt.color:"#2a5040", fontWeight:"700", fontFamily:FONT }}>
+              style={{ padding:"5px 10px", background:selected.id===mt.id?`${mt.color}20`:"rgba(0,0,0,0.2)", border:`1px solid ${selected.id===mt.id?mt.color:"rgba(16,185,129,0.1)"}`, borderRadius:"6px", cursor:"pointer", fontSize:"11px", color:selected.id===mt.id?mt.color:"#2a5040", fontWeight:"700", fontFamily:FONT_SANS }}>
               {mt.no}. {mt.icon}
             </button>
           ))}
@@ -328,7 +323,7 @@ function MapTypeVisual({ type }: { type: MapType }) {
   const c = type.color;
   return (
     <div style={{ padding:"16px 20px", background:"rgba(0,0,0,0.25)", border:`1px solid ${c}15`, borderRadius:"12px" }}>
-      <div style={{ fontSize:"11px", color:c, letterSpacing:"2px", fontWeight:"800", marginBottom:"12px", fontFamily:FONT }}>GÖRSEL TEMSİL</div>
+      <div style={{ fontSize:"11px", color:c, letterSpacing:"2px", fontWeight:"800", marginBottom:"12px", fontFamily:FONT_SANS }}>GÖRSEL TEMSİL</div>
       <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ width:"100%", maxWidth:W, display:"block" }}>
         {/* Arka plan */}
         <rect width={W} height={H} fill="rgba(0,0,0,0.2)" rx="8"/>
@@ -498,17 +493,17 @@ function TestPanel() {
   if (done) {
     const pct = Math.round((score / (TEST_ITEMS.length*20))*100);
     return (
-      <div style={{ flex:1, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", gap:"18px", background:`radial-gradient(ellipse at center,#051a0e 0%,${BG} 100%)` }}>
+      <div style={{ flex:1, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", gap:"18px", background:`radial-gradient(ellipse at center,#051a0e 0%,${BG_DARK} 100%)` }}>
         <div style={{ fontSize:"60px" }}>🗺️</div>
-        <div style={{ fontSize:"28px", fontWeight:"800", color:"#d1fae5", fontFamily:FONT }}>TEST TAMAMLANDI!</div>
-        <div style={{ fontSize:"52px", fontWeight:"800", color:pct>=80?C_GREEN:pct>=50?"#f59e0b":"#ef4444", fontFamily:MONO }}>{score} PUAN</div>
-        <div style={{ fontSize:"15px", color:"#1a6040", fontFamily:FONT }}>{answers.filter(Boolean).length}/{TEST_ITEMS.length} doğru · %{pct} başarı</div>
-        <div style={{ fontSize:"15px", color:"#3a8060", textAlign:"center", maxWidth:"420px", lineHeight:"1.8", fontFamily:FONT }}>
+        <div style={{ fontSize:"28px", fontWeight:"800", color:"#d1fae5", fontFamily:FONT_SANS }}>TEST TAMAMLANDI!</div>
+        <div style={{ fontSize:"52px", fontWeight:"800", color:pct>=80?COLOR_SUCCESS:pct>=50?COLOR_ACCENT:COLOR_ERROR, fontFamily:FONT_MONO }}>{score} PUAN</div>
+        <div style={{ fontSize:"15px", color:"#1a6040", fontFamily:FONT_SANS }}>{answers.filter(Boolean).length}/{TEST_ITEMS.length} doğru · %{pct} başarı</div>
+        <div style={{ fontSize:"15px", color:"#3a8060", textAlign:"center", maxWidth:"420px", lineHeight:"1.8", fontFamily:FONT_SANS }}>
           {pct>=80?"🏆 Mükemmel! Harita türlerini çok iyi öğrendin.":pct>=50?"👍 İyi! Öğren sekmesindeki karşılaştırma tablosunu tekrar incele.":"📚 Tekrar dene! Her harita türünün örneğini incele."}
         </div>
         <div style={{ display:"flex", gap:"12px" }}>
           <button onClick={retry}
-            style={{ padding:"13px 30px", background:"transparent", border:`2px solid ${C_GREEN}40`, borderRadius:"10px", color:C_GREEN, fontSize:"14px", fontWeight:"800", cursor:"pointer", fontFamily:FONT }}
+            style={{ padding:"13px 30px", background:"transparent", border:`2px solid ${COLOR_SUCCESS}40`, borderRadius:"10px", color:COLOR_SUCCESS, fontSize:"14px", fontWeight:"800", cursor:"pointer", fontFamily:FONT_SANS }}
             onMouseEnter={e=>{e.currentTarget.style.background=`${C_GREEN}10`;}}
             onMouseLeave={e=>{e.currentTarget.style.background="transparent";}}>
             🔄 Tekrar Dene
@@ -600,18 +595,18 @@ function TestPanel() {
 
         {/* Açıklama */}
         {selected!==null && (
-          <div style={{ maxWidth:"680px", width:"100%", padding:"18px 22px", background:selected===q.correct?`${C_GREEN}08`:"rgba(239,68,68,0.08)", border:`2px solid ${selected===q.correct?`${C_GREEN}28`:"rgba(239,68,68,0.28)"}`, borderRadius:"14px" }}>
-            <div style={{ fontSize:"16px", fontWeight:"800", color:selected===q.correct?C_GREEN:"#ef4444", marginBottom:"10px", fontFamily:FONT }}>
+          <div style={{ maxWidth:"680px", width:"100%", padding:"18px 22px", background:selected===q.correct?`${COLOR_SUCCESS}08`:"rgba(239,68,68,0.08)", border:`2px solid ${selected===q.correct?`${COLOR_SUCCESS}28`:"rgba(239,68,68,0.28)"}`, borderRadius:"14px" }}>
+            <div style={{ fontSize:"16px", fontWeight:"800", color:selected===q.correct?COLOR_SUCCESS:COLOR_ERROR, marginBottom:"10px", fontFamily:FONT_SANS }}>
               {selected===q.correct?"✅ DOĞRU!":"❌ YANLIŞ!"}
             </div>
-            <p style={{ fontSize:"14px", color:"#4a8060", lineHeight:"1.85", margin:0, fontWeight:"500", fontFamily:FONT }}>{q.exp}</p>
+            <p style={{ fontSize:"14px", color:"#4a8060", lineHeight:"1.85", margin:0, fontWeight:"500", fontFamily:FONT_SANS }}>{q.exp}</p>
           </div>
         )}
 
         {/* İleri */}
         {selected!==null && (
           <button onClick={next}
-            style={{ padding:"14px 38px", background:`linear-gradient(90deg,#065f46,${C_GREEN})`, border:"none", borderRadius:"11px", color:"#000", fontSize:"15px", fontWeight:"800", letterSpacing:"1.5px", cursor:"pointer", fontFamily:FONT, boxShadow:`0 4px 22px ${C_GREEN}40` }}
+            style={{ padding:"14px 38px", background:`linear-gradient(90deg,#065f46,${COLOR_SUCCESS})`, border:"none", borderRadius:"11px", color:"#000", fontSize:"15px", fontWeight:"800", letterSpacing:"1.5px", cursor:"pointer", fontFamily:FONT_SANS, boxShadow:`0 4px 22px ${COLOR_SUCCESS}40` }}
             onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-2px)";}}
             onMouseLeave={e=>{e.currentTarget.style.transform="none";}}>
             {qIdx>=TEST_ITEMS.length-1?"🏁 Sonuçları Gör":"⏭ Sonraki Soru"}

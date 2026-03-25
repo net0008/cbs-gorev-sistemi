@@ -1,5 +1,6 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
+import { FONT_SANS, FONT_MONO, BG_DARK, COLOR_LOCATION, COLOR_SUCCESS, COLOR_ERROR, COLOR_ACCENT, COLOR_UA, COLOR_CBS, COLOR_TOPO, COLOR_PINK, COLOR_BLUE, COLOR_SECONDARY } from "./theme";
 
 function beep(f: number, d: number, t: OscillatorType = "sine", v = 0.13) {
   try {
@@ -17,11 +18,6 @@ const sndOK    = () => [440,554,660].forEach((f,i) => setTimeout(() => beep(f,0.
 const sndFail  = () => beep(200,0.28,"sawtooth",0.11);
 const sndClick = () => beep(700,0.07,"square",0.06);
 const sndDrop  = () => beep(500,0.12,"sine",0.10);
-
-const FONT = "'Segoe UI','Helvetica Neue',Arial,sans-serif";
-const MONO = "'Courier New',monospace";
-const BG   = "#05080f";
-const C    = "#6366f1";
 type Tab = "learn"|"act1"|"act2"|"act3"|"test";
 
 // Komsu ulkeler
@@ -172,7 +168,7 @@ function LearnTab() {
             { id:"jeopolitik" as const,icon:"⚡",  title:"Jeopolitik Onem", sub:"Bogazlar & enerji & kultur" },
           ]).map(s=>(
             <button key={s.id} onClick={()=>{sndClick();setSection(s.id);}}
-              style={{ padding:"12px 14px", background:section===s.id?`${C}18`:"rgba(0,0,0,0.22)", border:`2px solid ${section===s.id?C:"rgba(99,102,241,0.08)"}`, borderRadius:"10px", cursor:"pointer", textAlign:"left", fontFamily:FONT, transition:"all 0.18s" }}>
+              style={{ padding:"12px 14px", background:section===s.id?`${COLOR_LOCATION}18`:"rgba(0,0,0,0.22)", border:`2px solid ${section===s.id?COLOR_LOCATION:"rgba(99,102,241,0.08)"}`, borderRadius:"10px", cursor:"pointer", textAlign:"left", fontFamily:FONT_SANS, transition:"all 0.18s" }}>
               <div style={{ fontSize:"18px", marginBottom:"4px" }}>{s.icon}</div>
               <div style={{ fontSize:"13px", fontWeight:"800", color:section===s.id?"#c7d2fe":"#3a3a6a" }}>{s.title}</div>
               <div style={{ fontSize:"11px", color:section===s.id?`${C}88`:"#2a2a4a", marginTop:"2px" }}>{s.sub}</div>
@@ -184,42 +180,42 @@ function LearnTab() {
         <div style={{ marginTop:"10px", display:"flex", flexDirection:"column", gap:"6px" }}>
           {[["36-42 Kuzey paraleli","Kuzey Yarim Kure"],["26-45 Dogu meridyeni","Dogu Yarim Kure"],["8 kara komsulari","D/G/B"],["13 deniz komsulari","3 deniz: K/E/A"],["76 dk saat farki","Dogu-Bati arasi"]].map(([k,v])=>(
             <div key={k} style={{ display:"flex", justifyContent:"space-between", padding:"6px 10px", background:"rgba(0,0,0,0.2)", borderRadius:"6px" }}>
-              <span style={{ fontSize:"11px", color:"#6366f1", fontWeight:"700" }}>{k}</span>
+              <span style={{ fontSize:"11px", color:COLOR_LOCATION, fontWeight:"700" }}>{k}</span>
               <span style={{ fontSize:"11px", color:"#3a3a6a" }}>{v}</span>
             </div>
           ))}
         </div>
       </div>
-      <div style={{ flex:1, overflowY:"auto", padding:"26px 32px", display:"flex", flexDirection:"column", gap:"20px", background:`radial-gradient(ellipse at 20% 20%,${C}08 0%,${BG} 70%)` }}>
+      <div style={{ flex:1, overflowY:"auto", padding:"26px 32px", display:"flex", flexDirection:"column", gap:"20px", background:`radial-gradient(ellipse at 20% 20%,${COLOR_LOCATION}08 0%,${BG_DARK} 70%)` }}>
         {section==="mutlak" && <>
-          <SectionHeader icon="📍" color={C} title="Mutlak Konum" sub="Koordinatlarla kesin konum belirleme"/>
-          <InfoCard color={C}><p style={{ fontSize:"14px", color:"#c7d2fe", lineHeight:"1.9", margin:0, fontWeight:"500" }}>Ekvator ve baslangic meridyenine gore belirlenen kesin konum <strong style={{ color:C }}>mutlak konum</strong>'dur.</p></InfoCard>
-          <div style={{ width:"100%", maxWidth:"840px", margin:"0 auto", padding:"16px 20px", background:"rgba(0,0,0,0.28)", border:`1px solid ${C}18`, borderRadius:"12px" }}>
-            <div style={{ fontSize:"11px", color:C, letterSpacing:"2px", fontWeight:"800", marginBottom:"12px", fontFamily:FONT }}>TURKIYE'NIN KOORDINATLARI</div>
+          <SectionHeader icon="📍" color={COLOR_LOCATION} title="Mutlak Konum" sub="Koordinatlarla kesin konum belirleme"/>
+          <InfoCard color={COLOR_LOCATION}><p style={{ fontSize:"14px", color:"#c7d2fe", lineHeight:"1.9", margin:0, fontWeight:"500" }}>Ekvator ve baslangic meridyenine gore belirlenen kesin konum <strong style={{ color:COLOR_LOCATION }}>mutlak konum</strong>'dur.</p></InfoCard>
+          <div style={{ width:"100%", maxWidth:"840px", margin:"0 auto", padding:"16px 20px", background:"rgba(0,0,0,0.28)", border:`1px solid ${COLOR_LOCATION}18`, borderRadius:"12px" }}>
+            <div style={{ fontSize:"11px", color:COLOR_LOCATION, letterSpacing:"2px", fontWeight:"800", marginBottom:"12px", fontFamily:FONT_SANS }}>TURKIYE'NIN KOORDINATLARI</div>
             <iframe style={{ width:"100%", height:"500px", border:0, borderRadius:"8px" }} allowFullScreen allow="geolocation"
               src="//umap.openstreetmap.fr/tr/map/turkiyenin-matematik-konumu_1380349?scaleControl=false&miniMap=false&scrollWheelZoom=true&zoomControl=false&editMode=disabled&moreControl=false&searchControl=false&tilelayersControl=false&embedControl=false&datalayersControl=false&onLoadPanel=none&captionBar=false&captionMenus=false&homeControl=false&fullscreenControl=false&captionControl=false&locateControl=false&measureControl=false&printControl=false#5/39.044786/36.210938"
               title="Turkiye Matematik Konumu"/>
           </div>
           <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"14px" }}>
-            <InfoBox color="#10b981" title="KUZEY YARI KURE" icon="⬆️"><div style={{ fontSize:"13px", color:"#3a6a50", lineHeight:"1.8" }}>Turkiye <strong style={{ color:"#10b981" }}>36 - 42 Kuzey</strong> paralelleri arasindadir.</div></InfoBox>
-            <InfoBox color={C} title="DOGU YARI KURE" icon="➡️"><div style={{ fontSize:"13px", color:"#3a3a6a", lineHeight:"1.8" }}>Turkiye <strong style={{ color:C }}>26 - 45 Dogu</strong> meridyenleri arasindadir. <strong style={{ color:C }}>76 dakika</strong> yerel saat farki vardir.</div></InfoBox>
+            <InfoBox color={COLOR_SUCCESS} title="KUZEY YARI KURE" icon="⬆️"><div style={{ fontSize:"13px", color:"#3a6a50", lineHeight:"1.8" }}>Turkiye <strong style={{ color:COLOR_SUCCESS }}>36 - 42 Kuzey</strong> paralelleri arasindadir.</div></InfoBox>
+            <InfoBox color={COLOR_LOCATION} title="DOGU YARI KURE" icon="➡️"><div style={{ fontSize:"13px", color:"#3a3a6a", lineHeight:"1.8" }}>Turkiye <strong style={{ color:COLOR_LOCATION }}>26 - 45 Dogu</strong> meridyenleri arasindadir. <strong style={{ color:COLOR_LOCATION }}>76 dakika</strong> yerel saat farki vardir.</div></InfoBox>
           </div>
         </>}
         {section==="goreceli" && <>
           <SectionHeader icon="🌍" color="#10b981" title="Goreceli Konum" sub="Diger yerlerle iliskisel konum"/>
           <TurkeyNeighborMap />
           <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"12px" }}>
-            <InfoBox color="#ef4444" title="KARA KOMSULARI (8)" icon="🤝">
+            <InfoBox color={COLOR_ERROR} title="KARA KOMSULARI (8)" icon="🤝">
               <div style={{ display:"flex", flexDirection:"column", gap:"5px", marginTop:"6px" }}>
                 {[["Dogu","Ermenistan, Gurcistan, Azerbaycan, Iran"],["Guney","Irak, Suriye"],["Bati","Yunanistan, Bulgaristan"]].map(([y,u])=>(
-                  <div key={y} style={{ fontSize:"12px", color:"#6a3a30", lineHeight:"1.6" }}><strong style={{ color:"#ef4444" }}>{y}: </strong>{u}</div>
+                  <div key={y} style={{ fontSize:"12px", color:"#6a3a30", lineHeight:"1.6" }}><strong style={{ color:COLOR_ERROR }}>{y}: </strong>{u}</div>
                 ))}
               </div>
             </InfoBox>
-            <InfoBox color="#0ea5e9" title="DENIZ KOMSULARI (13)" icon="⚓">
+            <InfoBox color={COLOR_SECONDARY} title="DENIZ KOMSULARI (13)" icon="⚓">
               <div style={{ display:"flex", flexDirection:"column", gap:"5px", marginTop:"6px" }}>
                 {[["Karadeniz","Bulgaristan, Romanya, Ukrayna, Rusya, Gurcistan"],["Ege Denizi","Yunanistan"],["Akdeniz","KKTC, Libya, Misir, Filistin, Israil, Lubnan, Suriye"]].map(([d,u])=>(
-                  <div key={d} style={{ fontSize:"12px", color:"#1a4a6a", lineHeight:"1.6" }}><strong style={{ color:"#0ea5e9" }}>{d}: </strong>{u}</div>
+                  <div key={d} style={{ fontSize:"12px", color:"#1a4a6a", lineHeight:"1.6" }}><strong style={{ color:COLOR_SECONDARY }}>{d}: </strong>{u}</div>
                 ))}
               </div>
             </InfoBox>
@@ -229,11 +225,11 @@ function LearnTab() {
           <SectionHeader icon="⚡" color="#f59e0b" title="Jeopolitik Onem" sub="Stratejik konum avantajlari"/>
           <div style={{ display:"flex", flexDirection:"column", gap:"12px" }}>
             {[
-              { icon:"🌊", color:"#0ea5e9", title:"Turk Bogazlari", desc:"Istanbul ve Canakkale Bogazi, Karadeniz'i Akdeniz'e baglar." },
-              { icon:"⛽", color:"#f97316", title:"Enerji Koridoru", desc:"Orta Dogu ve Kafkasya enerji kaynaklari Turkiye uzerinden Avrupa'ya tasir." },
-              { icon:"🏛️", color:"#a78bfa", title:"Kulturel Miras", desc:"Bircok medeniyete ev sahipligi yapmis zengin kulturel miras." },
-              { icon:"💼", color:"#10b981", title:"Ticaret Merkezi", desc:"Kisalar arasi ticaret yollarinin kesisiminde Istanbul kuresel merkez kapasitesi tasir." },
-              { icon:"🏝️", color:"#ec4899", title:"Kibris'in Onemi", desc:"Kibris (9.251 km2) Dogu Akdeniz'in en buyuk adasidir. KKTC Turkiye'nin dis politikasinda kritik oneme sahiptir." },
+              { icon:"🌊", color:COLOR_SECONDARY, title:"Turk Bogazlari", desc:"Istanbul ve Canakkale Bogazi, Karadeniz'i Akdeniz'e baglar." },
+              { icon:"⛽", color:COLOR_TOPO, title:"Enerji Koridoru", desc:"Orta Dogu ve Kafkasya enerji kaynaklari Turkiye uzerinden Avrupa'ya tasir." },
+              { icon:"🏛️", color:COLOR_UA, title:"Kulturel Miras", desc:"Bircok medeniyete ev sahipligi yapmis zengin kulturel miras." },
+              { icon:"💼", color:COLOR_SUCCESS, title:"Ticaret Merkezi", desc:"Kisalar arasi ticaret yollarinin kesisiminde Istanbul kuresel merkez kapasitesi tasir." },
+              { icon:"🏝️", color:COLOR_PINK, title:"Kibris'in Onemi", desc:"Kibris (9.251 km2) Dogu Akdeniz'in en buyuk adasidir. KKTC Turkiye'nin dis politikasinda kritik oneme sahiptir." },
             ].map(item=>(
               <div key={item.title} style={{ padding:"16px 20px", background:`${item.color}08`, border:`1.5px solid ${item.color}22`, borderRadius:"12px", display:"flex", gap:"14px", alignItems:"flex-start" }}>
                 <span style={{ fontSize:"24px", flexShrink:0 }}>{item.icon}</span>
@@ -353,7 +349,7 @@ function Act1KoordinatOyunu() {
 
   if (done) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center gap-4" style={{ background: `radial-gradient(ellipse at center,${C}0a 0%,${BG} 100%)` }}>
+      <div className="flex-1 flex flex-col items-center justify-center gap-4" style={{ background: `radial-gradient(ellipse at center,${COLOR_LOCATION}0a 0%,${BG_DARK} 100%)` }}>
         <div className="text-6xl">🎯</div>
         <div className="text-2xl font-black text-indigo-200">GÖREV TAMAMLANDI!</div>
         <div className="text-5xl font-black text-indigo-500 font-mono">{score} / {KOORDINAT_SORULARI.length}</div>
@@ -530,12 +526,12 @@ function Act2Komsular() {
   };
 
   if (done) return (
-    <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "16px", background: `radial-gradient(ellipse at center,${C}0a 0%,${BG} 100%)` }}>
+    <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "16px", background: `radial-gradient(ellipse at center,${COLOR_LOCATION}0a 0%,${BG_DARK} 100%)` }}>
       <div style={{ fontSize: "60px" }}>🏆</div>
       <div style={{ fontSize: "24px", fontWeight: "800", color: "#c7d2fe" }}>TEBRİKLER OPERATÖR!</div>
-      <div style={{ fontSize: "48px", fontWeight: "800", color: C, fontFamily: MONO }}>{score}/{cards.length}</div>
+      <div style={{ fontSize: "48px", fontWeight: "800", color: COLOR_LOCATION, fontFamily: FONT_MONO }}>{score}/{cards.length}</div>
       <div style={{ fontSize: "14px", color: "#4a4a8a" }}>Komşuluk ilişkilerini başarıyla analiz ettin.</div>
-      <button onClick={retry} style={{ padding: "12px 32px", background: C, border: "none", borderRadius: "10px", color: "#fff", fontWeight: "800", cursor: "pointer" }}>TEKRAR DENE</button>
+      <button onClick={retry} style={{ padding: "12px 32px", background: COLOR_LOCATION, border: "none", borderRadius: "10px", color: "#fff", fontWeight: "800", cursor: "pointer" }}>TEKRAR DENE</button>
     </div>
   );
 
@@ -546,13 +542,13 @@ function Act2Komsular() {
       {/* SOL PANEL: Etkileşimli uMap Haritası */}
       <div style={{ flex: 1.2, display: "flex", flexDirection: "column", padding: "16px", gap: "12px", borderRight: "1px solid rgba(99,102,241,0.15)" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div style={{ fontSize: "11px", color: C, letterSpacing: "2px", fontWeight: "800", fontFamily: MONO }}>
+          <div style={{ fontSize: "11px", color: COLOR_LOCATION, letterSpacing: "2px", fontWeight: "800", fontFamily: FONT_MONO }}>
             SİSMİK REFERANS HARİTASI (uMAP)
           </div>
           <div style={{ fontSize: "10px", color: "#4a4a8a" }}>İpucu: Haritayı kaydırarak sınırları incele</div>
         </div>
         
-        <div style={{ flex: 1, borderRadius: "12px", overflow: "hidden", border: `2px solid ${C}20`, background: "#000" }}>
+        <div style={{ flex: 1, borderRadius: "12px", overflow: "hidden", border: `2px solid ${COLOR_LOCATION}20`, background: "#000" }}>
           <iframe 
             style={{ width: "100%", height: "100%", border: 0 }} 
             allowFullScreen 
@@ -576,7 +572,7 @@ function Act2Komsular() {
               <div key={item.id} draggable
                 onDragStart={e => { setDragId(item.id); e.dataTransfer.setData("text/plain", item.id); }}
                 style={{ 
-                  padding: "8px 14px", background: "rgba(99,102,241,0.15)", border: `1px solid ${C}50`, 
+                padding: "8px 14px", background: "rgba(99,102,241,0.15)", border: `1px solid ${COLOR_LOCATION}50`, 
                   borderRadius: "6px", cursor: "grab", color: "#fff", fontSize: "13px", fontWeight: "600" 
                 }}>
                 {item.name}
@@ -617,9 +613,9 @@ function Act2Komsular() {
           ))}
         </div>
 
-        <div style={{ marginTop: "auto", padding: "12px", background: `${C}10`, borderRadius: "8px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div style={{ marginTop: "auto", padding: "12px", background: `${COLOR_LOCATION}10`, borderRadius: "8px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <span style={{ fontSize: "12px", color: "#4a4a8a" }}>Doğru Sayısı:</span>
-          <span style={{ fontSize: "18px", fontWeight: "800", color: C, fontFamily: MONO }}>{score} / {cards.length}</span>
+          <span style={{ fontSize: "18px", fontWeight: "800", color: COLOR_LOCATION, fontFamily: FONT_MONO }}>{score} / {cards.length}</span>
         </div>
       </div>
     </div>
@@ -647,20 +643,20 @@ function Act3Gzft() {
   const retry=()=>{setPlaced({});setWrong({});setScore(0);setDone(false);setDragId(null);setHovBucket(null);};
 
   if(done)return(
-    <div style={{ flex:1,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:"16px",background:`radial-gradient(ellipse at center,${C}0a 0%,${BG} 100%)` }}>
+    <div style={{ flex:1,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:"16px",background:`radial-gradient(ellipse at center,${COLOR_LOCATION}0a 0%,${BG_DARK} 100%)` }}>
       <div style={{ fontSize:"52px" }}>⚖️</div>
       <div style={{ fontSize:"28px",fontWeight:"800",color:"#c7d2fe" }}>GZFT TAMAMLANDI!</div>
-      <div style={{ fontSize:"44px",fontWeight:"800",color:C,fontFamily:MONO }}>{score}/{GZFT_ITEMS.length}</div>
+      <div style={{ fontSize:"44px",fontWeight:"800",color:COLOR_LOCATION,fontFamily:FONT_MONO }}>{score}/{GZFT_ITEMS.length}</div>
       <div style={{ fontSize:"14px",color:"#4a4a8a" }}>kart dogru kategoriye yerlestirildi</div>
-      <button onClick={retry} style={{ padding:"12px 28px",background:`linear-gradient(90deg,#3730a3,${C})`,border:"none",borderRadius:"10px",color:"#fff",fontSize:"14px",fontWeight:"800",cursor:"pointer",fontFamily:FONT }}>Tekrar</button>
+      <button onClick={retry} style={{ padding:"12px 28px",background:`linear-gradient(90deg,#3730a3,${COLOR_LOCATION})`,border:"none",borderRadius:"10px",color:"#fff",fontSize:"14px",fontWeight:"800",cursor:"pointer",fontFamily:FONT_SANS }}>Tekrar</button>
     </div>
   );
 
   const pending=GZFT_ITEMS.filter(i=>!placed[i.id]);
   return(
-    <div style={{ flex:1,display:"flex",flexDirection:"column",padding:"20px 24px",gap:"16px",overflowY:"auto",background:`radial-gradient(ellipse at 30% 20%,${C}08 0%,${BG} 100%)` }}>
+    <div style={{ flex:1,display:"flex",flexDirection:"column",padding:"20px 24px",gap:"16px",overflowY:"auto",background:`radial-gradient(ellipse at 30% 20%,${COLOR_LOCATION}08 0%,${BG_DARK} 100%)` }}>
       <div>
-        <div style={{ fontSize:"10px",letterSpacing:"3px",color:C,fontFamily:MONO,marginBottom:"4px" }}>ETK 3 - GZFT ANALIZI</div>
+        <div style={{ fontSize:"10px",letterSpacing:"3px",color:COLOR_LOCATION,fontFamily:FONT_MONO,marginBottom:"4px" }}>ETK 3 - GZFT ANALIZI</div>
         <div style={{ fontSize:"18px",fontWeight:"800",color:"#c7d2fe" }}>Turkiye'nin Konum Analizi</div>
         <div style={{ fontSize:"13px",color:"#4a4a8a",marginTop:"4px" }}>Her karti dogru GZFT kategorisine surukle</div>
       </div>
@@ -674,10 +670,10 @@ function Act3Gzft() {
               onDragEnd={()=>{setDragId(null);setHovBucket(null);}}
               style={{
                 padding:"9px 12px",
-                background:dragId===item.id?`${C}28`:"rgba(0,0,0,0.4)",
-                border:`1.5px solid ${dragId===item.id?C:`${C}28`}`,
+                background:dragId===item.id?`${COLOR_LOCATION}28`:"rgba(0,0,0,0.4)",
+                border:`1.5px solid ${dragId===item.id?COLOR_LOCATION:`${COLOR_LOCATION}28`}`,
                 borderRadius:"8px",cursor:"grab",
-                fontSize:"12px",fontWeight:"600",color:"#c7d2fe",fontFamily:FONT,
+                fontSize:"12px",fontWeight:"600",color:"#c7d2fe",fontFamily:FONT_SANS,
                 maxWidth:"260px",lineHeight:"1.5",opacity:dragId===item.id?0.5:1,
                 userSelect:"none",WebkitUserSelect:"none",
               }}>
@@ -733,9 +729,9 @@ function Act3Gzft() {
         ))}
       </div>
 
-      <div style={{ padding:"9px 14px",background:`${C}08`,border:`1px solid ${C}12`,borderRadius:"8px",display:"flex",justifyContent:"space-between" }}>
+      <div style={{ padding:"9px 14px",background:`${COLOR_LOCATION}08`,border:`1px solid ${COLOR_LOCATION}12`,borderRadius:"8px",display:"flex",justifyContent:"space-between" }}>
         <span style={{ fontSize:"12px",color:"#4a4a8a" }}>Kalan: {pending.length} kart</span>
-        <span style={{ fontSize:"14px",fontWeight:"800",color:C,fontFamily:MONO }}>{score}/{GZFT_ITEMS.length} dogru</span>
+        <span style={{ fontSize:"14px",fontWeight:"800",color:COLOR_LOCATION,fontFamily:FONT_MONO }}>{score}/{GZFT_ITEMS.length} dogru</span>
       </div>
     </div>
   );
@@ -752,15 +748,15 @@ function TestTab() {
   if(done){
     const pct=Math.round((score/(TEST_ITEMS.length*10))*100);
     return(
-      <div style={{ flex:1,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:"18px",background:`radial-gradient(ellipse at center,${C}0a 0%,${BG} 100%)` }}>
+      <div style={{ flex:1,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:"18px",background:`radial-gradient(ellipse at center,${COLOR_LOCATION}0a 0%,${BG_DARK} 100%)` }}>
         <div style={{ fontSize:"60px" }}>🌐</div>
         <div style={{ fontSize:"28px",fontWeight:"800",color:"#c7d2fe" }}>TEST TAMAMLANDI!</div>
-        <div style={{ fontSize:"52px",fontWeight:"800",color:pct>=80?"#10b981":pct>=50?"#f59e0b":"#ef4444",fontFamily:MONO }}>{score} PUAN</div>
+        <div style={{ fontSize:"52px",fontWeight:"800",color:pct>=80?COLOR_SUCCESS:pct>=50?COLOR_ACCENT:COLOR_ERROR,fontFamily:FONT_MONO }}>{score} PUAN</div>
         <div style={{ fontSize:"15px",color:"#4a4a8a" }}>{answers.filter(Boolean).length}/{TEST_ITEMS.length} dogru - %{pct}</div>
         <div style={{ fontSize:"15px",color:"#6a6aaa",textAlign:"center",maxWidth:"420px",lineHeight:"1.8" }}>
           {pct>=80?"Mukemmel!":pct>=50?"Iyi! Ogren sekmesini tekrar incele.":"Tekrar dene!"}
         </div>
-        <button onClick={retry} style={{ padding:"13px 30px",background:`linear-gradient(90deg,#3730a3,${C})`,border:"none",borderRadius:"10px",color:"#fff",fontSize:"14px",fontWeight:"800",cursor:"pointer",fontFamily:FONT }}>Tekrar Dene</button>
+        <button onClick={retry} style={{ padding:"13px 30px",background:`linear-gradient(90deg,#3730a3,${COLOR_LOCATION})`,border:"none",borderRadius:"10px",color:"#fff",fontSize:"14px",fontWeight:"800",cursor:"pointer",fontFamily:FONT_SANS }}>Tekrar Dene</button>
       </div>
     );
   }
@@ -816,14 +812,14 @@ function TestTab() {
           })}
         </div>
         {sel!==null&&(
-          <div style={{ maxWidth:"660px",width:"100%",padding:"16px 20px",background:sel===q.correct?"rgba(16,185,129,0.08)":"rgba(239,68,68,0.08)",border:`2px solid ${sel===q.correct?"rgba(16,185,129,0.28)":"rgba(239,68,68,0.28)"}`,borderRadius:"13px" }}>
+          <div style={{ maxWidth:"660px",width:"100%",padding:"16px 20px",background:sel===q.correct?`${COLOR_SUCCESS}08`:`${COLOR_ERROR}08`,border:`2px solid ${sel===q.correct?`${COLOR_SUCCESS}28`:`${COLOR_ERROR}28`}`,borderRadius:"13px" }}>
             <div style={{ fontSize:"15px",fontWeight:"800",color:sel===q.correct?"#10b981":"#ef4444",marginBottom:"9px" }}>{sel===q.correct?"DOGRU!":"YANLIS!"}</div>
             <p style={{ fontSize:"14px",color:"#6a6aaa",lineHeight:"1.85",margin:0,fontWeight:"500" }}>{q.exp}</p>
           </div>
         )}
         {sel!==null&&(
           <button onClick={next}
-            style={{ padding:"13px 36px",background:`linear-gradient(90deg,#3730a3,${C})`,border:"none",borderRadius:"11px",color:"#fff",fontSize:"15px",fontWeight:"800",letterSpacing:"1.5px",cursor:"pointer",fontFamily:FONT }}
+            style={{ padding:"13px 36px",background:`linear-gradient(90deg,#3730a3,${COLOR_LOCATION})`,border:"none",borderRadius:"11px",color:"#fff",fontSize:"15px",fontWeight:"800",letterSpacing:"1.5px",cursor:"pointer",fontFamily:FONT_SANS }}
             onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-2px)";}}
             onMouseLeave={e=>{e.currentTarget.style.transform="none";}}>
             {qIdx>=TEST_ITEMS.length-1?"Sonuclari Gor":"Sonraki Soru"}
@@ -835,8 +831,8 @@ function TestTab() {
 }
 
 // ─── Yardimcilar ─────────────────────────────────────────────────────────────
-function SLabel({children}:{children:React.ReactNode}){return <div style={{ fontSize:"11px",letterSpacing:"2px",color:"#3a3a6a",fontWeight:"800",fontFamily:FONT }}>{children}</div>;}
-function SDivider(){return <div style={{ height:"1px",background:"rgba(99,102,241,0.1)",margin:"16px 0" }} />;}
+function SLabel({children}:{children:React.ReactNode}){return <div style={{ fontSize:"11px",letterSpacing:"2px",color:"#3a3a6a",fontWeight:"800",fontFamily:FONT_SANS }}>{children}</div>;}
+function SDivider(){return <div style={{ height:"1px",background:`${COLOR_LOCATION}1a`,margin:"16px 0" }} />;}
 function InfoCard({color,children}:{color:string;children:React.ReactNode}){return <div style={{ padding:"20px 24px",background:`${color}0a`,border:`1.5px solid ${color}22`,borderRadius:"14px" }}>{children}</div>;}
 function InfoBox({color,title,icon,children}:{color:string;title:string;icon:string;children:React.ReactNode}){return(
   <div style={{ padding:"16px 18px",background:`${color}08`,border:`1px solid ${color}20`,borderRadius:"12px" }}>
