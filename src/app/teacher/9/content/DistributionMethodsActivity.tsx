@@ -501,132 +501,179 @@ function ActivityPanel() {
 }
 
 function TestPanel() {
-  const [answers, setAnswers] = useState<number[]>(Array(QUIZ_ITEMS.length).fill(-1));
-  const [submitted, setSubmitted] = useState(false);
+  const [qIdx, setQIdx] = useState(0);
+  const [sel, setSel] = useState<number | null>(null);
+  const [score, setScore] = useState(0);
+  const [answers, setAnswers] = useState<boolean[]>([]);
+  const [done, setDone] = useState(false);
 
-  const score = answers.reduce((total, answer, index) => (answer === QUIZ_ITEMS[index].correct ? total + 1 : total), 0);
+  const q = QUIZ_ITEMS[qIdx];
+  const progress = Math.round((qIdx / QUIZ_ITEMS.length) * 100);
+
+  const handleAnswer = (index: number) => {
+    if (sel !== null) return;
+    setSel(index);
+    const correct = index === q.correct;
+    if (correct) setScore((prev) => prev + 10);
+    setAnswers((prev) => [...prev, correct]);
+  };
+
+  const next = () => {
+    if (qIdx >= QUIZ_ITEMS.length - 1) {
+      setDone(true);
+      return;
+    }
+    setQIdx((prev) => prev + 1);
+    setSel(null);
+  };
+
+  const retry = () => {
+    setQIdx(0);
+    setSel(null);
+    setScore(0);
+    setAnswers([]);
+    setDone(false);
+  };
+
+  if (done) {
+    const pct = Math.round((score / (QUIZ_ITEMS.length * 10)) * 100);
+    return (
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "18px", padding: "32px 24px", textAlign: "center", background: "linear-gradient(180deg, rgba(3,7,18,0.98), rgba(6,17,31,1))" }}>
+        <div style={{ fontSize: "52px" }}>Harita</div>
+        <div style={{ fontSize: "26px", fontWeight: 800, color: "#e2e8f0", fontFamily: FONT }}>Test Tamamlandi</div>
+        <div style={{ fontSize: "50px", fontWeight: 800, color: pct >= 80 ? PRIMARY : pct >= 50 ? ACCENT : "#ef4444", fontFamily: MONO }}>{score} PUAN</div>
+        <div style={{ fontSize: "14px", color: "#94a3b8", fontFamily: FONT }}>{answers.filter(Boolean).length}/{QUIZ_ITEMS.length} dogru - %{pct}</div>
+        <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", justifyContent: "center" }}>
+          <div style={{ padding: "12px 16px", background: `${PRIMARY}10`, border: `1.5px solid ${PRIMARY}30`, borderRadius: "10px", textAlign: "center" }}>
+            <div style={{ fontSize: "13px", fontWeight: 800, color: PRIMARY, fontFamily: FONT }}>Dogru</div>
+            <div style={{ fontSize: "20px", fontWeight: 800, color: PRIMARY, fontFamily: MONO }}>{answers.filter(Boolean).length}/{QUIZ_ITEMS.length}</div>
+          </div>
+          <div style={{ padding: "12px 16px", background: `rgba(245,158,11,0.1)`, border: `1.5px solid rgba(245,158,11,0.3)`, borderRadius: "10px", textAlign: "center" }}>
+            <div style={{ fontSize: "13px", fontWeight: 800, color: ACCENT, fontFamily: FONT }}>Basari</div>
+            <div style={{ fontSize: "20px", fontWeight: 800, color: ACCENT, fontFamily: MONO }}>%{pct}</div>
+          </div>
+        </div>
+        <div style={{ fontSize: "14px", color: "#94a3b8", maxWidth: "420px", lineHeight: "1.8", fontFamily: FONT }}>
+          {pct >= 80 ? "Harita okuryazarligi konularini cok iyi kavradin." : pct >= 50 ? "Iyi gidiyorsun. Ogren sekmesine donup kisa bir tekrar yaparsan daha da guclenir." : "Ogren sekmesindeki konu ozetlerini tekrar inceleyip testi yeniden cozebilirsin."}
+        </div>
+        <button
+          onClick={retry}
+          style={{ padding: "13px 30px", background: `linear-gradient(90deg, #0f766e, ${PRIMARY})`, border: "none", borderRadius: "10px", color: "#fff", fontSize: "14px", fontWeight: 800, cursor: "pointer", fontFamily: FONT }}
+        >
+          Tekrar Dene
+        </button>
+      </div>
+    );
+  }
 
   return (
-    <div style={{ flex: 1, overflowY: "auto", padding: "28px 34px", background: "linear-gradient(180deg, rgba(3,7,18,0.98), rgba(6,17,31,1))" }}>
-      <SectionBadge text="TEST" color={ACCENT} />
-      <h2 style={{ fontSize: "32px", margin: "16px 0 10px", color: "#f8fafc", fontWeight: 800 }}>Kendini değerlendir</h2>
-      <p style={{ fontSize: "15px", lineHeight: 1.8, color: "#cbd5e1", margin: 0, maxWidth: "860px" }}>
-        Aşağıdaki soruları çözerek harita okuryazarlığı kazanımının temel kavramlarını ne kadar kavradığını kontrol et.
-      </p>
-
-      <div style={{ display: "grid", gap: "16px", marginTop: "24px" }}>
-        {QUIZ_ITEMS.map((item, index) => (
-          <div key={item.question} style={{ padding: "20px", borderRadius: "18px", background: PANEL, border: "1px solid rgba(148,163,184,0.16)" }}>
-            <div style={{ fontSize: "15px", fontWeight: 800, color: "#f8fafc", lineHeight: 1.6 }}>
-              {index + 1}. {item.question}
-            </div>
-            <div style={{ display: "grid", gap: "10px", marginTop: "14px" }}>
-              {item.options.map((option, optionIndex) => {
-                const chosen = answers[index] === optionIndex;
-                const showState = submitted;
-                const isCorrect = item.correct === optionIndex;
-                let border = "rgba(148,163,184,0.16)";
-                let background = "rgba(255,255,255,0.03)";
-
-                if (chosen) {
-                  border = SECONDARY;
-                  background = `${SECONDARY}14`;
-                }
-                if (showState && isCorrect) {
-                  border = PRIMARY;
-                  background = `${PRIMARY}14`;
-                }
-                if (showState && chosen && !isCorrect) {
-                  border = "#ef4444";
-                  background = "rgba(239,68,68,0.12)";
-                }
-
-                return (
-                  <button
-                    key={option}
-                    onClick={() => {
-                      const next = [...answers];
-                      next[index] = optionIndex;
-                      setAnswers(next);
-                      setSubmitted(false);
-                    }}
-                    style={{
-                      textAlign: "left",
-                      padding: "13px 15px",
-                      borderRadius: "14px",
-                      border: `1px solid ${border}`,
-                      background,
-                      color: "#e2e8f0",
-                      cursor: "pointer",
-                      fontFamily: FONT,
-                      fontSize: "14px",
-                      lineHeight: 1.7,
-                    }}
-                  >
-                    {option}
-                  </button>
-                );
-              })}
-            </div>
-
-            {submitted && (
-              <div
-                style={{
-                  marginTop: "14px",
-                  padding: "14px 16px",
-                  borderRadius: "14px",
-                  background: "rgba(148,163,184,0.08)",
-                  border: "1px solid rgba(148,163,184,0.16)",
-                }}
-              >
-                <div style={{ fontSize: "13px", fontWeight: 800, color: "#f8fafc" }}>
-                  Doğru cevap: {item.options[item.correct]}
-                </div>
-                <p style={{ fontSize: "13px", lineHeight: 1.8, color: "#cbd5e1", margin: "6px 0 0" }}>{item.explanation}</p>
+    <div style={{ flex: 1, display: "flex", overflow: "hidden", background: "linear-gradient(180deg, rgba(3,7,18,0.98), rgba(6,17,31,1))" }}>
+      <div style={{ width: "220px", flexShrink: 0, borderRight: "1px solid rgba(255,255,255,0.05)", background: "rgba(3,6,15,0.6)", padding: "20px 14px", display: "flex", flexDirection: "column", gap: "6px", overflowY: "auto" }}>
+        <div style={{ fontSize: "11px", letterSpacing: "2px", color: "#94a3b8", fontWeight: 800, fontFamily: FONT, marginBottom: "4px" }}>SORULAR</div>
+        {QUIZ_ITEMS.map((_, i) => {
+          const doneItem = i < answers.length;
+          const cur = i === qIdx;
+          return (
+            <div
+              key={i}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                padding: "8px 10px",
+                background: cur ? `${ACCENT}10` : "rgba(0,0,0,0.15)",
+                border: `1.5px solid ${cur ? ACCENT : doneItem ? answers[i] ? "rgba(52,211,153,0.3)" : "rgba(239,68,68,0.3)" : "rgba(255,255,255,0.04)"}`,
+                borderRadius: "7px",
+              }}
+            >
+              <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: doneItem ? answers[i] ? "#34d399" : "#ef4444" : cur ? ACCENT : "rgba(255,255,255,0.06)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "10px", fontWeight: 800, color: "#fff", flexShrink: 0, fontFamily: MONO }}>
+                {doneItem ? answers[i] ? "OK" : "X" : i + 1}
               </div>
-            )}
-          </div>
-        ))}
+              <div>
+                <div style={{ fontSize: "10px", fontWeight: 700, color: cur ? ACCENT : "#cbd5e1", fontFamily: FONT }}>Soru {i + 1}</div>
+                <div style={{ fontSize: "10px", color: cur ? "#fcd34d" : "#64748b", fontFamily: FONT }}>HARITA</div>
+              </div>
+            </div>
+          );
+        })}
+        <div style={{ marginTop: "auto", padding: "12px", background: "rgba(0,0,0,0.3)", border: "1px solid rgba(255,255,255,0.05)", borderRadius: "9px", textAlign: "center" }}>
+          <div style={{ fontSize: "11px", color: "#94a3b8", fontWeight: 700, fontFamily: FONT, marginBottom: "4px" }}>PUAN</div>
+          <div style={{ fontSize: "30px", fontWeight: 800, color: ACCENT, fontFamily: MONO }}>{score}</div>
+          <div style={{ fontSize: "11px", color: "#64748b", fontFamily: FONT }}>/ {QUIZ_ITEMS.length * 10}</div>
+        </div>
       </div>
 
-      <div style={{ display: "flex", gap: "12px", alignItems: "center", flexWrap: "wrap", marginTop: "22px" }}>
-        <button
-          onClick={() => setSubmitted(true)}
-          style={{
-            padding: "12px 18px",
-            borderRadius: "12px",
-            border: "none",
-            cursor: "pointer",
-            background: `linear-gradient(90deg, ${ACCENT}, #f97316)`,
-            color: "#1c1917",
-            fontWeight: 800,
-            fontFamily: FONT,
-          }}
-        >
-          Sonuçları Göster
-        </button>
-        <button
-          onClick={() => {
-            setAnswers(Array(QUIZ_ITEMS.length).fill(-1));
-            setSubmitted(false);
-          }}
-          style={{
-            padding: "12px 18px",
-            borderRadius: "12px",
-            border: "1px solid rgba(148,163,184,0.2)",
-            cursor: "pointer",
-            background: "transparent",
-            color: "#cbd5e1",
-            fontWeight: 700,
-            fontFamily: FONT,
-          }}
-        >
-          Testi Sıfırla
-        </button>
-        {submitted && (
-          <div style={{ fontSize: "14px", color: "#fde68a", fontWeight: 700 }}>
-            Puanın: {score} / {QUIZ_ITEMS.length}
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", padding: "28px 36px", overflowY: "auto", gap: "18px" }}>
+        <div style={{ width: "100%", maxWidth: "640px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <span style={{ fontSize: "11px", color: "#94a3b8", fontWeight: 700, fontFamily: FONT }}>SORU {qIdx + 1}/{QUIZ_ITEMS.length}</span>
+              <span style={{ padding: "2px 8px", background: `${ACCENT}18`, border: `1px solid ${ACCENT}40`, borderRadius: "4px", fontSize: "10px", fontWeight: 800, color: ACCENT, fontFamily: FONT }}>TEST</span>
+            </div>
+            <span style={{ fontSize: "11px", color: "#94a3b8", fontFamily: FONT }}>%{progress}</span>
           </div>
+          <div style={{ height: "4px", background: "rgba(255,255,255,0.06)", borderRadius: "2px", overflow: "hidden" }}>
+            <div style={{ height: "100%", width: `${(qIdx / QUIZ_ITEMS.length) * 100}%`, background: `linear-gradient(90deg, #0f766e, ${ACCENT})`, borderRadius: "2px", transition: "width 0.4s" }} />
+          </div>
+        </div>
+
+        <div style={{ maxWidth: "640px", width: "100%", padding: "22px 24px", background: `rgba(245,158,11,0.08)`, border: `1.5px solid rgba(245,158,11,0.2)`, borderRadius: "14px" }}>
+          <p style={{ fontSize: "15px", color: "#e2e8f0", lineHeight: "1.9", margin: 0, fontWeight: 600, fontFamily: FONT }}>{q.question}</p>
+        </div>
+
+        <div style={{ maxWidth: "640px", width: "100%", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "9px" }}>
+          {q.options.map((opt, i) => {
+            const isSel = sel === i;
+            const isCorr = i === q.correct;
+            const show = sel !== null;
+            let bg = "rgba(0,0,0,0.25)";
+            let border = "rgba(255,255,255,0.07)";
+            let color = "#cbd5e1";
+
+            if (show) {
+              if (isCorr) {
+                bg = "#34d39912";
+                border = "#34d399";
+                color = "#34d399";
+              } else if (isSel) {
+                bg = "rgba(239,68,68,0.1)";
+                border = "#ef4444";
+                color = "#fca5a5";
+              }
+            }
+
+            return (
+              <button
+                key={i}
+                onClick={() => handleAnswer(i)}
+                disabled={sel !== null}
+                style={{ padding: "13px 15px", background: bg, border: `2px solid ${border}`, borderRadius: "10px", cursor: sel !== null ? "default" : "pointer", fontFamily: FONT, textAlign: "left", transition: "all 0.18s" }}
+              >
+                <div style={{ display: "flex", alignItems: "flex-start", gap: "9px" }}>
+                  <span style={{ width: "22px", height: "22px", borderRadius: "50%", background: show && isCorr ? "#34d399" : show && isSel && !isCorr ? "#ef4444" : `${ACCENT}20`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "10px", fontWeight: 800, color: "#fff", flexShrink: 0, marginTop: "1px", fontFamily: MONO }}>
+                    {show && isCorr ? "OK" : show && isSel && !isCorr ? "X" : String.fromCharCode(65 + i)}
+                  </span>
+                  <span style={{ fontSize: "13px", color, fontWeight: 600, lineHeight: "1.6", fontFamily: FONT }}>{opt}</span>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        {sel !== null && (
+          <div style={{ maxWidth: "640px", width: "100%", padding: "15px 18px", background: sel === q.correct ? "rgba(52,211,153,0.07)" : "rgba(239,68,68,0.07)", border: `1.5px solid ${sel === q.correct ? "rgba(52,211,153,0.25)" : "rgba(239,68,68,0.25)"}`, borderRadius: "12px" }}>
+            <div style={{ fontSize: "14px", fontWeight: 800, color: sel === q.correct ? "#34d399" : "#ef4444", marginBottom: "8px", fontFamily: FONT }}>{sel === q.correct ? "Dogru" : "Yanlis"}</div>
+            <p style={{ fontSize: "13px", color: "#cbd5e1", lineHeight: "1.85", margin: 0, fontFamily: FONT }}>{q.explanation}</p>
+          </div>
+        )}
+
+        {sel !== null && (
+          <button
+            onClick={next}
+            style={{ padding: "12px 34px", background: `linear-gradient(90deg, #0f766e, ${PRIMARY})`, border: "none", borderRadius: "10px", color: "#fff", fontSize: "14px", fontWeight: 800, cursor: "pointer", fontFamily: FONT }}
+          >
+            {qIdx >= QUIZ_ITEMS.length - 1 ? "Sonuclari Gor" : "Sonraki Soru"}
+          </button>
         )}
       </div>
     </div>
