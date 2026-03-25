@@ -10,9 +10,8 @@ import MapTypesActivity from './MapTypesActivity';
 import Topoactivity from './Topoactivity';
 import LocationActivity from './Locationactivity';
 import MekanBilgiActivity from './Mekanbilgiactivity';
-import TimeZonesActivity from './TimeZonesActivity';
 
-type ActivityType = null | 'activity1' | 'activity2' | 'projections' | 'scale' | 'mapTypes' | 'topoactivity' | 'location' | 'mekanBilgi' | 'time-zones';
+type ActivityType = null | 'activity1' | 'activity2' | 'projections' | 'scale' | 'mapTypes' | 'topoactivity' | 'location' | 'mekanBilgi';
 
 export default function ContentCatalogPage() {
   const [activeActivity, setActiveActivity] = useState<ActivityType>(null);
@@ -186,28 +185,6 @@ export default function ContentCatalogPage() {
           </div>
         </div>
 
-        {/* 10. Kutu: Yerel ve Ulusal Saat Hesaplamaları */}
-        <div 
-          onClick={() => setActiveActivity('time-zones')}
-          className="group cursor-pointer bg-slate-900 border-2 border-slate-800 hover:border-cyan-500 rounded-3xl p-8 transition-all duration-300 hover:shadow-[0_0_40px_rgba(6,182,212,0.15)] hover:-translate-y-2 flex flex-col items-center text-center relative overflow-hidden"
-        >
-          <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-cyan-600 to-sky-400 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-          <div className="w-20 h-20 bg-cyan-950 border border-cyan-800 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
-            <Clock size={36} className="text-cyan-400" />
-          </div>
-          <h2 className="text-2xl font-bold text-cyan-400 mb-4">10. Etkinlik: Yerel ve Ulusal Saat Hesaplamaları</h2>
-          <div className="text-sm text-slate-400 leading-relaxed font-medium text-left w-full bg-slate-950/50 p-4 rounded-xl space-y-2">
-            <p><strong className="text-slate-300">Öğrenme Çıktıları:</strong> COĞ.9.2.2. Dünya’nın günlük hareketine bağlı olarak yerel saat farklarını analiz eder.</p>
-            <p><strong className="text-slate-300">Araç Seti:</strong> Dünya Saati</p>
-            <p><strong className="text-slate-300">Açıklama:</strong> Meridyenler arası zaman farkını ve uluslararası saat dilimlerini interaktif olarak hesaplayın.</p>
-          </div>
-        </div>
-
-
-
-
-
-
       </div>
 
       {/* --- Aktif Modal / Tam Ekran Render Alanı --- */}
@@ -234,9 +211,6 @@ export default function ContentCatalogPage() {
       )}
       {activeActivity === 'mekanBilgi' && (
         <MekanBilgiActivity onClose={() => setActiveActivity(null)} />
-      )}
-      {activeActivity === 'time-zones' && (
-        <TimeZonesActivity onClose={() => setActiveActivity(null)} />
       )}
     </div>
   );
