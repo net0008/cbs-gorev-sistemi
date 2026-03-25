@@ -7,9 +7,9 @@ import RouteSimulationActivity from './RouteSimulationActivity';
 import ProjectionActivity from './Projectionactivity';
 import ScaleActivity from './Scaleactivity';
 import MapTypesActivity from './MapTypesActivity';
-import Topoactivity from './Topoactivity';
+import TopoActivity from './Topoactivity';
 import LocationActivity from './Locationactivity';
-import MekanBilgiActivity from './Mekanbilgiactivity';
+import MekanBilgiActivity from './MekanBilgiActivity';
 import TimeZonesActivity from './TimeZonesActivity';
 import DistributionMethodsActivity from './DistributionMethodsActivity';
 
@@ -196,11 +196,11 @@ export default function ContentCatalogPage() {
           <div className="w-20 h-20 bg-lime-950 border border-lime-800 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
             <Map size={36} className="text-lime-400" />
           </div>
-          <h2 className="text-2xl font-bold text-lime-400 mb-4">10. Etkinlik: Harita Okuryazarligi</h2>
+          <h2 className="text-2xl font-bold text-lime-400 mb-4">10. Etkinlik: Harita Okuryazarlığı</h2>
           <div className="text-sm text-slate-400 leading-relaxed font-medium text-left w-full bg-slate-950/50 p-4 rounded-xl space-y-2">
-            <p><strong className="text-slate-300">Ogrenme Ciktisi:</strong> Haritanin temel ozelliklerini, elemanlarini ve cografi koordinat sistemini kavrar.</p>
-            <p><strong className="text-slate-300">Icerik Akisi:</strong> Konu anlatimi + etkilesimli etkinlik + olcme ve degerlendirme testi</p>
-            <p><strong className="text-slate-300">Odak:</strong> Harita tanimi, harita elemanlari, harita turleri ve koordinatlar</p>
+            <p><strong className="text-slate-300">Öğrenme Çıktısı:</strong> Haritanın temel özelliklerini, elemanlarını ve coğrafi koordinat sistemini kavrar.</p>
+            <p><strong className="text-slate-300">İçerik Akışı:</strong> Konu anlatımı + etkileşimli etkinlik + ölçme ve değerlendirme testi</p>
+            <p><strong className="text-slate-300">Odak:</strong> Harita tanımı, harita elemanları, harita türleri ve koordinatlar</p>
           </div>
         </div>
       </div>
@@ -222,7 +222,7 @@ export default function ContentCatalogPage() {
         <MapTypesActivity onClose={() => setActiveActivity(null)} />
       )}
       {activeActivity === 'topoactivity' && (
-        <Topoactivity onClose={() => setActiveActivity(null)} />
+        <TopoActivity onClose={() => setActiveActivity(null)} />
       )}
       {activeActivity === 'location' && (
         <LocationActivity onClose={() => setActiveActivity(null)} />

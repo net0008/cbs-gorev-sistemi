@@ -63,7 +63,7 @@ export default function TimeZonesActivity({ onClose }: Props) {
           </div>
           <div>
             <h2 className="text-white font-bold text-lg leading-tight">Yerel ve Ulusal Saat Simülasyonu</h2>
-            <p className="text-slate-400 text-xs tracking-widest uppercase">Mekansal Bilgi Teknolojileri</p>
+            <p className="text-slate-400 text-xs tracking-widest uppercase">Mekânsal Bilgi Teknolojileri</p>
           </div>
         </div>
         <button onClick={onClose} className="bg-red-500/10 hover:bg-red-500/20 text-red-500 px-4 py-2 rounded-lg font-bold text-sm transition-all border border-red-500/20">

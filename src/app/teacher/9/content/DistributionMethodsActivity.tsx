@@ -30,11 +30,11 @@ const LEARN_CONTENT: Record<LearnSection, { title: string; subtitle: string; col
     title: "Harita Nedir?",
     subtitle: "Haritanın tanımı, önemi ve harita olabilme koşulları",
     color: PRIMARY,
-    cards: [
+    cards: [ // tanimi, onemi, kosullari -> tanımı, önemi, koşulları
       {
         title: "Mekânın sembolik dili",
         text:
-          "Harita; Dünya'nın veya başka bir gök cisminin tamamının ya da bir bölümünün kuş bakışı görünümle, belirli bir oranda küçültülerek düzleme aktarılmış gösterimidir.",
+          "Harita; Dünya'nın veya başka bir gök cisminin tamamının ya da bir bölümünün kuş bakışı görünümle, belirli bir oranda küçültülerek düzleme aktarılmış gösterimidir.", // Dunya'nin, bolumunun, kus bakisi, kucultulerek, gosterimidir -> Dünya'nın, bölümünün, kuş bakışı, küçültülerek, gösterimidir
       },
       {
         title: "Neden ihtiyaç duyarız?",
@@ -43,14 +43,14 @@ const LEARN_CONTENT: Record<LearnSection, { title: string; subtitle: string; col
       },
       {
         title: "Bir çizim ne zaman haritadır?",
-        text:
-          "Bir çizimin harita sayılabilmesi için kuş bakışı çizilmesi, ölçek taşıması ve düzlem üzerine aktarılması gerekir. Bu özellikleri taşımayan serbest çizimler kroki olarak adlandırılır.",
+        text: // cizimin, kus bakisi, cizilmesi, olcek tasimasi, tasimayan -> çizimin, kuş bakışı, çizilmesi, ölçek taşıması, taşımayan
+          "Bir çizimin harita sayılabilmesi için kuş bakışı çizilmesi, ölçek taşıması ve düzlem üzerine aktarılması gerekir. Bu özellikleri taşımayan serbest çizimler kroki olarak adlandırılır.", // adlandirilir -> adlandırılır
       },
     ],
   },
   elemanlar: {
     title: "Harita Elemanları",
-    subtitle: "Bir haritayı doğru okumak için önce onun dilini çözeriz",
+    subtitle: "Bir haritayı doğru okumak için önce onun dilini çözeriz", // dogru, cozeriz -> doğru, çözeriz
     color: SECONDARY,
     cards: [
       {
@@ -60,12 +60,12 @@ const LEARN_CONTENT: Record<LearnSection, { title: string; subtitle: string; col
       },
       {
         title: "Ölçek ve yön",
-        text:
-          "Ölçek, gerçek uzunlukların ne kadar küçültüldüğünü gösterir. Yön oku ise kuzey başta olmak üzere yönleri doğru yorumlamayı sağlar.",
+        text: // gercek, uzunluklarin, kucultuldugunu, yon, yonleri, dogru -> gerçek, uzunlukların, küçültüldüğünü, yön, yönleri, doğru
+          "Ölçek, gerçek uzunlukların ne kadar küçültüldüğünü gösterir. Yön oku ise kuzey başta olmak üzere yönleri doğru yorumlamayı sağlar.", // saglar -> sağlar
       },
       {
         title: "Lejant ve koordinatlar",
-        text:
+        text: // anlamini, yerin, konumunu -> anlamını, yerin, konumunu
           "Lejant; renklerin, taramaların ve sembollerin anlamını verir. Paralel ve meridyenler ise bir yerin kesin konumunu belirtmeye yardım eder.",
       },
     ],
@@ -76,12 +76,12 @@ const LEARN_CONTENT: Record<LearnSection, { title: string; subtitle: string; col
     color: "#a78bfa",
     cards: [
       {
-        title: "Genel haritalar",
+        title: "Genel haritalar", // genis, kullanimli, Mekanin, ozelliklerini, bakisla -> geniş, kullanımlı, Mekânın, özelliklerini, bakışla
         text:
           "Fiziki, siyasi, topoğrafya ve atlas haritaları gibi geniş kullanımlı haritalardır. Mekânın temel özelliklerini genel bir bakışla verir.",
       },
       {
-        title: "Tematik haritalar",
+        title: "Tematik haritalar", // Nufus, ortusu, ulasim, one -> Nüfus, örtüsü, ulaşım, öne
         text:
           "Nüfus, iklim, bitki örtüsü, ulaşım, ekonomi, jeoloji ve toprak gibi belirli bir konuyu öne çıkaran haritalardır.",
       },
@@ -99,17 +99,17 @@ const LEARN_CONTENT: Record<LearnSection, { title: string; subtitle: string; col
     cards: [
       {
         title: "Enlem",
-        text:
+        text: // Guney Yarim Kure'de -> Güney Yarım Küre'de
           "Enlem, bir noktanın Ekvator'a olan açısal uzaklığıdır. Kuzey ve Güney Yarım Küre'de derece, dakika ve saniye ile ifade edilir.",
       },
       {
         title: "Boylam",
-        text:
+        text: // baslangic, Dogu -> başlangıç, Doğu
           "Boylam, bir noktanın başlangıç meridyenine olan açısal uzaklığıdır. Doğu ya da Batı boylamı olarak ifade edilir.",
       },
       {
         title: "Günlük kullanım",
-        text:
+        text: // gunumuzde, ulasim, yonetiminde, kullanilir -> günümüzde, ulaşım, yönetiminde, kullanılır
           "Koordinat sistemi günümüzde özellikle GPS ile ulaşım, lojistik, mühendislik, meteoroloji ve acil durum yönetiminde aktif olarak kullanılır.",
       },
     ],
@@ -132,13 +132,13 @@ const MAP_ELEMENTS = [
 
 const QUIZ_ITEMS: QuizItem[] = [
   {
-    question: "Aşağıdakilerden hangisi bir çizimin harita sayılabilmesi için zorunlu özelliklerden biri değildir?",
+    question: "Aşağıdakilerden hangisi bir çizimin harita sayılabilmesi için zorunlu özelliklerden biri değildir?", // cizimin -> çizimin
     options: ["Kuş bakışı görünüm", "Ölçek", "Düzlem üzerine çizim", "Renkli olması"],
     correct: 3,
     explanation: "Haritanın renkli olması zorunlu değildir; ancak kuş bakışı, ölçek ve düzlem koşulları gereklidir.",
   },
   {
-    question: "Haritada kullanılan renk ve sembollerin ne anlama geldiğini hangi eleman açıklar?",
+    question: "Haritada kullanılan renk ve sembollerin ne anlama geldiğini hangi eleman açıklar?", // kullanilan, geldigini, aciklar -> kullanılan, geldiğini, açıklar
     options: ["Ölçek", "Lejant", "Yön oku", "Başlık"],
     correct: 1,
     explanation: "Lejant, haritada yer alan sembol ve renklerin anlamını gösteren listedir.",
@@ -146,17 +146,17 @@ const QUIZ_ITEMS: QuizItem[] = [
   {
     question: "Nüfusun dağılışını incelemek isteyen biri hangi harita türünü seçmelidir?",
     options: ["Siyasi harita", "Nüfus haritası", "Fiziki harita", "Kroki"],
-    correct: 1,
+    correct: 1, // Nufusun dagilisini, turunu secmelidir -> Nüfusun dağılışını, türünü seçmelidir
     explanation: "Nüfus haritası tematik bir haritadır ve nüfus dağılışını göstermek için kullanılır.",
   },
   {
     question: "Bir noktanın Ekvator'a olan açısal uzaklığına ne ad verilir?",
     options: ["Boylam", "Yükselti", "Enlem", "İzohips"],
-    correct: 2,
+    correct: 2, // noktanin, uzakligina -> noktanın, uzaklığına
     explanation: "Ekvator'a göre olan açısal uzaklık enlem olarak adlandırılır.",
   },
   {
-    question: "GPS teknolojisinin temel işlevi aşağıdakilerden hangisidir?",
+    question: "GPS teknolojisinin temel işlevi aşağıdakilerden hangisidir?", // islevi, asagidakilerden -> işlevi, aşağıdakilerden
     options: ["Hava sıcaklığını ölçmek", "Bir yerin koordinatlarını uydularla belirlemek", "Haritanın renklerini belirlemek", "Nüfus miktarını hesaplamak"],
     correct: 1,
     explanation: "GPS, uydular yardımıyla bir konumun koordinatlarını belirlemeyi sağlayan küresel konumlandırma sistemidir.",
@@ -249,7 +249,7 @@ function LearnPanel() {
         </div>
 
         <div style={{ marginTop: "22px", fontSize: "11px", letterSpacing: "3px", color: SECONDARY, fontFamily: MONO, marginBottom: "12px" }}>
-          HIZLI HATIRLATMA
+          HIZLI HATIRLATMA // HATIRLATMA -> HATIRLATMA
         </div>
         <div style={{ display: "grid", gap: "10px" }}>
           <MetricCard label="Harita koşulları" value="Kuş bakışı, ölçek ve düzlem" />
@@ -373,7 +373,7 @@ function ActivityPanel() {
       <SectionBadge text="ETKİNLİK" color={PRIMARY} />
       <h2 style={{ fontSize: "32px", margin: "16px 0 10px", color: "#f8fafc", fontWeight: 800 }}>Haritayı okuyarak karar ver</h2>
       <p style={{ fontSize: "15px", lineHeight: 1.8, color: "#cbd5e1", margin: 0, maxWidth: "860px" }}>
-        Bu bölümde önce bir çizimin harita sayılması için gereken koşulları seçecek, sonra harita elemanlarının işlevlerini kullanarak minik bir yorumlama çalışması yapacaksın.
+        Bu bölümde önce bir çizimin harita sayılması için gereken koşulları seçecek, sonra harita elemanlarının işlevlerini kullanarak minik bir yorumlama çalışması yapacaksın. // bolumde, cizimin, kosullari, islevlerini, calismasi -> bölümde, çizimin, koşulları, işlevlerini, çalışması
       </p>
 
       <div style={{ display: "grid", gridTemplateColumns: "1.1fr 0.9fr", gap: "18px", marginTop: "24px" }}>
@@ -381,11 +381,11 @@ function ActivityPanel() {
           <div style={{ fontSize: "12px", letterSpacing: "3px", color: PRIMARY, fontFamily: MONO, marginBottom: "10px" }}>GÖREV 1</div>
           <div style={{ fontSize: "22px", fontWeight: 800, color: "#f8fafc", marginBottom: "10px" }}>Bir çizimin harita olma koşulları</div>
           <p style={{ fontSize: "14px", lineHeight: 1.8, color: "#cbd5e1", marginTop: 0 }}>
-            Aşağıdaki seçeneklerden harita için zorunlu olanları işaretle. Hepsini seçince "Kontrol Et" butonuna bas.
+            Aşağıdaki seçeneklerden harita için zorunlu olanları işaretle. Hepsini seçince "Kontrol Et" butonuna bas. // Asagidaki, seceneklerden, isaretle, secince -> Aşağıdaki, seçeneklerden, işaretle, seçince
           </p>
 
           <div style={{ display: "grid", gap: "12px", marginTop: "16px" }}>
-            {["Kuş bakışı görünüm", "Ölçek", "Düzlem", "Mutlaka renkli olma", "Yalnızca kâğıda çizilme"].map((item) => {
+            {["Kuş bakışı görünüm", "Ölçek", "Düzlem", "Mutlaka renkli olma", "Yalnızca kâğıda çizilme"].map((item) => { // Yalnizca, kagida -> Yalnızca, kâğıda
               const active = selectedRules.includes(item);
               return (
                 <button
@@ -439,7 +439,7 @@ function ActivityPanel() {
                 border: `1px solid ${isPerfectRuleAnswer ? "rgba(34,197,94,0.4)" : "rgba(245,158,11,0.4)"}`,
               }}
             >
-              <div style={{ fontSize: "14px", fontWeight: 800, color: isPerfectRuleAnswer ? "#86efac" : "#fcd34d" }}>
+              <div style={{ fontSize: "14px", fontWeight: 800, color: isPerfectRuleAnswer ? "#86efac" : "#fcd34d" }}> // dusun -> düşün
                 {isPerfectRuleAnswer ? "Tebrikler, tüm zorunlu koşulları doğru seçtin." : "Bir kez daha düşün. Harita için kuş bakışı, ölçek ve düzlem gereklidir."}
               </div>
             </div>
@@ -450,7 +450,7 @@ function ActivityPanel() {
           <div style={{ fontSize: "12px", letterSpacing: "3px", color: SECONDARY, fontFamily: MONO, marginBottom: "10px" }}>GÖREV 2</div>
           <div style={{ fontSize: "22px", fontWeight: 800, color: "#f8fafc", marginBottom: "10px" }}>Elemanı seç, görevini öğren</div>
           <p style={{ fontSize: "14px", lineHeight: 1.8, color: "#cbd5e1", marginTop: 0 }}>
-            Harita elemanlarından birini seç. Sonra bunun hangi bilgiyi okumakta kullanıldığını incele.
+            Harita elemanlarından birini seç. Sonra bunun hangi bilgiyi okumakta kullanıldığını incele. // sec -> seç, kullanildigini -> kullanıldığını
           </p>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "10px", marginTop: "16px" }}>
@@ -494,7 +494,7 @@ function ActivityPanel() {
                 <p style={{ fontSize: "14px", lineHeight: 1.9, color: "#dbeafe", margin: "8px 0 0" }}>{activeElement.hint}</p>
               </>
             ) : (
-              <p style={{ fontSize: "14px", lineHeight: 1.8, color: "#94a3b8", margin: 0 }}>
+              <p style={{ fontSize: "14px", lineHeight: 1.8, color: "#94a3b8", margin: 0 }}> // sectiginde, aciklamasi, gorunecek, bilginin, okunacagini, pekistirebilirsin -> seçtiğinde, açıklaması, görünecek, bilginin, okunacağını, pekiştirebilirsin
                 Bir eleman seçtiğinde burada kısa açıklaması görünecek. Böylece haritaya bakarken hangi bilginin nereden okunacağını pekiştirebilirsin.
               </p>
             )}
@@ -505,7 +505,7 @@ function ActivityPanel() {
       <div style={{ marginTop: "20px", padding: "20px 22px", borderRadius: "20px", background: "rgba(245,158,11,0.08)", border: "1px solid rgba(245,158,11,0.2)" }}>
         <div style={{ fontSize: "12px", letterSpacing: "3px", color: ACCENT, fontFamily: MONO, marginBottom: "8px" }}>SINIF İÇİN TARTIŞMA SORUSU</div>
         <p style={{ fontSize: "14px", lineHeight: 1.9, color: "#fde68a", margin: 0 }}>
-          Drone ile kargo dağıtımı yapan bir sistemin doğru rota kurması için harita, koordinat ve GPS bilgisinden nasıl aynı anda yararlanabileceğini açıkla.
+          Drone ile kargo dağıtımı yapan bir sistemin doğru rota kurması için harita, koordinat ve GPS bilgisinden nasıl aynı anda yararlanabileceğini açıkla. // dagitimi, dogru, yararlanabilecegini, acikla -> dağıtımı, doğru, yararlanabileceğini, açıkla
         </p>
       </div>
     </div>
@@ -523,7 +523,7 @@ function TestPanel() {
       <SectionBadge text="TEST" color={ACCENT} />
       <h2 style={{ fontSize: "32px", margin: "16px 0 10px", color: "#f8fafc", fontWeight: 800 }}>Kendini değerlendir</h2>
       <p style={{ fontSize: "15px", lineHeight: 1.8, color: "#cbd5e1", margin: 0, maxWidth: "860px" }}>
-        Aşağıdaki soruları çözerek harita okuryazarlığı kazanımının temel kavramlarını ne kadar kavradığını kontrol et.
+        Aşağıdaki soruları çözerek harita okuryazarlığı kazanımının temel kavramlarını ne kadar kavradığını kontrol et. // Asagidaki, sorulari, cozerk, kazaniminin, kavramlarini, kavradigini -> Aşağıdaki, soruları, çözerek, kazanımının, kavramlarını, kavradığını
       </p>
 
       <div style={{ display: "grid", gap: "16px", marginTop: "24px" }}>
@@ -636,7 +636,7 @@ function TestPanel() {
           Testi Sıfırla
         </button>
         {submitted && (
-          <div style={{ fontSize: "14px", color: "#fde68a", fontWeight: 700 }}>
+          <div style={{ fontSize: "14px", color: "#fde68a", fontWeight: 700 }}> // Puanin -> Puanın
             Puanın: {score} / {QUIZ_ITEMS.length}
           </div>
         )}
@@ -681,7 +681,7 @@ export default function DistributionMethodsActivity({ onClose }: { onClose: () =
       >
         <div style={{ display: "flex", alignItems: "center", gap: "22px", minWidth: 0 }}>
           <div>
-            <div style={{ fontSize: "10px", letterSpacing: "4px", color: PRIMARY, opacity: 0.75, fontFamily: MONO }}>HARİTA OKURYAZARLIĞI</div>
+            <div style={{ fontSize: "10px", letterSpacing: "4px", color: PRIMARY, opacity: 0.75, fontFamily: MONO }}>HARİTA OKURYAZARLIĞI</div> // OKURYAZARLIGI -> OKURYAZARLIĞI
             <div style={{ fontSize: "22px", fontWeight: 800, color: "#f8fafc" }}>Konu Anlatımı, Etkinlik ve Test</div>
           </div>
 
