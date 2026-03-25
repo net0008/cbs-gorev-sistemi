@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import MapReadingActivity from "./MapReadingActivity";
+import { FONT_SANS, FONT_MONO, BG_DARK, COLOR_PRIMARY, COLOR_SECONDARY, COLOR_ACCENT, PANEL_DARK, COLOR_UA } from "./theme";
 
 // ─── Ses ─────────────────────────────────────────────────────────────────────
 function beep(f: number, d: number, t: OscillatorType = "sine", v = 0.15) {
@@ -19,14 +20,6 @@ function beep(f: number, d: number, t: OscillatorType = "sine", v = 0.15) {
 const sndOK    = () => [440,554,660].forEach((f,i) => setTimeout(() => beep(f,0.22,"sine",0.14), i*80));
 const sndFail  = () => beep(200,0.32,"sawtooth",0.12);
 const sndClick = () => beep(700,0.07,"square",0.07);
-
-const FONT = "'Segoe UI','Helvetica Neue',Arial,sans-serif";
-const MONO = "'Courier New',Courier,monospace";
-const BG = "#06111f";
-const PRIMARY = "#22c55e";
-const SECONDARY = "#38bdf8";
-const ACCENT = "#f59e0b";
-const PANEL = "rgba(7,18,33,0.88)";
 
 type Tab = "learn" | "activity" | "map_reading" | "test";
 type LearnSection = "temel" | "elemanlar" | "turler" | "koordinat";
@@ -47,7 +40,7 @@ const LEARN_CONTENT: Record<LearnSection, { title: string; subtitle: string; col
   temel: {
     title: "Harita Nedir?",
     subtitle: "Haritanın tanımı, önemi ve harita olabilme koşulları",
-    color: PRIMARY,
+    color: COLOR_PRIMARY,
     cards: [
       {
         title: "Mekânın sembolik dili",
@@ -66,7 +59,7 @@ const LEARN_CONTENT: Record<LearnSection, { title: string; subtitle: string; col
   elemanlar: {
     title: "Harita Elemanları",
     subtitle: "Bir haritayı doğru okumak için önce onun dilini çözeriz",
-    color: SECONDARY,
+    color: COLOR_SECONDARY,
     cards: [
       {
         title: "Başlık",
@@ -85,7 +78,7 @@ const LEARN_CONTENT: Record<LearnSection, { title: string; subtitle: string; col
   turler: {
     title: "Harita Türleri",
     subtitle: "Kullanım amacına göre haritalar farklı bilgi sunar",
-    color: "#a78bfa",
+    color: COLOR_UA,
     cards: [
       {
         title: "Genel haritalar",
@@ -104,7 +97,7 @@ const LEARN_CONTENT: Record<LearnSection, { title: string; subtitle: string; col
   koordinat: {
     title: "Coğrafi Koordinatlar",
     subtitle: "Enlem ve boylamla bir noktanın yeri matematiksel olarak bulunur",
-    color: ACCENT,
+    color: COLOR_ACCENT,
     cards: [
       {
         title: "Enlem",
@@ -233,7 +226,7 @@ function SectionBadge({ text, color }: { text: string; color: string }) {
         fontSize: "11px",
         fontWeight: 800,
         letterSpacing: "1.8px",
-        fontFamily: MONO,
+        fontFamily: FONT_MONO,
       }}
     >
       {text}
@@ -273,7 +266,7 @@ function LearnPanel() {
                 border: `1px solid ${section === key ? value.color : "rgba(148,163,184,0.16)"}`,
                 background: section === key ? `${value.color}16` : "rgba(255,255,255,0.03)",
                 transition: "all 0.2s ease",
-                fontFamily: FONT,
+                fontFamily: FONT_SANS,
               }}
             >
               <div style={{ fontSize: "14px", fontWeight: 800, color: section === key ? "#ffffff" : "#e2e8f0" }}>{value.title}</div>
@@ -284,7 +277,7 @@ function LearnPanel() {
           ))}
         </div>
 
-        <div style={{ marginTop: "22px", fontSize: "11px", letterSpacing: "3px", color: SECONDARY, fontFamily: MONO, marginBottom: "12px" }}>
+        <div style={{ marginTop: "22px", fontSize: "11px", letterSpacing: "3px", color: COLOR_SECONDARY, fontFamily: FONT_MONO, marginBottom: "12px" }}>
           HIZLI HATIRLATMA
         </div>
         <div style={{ display: "grid", gap: "10px" }}>
@@ -315,7 +308,7 @@ function LearnPanel() {
               style={{
                 padding: "20px",
                 borderRadius: "18px",
-                background: PANEL,
+                background: PANEL_DARK,
                 border: `1px solid ${current.color}28`,
                 boxShadow: "0 12px 32px rgba(2,6,23,0.22)",
               }}
@@ -335,7 +328,7 @@ function LearnPanel() {
             border: "1px solid rgba(148,163,184,0.16)",
           }}
         >
-          <div style={{ fontSize: "12px", letterSpacing: "3px", color: "#f8fafc", fontFamily: MONO, marginBottom: "14px" }}>
+          <div style={{ fontSize: "12px", letterSpacing: "3px", color: "#f8fafc", fontFamily: FONT_MONO, marginBottom: "14px" }}>
             KISA ÖZET
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "14px" }}>
@@ -406,7 +399,7 @@ function ActivityPanel() {
 
   return (
     <div style={{ flex: 1, overflowY: "auto", padding: "28px 34px", background: "linear-gradient(180deg, rgba(4,12,24,0.96), rgba(2,6,23,1))" }}>
-      <SectionBadge text="ETKİNLİK" color={PRIMARY} />
+      <SectionBadge text="ETKİNLİK" color={COLOR_PRIMARY} />
       <h2 style={{ fontSize: "32px", margin: "16px 0 10px", color: "#f8fafc", fontWeight: 800 }}>Haritayı okuyarak karar ver</h2>
       <p style={{ fontSize: "15px", lineHeight: 1.8, color: "#cbd5e1", margin: 0, maxWidth: "860px" }}>
         Bu bölümde önce bir çizimin harita sayılması için gereken koşulları seçecek, sonra harita elemanlarının işlevlerini kullanarak minik bir yorumlama çalışması yapacaksın.
@@ -431,11 +424,11 @@ function ActivityPanel() {
                     textAlign: "left",
                     padding: "14px 16px",
                     borderRadius: "14px",
-                    border: `1px solid ${active ? PRIMARY : "rgba(148,163,184,0.16)"}`,
-                    background: active ? `${PRIMARY}14` : "rgba(255,255,255,0.03)",
+                    border: `1px solid ${active ? COLOR_PRIMARY : "rgba(148,163,184,0.16)"}`,
+                    background: active ? `${COLOR_PRIMARY}14` : "rgba(255,255,255,0.03)",
                     color: active ? "#f8fafc" : "#cbd5e1",
                     cursor: "pointer",
-                    fontFamily: FONT,
+                    fontFamily: FONT_SANS,
                     fontSize: "14px",
                     fontWeight: 600,
                   }}
@@ -454,10 +447,10 @@ function ActivityPanel() {
                 borderRadius: "12px",
                 border: "none",
                 cursor: "pointer",
-                background: `linear-gradient(90deg, ${PRIMARY}, #14b8a6)`,
+                background: `linear-gradient(90deg, ${COLOR_PRIMARY}, #14b8a6)`,
                 color: "#052e16",
                 fontWeight: 800,
-                fontFamily: FONT,
+                fontFamily: FONT_SANS,
               }}
             >
               Kontrol Et
@@ -482,8 +475,8 @@ function ActivityPanel() {
           )}
         </div>
 
-        <div style={{ padding: "22px", borderRadius: "20px", background: PANEL, border: `1px solid ${SECONDARY}28` }}>
-          <div style={{ fontSize: "12px", letterSpacing: "3px", color: SECONDARY, fontFamily: MONO, marginBottom: "10px" }}>GÖREV 2</div>
+        <div style={{ padding: "22px", borderRadius: "20px", background: PANEL_DARK, border: `1px solid ${COLOR_SECONDARY}28` }}>
+          <div style={{ fontSize: "12px", letterSpacing: "3px", color: COLOR_SECONDARY, fontFamily: FONT_MONO, marginBottom: "10px" }}>GÖREV 2</div>
           <div style={{ fontSize: "22px", fontWeight: 800, color: "#f8fafc", marginBottom: "10px" }}>Elemanı seç, görevini öğren</div>
           <p style={{ fontSize: "14px", lineHeight: 1.8, color: "#cbd5e1", marginTop: 0 }}>
             Harita elemanlarından birini seç. Sonra bunun hangi bilgiyi okumakta kullanıldığını incele.
@@ -499,11 +492,11 @@ function ActivityPanel() {
                   style={{
                     padding: "14px 12px",
                     borderRadius: "14px",
-                    border: `1px solid ${active ? SECONDARY : "rgba(148,163,184,0.16)"}`,
-                    background: active ? `${SECONDARY}14` : "rgba(255,255,255,0.03)",
+                    border: `1px solid ${active ? COLOR_SECONDARY : "rgba(148,163,184,0.16)"}`,
+                    background: active ? `${COLOR_SECONDARY}14` : "rgba(255,255,255,0.03)",
                     color: active ? "#f8fafc" : "#cbd5e1",
                     cursor: "pointer",
-                    fontFamily: FONT,
+                    fontFamily: FONT_SANS,
                     fontSize: "14px",
                     fontWeight: 700,
                   }}
@@ -526,7 +519,7 @@ function ActivityPanel() {
           >
             {activeElement ? (
               <>
-                <div style={{ fontSize: "15px", fontWeight: 800, color: SECONDARY }}>{activeElement.label}</div>
+                <div style={{ fontSize: "15px", fontWeight: 800, color: COLOR_SECONDARY }}>{activeElement.label}</div>
                 <p style={{ fontSize: "14px", lineHeight: 1.9, color: "#dbeafe", margin: "8px 0 0" }}>{activeElement.hint}</p>
               </>
             ) : (
@@ -539,7 +532,7 @@ function ActivityPanel() {
       </div>
 
       <div style={{ marginTop: "20px", padding: "20px 22px", borderRadius: "20px", background: "rgba(245,158,11,0.08)", border: "1px solid rgba(245,158,11,0.2)" }}>
-        <div style={{ fontSize: "12px", letterSpacing: "3px", color: ACCENT, fontFamily: MONO, marginBottom: "8px" }}>SINIF İÇİN TARTIŞMA SORUSU</div>
+        <div style={{ fontSize: "12px", letterSpacing: "3px", color: COLOR_ACCENT, fontFamily: FONT_MONO, marginBottom: "8px" }}>SINIF İÇİN TARTIŞMA SORUSU</div>
         <p style={{ fontSize: "14px", lineHeight: 1.9, color: "#fde68a", margin: 0 }}>
           Drone ile kargo dağıtımı yapan bir sistemin doğru rota kurması için harita, koordinat ve GPS bilgisinden nasıl aynı anda yararlanabileceğini açıkla.
         </p>
@@ -556,7 +549,7 @@ function TestPanel() {
   const [done, setDone] = useState(false);
 
   const q = QUIZ_ITEMS[qIdx];
-  const progress = Math.round((qIdx / QUIZ_ITEMS.length) * 100);
+  const progress = Math.round(((qIdx + 1) / QUIZ_ITEMS.length) * 100);
 
   const handleAnswer = (index: number) => {
     if (sel !== null) return;
@@ -590,25 +583,25 @@ function TestPanel() {
     return (
       <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "18px", padding: "32px 24px", textAlign: "center", background: "linear-gradient(180deg, rgba(3,7,18,0.98), rgba(6,17,31,1))" }}>
         <div style={{ fontSize: "52px" }}>Harita</div>
-        <div style={{ fontSize: "26px", fontWeight: 800, color: "#e2e8f0", fontFamily: FONT }}>Test Tamamlandı</div>
-        <div style={{ fontSize: "50px", fontWeight: 800, color: pct >= 80 ? PRIMARY : pct >= 50 ? ACCENT : "#ef4444", fontFamily: MONO }}>{score} PUAN</div>
-        <div style={{ fontSize: "14px", color: "#94a3b8", fontFamily: FONT }}>{answers.filter(Boolean).length}/{QUIZ_ITEMS.length} doğru - %{pct}</div>
+        <div style={{ fontSize: "26px", fontWeight: 800, color: "#e2e8f0", fontFamily: FONT_SANS }}>Test Tamamlandı</div>
+        <div style={{ fontSize: "50px", fontWeight: 800, color: pct >= 80 ? COLOR_PRIMARY : pct >= 50 ? COLOR_ACCENT : "#ef4444", fontFamily: FONT_MONO }}>{score} PUAN</div>
+        <div style={{ fontSize: "14px", color: "#94a3b8", fontFamily: FONT_SANS }}>{answers.filter(Boolean).length}/{QUIZ_ITEMS.length} doğru - %{pct}</div>
         <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", justifyContent: "center" }}>
-          <div style={{ padding: "12px 16px", background: `${PRIMARY}10`, border: `1.5px solid ${PRIMARY}30`, borderRadius: "10px", textAlign: "center" }}>
-            <div style={{ fontSize: "13px", fontWeight: 800, color: PRIMARY, fontFamily: FONT }}>Doğru</div>
-            <div style={{ fontSize: "20px", fontWeight: 800, color: PRIMARY, fontFamily: MONO }}>{answers.filter(Boolean).length}/{QUIZ_ITEMS.length}</div>
+          <div style={{ padding: "12px 16px", background: `${COLOR_PRIMARY}10`, border: `1.5px solid ${COLOR_PRIMARY}30`, borderRadius: "10px", textAlign: "center" }}>
+            <div style={{ fontSize: "13px", fontWeight: 800, color: COLOR_PRIMARY, fontFamily: FONT_SANS }}>Doğru</div>
+            <div style={{ fontSize: "20px", fontWeight: 800, color: COLOR_PRIMARY, fontFamily: FONT_MONO }}>{answers.filter(Boolean).length}/{QUIZ_ITEMS.length}</div>
           </div>
           <div style={{ padding: "12px 16px", background: `rgba(245,158,11,0.1)`, border: `1.5px solid rgba(245,158,11,0.3)`, borderRadius: "10px", textAlign: "center" }}>
-            <div style={{ fontSize: "13px", fontWeight: 800, color: ACCENT, fontFamily: FONT }}>Başarı</div>
-            <div style={{ fontSize: "20px", fontWeight: 800, color: ACCENT, fontFamily: MONO }}>%{pct}</div>
+            <div style={{ fontSize: "13px", fontWeight: 800, color: COLOR_ACCENT, fontFamily: FONT_SANS }}>Başarı</div>
+            <div style={{ fontSize: "20px", fontWeight: 800, color: COLOR_ACCENT, fontFamily: FONT_MONO }}>%{pct}</div>
           </div>
         </div>
-        <div style={{ fontSize: "14px", color: "#94a3b8", maxWidth: "420px", lineHeight: "1.8", fontFamily: FONT }}>
+        <div style={{ fontSize: "14px", color: "#94a3b8", maxWidth: "420px", lineHeight: "1.8", fontFamily: FONT_SANS }}>
           {pct >= 80 ? "Harita okuryazarlığı konularını çok iyi kavradın." : pct >= 50 ? "İyi gidiyorsun. Öğren sekmesine dönüp kısa bir tekrar yaparsan daha da güçlenir." : "Öğren sekmesindeki konu özetlerini tekrar inceleyip testi yeniden çözebilirsin."}
         </div>
         <button
           onClick={retry}
-          style={{ padding: "13px 30px", background: `linear-gradient(90deg, #0f766e, ${PRIMARY})`, border: "none", borderRadius: "10px", color: "#fff", fontSize: "14px", fontWeight: 800, cursor: "pointer", fontFamily: FONT }}
+          style={{ padding: "13px 30px", background: `linear-gradient(90deg, #0f766e, ${COLOR_PRIMARY})`, border: "none", borderRadius: "10px", color: "#fff", fontSize: "14px", fontWeight: 800, cursor: "pointer", fontFamily: FONT_SANS }}
         >
           Tekrar Dene
         </button>
@@ -619,7 +612,7 @@ function TestPanel() {
   return (
     <div style={{ flex: 1, display: "flex", overflow: "hidden", background: "linear-gradient(180deg, rgba(3,7,18,0.98), rgba(6,17,31,1))" }}>
       <div style={{ width: "220px", flexShrink: 0, borderRight: "1px solid rgba(255,255,255,0.05)", background: "rgba(3,6,15,0.6)", padding: "20px 14px", display: "flex", flexDirection: "column", gap: "6px", overflowY: "auto" }}>
-        <div style={{ fontSize: "11px", letterSpacing: "2px", color: "#94a3b8", fontWeight: 800, fontFamily: FONT, marginBottom: "4px" }}>SORULAR</div>
+        <div style={{ fontSize: "11px", letterSpacing: "2px", color: "#94a3b8", fontWeight: 800, fontFamily: FONT_SANS, marginBottom: "4px" }}>SORULAR</div>
         {QUIZ_ITEMS.map((_, i) => {
           const doneItem = i < answers.length;
           const cur = i === qIdx;
@@ -640,16 +633,16 @@ function TestPanel() {
                 {doneItem ? answers[i] ? "OK" : "X" : i + 1}
               </div>
               <div>
-                <div style={{ fontSize: "10px", fontWeight: 700, color: cur ? ACCENT : "#cbd5e1", fontFamily: FONT }}>Soru {i + 1}</div>
-                <div style={{ fontSize: "10px", color: cur ? "#fcd34d" : "#64748b", fontFamily: FONT }}>HARITA</div>
+                <div style={{ fontSize: "10px", fontWeight: 700, color: cur ? COLOR_ACCENT : "#cbd5e1", fontFamily: FONT_SANS }}>Soru {i + 1}</div>
+                <div style={{ fontSize: "10px", color: cur ? "#fcd34d" : "#64748b", fontFamily: FONT_SANS }}>HARITA</div>
               </div>
             </div>
           );
         })}
         <div style={{ marginTop: "auto", padding: "12px", background: "rgba(0,0,0,0.3)", border: "1px solid rgba(255,255,255,0.05)", borderRadius: "9px", textAlign: "center" }}>
-          <div style={{ fontSize: "11px", color: "#94a3b8", fontWeight: 700, fontFamily: FONT, marginBottom: "4px" }}>PUAN</div>
-          <div style={{ fontSize: "30px", fontWeight: 800, color: ACCENT, fontFamily: MONO }}>{score}</div>
-          <div style={{ fontSize: "11px", color: "#64748b", fontFamily: FONT }}>/ {QUIZ_ITEMS.length * 10}</div>
+          <div style={{ fontSize: "11px", color: "#94a3b8", fontWeight: 700, fontFamily: FONT_SANS, marginBottom: "4px" }}>PUAN</div>
+          <div style={{ fontSize: "30px", fontWeight: 800, color: COLOR_ACCENT, fontFamily: FONT_MONO }}>{score}</div>
+          <div style={{ fontSize: "11px", color: "#64748b", fontFamily: FONT_SANS }}>/ {QUIZ_ITEMS.length * 10}</div>
         </div>
       </div>
 
@@ -657,18 +650,18 @@ function TestPanel() {
         <div style={{ width: "100%", maxWidth: "640px" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <span style={{ fontSize: "11px", color: "#94a3b8", fontWeight: 700, fontFamily: FONT }}>SORU {qIdx + 1}/{QUIZ_ITEMS.length}</span>
-              <span style={{ padding: "2px 8px", background: `${ACCENT}18`, border: `1px solid ${ACCENT}40`, borderRadius: "4px", fontSize: "10px", fontWeight: 800, color: ACCENT, fontFamily: FONT }}>TEST</span>
+              <span style={{ fontSize: "11px", color: "#94a3b8", fontWeight: 700, fontFamily: FONT_SANS }}>SORU {qIdx + 1}/{QUIZ_ITEMS.length}</span>
+              <span style={{ padding: "2px 8px", background: `${COLOR_ACCENT}18`, border: `1px solid ${COLOR_ACCENT}40`, borderRadius: "4px", fontSize: "10px", fontWeight: 800, color: COLOR_ACCENT, fontFamily: FONT_SANS }}>TEST</span>
             </div>
-            <span style={{ fontSize: "11px", color: "#94a3b8", fontFamily: FONT }}>%{progress}</span>
+            <span style={{ fontSize: "11px", color: "#94a3b8", fontFamily: FONT_SANS }}>%{progress}</span>
           </div>
           <div style={{ height: "4px", background: "rgba(255,255,255,0.06)", borderRadius: "2px", overflow: "hidden" }}>
-            <div style={{ height: "100%", width: `${(qIdx / QUIZ_ITEMS.length) * 100}%`, background: `linear-gradient(90deg, #0f766e, ${ACCENT})`, borderRadius: "2px", transition: "width 0.4s" }} />
+            <div style={{ height: "100%", width: `${progress}%`, background: `linear-gradient(90deg, #0f766e, ${COLOR_ACCENT})`, borderRadius: "2px", transition: "width 0.4s" }} />
           </div>
         </div>
 
         <div style={{ maxWidth: "640px", width: "100%", padding: "22px 24px", background: `rgba(245,158,11,0.08)`, border: `1.5px solid rgba(245,158,11,0.2)`, borderRadius: "14px" }}>
-          <p style={{ fontSize: "15px", color: "#e2e8f0", lineHeight: "1.9", margin: 0, fontWeight: 600, fontFamily: FONT }}>{q.question}</p>
+          <p style={{ fontSize: "15px", color: "#e2e8f0", lineHeight: "1.9", margin: 0, fontWeight: 600, fontFamily: FONT_SANS }}>{q.question}</p>
         </div>
 
         <div style={{ maxWidth: "640px", width: "100%", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "9px" }}>
@@ -697,13 +690,13 @@ function TestPanel() {
                 key={i}
                 onClick={() => handleAnswer(i)}
                 disabled={sel !== null}
-                style={{ padding: "13px 15px", background: bg, border: `2px solid ${border}`, borderRadius: "10px", cursor: sel !== null ? "default" : "pointer", fontFamily: FONT, textAlign: "left", transition: "all 0.18s" }}
+                style={{ padding: "13px 15px", background: bg, border: `2px solid ${border}`, borderRadius: "10px", cursor: sel !== null ? "default" : "pointer", fontFamily: FONT_SANS, textAlign: "left", transition: "all 0.18s" }}
               >
                 <div style={{ display: "flex", alignItems: "flex-start", gap: "9px" }}>
-                  <span style={{ width: "22px", height: "22px", borderRadius: "50%", background: show && isCorr ? "#34d399" : show && isSel && !isCorr ? "#ef4444" : `${ACCENT}20`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "10px", fontWeight: 800, color: "#fff", flexShrink: 0, marginTop: "1px", fontFamily: MONO }}>
+                  <span style={{ width: "22px", height: "22px", borderRadius: "50%", background: show && isCorr ? "#34d399" : show && isSel && !isCorr ? "#ef4444" : `${COLOR_ACCENT}20`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "10px", fontWeight: 800, color: "#fff", flexShrink: 0, marginTop: "1px", fontFamily: FONT_MONO }}>
                     {show && isCorr ? "OK" : show && isSel && !isCorr ? "X" : String.fromCharCode(65 + i)}
                   </span>
-                  <span style={{ fontSize: "13px", color, fontWeight: 600, lineHeight: "1.6", fontFamily: FONT }}>{opt}</span>
+                  <span style={{ fontSize: "13px", color, fontWeight: 600, lineHeight: "1.6", fontFamily: FONT_SANS }}>{opt}</span>
                 </div>
               </button>
             );
@@ -712,15 +705,15 @@ function TestPanel() {
 
         {sel !== null && (
           <div style={{ maxWidth: "640px", width: "100%", padding: "15px 18px", background: sel === q.correct ? "rgba(52,211,153,0.07)" : "rgba(239,68,68,0.07)", border: `1.5px solid ${sel === q.correct ? "rgba(52,211,153,0.25)" : "rgba(239,68,68,0.25)"}`, borderRadius: "12px" }}>
-            <div style={{ fontSize: "14px", fontWeight: 800, color: sel === q.correct ? "#34d399" : "#ef4444", marginBottom: "8px", fontFamily: FONT }}>{sel === q.correct ? "Doğru" : "Yanlış"}</div>
-            <p style={{ fontSize: "13px", color: "#cbd5e1", lineHeight: "1.85", margin: 0, fontFamily: FONT }}>{q.explanation}</p>
+            <div style={{ fontSize: "14px", fontWeight: 800, color: sel === q.correct ? "#34d399" : "#ef4444", marginBottom: "8px", fontFamily: FONT_SANS }}>{sel === q.correct ? "Doğru" : "Yanlış"}</div>
+            <p style={{ fontSize: "13px", color: "#cbd5e1", lineHeight: "1.85", margin: 0, fontFamily: FONT_SANS }}>{q.explanation}</p>
           </div>
         )}
 
         {sel !== null && (
           <button
             onClick={next}
-            style={{ padding: "12px 34px", background: `linear-gradient(90deg, #0f766e, ${PRIMARY})`, border: "none", borderRadius: "10px", color: "#fff", fontSize: "14px", fontWeight: 800, cursor: "pointer", fontFamily: FONT }}
+            style={{ padding: "12px 34px", background: `linear-gradient(90deg, #0f766e, ${COLOR_PRIMARY})`, border: "none", borderRadius: "10px", color: "#fff", fontSize: "14px", fontWeight: 800, cursor: "pointer", fontFamily: FONT_SANS }}
           >
             {qIdx >= QUIZ_ITEMS.length - 1 ? "Sonuçları Gör" : "Sonraki Soru"}
           </button>
@@ -748,8 +741,8 @@ export default function DistributionMethodsActivity({ onClose }: { onClose: () =
         zIndex: 1000,
         display: "flex",
         flexDirection: "column",
-        background: BG,
-        fontFamily: FONT,
+        background: BG_DARK,
+        fontFamily: FONT_SANS,
       }}
     >
       <div
@@ -767,7 +760,7 @@ export default function DistributionMethodsActivity({ onClose }: { onClose: () =
       >
         <div style={{ display: "flex", alignItems: "center", gap: "22px", minWidth: 0 }}>
           <div>
-            <div style={{ fontSize: "10px", letterSpacing: "4px", color: PRIMARY, opacity: 0.75, fontFamily: MONO }}>HARİTA OKURYAZARLIĞI</div>
+            <div style={{ fontSize: "10px", letterSpacing: "4px", color: COLOR_PRIMARY, opacity: 0.75, fontFamily: FONT_MONO }}>HARİTA OKURYAZARLIĞI</div>
             <div style={{ fontSize: "22px", fontWeight: 800, color: "#f8fafc" }}>Konu Anlatımı, Etkinlik ve Test</div>
           </div>
 
@@ -781,11 +774,11 @@ export default function DistributionMethodsActivity({ onClose }: { onClose: () =
                   cursor: "pointer",
                   borderRadius: "10px",
                   padding: "9px 14px",
-                  background: tab === item.id ? PRIMARY : "transparent",
+                  background: tab === item.id ? COLOR_PRIMARY : "transparent",
                   color: tab === item.id ? "#052e16" : "#cbd5e1",
                   fontWeight: 800,
                   fontSize: "12px",
-                  fontFamily: FONT,
+                  fontFamily: FONT_SANS,
                 }}
               >
                 {item.icon} {item.label}
@@ -804,7 +797,7 @@ export default function DistributionMethodsActivity({ onClose }: { onClose: () =
             color: "#fca5a5",
             cursor: "pointer",
             fontWeight: 700,
-            fontFamily: FONT,
+            fontFamily: FONT_SANS,
           }}
         >
           X KAPAT

@@ -1,5 +1,6 @@
 'use client';
 import { useState, useRef, useEffect, useCallback } from "react";
+import { FONT_SANS, FONT_MONO, BG_DARK, COLOR_CBS, COLOR_UA, COLOR_GPS, PANEL_DARK } from "./theme";
 
 // ─── Ses ─────────────────────────────────────────────────────────────────────
 function beep(f: number, d: number, t: OscillatorType = "sine", v = 0.15) {
@@ -17,15 +18,6 @@ function beep(f: number, d: number, t: OscillatorType = "sine", v = 0.15) {
 const sndOK    = () => [440,554,660].forEach((f,i)=>setTimeout(()=>beep(f,0.22,"sine",0.13),i*80));
 const sndFail  = () => beep(200,0.30,"sawtooth",0.12);
 const sndClick = () => beep(680,0.07,"square",0.06);
-
-// ─── Stil sabitleri ─────────────────────────────────────────────────────────
-const FONT     = "'Segoe UI','Helvetica Neue',Arial,sans-serif";
-const MONO     = "'Courier New',Courier,monospace";
-const BG       = "#06101f"; // Koyu arka plan
-const C_CBS    = "#06b6d4";   // cyan - CBS
-const C_UA     = "#a78bfa";   // violet - Uzaktan Algılama
-const C_GPS    = "#34d399";   // emerald - GPS
-const C_PANEL  = "rgba(6,16,31,0.82)";
 
 type MainTab = "learn" | "act" | "test";
 type LearnSec = "cbs" | "ua" | "gps";
@@ -68,7 +60,7 @@ const TEST_ITEMS: QItem[] = [
 // ─── Bartın Aktivite Verileri ───────────────────────────────────────────────
 interface CbsComponent { id: string; label: string; color: string; description: string; example: string; }
 const CBS_COMPONENTS: CbsComponent[] = [
-  { id:"kullanici", label:"Kullanıcı",  color:C_CBS,
+  { id:"kullanici", label:"Kullanıcı",  color:COLOR_CBS,
     description:"CBS uygulamalarının başarısında bilgi ve becerisi önemli rol oynar; sistemi yönetir.",
     example:"Orman yangını risk haritasını oluşturan uzman coğrafyacılar ve CBS uzmanları" },
   { id:"veri",      label:"Veri",       color:"#60a5fa",
@@ -95,9 +87,9 @@ function CbsDiagram() {
       <div style={{ width:"260px", flexShrink:0 }}>
         <svg viewBox="0 0 260 260" width="260" height="260">
           {/* Merkez */}
-          <circle cx="130" cy="130" r="46" fill={`${C_CBS}18`} stroke={C_CBS} strokeWidth="2"/>
-          <text x="130" y="126" textAnchor="middle" fontSize="11" fill={C_CBS} fontFamily={FONT} fontWeight="800">CBS'nin</text>
-          <text x="130" y="141" textAnchor="middle" fontSize="11" fill={C_CBS} fontFamily={FONT} fontWeight="800">Bileşenleri</text>
+          <circle cx="130" cy="130" r="46" fill={`${COLOR_CBS}18`} stroke={COLOR_CBS} strokeWidth="2"/>
+          <text x="130" y="126" textAnchor="middle" fontSize="11" fill={COLOR_CBS} fontFamily={FONT_SANS} fontWeight="800">CBS'nin</text>
+          <text x="130" y="141" textAnchor="middle" fontSize="11" fill={COLOR_CBS} fontFamily={FONT_SANS} fontWeight="800">Bileşenleri</text>
           {/* 5 bileşen */}
           {CBS_COMPONENTS.map((comp, i) => {
             const angle = (i * 72 - 90) * Math.PI / 180;
@@ -108,30 +100,30 @@ function CbsDiagram() {
               <g key={comp.id} onClick={() => { sndClick(); setActive(active === comp.id ? null : comp.id); }} style={{ cursor:"pointer" }}>
                 <line x1="130" y1="130" x2={cx} y2={cy} stroke={`${comp.color}40`} strokeWidth="1.5" strokeDasharray="4,3"/>
                 <circle cx={cx} cy={cy} r={isActive ? 30 : 26} fill={isActive ? `${comp.color}25` : `${comp.color}12`} stroke={comp.color} strokeWidth={isActive ? 2.5 : 1.5} style={{ transition:"all 0.2s" }}/>
-                <text x={cx} y={cy+4} textAnchor="middle" fontSize="10" fill={comp.color} fontFamily={FONT} fontWeight="700">{comp.label}</text>
+                <text x={cx} y={cy+4} textAnchor="middle" fontSize="10" fill={comp.color} fontFamily={FONT_SANS} fontWeight="700">{comp.label}</text>
               </g>
             );
           })}
         </svg>
-        <p style={{ fontSize:"11px", color:"#4a5568", textAlign:"center", fontFamily:FONT, marginTop:"4px" }}>Bileşene tıkla → ayrıntıları gör</p>
+        <p style={{ fontSize:"11px", color:"#4a5568", textAlign:"center", fontFamily:FONT_SANS, marginTop:"4px" }}>Bileşene tıkla → ayrıntıları gör</p>
       </div>
       {/* Açıklama paneli */}
       <div style={{ flex:1 }}>
         {comp ? (
           <div style={{ padding:"18px 20px", background:`${comp.color}0d`, border:`1.5px solid ${comp.color}30`, borderRadius:"12px", animation:"fadeIn 0.2s ease" }}>
-            <div style={{ fontSize:"14px", fontWeight:"800", color:comp.color, marginBottom:"10px", fontFamily:FONT, letterSpacing:"0.5px" }}>
+            <div style={{ fontSize:"14px", fontWeight:"800", color:comp.color, marginBottom:"10px", fontFamily:FONT_SANS, letterSpacing:"0.5px" }}>
               {comp.label}
             </div>
-            <p style={{ fontSize:"13px", color:"#94a3b8", lineHeight:"1.85", margin:"0 0 12px", fontFamily:FONT }}>{comp.description}</p>
+            <p style={{ fontSize:"13px", color:"#94a3b8", lineHeight:"1.85", margin:"0 0 12px", fontFamily:FONT_SANS }}>{comp.description}</p>
             <div style={{ padding:"10px 14px", background:"rgba(0,0,0,0.2)", borderRadius:"8px", borderLeft:`3px solid ${comp.color}` }}>
-              <div style={{ fontSize:"10px", color:comp.color, fontWeight:"800", letterSpacing:"1.5px", marginBottom:"5px", fontFamily:FONT }}>BARTIN ÖRNEĞİ</div>
-              <p style={{ fontSize:"12px", color:"#cbd5e1", lineHeight:"1.75", margin:0, fontFamily:FONT }}>{comp.example}</p>
+              <div style={{ fontSize:"10px", color:comp.color, fontWeight:"800", letterSpacing:"1.5px", marginBottom:"5px", fontFamily:FONT_SANS }}>BARTIN ÖRNEĞİ</div>
+              <p style={{ fontSize:"12px", color:"#cbd5e1", lineHeight:"1.75", margin:0, fontFamily:FONT_SANS }}>{comp.example}</p>
             </div>
           </div>
         ) : (
           <div style={{ padding:"20px", background:"rgba(6,182,212,0.05)", border:"1.5px dashed rgba(6,182,212,0.2)", borderRadius:"12px", textAlign:"center" }}>
             <div style={{ fontSize:"28px", marginBottom:"10px" }}>🗺️</div>
-            <p style={{ fontSize:"13px", color:"#4a5568", lineHeight:"1.8", fontFamily:FONT, margin:0 }}>
+            <p style={{ fontSize:"13px", color:"#4a5568", lineHeight:"1.8", fontFamily:FONT_SANS, margin:0 }}>
               Soldaki diyagramda bir bileşene tıklayarak<br/>açıklamasını ve Bartın orman yangını<br/>örneğindeki karşılığını öğren.
             </p>
           </div>
@@ -140,7 +132,7 @@ function CbsDiagram() {
         <div style={{ marginTop:"12px", display:"grid", gridTemplateColumns:"1fr 1fr", gap:"6px" }}>
           {CBS_COMPONENTS.map(c => (
             <button key={c.id} onClick={() => { sndClick(); setActive(active === c.id ? null : c.id); }}
-              style={{ padding:"8px 12px", background:active===c.id?`${c.color}20`:"rgba(0,0,0,0.2)", border:`1.5px solid ${active===c.id?c.color:`${c.color}30`}`, borderRadius:"8px", cursor:"pointer", textAlign:"left", fontFamily:FONT, transition:"all 0.18s" }}>
+              style={{ padding:"8px 12px", background:active===c.id?`${c.color}20`:"rgba(0,0,0,0.2)", border:`1.5px solid ${active===c.id?c.color:`${c.color}30`}`, borderRadius:"8px", cursor:"pointer", textAlign:"left", fontFamily:FONT_SANS, transition:"all 0.18s" }}>
               <span style={{ fontSize:"12px", fontWeight:"700", color:active===c.id?c.color:"#64748b" }}>{c.label}</span>
             </button>
           ))}
@@ -158,7 +150,7 @@ function GpsDiagram() {
       desc:"Dünya yörüngesinde hareket eden uydular, kullanıcılara coğrafi konum ve yerel saat verisi içeren radyo sinyalleri iletir." },
     { icon:"📡", label:"Yer Kontrol Ağı", color:"#ef4444",
       desc:"Antenlerin bulunduğu izleme ve kontrol istasyonları uyduların gönderdiği radyo sinyallerini yakalar, uyduların konumu ve hareketlerini takip ederek yönlendirme yapar." },
-    { icon:"📱", label:"GPS Alıcıları", color:C_GPS,
+    { icon:"📱", label:"GPS Alıcıları", color:COLOR_GPS,
       desc:"Saat, akıllı telefon, araç içi navigasyon, el tipi ve ayaklı cihazlar gibi farklı tiplerde geliştirilmiştir. Koordinatlar uydular tarafından belirlenir." },
   ];
   return (
@@ -166,7 +158,7 @@ function GpsDiagram() {
       <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:"10px" }}>
         {parts.map((p,i)=>(
           <button key={i} onClick={()=>{ sndClick(); setActive(active===i?null:i); }}
-            style={{ padding:"18px 14px", background:active===i?`${p.color}18`:`${p.color}08`, border:`2px solid ${active===i?p.color:`${p.color}30`}`, borderRadius:"12px", cursor:"pointer", textAlign:"center", fontFamily:FONT, transition:"all 0.2s" }}>
+            style={{ padding:"18px 14px", background:active===i?`${p.color}18`:`${p.color}08`, border:`2px solid ${active===i?p.color:`${p.color}30`}`, borderRadius:"12px", cursor:"pointer", textAlign:"center", fontFamily:FONT_SANS, transition:"all 0.2s" }}>
             <div style={{ fontSize:"26px", marginBottom:"8px" }}>{p.icon}</div>
             <div style={{ fontSize:"12px", fontWeight:"800", color:active===i?p.color:"#64748b" }}>{p.label}</div>
           </button>
@@ -174,16 +166,16 @@ function GpsDiagram() {
       </div>
       {/* Ok diyagramı */}
       <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:"6px", padding:"10px 0" }}>
-        <div style={{ padding:"6px 12px", background:"rgba(245,158,11,0.1)", border:"1px solid rgba(245,158,11,0.3)", borderRadius:"6px", fontSize:"11px", color:"#f59e0b", fontFamily:FONT, fontWeight:"700" }}>🛰️ Uydu</div>
+        <div style={{ padding:"6px 12px", background:"rgba(245,158,11,0.1)", border:"1px solid rgba(245,158,11,0.3)", borderRadius:"6px", fontSize:"11px", color:"#f59e0b", fontFamily:FONT_SANS, fontWeight:"700" }}>🛰️ Uydu</div>
         <div style={{ fontSize:"14px", color:"#4a5568" }}>━━ sinyal ━━▶</div>
-        <div style={{ padding:"6px 12px", background:"rgba(239,68,68,0.1)", border:"1px solid rgba(239,68,68,0.3)", borderRadius:"6px", fontSize:"11px", color:"#ef4444", fontFamily:FONT, fontWeight:"700" }}>📡 Yer İstasyonu</div>
+        <div style={{ padding:"6px 12px", background:"rgba(239,68,68,0.1)", border:"1px solid rgba(239,68,68,0.3)", borderRadius:"6px", fontSize:"11px", color:"#ef4444", fontFamily:FONT_SANS, fontWeight:"700" }}>📡 Yer İstasyonu</div>
         <div style={{ fontSize:"14px", color:"#4a5568" }}>━━ sinyal ━━▶</div>
-        <div style={{ padding:"6px 12px", background:"rgba(52,211,153,0.1)", border:"1px solid rgba(52,211,153,0.3)", borderRadius:"6px", fontSize:"11px", color:C_GPS, fontFamily:FONT, fontWeight:"700" }}>📱 Alıcı</div>
+        <div style={{ padding:"6px 12px", background:"rgba(52,211,153,0.1)", border:"1px solid rgba(52,211,153,0.3)", borderRadius:"6px", fontSize:"11px", color:COLOR_GPS, fontFamily:FONT_SANS, fontWeight:"700" }}>📱 Alıcı</div>
       </div>
       {active !== null && (
         <div style={{ padding:"16px 18px", background:`${parts[active].color}0d`, border:`1.5px solid ${parts[active].color}30`, borderRadius:"10px" }}>
-          <div style={{ fontSize:"13px", fontWeight:"800", color:parts[active].color, marginBottom:"8px", fontFamily:FONT }}>{parts[active].icon} {parts[active].label}</div>
-          <p style={{ fontSize:"13px", color:"#94a3b8", lineHeight:"1.85", margin:0, fontFamily:FONT }}>{parts[active].desc}</p>
+          <div style={{ fontSize:"13px", fontWeight:"800", color:parts[active].color, marginBottom:"8px", fontFamily:FONT_SANS }}>{parts[active].icon} {parts[active].label}</div>
+          <p style={{ fontSize:"13
         </div>
       )}
     </div>
