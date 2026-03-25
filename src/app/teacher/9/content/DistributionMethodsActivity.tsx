@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import { useMemo, useState } from "react";
+import MapReadingActivity from "./MapReadingActivity";
 
 // ─── Ses ─────────────────────────────────────────────────────────────────────
 function beep(f: number, d: number, t: OscillatorType = "sine", v = 0.15) {
@@ -27,7 +28,7 @@ const SECONDARY = "#38bdf8";
 const ACCENT = "#f59e0b";
 const PANEL = "rgba(7,18,33,0.88)";
 
-type Tab = "learn" | "activity" | "test";
+type Tab = "learn" | "activity" | "map_reading" | "test";
 type LearnSection = "temel" | "elemanlar" | "turler" | "koordinat";
 
 interface LearnCardItem {
@@ -734,7 +735,8 @@ export default function DistributionMethodsActivity({ onClose }: { onClose: () =
 
   const tabs: { id: Tab; label: string; icon: string }[] = [
     { id: "learn", label: "ÖĞREN", icon: "📘" },
-    { id: "activity", label: "ETKİNLİK", icon: "🧩" },
+    { id: "activity", label: "ETKİNLİK 1", icon: "🧩" },
+    { id: "map_reading", label: "ETKİNLİK 2", icon: "🗺️" },
     { id: "test", label: "TEST", icon: "📝" },
   ];
 
@@ -812,6 +814,7 @@ export default function DistributionMethodsActivity({ onClose }: { onClose: () =
       <div style={{ flex: 1, minHeight: 0 }}>
         {tab === "learn" && <LearnPanel />}
         {tab === "activity" && <ActivityPanel />}
+        {tab === "map_reading" && <MapReadingActivity />}
         {tab === "test" && <TestPanel />}
       </div>
     </div>

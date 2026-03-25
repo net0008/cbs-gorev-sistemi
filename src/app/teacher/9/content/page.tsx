@@ -13,7 +13,7 @@ import MekanBilgiActivity from './Mekanbilgiactivity';
 import TimeZonesActivity from './TimeZonesActivity';
 import DistributionMethodsActivity from './DistributionMethodsActivity';
 
-type ActivityType = null | 'activity1' | 'activity2' | 'projections' | 'scale' | 'mapTypes' | 'topoactivity' | 'location' | 'mekanBilgi' | 'time-zones' | 'map-literacy';
+type ActivityType = null | 'activity2' | 'projections' | 'scale' | 'mapTypes' | 'topoactivity' | 'location' | 'mekanBilgi' | 'time-zones' | 'map-literacy';
 
 export default function ContentCatalogPage() {
   const [activeActivity, setActiveActivity] = useState<ActivityType>(null);
@@ -31,23 +31,6 @@ export default function ContentCatalogPage() {
       {/* CSS Grid - Etkinlik Kartları Alanı */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto w-full">
         
-        {/* 1. Kutu: Haritalar Nasıl Okunur? */}
-        <div 
-          onClick={() => setActiveActivity('activity1')}
-          className="group cursor-pointer bg-slate-900 border-2 border-slate-800 hover:border-emerald-500 rounded-3xl p-8 transition-all duration-300 hover:shadow-[0_0_40px_rgba(16,185,129,0.15)] hover:-translate-y-2 flex flex-col items-center text-center relative overflow-hidden"
-        >
-          <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-emerald-600 to-teal-400 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-          <div className="w-20 h-20 bg-emerald-950 border border-emerald-800 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
-            <Map size={36} className="text-emerald-400" />
-          </div>
-          <h2 className="text-2xl font-bold text-emerald-400 mb-4">1. Etkinlik: Haritalar Nasıl Okunur?</h2>
-          <div className="text-sm text-slate-400 leading-relaxed font-medium text-left w-full bg-slate-950/50 p-4 rounded-xl space-y-2">
-            <p><strong className="text-slate-300">Öğrenme Çıktıları:</strong> COĞ.9.2.1. Harita uygulamaları yapabilme</p>
-            <p><strong className="text-slate-300">Süreç Bileşeni:</strong> a) Haritaya ait bileşenlerden yararlanarak haritaları okur.</p>
-            <p><strong className="text-slate-300">Araç Seti:</strong> Harita</p>
-          </div>
-        </div>
-
         {/* 2. Kutu: Coğrafi Koordinatlar */}
         <div 
           onClick={() => setActiveActivity('activity2')}
@@ -196,7 +179,7 @@ export default function ContentCatalogPage() {
           <div className="w-20 h-20 bg-lime-950 border border-lime-800 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
             <Map size={36} className="text-lime-400" />
           </div>
-          <h2 className="text-2xl font-bold text-lime-400 mb-4">10. Etkinlik: Harita Okuryazarlığı</h2>
+          <h2 className="text-2xl font-bold text-lime-400 mb-4">1. Etkinlik: Harita Okuryazarlığı</h2>
           <div className="text-sm text-slate-400 leading-relaxed font-medium text-left w-full bg-slate-950/50 p-4 rounded-xl space-y-2">
             <p><strong className="text-slate-300">Öğrenme Çıktısı:</strong> Haritanın temel özelliklerini, elemanlarını ve coğrafi koordinat sistemini kavrar.</p>
             <p><strong className="text-slate-300">İçerik Akışı:</strong> Konu anlatımı + etkileşimli etkinlik + ölçme ve değerlendirme testi</p>
@@ -206,9 +189,6 @@ export default function ContentCatalogPage() {
       </div>
 
       {/* --- Aktif Modal / Tam Ekran Render Alanı --- */}
-      {activeActivity === 'activity1' && (
-        <MapReadingActivity onClose={() => setActiveActivity(null)} />
-      )}
       {activeActivity === 'activity2' && (
         <RouteSimulationActivity onClose={() => setActiveActivity(null)} />
       )}

@@ -4,10 +4,6 @@ import { motion, AnimatePresence, PanInfo } from 'framer-motion';
 import Image from 'next/image';
 import { X, CheckCircle } from 'lucide-react';
 
-interface MapReadingActivityProps {
-  onClose: () => void;
-}
-
 // 🎯 Hasbi Hocam, En Son Verdiğin Koordinatlar (Zerre şaşmaz)
 const coordinatesBlock = {
   area_x5F_title:   { centerX: 53.38, centerY: 10.51, width: 65.06, height: 15.82 },
@@ -17,7 +13,7 @@ const coordinatesBlock = {
   area_x5F_coords:  { centerX: 1.43,  centerY: 45.75, width: 3.16,  height: 64.39 },
 };
 
-export default function MapReadingActivity({ onClose }: MapReadingActivityProps) {
+export default function MapReadingActivity() {
   const [solved, setSolved] = useState<string[]>([]);
   // dropZoneRefs'i artık kullanmamıza gerek kalmadı ama yapıyı bozmamak için tutuyoruz
   const dropZoneRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
@@ -110,15 +106,7 @@ export default function MapReadingActivity({ onClose }: MapReadingActivityProps)
   }, []);
 
   return (
-    <div ref={activityAreaRef} className="fixed inset-0 z-50 bg-slate-950 flex flex-col overflow-hidden select-none touch-none">
-      <div className="p-3 px-6 flex justify-between items-center bg-black/60 border-b border-white/10 flex-shrink-0">
-        <div className="text-white">
-          <h2 className="font-bold text-lg text-emerald-400 leading-tight">Haritalar Nasıl Okunur?</h2>
-          <span className="text-[10px] text-slate-500 uppercase font-black tracking-widest block mt-0.5">Öğrenme Çıktıları ve Süreç Bileşenleri</span>
-        </div>
-        <button onClick={onClose} className="bg-red-600 hover:bg-red-700 text-white px-6 py-1.5 rounded-full font-bold text-sm transition-all active:scale-95">KAPAT</button>
-      </div>
-
+    <div ref={activityAreaRef} className="h-full bg-slate-950 flex flex-col overflow-hidden select-none touch-none">
       <div className="bg-[#2D3328]/95 p-2 flex flex-wrap justify-center items-center gap-2 border-b border-white/5 flex-shrink-0 min-h-[55px] z-10">
         <AnimatePresence>
           {Object.keys(coordinatesBlock).filter(id => !solved.includes(id)).map((id) => (
