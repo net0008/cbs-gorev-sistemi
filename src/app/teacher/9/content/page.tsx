@@ -10,8 +10,9 @@ import MapTypesActivity from './MapTypesActivity';
 import Topoactivity from './Topoactivity';
 import LocationActivity from './Locationactivity';
 import MekanBilgiActivity from './Mekanbilgiactivity';
+import TimeZonesActivity from './TimeZonesActivity';
 
-type ActivityType = null | 'activity1' | 'activity2' | 'projections' | 'scale' | 'mapTypes' | 'topoactivity' | 'location' | 'mekanBilgi';
+type ActivityType = null | 'activity1' | 'activity2' | 'projections' | 'scale' | 'mapTypes' | 'topoactivity' | 'location' | 'mekanBilgi' | 'time-zones';
 
 export default function ContentCatalogPage() {
   const [activeActivity, setActiveActivity] = useState<ActivityType>(null);
@@ -211,6 +212,9 @@ export default function ContentCatalogPage() {
       )}
       {activeActivity === 'mekanBilgi' && (
         <MekanBilgiActivity onClose={() => setActiveActivity(null)} />
+      )}
+      {activeActivity === 'time-zones' && (
+        <TimeZonesActivity onClose={() => setActiveActivity(null)} />
       )}
     </div>
   );
