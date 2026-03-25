@@ -175,7 +175,7 @@ function GpsDiagram() {
       {active !== null && (
         <div style={{ padding:"16px 18px", background:`${parts[active].color}0d`, border:`1.5px solid ${parts[active].color}30`, borderRadius:"10px" }}>
           <div style={{ fontSize:"13px", fontWeight:"800", color:parts[active].color, marginBottom:"8px", fontFamily:FONT_SANS }}>{parts[active].icon} {parts[active].label}</div>
-          <p style={{ fontSize:"13
+          <p style={{ fontSize:"13px", color:"#94a3b8", lineHeight:"1.85", margin:0, fontFamily:FONT_SANS }}>{parts[active].desc}</p>
         </div>
       )}
     </div>

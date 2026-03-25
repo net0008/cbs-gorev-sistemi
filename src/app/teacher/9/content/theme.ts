@@ -6,6 +6,10 @@ export const COLOR_PRIMARY = "#22c55e";
 export const COLOR_SECONDARY = "#38bdf8";
 export const COLOR_ACCENT = "#f59e0b";
 export const COLOR_INFO = "#00c8ff";
+export const COLOR_INFO_LIGHT = "#c8e0ff";
+export const COLOR_INFO_DARK = "#4a7a9a";
+export const COLOR_BLUE = "#3b82f6";
+export const COLOR_PINK = "#ec4899";
 
 // Backgrounds
 export const BG_DARK = "#06101f";
@@ -23,4 +27,6 @@ export const COLOR_UA = "#a78bfa";
 export const COLOR_GPS = "#34d399";
 export const COLOR_LOCATION = "#6366f1";
 export const COLOR_SCALE = "#fbbf24";
+export const COLOR_SCALE_DIM = "#d97706";
+export const COLOR_SCALE_DARK = "#92400e";
 export const COLOR_TOPO = "#f97316";

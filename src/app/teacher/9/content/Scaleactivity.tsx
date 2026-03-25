@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { FONT_SANS, FONT_MONO, BG_DARK, PANEL_DARK, COLOR_SCALE, COLOR_SCALE_DIM, COLOR_SCALE_DARK, COLOR_SUCCESS, COLOR_ERROR } from "./theme";
 
 // ─── Tipler ───────────────────────────────────────────────────────────────────
 type Tab       = "learn" | "measure" | "convert" | "mapScaleRel" | "test";
@@ -41,18 +42,6 @@ const TEST_ITEMS: QItem[] = [
   { type:"concept",  q:"Kesir ölçekte payda neyi ifade eder?",                                                 opts:["Haritanın boyutunu","Gerçek uzunluğu","Küçültme oranını","Harita alanını"], correct:2, exp:"Kesir ölçekte pay=1 (haritada 1 cm), payda ise yapılan küçültme oranını gösterir. 1/100.000 → 100.000 kat küçültme." },
 ];
 
-// ─── Stil sabitleri ───────────────────────────────────────────────────────────
-// Okunabilir font ailesi: sistem fontlarından seç (web-safe + modern)
-const FONT_BODY   = "'Segoe UI', 'Helvetica Neue', Arial, sans-serif";
-const FONT_MONO   = "'Courier New', Courier, monospace";
-const C_GOLD      = "#fbbf24";
-const C_GOLD_DIM  = "#d97706";
-const C_GOLD_DARK = "#92400e";
-const C_GREEN     = "#10b981";
-const C_RED       = "#ef4444";
-const C_BG        = "#07111e";
-const C_PANEL     = "rgba(4,9,22,0.75)";
-
 function formatNum(cm: number): string {
   if (cm >= 100000) return (cm / 100000).toFixed(cm % 100000 === 0 ? 0 : 1) + " km";
   if (cm >= 100)    return (cm / 100).toFixed(0) + " m";
@@ -64,7 +53,7 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
     <div style={{
       fontSize: "13px", fontWeight: "800", letterSpacing: "2px",
-      color: "#9a7a30", fontFamily: FONT_BODY, textTransform: "uppercase",
+      color: "#9a7a30", fontFamily: FONT_SANS, textTransform: "uppercase",
       paddingBottom: "6px", borderBottom: "1px solid rgba(251,191,36,0.12)",
     }}>{children}</div>
   );
@@ -72,7 +61,7 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
 function SDivider() {
   return <div style={{ height: "1px", background: "rgba(251,191,36,0.1)", margin: "20px 0" }} />;
 }
-function InfoBox({ children, accent = C_GOLD }: { children: React.ReactNode; accent?: string }) {
+function InfoBox({ children, accent = COLOR_SCALE }: { children: React.ReactNode; accent?: string }) {
   return (
     <div style={{ padding: "14px 16px", background: `${accent}10`, border: `1.5px solid ${accent}25`, borderRadius: "10px" }}>
       {children}
@@ -81,7 +70,7 @@ function InfoBox({ children, accent = C_GOLD }: { children: React.ReactNode; acc
 }
 function BodyText({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {
   return (
-    <p style={{ fontSize: "14px", color: "#a08060", lineHeight: "1.85", margin: 0, fontWeight: "500", fontFamily: FONT_BODY, ...style }}>
+    <p style={{ fontSize: "14px", color: "#a08060", lineHeight: "1.85", margin: 0, fontWeight: "500", fontFamily: FONT_SANS, ...style }}>
       {children}
     </p>
   );
@@ -103,22 +92,22 @@ export default function ScaleActivity({ onClose }: { onClose: () => void }) {
 
   return (
     <div
-      style={{ position: "fixed", inset: 0, zIndex: 1000, background: C_BG, display: "flex", flexDirection: "column", fontFamily: FONT_BODY, touchAction: "none", userSelect: "none", WebkitUserSelect: "none" }}
+      style={{ position: "fixed", inset: 0, zIndex: 1000, background: BG_DARK, display: "flex", flexDirection: "column", fontFamily: FONT_SANS, touchAction: "none", userSelect: "none", WebkitUserSelect: "none" }}
       onWheel={e => e.preventDefault()}
     >
       {/* ── Üst bar ──────────────────────────────────────────────────────── */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 28px", height: "64px", borderBottom: "1px solid rgba(251,191,36,0.18)", background: "rgba(3,7,18,0.8)", flexShrink: 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: "28px" }}>
           <div>
-            <div style={{ fontSize: "10px", letterSpacing: "4px", color: C_GOLD, opacity: 0.6, fontFamily: FONT_MONO }}>HARİTA ÖLÇEĞİ</div>
+            <div style={{ fontSize: "10px", letterSpacing: "4px", color: COLOR_SCALE, opacity: 0.6, fontFamily: FONT_MONO }}>HARİTA ÖLÇEĞİ</div>
             <div style={{ fontSize: "20px", fontWeight: "800", color: "#fef3c7", letterSpacing: "-0.3px" }}>Kesir & Çizgi Ölçek</div>
           </div>
           {/* Tab bar */}
           <div style={{ display: "flex", gap: "3px", background: "rgba(0,0,0,0.4)", padding: "4px", borderRadius: "10px" }}>
             {TABS.map(t => (
               <button key={t.id} onClick={() => { sndClick(); setTab(t.id); }}
-                style={{ padding: "8px 18px", borderRadius: "7px", border: "none", cursor: "pointer", fontFamily: FONT_BODY, fontSize: "12px", fontWeight: "700", letterSpacing: "0.5px", transition: "all 0.18s",
-                  background: tab === t.id ? C_GOLD_DIM : "transparent",
+                style={{ padding: "8px 18px", borderRadius: "7px", border: "none", cursor: "pointer", fontFamily: FONT_SANS, fontSize: "12px", fontWeight: "700", letterSpacing: "0.5px", transition: "all 0.18s",
+                  background: tab === t.id ? COLOR_SCALE_DIM : "transparent",
                   color:      tab === t.id ? "#fff"      : "#5a4a1a",
                 }}>
                 {t.icon} {t.label}
@@ -127,7 +116,7 @@ export default function ScaleActivity({ onClose }: { onClose: () => void }) {
           </div>
         </div>
         <button onClick={onClose}
-          style={{ padding: "8px 18px", background: "transparent", border: "1px solid rgba(255,80,80,0.3)", borderRadius: "8px", color: "#ff7070", fontSize: "12px", fontWeight: "700", letterSpacing: "1px", cursor: "pointer", fontFamily: FONT_BODY, transition: "all 0.18s" }}
+          style={{ padding: "8px 18px", background: "transparent", border: "1px solid rgba(255,80,80,0.3)", borderRadius: "8px", color: "#ff7070", fontSize: "12px", fontWeight: "700", letterSpacing: "1px", cursor: "pointer", fontFamily: FONT_SANS, transition: "all 0.18s" }}
           onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,80,80,0.1)"; }}
           onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}>
           ✕ KAPAT
@@ -157,17 +146,17 @@ function LearnTab() {
     <div style={{ flex: 1, display: "flex", overflow: "hidden" }}>
 
       {/* ── Sol panel (geniş) ── */}
-      <div style={{ width: "340px", flexShrink: 0, borderRight: "1px solid rgba(251,191,36,0.1)", background: C_PANEL, overflowY: "auto", padding: "26px" }}>
+      <div style={{ width: "340px", flexShrink: 0, borderRight: "1px solid rgba(251,191,36,0.1)", background: PANEL_DARK, overflowY: "auto", padding: "26px" }}>
         <SectionTitle>Ölçek Türleri</SectionTitle>
 
         <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginTop: "16px" }}>
           {(["fraction", "line"] as ScaleType[]).map(t => (
             <button key={t} onClick={() => { sndClick(); setActiveType(t); }}
-              style={{ padding: "16px 18px", background: activeType === t ? `${C_GOLD}12` : "rgba(0,0,0,0.25)", border: `2px solid ${activeType === t ? C_GOLD_DIM : "rgba(251,191,36,0.1)"}`, borderRadius: "12px", cursor: "pointer", textAlign: "left", fontFamily: FONT_BODY, transition: "all 0.2s" }}>
-              <div style={{ fontSize: "15px", fontWeight: "800", color: activeType === t ? C_GOLD : "#5a4a2a" }}>
+              style={{ padding: "16px 18px", background: activeType === t ? `${COLOR_SCALE}12` : "rgba(0,0,0,0.25)", border: `2px solid ${activeType === t ? COLOR_SCALE_DIM : "rgba(251,191,36,0.1)"}`, borderRadius: "12px", cursor: "pointer", textAlign: "left", fontFamily: FONT_SANS, transition: "all 0.2s" }}>
+              <div style={{ fontSize: "15px", fontWeight: "800", color: activeType === t ? COLOR_SCALE : "#5a4a2a" }}>
                 {t === "fraction" ? "1 — Kesir Ölçek" : "2 — Çizgi Ölçek"}
               </div>
-              <div style={{ fontSize: "13px", color: activeType === t ? "#92660a" : "#2a2010", marginTop: "4px", fontWeight: "500" }}>
+              <div style={{ fontSize: "13px", color: activeType === t ? COLOR_SCALE_DARK : "#2a2010", marginTop: "4px", fontWeight: "500" }}>
                 {t === "fraction" ? "Pay / Payda formatı · 1/100.000" : "Grafik / Görsel çizgi formatı"}
               </div>
             </button>
@@ -182,10 +171,10 @@ function LearnTab() {
             <div style={{ marginTop: "14px" }}>
               <InfoBox>
                 <BodyText>
-                  <span style={{ color: C_GOLD, fontWeight: "800" }}>Pay</span> ve{" "}
-                  <span style={{ color: C_GOLD, fontWeight: "800" }}>paydadan</span> oluşan kesirli sayıyla gösterilen ölçektir.
-                  Pay her zaman <span style={{ color: C_GOLD }}>1</span>'dir ve haritadaki uzunluğu, payda ise küçültme oranını gösterir.
-                  Birim her zaman <span style={{ color: C_GOLD }}>santimetre (cm)</span>'dir.
+                  <span style={{ color: COLOR_SCALE, fontWeight: "800" }}>Pay</span> ve{" "}
+                  <span style={{ color: COLOR_SCALE, fontWeight: "800" }}>paydadan</span> oluşan kesirli sayıyla gösterilen ölçektir.
+                  Pay her zaman <span style={{ color: COLOR_SCALE }}>1</span>'dir ve haritadaki uzunluğu, payda ise küçültme oranını gösterir.
+                  Birim her zaman <span style={{ color: COLOR_SCALE }}>santimetre (cm)</span>'dir.
                 </BodyText>
               </InfoBox>
             </div>
@@ -200,7 +189,7 @@ function LearnTab() {
                 { s: 1000000, m: "1 cm", r: "10 km" },
               ].map(r => (
                 <div key={r.s} style={{ padding: "11px 14px", background: "rgba(0,0,0,0.25)", border: "1px solid rgba(251,191,36,0.1)", borderRadius: "8px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span style={{ fontSize: "14px", color: C_GOLD, fontWeight: "800", fontFamily: FONT_MONO }}>1/{r.s.toLocaleString("tr")}</span>
+                  <span style={{ fontSize: "14px", color: COLOR_SCALE, fontWeight: "800", fontFamily: FONT_MONO }}>1/{r.s.toLocaleString("tr")}</span>
                   <span style={{ fontSize: "13px", color: "#7a6040", fontWeight: "500" }}>{r.m} → {r.r}</span>
                 </div>
               ))}
@@ -212,9 +201,9 @@ function LearnTab() {
             <div style={{ marginTop: "14px" }}>
               <InfoBox>
                 <BodyText>
-                  <span style={{ color: C_GOLD, fontWeight: "800" }}>Grafik olarak</span> gösterilen ölçektir. Harita dijital cihazlarla
+                  <span style={{ color: COLOR_SCALE, fontWeight: "800" }}>Grafik olarak</span> gösterilen ölçektir. Harita dijital cihazlarla
                   çoğaltılıp ebatları değiştirildiğinde çizgi ölçek de orantılı değiştiği için{" "}
-                  <span style={{ color: C_GOLD }}>tercih edilir</span>.
+                  <span style={{ color: COLOR_SCALE }}>tercih edilir</span>.
                 </BodyText>
               </InfoBox>
             </div>
@@ -228,7 +217,7 @@ function LearnTab() {
                 "Kağıt parçasıyla iki nokta arası transfer edilir",
               ].map(tx => (
                 <div key={tx} style={{ display: "flex", gap: "10px", alignItems: "flex-start", padding: "10px 13px", background: "rgba(0,0,0,0.18)", borderRadius: "8px" }}>
-                  <span style={{ color: C_GOLD_DIM, fontWeight: "800", fontSize: "14px", marginTop: "1px", flexShrink: 0 }}>✓</span>
+                  <span style={{ color: COLOR_SCALE_DIM, fontWeight: "800", fontSize: "14px", marginTop: "1px", flexShrink: 0 }}>✓</span>
                   <BodyText style={{ color: "#7a6040" }}>{tx}</BodyText>
                 </div>
               ))}
@@ -238,19 +227,19 @@ function LearnTab() {
       </div>
 
       {/* ── Orta panel (dar) ── */}
-      <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "28px 20px", background: `radial-gradient(ellipse at center,#0e1a2e 0%,${C_BG} 100%)`, overflowY: "auto", gap: "24px" }}>
+      <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "28px 20px", background: `radial-gradient(ellipse at center,#0e1a2e 0%,${BG_DARK} 100%)`, overflowY: "auto", gap: "24px" }}>
         {activeType === "fraction"
           ? <FractionViz scale={animScale} onScale={setAnimScale} />
           : <LineViz />}
       </div>
 
       {/* ── Sağ panel (geniş) ── */}
-      <div style={{ width: "340px", flexShrink: 0, borderLeft: "1px solid rgba(251,191,36,0.1)", background: C_PANEL, overflowY: "auto", padding: "26px" }}>
+      <div style={{ width: "340px", flexShrink: 0, borderLeft: "1px solid rgba(251,191,36,0.1)", background: PANEL_DARK, overflowY: "auto", padding: "26px" }}>
         <SectionTitle>Büyük / Küçük Ölçek</SectionTitle>
         <div style={{ marginTop: "14px", display: "flex", flexDirection: "column", gap: "12px" }}>
           <div style={{ padding: "16px 18px", background: "rgba(16,185,129,0.08)", border: "1.5px solid rgba(16,185,129,0.22)", borderRadius: "12px" }}>
-            <div style={{ fontSize: "15px", fontWeight: "800", color: C_GREEN, marginBottom: "10px", fontFamily: FONT_BODY }}>📌 Büyük Ölçek</div>
-            <div style={{ fontSize: "13px", color: "#0d7a56", lineHeight: "1.8", fontWeight: "500", fontFamily: FONT_BODY }}>
+            <div style={{ fontSize: "15px", fontWeight: "800", color: COLOR_SUCCESS, marginBottom: "10px", fontFamily: FONT_SANS }}>📌 Büyük Ölçek</div>
+            <div style={{ fontSize: "13px", color: "#0d7a56", lineHeight: "1.8", fontWeight: "500", fontFamily: FONT_SANS }}>
               <div>• Payda küçüktür → 1/25.000</div>
               <div>• Az alan, fazla ayrıntı</div>
               <div>• Şehir ve mahalle haritaları</div>
@@ -258,8 +247,8 @@ function LearnTab() {
             </div>
           </div>
           <div style={{ padding: "16px 18px", background: "rgba(239,68,68,0.08)", border: "1.5px solid rgba(239,68,68,0.22)", borderRadius: "12px" }}>
-            <div style={{ fontSize: "15px", fontWeight: "800", color: C_RED, marginBottom: "10px", fontFamily: FONT_BODY }}>📌 Küçük Ölçek</div>
-            <div style={{ fontSize: "13px", color: "#7a2020", lineHeight: "1.8", fontWeight: "500", fontFamily: FONT_BODY }}>
+            <div style={{ fontSize: "15px", fontWeight: "800", color: COLOR_ERROR, marginBottom: "10px", fontFamily: FONT_SANS }}>📌 Küçük Ölçek</div>
+            <div style={{ fontSize: "13px", color: "#7a2020", lineHeight: "1.8", fontWeight: "500", fontFamily: FONT_SANS }}>
               <div>• Payda büyüktür → 1/1.000.000</div>
               <div>• Geniş alan, az ayrıntı</div>
               <div>• Dünya, kıta, ülke haritaları</div>
@@ -273,7 +262,7 @@ function LearnTab() {
         <div style={{ marginTop: "14px", display: "flex", flexDirection: "column", gap: "6px" }}>
           {SCALES.map(s => (
             <div key={s.value} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 14px", background: "rgba(0,0,0,0.18)", border: "1px solid rgba(251,191,36,0.08)", borderRadius: "8px" }}>
-              <span style={{ fontSize: "13px", color: C_GOLD, fontWeight: "700", fontFamily: FONT_MONO }}>{s.label}</span>
+              <span style={{ fontSize: "13px", color: COLOR_SCALE, fontWeight: "700", fontFamily: FONT_MONO }}>{s.label}</span>
               <span style={{ fontSize: "13px", color: "#7a6040", fontWeight: "500" }}>{s.desc}</span>
             </div>
           ))}
@@ -281,12 +270,12 @@ function LearnTab() {
 
         <SDivider />
         <InfoBox>
-          <div style={{ fontSize: "12px", color: C_GOLD_DIM, fontWeight: "800", marginBottom: "8px", letterSpacing: "1px" }}>💡 TEMEL KURAL</div>
+          <div style={{ fontSize: "12px", color: COLOR_SCALE_DIM, fontWeight: "800", marginBottom: "8px", letterSpacing: "1px" }}>💡 TEMEL KURAL</div>
           <BodyText style={{ color: "#6a5020" }}>
-            Payda <strong style={{ color: C_GOLD }}>küçüldükçe</strong> ölçek{" "}
-            <strong style={{ color: C_GREEN }}>büyür</strong> → ayrıntı artar.<br /><br />
-            Payda <strong style={{ color: C_GOLD }}>büyüdükçe</strong> ölçek{" "}
-            <strong style={{ color: C_RED }}>küçülür</strong> → kapsam genişler.
+            Payda <strong style={{ color: COLOR_SCALE }}>küçüldükçe</strong> ölçek{" "}
+            <strong style={{ color: COLOR_SUCCESS }}>büyür</strong> → ayrıntı artar.<br /><br />
+            Payda <strong style={{ color: COLOR_SCALE }}>büyüdükçe</strong> ölçek{" "}
+            <strong style={{ color: COLOR_ERROR }}>küçülür</strong> → kapsam genişler.
           </BodyText>
         </InfoBox>
       </div>
@@ -299,13 +288,13 @@ function FractionViz({ scale, onScale }: { scale: number; onScale: (v: number) =
   const realKm = scale / 100000;
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "22px", width: "100%", maxWidth: "480px" }}>
-      <div style={{ fontSize: "12px", letterSpacing: "3px", color: C_GOLD_DIM, fontFamily: FONT_MONO }}>KESİR ÖLÇEK</div>
+      <div style={{ fontSize: "12px", letterSpacing: "3px", color: COLOR_SCALE_DIM, fontFamily: FONT_MONO }}>KESİR ÖLÇEK</div>
 
       {/* Ölçek butonları */}
       <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", justifyContent: "center" }}>
         {SCALES.map(s => (
           <button key={s.value} onClick={() => { sndClick(); onScale(s.value); }}
-            style={{ padding: "8px 14px", background: scale === s.value ? C_GOLD_DIM : "rgba(0,0,0,0.3)", border: `1.5px solid ${scale === s.value ? C_GOLD_DIM : "rgba(251,191,36,0.15)"}`, borderRadius: "7px", color: scale === s.value ? "#000" : "#5a4010", fontSize: "12px", fontWeight: "700", cursor: "pointer", fontFamily: FONT_MONO, transition: "all 0.18s" }}>
+            style={{ padding: "8px 14px", background: scale === s.value ? COLOR_SCALE_DIM : "rgba(0,0,0,0.3)", border: `1.5px solid ${scale === s.value ? COLOR_SCALE_DIM : "rgba(251,191,36,0.15)"}`, borderRadius: "7px", color: scale === s.value ? "#000" : "#5a4010", fontSize: "12px", fontWeight: "700", cursor: "pointer", fontFamily: FONT_MONO, transition: "all 0.18s" }}>
             {s.label}
           </button>
         ))}
@@ -313,50 +302,50 @@ function FractionViz({ scale, onScale }: { scale: number; onScale: (v: number) =
 
       {/* Büyük kesir gösterimi */}
       <div style={{ padding: "28px 44px", background: "rgba(0,0,0,0.4)", border: "2px solid rgba(251,191,36,0.22)", borderRadius: "16px", textAlign: "center" }}>
-        <div style={{ fontSize: "11px", color: C_GOLD_DIM, letterSpacing: "3px", marginBottom: "10px", fontFamily: FONT_MONO }}>ÖLÇEK</div>
-        <div style={{ fontSize: "52px", fontWeight: "900", color: C_GOLD, lineHeight: 1, fontFamily: FONT_MONO }}>1</div>
-        <div style={{ width: "140px", height: "3px", background: C_GOLD_DIM, borderRadius: "2px", margin: "10px auto" }} />
-        <div style={{ fontSize: "36px", fontWeight: "800", color: C_GOLD, fontFamily: FONT_MONO }}>{scale.toLocaleString("tr")}</div>
-        <div style={{ marginTop: "12px", fontSize: "14px", color: "#7a6030", fontFamily: FONT_BODY }}>
+        <div style={{ fontSize: "11px", color: COLOR_SCALE_DIM, letterSpacing: "3px", marginBottom: "10px", fontFamily: FONT_MONO }}>ÖLÇEK</div>
+        <div style={{ fontSize: "52px", fontWeight: "900", color: COLOR_SCALE, lineHeight: 1, fontFamily: FONT_MONO }}>1</div>
+        <div style={{ width: "140px", height: "3px", background: COLOR_SCALE_DIM, borderRadius: "2px", margin: "10px auto" }} />
+        <div style={{ fontSize: "36px", fontWeight: "800", color: COLOR_SCALE, fontFamily: FONT_MONO }}>{scale.toLocaleString("tr")}</div>
+        <div style={{ marginTop: "12px", fontSize: "14px", color: "#7a6030", fontFamily: FONT_SANS }}>
           Haritada 1 cm = Gerçekte {scale.toLocaleString("tr")} cm
         </div>
       </div>
 
       {/* Karşılaştırma cetvelleri */}
       <div style={{ width: "100%", padding: "20px 24px", background: "rgba(0,0,0,0.28)", border: "1.5px solid rgba(251,191,36,0.12)", borderRadius: "14px" }}>
-        <div style={{ fontSize: "11px", color: C_GOLD_DIM, letterSpacing: "3px", marginBottom: "16px", fontFamily: FONT_MONO }}>CETVEL KARŞILAŞTIRMASI</div>
+        <div style={{ fontSize: "11px", color: COLOR_SCALE_DIM, letterSpacing: "3px", marginBottom: "16px", fontFamily: FONT_MONO }}>CETVEL KARŞILAŞTIRMASI</div>
         {/* Harita cetveli */}
         <div style={{ marginBottom: "16px" }}>
-          <div style={{ fontSize: "13px", color: "#7a6030", marginBottom: "7px", fontWeight: "700", fontFamily: FONT_BODY }}>Haritada (cm)</div>
+          <div style={{ fontSize: "13px", color: "#7a6030", marginBottom: "7px", fontWeight: "700", fontFamily: FONT_SANS }}>Haritada (cm)</div>
           <div style={{ display: "flex", alignItems: "center" }}>
             {[0, 1, 2, 3, 4].map(n => (
               <div key={n} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                <div style={{ width: "54px", height: n % 2 === 0 ? "20px" : "12px", background: n % 2 === 0 ? C_GOLD : C_GOLD_DARK, borderRight: "1px solid #07111e" }} />
+                <div style={{ width: "54px", height: n % 2 === 0 ? "20px" : "12px", background: n % 2 === 0 ? COLOR_SCALE : COLOR_SCALE_DARK, borderRight: "1px solid #07111e" }} />
                 <span style={{ fontSize: "11px", color: "#7a6030", marginTop: "4px", fontFamily: FONT_MONO }}>{n}</span>
               </div>
             ))}
-            <span style={{ fontSize: "12px", color: "#5a4010", marginLeft: "5px", fontFamily: FONT_BODY }}>cm</span>
+            <span style={{ fontSize: "12px", color: "#5a4010", marginLeft: "5px", fontFamily: FONT_SANS }}>cm</span>
           </div>
         </div>
         {/* Gerçek cetvel */}
         <div>
-          <div style={{ fontSize: "13px", color: C_GREEN, marginBottom: "7px", fontWeight: "700", fontFamily: FONT_BODY }}>Gerçekte ({realKm >= 1 ? "km" : "m"})</div>
+          <div style={{ fontSize: "13px", color: COLOR_SUCCESS, marginBottom: "7px", fontWeight: "700", fontFamily: FONT_SANS }}>Gerçekte ({realKm >= 1 ? "km" : "m"})</div>
           <div style={{ display: "flex", alignItems: "center" }}>
             {[0, 1, 2, 3, 4].map(n => (
               <div key={n} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                <div style={{ width: "54px", height: n % 2 === 0 ? "20px" : "12px", background: n % 2 === 0 ? C_GREEN : "#065f46", borderRight: "1px solid #07111e" }} />
-                <span style={{ fontSize: "11px", color: C_GREEN, marginTop: "4px", fontFamily: FONT_MONO }}>
+                <div style={{ width: "54px", height: n % 2 === 0 ? "20px" : "12px", background: n % 2 === 0 ? COLOR_SUCCESS : "#065f46", borderRight: "1px solid #07111e" }} />
+                <span style={{ fontSize: "11px", color: COLOR_SUCCESS, marginTop: "4px", fontFamily: FONT_MONO }}>
                   {realKm >= 1 ? (n * realKm).toFixed(realKm % 1 === 0 ? 0 : 1) : (n * scale / 100).toFixed(0)}
                 </span>
               </div>
             ))}
-            <span style={{ fontSize: "12px", color: C_GREEN, marginLeft: "5px", fontFamily: FONT_BODY }}>{realKm >= 1 ? "km" : "m"}</span>
+            <span style={{ fontSize: "12px", color: COLOR_SUCCESS, marginLeft: "5px", fontFamily: FONT_SANS }}>{realKm >= 1 ? "km" : "m"}</span>
           </div>
         </div>
-        <div style={{ marginTop: "16px", padding: "12px 14px", background: `${C_GOLD}08`, borderRadius: "8px", fontSize: "14px", color: "#a08050", lineHeight: "1.7", fontFamily: FONT_BODY, fontWeight: "500" }}>
-          📐 <strong style={{ color: C_GOLD, fontFamily: FONT_MONO }}>1/{scale.toLocaleString("tr")}</strong> ölçeğinde haritadaki{" "}
-          <strong style={{ color: C_GOLD }}>1 cm</strong> gerçekte{" "}
-          <strong style={{ color: C_GREEN }}>{realKm >= 1 ? `${realKm} km` : `${scale / 100} m`}</strong>'ye karşılık gelir.
+        <div style={{ marginTop: "16px", padding: "12px 14px", background: `${COLOR_SCALE}08`, borderRadius: "8px", fontSize: "14px", color: "#a08050", lineHeight: "1.7", fontFamily: FONT_SANS, fontWeight: "500" }}>
+          📐 <strong style={{ color: COLOR_SCALE, fontFamily: FONT_MONO }}>1/{scale.toLocaleString("tr")}</strong> ölçeğinde haritadaki{" "}
+          <strong style={{ color: COLOR_SCALE }}>1 cm</strong> gerçekte{" "}
+          <strong style={{ color: COLOR_SUCCESS }}>{realKm >= 1 ? `${realKm} km` : `${scale / 100} m`}</strong>'ye karşılık gelir.
         </div>
       </div>
     </div>
@@ -368,40 +357,40 @@ function LineViz() {
   const [mapCm, setMapCm] = useState(3);
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "22px", width: "100%", maxWidth: "500px" }}>
-      <div style={{ fontSize: "12px", letterSpacing: "3px", color: C_GOLD_DIM, fontFamily: FONT_MONO }}>ÇİZGİ ÖLÇEK</div>
+      <div style={{ fontSize: "12px", letterSpacing: "3px", color: COLOR_SCALE_DIM, fontFamily: FONT_MONO }}>ÇİZGİ ÖLÇEK</div>
 
       <div style={{ width: "100%", padding: "22px 26px", background: "rgba(0,0,0,0.4)", border: "2px solid rgba(251,191,36,0.22)", borderRadius: "14px" }}>
-        <div style={{ fontSize: "12px", color: C_GOLD_DIM, letterSpacing: "2px", marginBottom: "16px", fontFamily: FONT_MONO }}>ÇİZGİ ÖLÇEK (1/100.000)</div>
+        <div style={{ fontSize: "12px", color: COLOR_SCALE_DIM, letterSpacing: "2px", marginBottom: "16px", fontFamily: FONT_MONO }}>ÇİZGİ ÖLÇEK (1/100.000)</div>
         <div style={{ display: "flex", alignItems: "flex-end" }}>
           {[0, 1, 2, 3, 4, 5].map(n => (
             <div key={n} style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
-              <div style={{ width: "70px", height: "22px", background: n % 2 === 0 ? C_GOLD : "#1a1000", border: "1px solid #d97706", boxSizing: "border-box" }} />
-              <div style={{ fontSize: "12px", color: C_GOLD, marginTop: "5px", marginLeft: "-3px", fontFamily: FONT_MONO }}>{n}</div>
+              <div style={{ width: "70px", height: "22px", background: n % 2 === 0 ? COLOR_SCALE : "#1a1000", border: "1px solid #d97706", boxSizing: "border-box" }} />
+              <div style={{ fontSize: "12px", color: COLOR_SCALE, marginTop: "5px", marginLeft: "-3px", fontFamily: FONT_MONO }}>{n}</div>
             </div>
           ))}
-          <span style={{ fontSize: "12px", color: "#7a6030", marginLeft: "8px", marginBottom: "3px", fontFamily: FONT_BODY }}>km</span>
+          <span style={{ fontSize: "12px", color: "#7a6030", marginLeft: "8px", marginBottom: "3px", fontFamily: FONT_SANS }}>km</span>
         </div>
-        <div style={{ marginTop: "14px", fontSize: "14px", color: "#7a6030", lineHeight: "1.7", fontFamily: FONT_BODY }}>
-          Haritada 1 cm = Gerçekte <strong style={{ color: C_GOLD }}>1 km</strong> (100.000 cm). Kesir ölçek karşılığı: <strong style={{ color: C_GOLD, fontFamily: FONT_MONO }}>1/100.000</strong>
+        <div style={{ marginTop: "14px", fontSize: "14px", color: "#7a6030", lineHeight: "1.7", fontFamily: FONT_SANS }}>
+          Haritada 1 cm = Gerçekte <strong style={{ color: COLOR_SCALE }}>1 km</strong> (100.000 cm). Kesir ölçek karşılığı: <strong style={{ color: COLOR_SCALE, fontFamily: FONT_MONO }}>1/100.000</strong>
         </div>
       </div>
 
       <div style={{ width: "100%", padding: "22px 26px", background: "rgba(0,0,0,0.28)", border: "1.5px solid rgba(251,191,36,0.12)", borderRadius: "14px" }}>
-        <div style={{ fontSize: "12px", color: C_GOLD_DIM, letterSpacing: "2px", marginBottom: "14px", fontFamily: FONT_MONO }}>İNTERAKTİF HESAPLAMA</div>
-        <label style={{ fontSize: "14px", color: "#7a6030", fontWeight: "700", display: "block", marginBottom: "10px", fontFamily: FONT_BODY }}>
-          Haritada ölçülen mesafe: <span style={{ color: C_GOLD, fontFamily: FONT_MONO }}>{mapCm} cm</span>
+        <div style={{ fontSize: "12px", color: COLOR_SCALE_DIM, letterSpacing: "2px", marginBottom: "14px", fontFamily: FONT_MONO }}>İNTERAKTİF HESAPLAMA</div>
+        <label style={{ fontSize: "14px", color: "#7a6030", fontWeight: "700", display: "block", marginBottom: "10px", fontFamily: FONT_SANS }}>
+          Haritada ölçülen mesafe: <span style={{ color: COLOR_SCALE, fontFamily: FONT_MONO }}>{mapCm} cm</span>
         </label>
         <input type="range" min={1} max={10} value={mapCm} onChange={e => setMapCm(Number(e.target.value))}
-          style={{ width: "100%", accentColor: C_GOLD_DIM, cursor: "pointer" }} />
+          style={{ width: "100%", accentColor: COLOR_SCALE_DIM, cursor: "pointer" }} />
         <div style={{ marginTop: "14px", height: "34px", position: "relative" }}>
-          <div style={{ height: "30px", width: `${mapCm * 46}px`, maxWidth: "100%", background: `linear-gradient(90deg,${C_GOLD_DARK},${C_GOLD})`, borderRadius: "5px", transition: "width 0.3s ease", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ height: "30px", width: `${mapCm * 46}px`, maxWidth: "100%", background: `linear-gradient(90deg,${COLOR_SCALE_DARK},${COLOR_SCALE})`, borderRadius: "5px", transition: "width 0.3s ease", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <span style={{ fontSize: "12px", fontWeight: "800", color: "#000", fontFamily: FONT_MONO }}>{mapCm} cm</span>
           </div>
         </div>
         <div style={{ marginTop: "12px", padding: "16px 18px", background: "rgba(16,185,129,0.07)", border: "1.5px solid rgba(16,185,129,0.22)", borderRadius: "10px" }}>
-          <div style={{ fontSize: "12px", color: C_GREEN, fontWeight: "700", marginBottom: "5px", fontFamily: FONT_BODY, letterSpacing: "1px" }}>GERÇEK MESAFE</div>
-          <div style={{ fontSize: "32px", fontWeight: "800", color: C_GREEN, fontFamily: FONT_MONO }}>{mapCm} km</div>
-          <div style={{ fontSize: "13px", color: "#065f46", marginTop: "4px", fontFamily: FONT_BODY }}>{mapCm} cm × 100.000 = {(mapCm * 100000).toLocaleString("tr")} cm = {mapCm} km</div>
+          <div style={{ fontSize: "12px", color: COLOR_SUCCESS, fontWeight: "700", marginBottom: "5px", fontFamily: FONT_SANS, letterSpacing: "1px" }}>GERÇEK MESAFE</div>
+          <div style={{ fontSize: "32px", fontWeight: "800", color: COLOR_SUCCESS, fontFamily: FONT_MONO }}>{mapCm} km</div>
+          <div style={{ fontSize: "13px", color: "#065f46", marginTop: "4px", fontFamily: FONT_SANS }}>{mapCm} cm × 100.000 = {(mapCm * 100000).toLocaleString("tr")} cm = {mapCm} km</div>
         </div>
       </div>
     </div>
@@ -832,10 +821,10 @@ function ConvertTab() {
   }
 
   return (
-    <div style={{ flex: 1, overflowY: "auto", display: "flex", justifyContent: "center", padding: "36px 24px", background: `radial-gradient(ellipse at center,#0e1a2e 0%,${C_BG} 100%)` }}>
+    <div style={{ flex: 1, overflowY: "auto", display: "flex", justifyContent: "center", padding: "36px 24px", background: `radial-gradient(ellipse at center,#0e1a2e 0%,${BG_DARK} 100%)` }}>
       <div style={{ width: "100%", maxWidth: "680px", display: "flex", flexDirection: "column", gap: "24px" }}>
 
-        <div style={{ fontSize: "13px", letterSpacing: "3px", color: C_GOLD_DIM, textAlign: "center", fontFamily: FONT_MONO }}>ÖLÇEK DÖNÜŞTÜRÜCÜ</div>
+        <div style={{ fontSize: "13px", letterSpacing: "3px", color: COLOR_SCALE_DIM, textAlign: "center", fontFamily: FONT_MONO }}>ÖLÇEK DÖNÜŞTÜRÜCÜ</div>
 
         {/* Mod seçici */}
         <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
@@ -844,8 +833,8 @@ function ConvertTab() {
             ["realToMap", "🗺️ Gerçek → Harita",  "Gerçek km → Harita cm"],
           ] as const).map(([m, label, sub]) => (
             <button key={m} onClick={() => { sndClick(); setMode(m); setInputVal(""); }}
-              style={{ flex: 1, padding: "16px 20px", background: mode === m ? `${C_GOLD}12` : "rgba(0,0,0,0.3)", border: `2px solid ${mode === m ? C_GOLD_DIM : `${C_GOLD}12`}`, borderRadius: "12px", cursor: "pointer", fontFamily: FONT_BODY, transition: "all 0.2s" }}>
-              <div style={{ fontSize: "16px", fontWeight: "800", color: mode === m ? C_GOLD : "#5a4010" }}>{label}</div>
+              style={{ flex: 1, padding: "16px 20px", background: mode === m ? `${COLOR_SCALE}12` : "rgba(0,0,0,0.3)", border: `2px solid ${mode === m ? COLOR_SCALE_DIM : `${COLOR_SCALE}12`}`, borderRadius: "12px", cursor: "pointer", fontFamily: FONT_SANS, transition: "all 0.2s" }}>
+              <div style={{ fontSize: "16px", fontWeight: "800", color: mode === m ? COLOR_SCALE : "#5a4010" }}>{label}</div>
               <div style={{ fontSize: "13px", color: mode === m ? C_GOLD_DARK : "#2a1a00", marginTop: "4px" }}>{sub}</div>
             </button>
           ))}
@@ -853,11 +842,11 @@ function ConvertTab() {
 
         {/* Ölçek seçici */}
         <div>
-          <div style={{ fontSize: "13px", color: "#7a6030", fontWeight: "700", marginBottom: "10px", letterSpacing: "1px", fontFamily: FONT_BODY }}>ÖLÇEK</div>
+          <div style={{ fontSize: "13px", color: "#7a6030", fontWeight: "700", marginBottom: "10px", letterSpacing: "1px", fontFamily: FONT_SANS }}>ÖLÇEK</div>
           <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
             {SCALES.map(s => (
               <button key={s.value} onClick={() => { sndClick(); setSelScale(s.value); }}
-                style={{ padding: "10px 18px", background: selScale === s.value ? C_GOLD_DIM : "rgba(0,0,0,0.3)", border: `1.5px solid ${selScale === s.value ? C_GOLD_DIM : `${C_GOLD}15`}`, borderRadius: "8px", color: selScale === s.value ? "#000" : "#5a4010", fontSize: "13px", fontWeight: "700", cursor: "pointer", fontFamily: FONT_MONO, transition: "all 0.18s" }}>
+                style={{ padding: "10px 18px", background: selScale === s.value ? COLOR_SCALE_DIM : "rgba(0,0,0,0.3)", border: `1.5px solid ${selScale === s.value ? COLOR_SCALE_DIM : `${COLOR_SCALE}15`}`, borderRadius: "8px", color: selScale === s.value ? "#000" : "#5a4010", fontSize: "13px", fontWeight: "700", cursor: "pointer", fontFamily: FONT_MONO, transition: "all 0.18s" }}>
                 {s.label}
               </button>
             ))}
@@ -867,28 +856,28 @@ function ConvertTab() {
         {/* Giriş */}
         <div style={{ padding: "26px 30px", background: "rgba(0,0,0,0.32)", border: "2px solid rgba(251,191,36,0.16)", borderRadius: "16px", display: "flex", flexDirection: "column", gap: "18px" }}>
           <div>
-            <label style={{ fontSize: "15px", color: "#7a6030", fontWeight: "700", display: "block", marginBottom: "12px", fontFamily: FONT_BODY }}>
+            <label style={{ fontSize: "15px", color: "#7a6030", fontWeight: "700", display: "block", marginBottom: "12px", fontFamily: FONT_SANS }}>
               {mode === "mapToReal" ? "Harita üzerindeki ölçüm (cm)" : "Gerçek mesafe (km)"}
             </label>
             <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
               <input type="number" value={inputVal} onChange={e => setInputVal(e.target.value)}
                 placeholder={mode === "mapToReal" ? "Örn: 3.5" : "Örn: 450"}
-                style={{ flex: 1, padding: "16px 18px", background: "rgba(0,0,0,0.45)", border: "2px solid rgba(251,191,36,0.22)", borderRadius: "10px", color: C_GOLD, fontSize: "22px", fontFamily: FONT_MONO, fontWeight: "700", outline: "none" }} />
-              <span style={{ fontSize: "18px", color: C_GOLD_DIM, fontWeight: "700", fontFamily: FONT_BODY }}>{mode === "mapToReal" ? "cm" : "km"}</span>
+                style={{ flex: 1, padding: "16px 18px", background: "rgba(0,0,0,0.45)", border: "2px solid rgba(251,191,36,0.22)", borderRadius: "10px", color: COLOR_SCALE, fontSize: "22px", fontFamily: FONT_MONO, fontWeight: "700", outline: "none" }} />
+              <span style={{ fontSize: "18px", color: COLOR_SCALE_DIM, fontWeight: "700", fontFamily: FONT_SANS }}>{mode === "mapToReal" ? "cm" : "km"}</span>
             </div>
           </div>
 
           {num > 0 && (
             <>
-              <div style={{ padding: "14px 18px", background: `${C_GOLD}08`, borderRadius: "10px" }}>
-                <div style={{ fontSize: "12px", color: "#7a6030", fontWeight: "600", marginBottom: "5px", fontFamily: FONT_BODY }}>FORMÜL</div>
-                <div style={{ fontSize: "14px", color: C_GOLD_DIM, fontWeight: "700", fontFamily: FONT_MONO }}>{formulaText}</div>
+              <div style={{ padding: "14px 18px", background: `${COLOR_SCALE}08`, borderRadius: "10px" }}>
+                <div style={{ fontSize: "12px", color: "#7a6030", fontWeight: "600", marginBottom: "5px", fontFamily: FONT_SANS }}>FORMÜL</div>
+                <div style={{ fontSize: "14px", color: COLOR_SCALE_DIM, fontWeight: "700", fontFamily: FONT_MONO }}>{formulaText}</div>
               </div>
               <div style={{ textAlign: "center", fontSize: "22px" }}>⬇️</div>
               <div style={{ padding: "22px 26px", background: "rgba(16,185,129,0.08)", border: "2px solid rgba(16,185,129,0.25)", borderRadius: "12px", textAlign: "center" }}>
-                <div style={{ fontSize: "13px", color: C_GREEN, fontWeight: "700", marginBottom: "8px", letterSpacing: "1px", fontFamily: FONT_BODY }}>SONUÇ</div>
-                <div style={{ fontSize: "42px", fontWeight: "800", color: C_GREEN, fontFamily: FONT_MONO }}>{resultBig}</div>
-                <div style={{ fontSize: "14px", color: "#065f46", marginTop: "6px", fontFamily: FONT_BODY }}>{resultSub}</div>
+                <div style={{ fontSize: "13px", color: COLOR_SUCCESS, fontWeight: "700", marginBottom: "8px", letterSpacing: "1px", fontFamily: FONT_SANS }}>SONUÇ</div>
+                <div style={{ fontSize: "42px", fontWeight: "800", color: COLOR_SUCCESS, fontFamily: FONT_MONO }}>{resultBig}</div>
+                <div style={{ fontSize: "14px", color: "#065f46", marginTop: "6px", fontFamily: FONT_SANS }}>{resultSub}</div>
               </div>
             </>
           )}
@@ -896,14 +885,14 @@ function ConvertTab() {
 
         {/* Referans tablosu */}
         <div style={{ padding: "22px 26px", background: "rgba(0,0,0,0.22)", border: `1px solid ${C_GOLD}0d`, borderRadius: "14px" }}>
-          <div style={{ fontSize: "13px", color: "#7a6030", fontWeight: "700", marginBottom: "14px", letterSpacing: "1px", fontFamily: FONT_BODY }}>
+          <div style={{ fontSize: "13px", color: "#7a6030", fontWeight: "700", marginBottom: "14px", letterSpacing: "1px", fontFamily: FONT_SANS }}>
             HIZLI REFERANS — 1/{selScale.toLocaleString("tr")} ölçek
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "7px" }}>
             {[1, 2, 3, 5, 10, 15].map(cm => (
               <div key={cm} style={{ display: "flex", justifyContent: "space-between", padding: "9px 14px", background: "rgba(0,0,0,0.18)", borderRadius: "6px" }}>
-                <span style={{ fontSize: "14px", color: C_GOLD, fontWeight: "700", fontFamily: FONT_MONO }}>{cm} cm →</span>
-                <span style={{ fontSize: "14px", color: C_GREEN, fontWeight: "700", fontFamily: FONT_MONO }}>{formatNum(cm * selScale)}</span>
+                <span style={{ fontSize: "14px", color: COLOR_SCALE, fontWeight: "700", fontFamily: FONT_MONO }}>{cm} cm →</span>
+                <span style={{ fontSize: "14px", color: COLOR_SUCCESS, fontWeight: "700", fontFamily: FONT_MONO }}>{formatNum(cm * selScale)}</span>
               </div>
             ))}
           </div>
@@ -918,8 +907,8 @@ function ConvertTab() {
 // ═══════════════════════════════════════════════════════════════════════════════
 function MapScaleRelTab() {
   return (
-    <div style={{ flex: 1, display: "flex", flexDirection: "column", padding: "24px", background: `radial-gradient(ellipse at center,#0e1a2e 0%,${C_BG} 100%)` }}>
-      <div style={{ fontSize: "13px", letterSpacing: "3px", color: C_GOLD_DIM, textAlign: "center", fontFamily: FONT_MONO, marginBottom: "20px" }}>
+    <div style={{ flex: 1, display: "flex", flexDirection: "column", padding: "24px", background: `radial-gradient(ellipse at center,#0e1a2e 0%,${BG_DARK} 100%)` }}>
+      <div style={{ fontSize: "13px", letterSpacing: "3px", color: COLOR_SCALE_DIM, textAlign: "center", fontFamily: FONT_MONO, marginBottom: "20px" }}>
         HARİTA VE ÖLÇEK İLİŞKİSİ İNTERAKTİF UYGULAMASI
       </div>
       <div style={{ flex: 1, borderRadius: "16px", border: "2px solid rgba(251,191,36,0.16)", overflow: "hidden", background: "#000", boxShadow: "0 8px 32px rgba(0,0,0,0.5)" }}>
@@ -958,16 +947,16 @@ function TestTab() {
   if (done) {
     const pct = Math.round((score / (TEST_ITEMS.length * 20)) * 100);
     return (
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "20px", background: `radial-gradient(ellipse at center,#1a1000 0%,${C_BG} 100%)` }}>
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "20px", background: `radial-gradient(ellipse at center,#1a1000 0%,${BG_DARK} 100%)` }}>
         <div style={{ fontSize: "60px" }}>📏</div>
-        <div style={{ fontSize: "28px", fontWeight: "800", color: C_GOLD, fontFamily: FONT_BODY }}>TEST TAMAMLANDI!</div>
-        <div style={{ fontSize: "52px", fontWeight: "800", color: pct >= 80 ? C_GREEN : pct >= 50 ? C_GOLD : C_RED, fontFamily: FONT_MONO }}>{score} PUAN</div>
-        <div style={{ fontSize: "15px", color: "#5a4010", fontFamily: FONT_BODY }}>{answers.filter(Boolean).length}/{TEST_ITEMS.length} doğru · %{pct} başarı</div>
-        <div style={{ fontSize: "15px", color: "#8a7040", textAlign: "center", maxWidth: "400px", lineHeight: "1.8", fontFamily: FONT_BODY }}>
+        <div style={{ fontSize: "28px", fontWeight: "800", color: COLOR_SCALE, fontFamily: FONT_SANS }}>TEST TAMAMLANDI!</div>
+        <div style={{ fontSize: "52px", fontWeight: "800", color: pct >= 80 ? COLOR_SUCCESS : pct >= 50 ? COLOR_SCALE : COLOR_ERROR, fontFamily: FONT_MONO }}>{score} PUAN</div>
+        <div style={{ fontSize: "15px", color: "#5a4010", fontFamily: FONT_SANS }}>{answers.filter(Boolean).length}/{TEST_ITEMS.length} doğru · %{pct} başarı</div>
+        <div style={{ fontSize: "15px", color: "#8a7040", textAlign: "center", maxWidth: "400px", lineHeight: "1.8", fontFamily: FONT_SANS }}>
           {pct >= 80 ? "🏆 Mükemmel! Harita ölçeğini çok iyi anladın." : pct >= 50 ? "👍 İyi! Dönüştür sekmesini tekrar incele." : "📚 Tekrar dene! Öğren sekmesinden başla."}
         </div>
         <button onClick={retry}
-          style={{ padding: "14px 32px", background: `linear-gradient(90deg,${C_GOLD_DARK},${C_GOLD_DIM})`, border: "none", borderRadius: "10px", color: "#fff", fontSize: "15px", fontWeight: "800", letterSpacing: "1px", cursor: "pointer", fontFamily: FONT_BODY }}>
+          style={{ padding: "14px 32px", background: `linear-gradient(90deg,${COLOR_SCALE_DARK},${COLOR_SCALE_DIM})`, border: "none", borderRadius: "10px", color: "#fff", fontSize: "15px", fontWeight: "800", letterSpacing: "1px", cursor: "pointer", fontFamily: FONT_SANS }}>
           🔄 Tekrar Dene
         </button>
       </div>
@@ -984,19 +973,19 @@ function TestTab() {
     <div style={{ flex: 1, display: "flex", overflow: "hidden" }}>
 
       {/* ── Sol: ilerleme paneli ── */}
-      <div style={{ width: "250px", flexShrink: 0, borderRight: "1px solid rgba(251,191,36,0.1)", background: C_PANEL, padding: "26px", display: "flex", flexDirection: "column", gap: "10px", overflowY: "auto" }}>
+      <div style={{ width: "250px", flexShrink: 0, borderRight: "1px solid rgba(251,191,36,0.1)", background: PANEL_DARK, padding: "26px", display: "flex", flexDirection: "column", gap: "10px", overflowY: "auto" }}>
         <SectionTitle>Sorular</SectionTitle>
         <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "10px" }}>
           {TEST_ITEMS.map((item, i) => {
             const d = i < answers.length, cur = i === qIdx;
             return (
               <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "11px 14px", background: cur ? `${C_GOLD}10` : "rgba(0,0,0,0.18)", border: `1.5px solid ${cur ? C_GOLD_DIM : d ? (answers[i] ? "rgba(16,185,129,0.3)" : "rgba(239,68,68,0.3)") : "rgba(255,255,255,0.04)"}`, borderRadius: "9px" }}>
-                <div style={{ width: "26px", height: "26px", borderRadius: "50%", background: d ? (answers[i] ? C_GREEN : C_RED) : cur ? C_GOLD_DIM : "rgba(255,255,255,0.07)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", fontWeight: "800", color: "#fff", flexShrink: 0, fontFamily: FONT_MONO }}>
+                <div style={{ width: "26px", height: "26px", borderRadius: "50%", background: d ? (answers[i] ? COLOR_SUCCESS : COLOR_ERROR) : cur ? COLOR_SCALE_DIM : "rgba(255,255,255,0.07)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", fontWeight: "800", color: "#fff", flexShrink: 0, fontFamily: FONT_MONO }}>
                   {d ? (answers[i] ? "✓" : "✗") : i + 1}
                 </div>
                 <div>
-                  <div style={{ fontSize: "13px", fontWeight: "700", color: cur ? C_GOLD : d ? (answers[i] ? C_GREEN : C_RED) : "#2a1a00", fontFamily: FONT_BODY }}>Soru {i + 1}</div>
-                  <div style={{ fontSize: "11px", color: "#2a1a00", fontFamily: FONT_BODY }}>
+                  <div style={{ fontSize: "13px", fontWeight: "700", color: cur ? COLOR_SCALE : d ? (answers[i] ? COLOR_SUCCESS : COLOR_ERROR) : "#2a1a00", fontFamily: FONT_SANS }}>Soru {i + 1}</div>
+                  <div style={{ fontSize: "11px", color: "#2a1a00", fontFamily: FONT_SANS }}>
                     {item.type === "concept" ? "Kavram" : item.type === "calc" ? "Hesaplama" : "Karşılaştırma"}
                   </div>
                 </div>
@@ -1005,10 +994,10 @@ function TestTab() {
           })}
         </div>
         <SDivider />
-        <div style={{ padding: "14px 16px", background: `${C_GOLD}0a`, border: `1px solid ${C_GOLD}15`, borderRadius: "10px" }}>
-          <div style={{ fontSize: "12px", color: "#5a4010", fontWeight: "700", letterSpacing: "1px", marginBottom: "4px", fontFamily: FONT_BODY }}>PUAN</div>
-          <div style={{ fontSize: "36px", fontWeight: "800", color: C_GOLD, fontFamily: FONT_MONO }}>{score}</div>
-          <div style={{ fontSize: "13px", color: "#3a2a00", fontFamily: FONT_BODY }}>/ {TEST_ITEMS.length * 20}</div>
+        <div style={{ padding: "14px 16px", background: `${COLOR_SCALE}0a`, border: `1px solid ${COLOR_SCALE}15`, borderRadius: "10px" }}>
+          <div style={{ fontSize: "12px", color: "#5a4010", fontWeight: "700", letterSpacing: "1px", marginBottom: "4px", fontFamily: FONT_SANS }}>PUAN</div>
+          <div style={{ fontSize: "36px", fontWeight: "800", color: COLOR_SCALE, fontFamily: FONT_MONO }}>{score}</div>
+          <div style={{ fontSize: "13px", color: "#3a2a00", fontFamily: FONT_SANS }}>/ {TEST_ITEMS.length * 20}</div>
         </div>
       </div>
 
@@ -1018,24 +1007,24 @@ function TestTab() {
         {/* İlerleme çubuğu */}
         <div style={{ width: "100%", maxWidth: "660px" }}>
           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
-            <span style={{ fontSize: "13px", color: "#5a4010", fontWeight: "700", letterSpacing: "1px", fontFamily: FONT_BODY }}>SORU {qIdx + 1} / {TEST_ITEMS.length}</span>
-            <span style={{ fontSize: "13px", color: C_GOLD_DIM, fontFamily: FONT_BODY }}>{Math.round((qIdx / TEST_ITEMS.length) * 100)}% tamamlandı</span>
+            <span style={{ fontSize: "13px", color: "#5a4010", fontWeight: "700", letterSpacing: "1px", fontFamily: FONT_SANS }}>SORU {qIdx + 1} / {TEST_ITEMS.length}</span>
+            <span style={{ fontSize: "13px", color: COLOR_SCALE_DIM, fontFamily: FONT_SANS }}>{Math.round((qIdx / TEST_ITEMS.length) * 100)}% tamamlandı</span>
           </div>
-          <div style={{ height: "6px", background: `${C_GOLD}15`, borderRadius: "3px", overflow: "hidden" }}>
-            <div style={{ height: "100%", width: `${(qIdx / TEST_ITEMS.length) * 100}%`, background: `linear-gradient(90deg,${C_GOLD_DARK},${C_GOLD_DIM},${C_GOLD})`, borderRadius: "3px", transition: "width 0.4s ease" }} />
+          <div style={{ height: "6px", background: `${COLOR_SCALE}15`, borderRadius: "3px", overflow: "hidden" }}>
+            <div style={{ height: "100%", width: `${(qIdx / TEST_ITEMS.length) * 100}%`, background: `linear-gradient(90deg,${COLOR_SCALE_DARK},${COLOR_SCALE_DIM},${COLOR_SCALE})`, borderRadius: "3px", transition: "width 0.4s ease" }} />
           </div>
         </div>
 
         {/* Tür rozeti */}
         <div style={{ alignSelf: "flex-start", maxWidth: "660px", width: "100%" }}>
-          <span style={{ padding: "6px 14px", background: `${C_GOLD}12`, border: `1px solid ${C_GOLD}22`, borderRadius: "20px", fontSize: "12px", color: C_GOLD_DIM, fontWeight: "700", letterSpacing: "1px", fontFamily: FONT_BODY }}>
+          <span style={{ padding: "6px 14px", background: `${COLOR_SCALE}12`, border: `1px solid ${COLOR_SCALE}22`, borderRadius: "20px", fontSize: "12px", color: COLOR_SCALE_DIM, fontWeight: "700", letterSpacing: "1px", fontFamily: FONT_SANS }}>
             {typeLabels[q.type]}
           </span>
         </div>
 
         {/* Soru metni */}
-        <div style={{ maxWidth: "660px", width: "100%", padding: "22px 26px", background: `${C_GOLD}08`, border: `1.5px solid ${C_GOLD}20`, borderRadius: "14px" }}>
-          <p style={{ fontSize: "16px", color: "#d4a84a", lineHeight: "1.9", margin: 0, fontWeight: "600", fontFamily: FONT_BODY }}>{q.q}</p>
+        <div style={{ maxWidth: "660px", width: "100%", padding: "22px 26px", background: `${COLOR_SCALE}08`, border: `1.5px solid ${COLOR_SCALE}20`, borderRadius: "14px" }}>
+          <p style={{ fontSize: "16px", color: "#d4a84a", lineHeight: "1.9", margin: 0, fontWeight: "600", fontFamily: FONT_SANS }}>{q.q}</p>
         </div>
 
         {/* Şıklar */}
@@ -1044,17 +1033,17 @@ function TestTab() {
             const isSel = selected === i, isCorr = i === q.correct, show = selected !== null;
             let bg = "rgba(0,0,0,0.25)", border = "rgba(255,255,255,0.07)", color = "#6a5030";
             if (show) {
-              if (isCorr)       { bg = "rgba(16,185,129,0.1)";  border = C_GREEN; color = C_GREEN; }
-              else if (isSel)   { bg = "rgba(239,68,68,0.1)";   border = C_RED;   color = C_RED;   }
-            } else if (isSel)   { bg = `${C_GOLD}12`;           border = C_GOLD_DIM; color = C_GOLD; }
+              if (isCorr)       { bg = "rgba(16,185,129,0.1)";  border = COLOR_SUCCESS; color = COLOR_SUCCESS; }
+              else if (isSel)   { bg = "rgba(239,68,68,0.1)";   border = COLOR_ERROR;   color = COLOR_ERROR;   }
+            } else if (isSel)   { bg = `${COLOR_SCALE}12`;           border = COLOR_SCALE_DIM; color = COLOR_SCALE; }
             return (
               <button key={i} onClick={() => handleAnswer(i)} disabled={selected !== null}
-                style={{ padding: "16px 18px", background: bg, border: `2px solid ${border}`, borderRadius: "12px", cursor: selected !== null ? "default" : "pointer", fontFamily: FONT_BODY, textAlign: "left", transition: "all 0.18s" }}>
+                style={{ padding: "16px 18px", background: bg, border: `2px solid ${border}`, borderRadius: "12px", cursor: selected !== null ? "default" : "pointer", fontFamily: FONT_SANS, textAlign: "left", transition: "all 0.18s" }}>
                 <div style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
-                  <span style={{ width: "26px", height: "26px", borderRadius: "50%", background: show && isCorr ? C_GREEN : show && isSel ? C_RED : `${C_GOLD}25`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", fontWeight: "800", color: show ? "#fff" : C_GOLD_DIM, flexShrink: 0, marginTop: "1px", fontFamily: FONT_MONO }}>
+                  <span style={{ width: "26px", height: "26px", borderRadius: "50%", background: show && isCorr ? COLOR_SUCCESS : show && isSel ? COLOR_ERROR : `${COLOR_SCALE}25`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", fontWeight: "800", color: show ? "#fff" : COLOR_SCALE_DIM, flexShrink: 0, marginTop: "1px", fontFamily: FONT_MONO }}>
                     {show && isCorr ? "✓" : show && isSel && !isCorr ? "✗" : String.fromCharCode(65 + i)}
                   </span>
-                  <span style={{ fontSize: "14px", color, fontWeight: "600", lineHeight: "1.6", fontFamily: FONT_BODY }}>{opt}</span>
+                  <span style={{ fontSize: "14px", color, fontWeight: "600", lineHeight: "1.6", fontFamily: FONT_SANS }}>{opt}</span>
                 </div>
               </button>
             );
@@ -1064,17 +1053,17 @@ function TestTab() {
         {/* Açıklama */}
         {selected !== null && (
           <div style={{ maxWidth: "660px", width: "100%", padding: "18px 22px", background: selected === q.correct ? "rgba(16,185,129,0.08)" : "rgba(239,68,68,0.08)", border: `2px solid ${selected === q.correct ? "rgba(16,185,129,0.28)" : "rgba(239,68,68,0.28)"}`, borderRadius: "14px" }}>
-            <div style={{ fontSize: "16px", fontWeight: "800", color: selected === q.correct ? C_GREEN : C_RED, marginBottom: "10px", fontFamily: FONT_BODY }}>
+            <div style={{ fontSize: "16px", fontWeight: "800", color: selected === q.correct ? COLOR_SUCCESS : COLOR_ERROR, marginBottom: "10px", fontFamily: FONT_SANS }}>
               {selected === q.correct ? "✅ DOĞRU!" : "❌ YANLIŞ!"}
             </div>
-            <p style={{ fontSize: "14px", color: "#8a7050", lineHeight: "1.85", margin: 0, fontWeight: "500", fontFamily: FONT_BODY }}>{q.exp}</p>
+            <p style={{ fontSize: "14px", color: "#8a7050", lineHeight: "1.85", margin: 0, fontWeight: "500", fontFamily: FONT_SANS }}>{q.exp}</p>
           </div>
         )}
 
         {/* İleri butonu */}
         {selected !== null && (
           <button onClick={next}
-            style={{ padding: "15px 40px", background: `linear-gradient(90deg,${C_GOLD_DARK},${C_GOLD_DIM},${C_GOLD})`, border: "none", borderRadius: "12px", color: "#000", fontSize: "15px", fontWeight: "800", letterSpacing: "1.5px", cursor: "pointer", fontFamily: FONT_BODY, boxShadow: `0 4px 22px ${C_GOLD_DIM}55`, transition: "all 0.2s" }}
+            style={{ padding: "15px 40px", background: `linear-gradient(90deg,${COLOR_SCALE_DARK},${COLOR_SCALE_DIM},${COLOR_SCALE})`, border: "none", borderRadius: "12px", color: "#000", fontSize: "15px", fontWeight: "800", letterSpacing: "1.5px", cursor: "pointer", fontFamily: FONT_SANS, boxShadow: `0 4px 22px ${COLOR_SCALE_DIM}55`, transition: "all 0.2s" }}
             onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; }}
             onMouseLeave={e => { e.currentTarget.style.transform = "none"; }}>
             {qIdx >= TEST_ITEMS.length - 1 ? "🏁 Sonuçları Gör" : "⏭ Sonraki Soru"}
