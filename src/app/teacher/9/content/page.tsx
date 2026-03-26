@@ -1,4 +1,4 @@
-﻿'use client';
+﻿﻿'use client';
 
 import React, { useState } from 'react';
 import { Map, Navigation, Layers, Maximize, Database, Mountain, Compass, Clock } from 'lucide-react';
@@ -30,7 +30,23 @@ export default function ContentCatalogPage() {
 
       {/* CSS Grid - Etkinlik Kartları Alanı */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto w-full">
-        
+        {/* 1. Kutu: Harita Okuryazarligi */}
+        <div 
+          onClick={() => setActiveActivity('map-literacy')}
+          className="group cursor-pointer bg-slate-900 border-2 border-slate-800 hover:border-lime-500 rounded-3xl p-8 transition-all duration-300 hover:shadow-[0_0_40px_rgba(132,204,22,0.15)] hover:-translate-y-2 flex flex-col items-center text-center relative overflow-hidden"
+        >
+          <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-lime-600 to-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div className="w-20 h-20 bg-lime-950 border border-lime-800 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
+            <Map size={36} className="text-lime-400" />
+          </div>
+          <h2 className="text-2xl font-bold text-lime-400 mb-4">1. Etkinlik: Harita Okuryazarlığı</h2>
+          <div className="text-sm text-slate-400 leading-relaxed font-medium text-left w-full bg-slate-950/50 p-4 rounded-xl space-y-2">
+            <p><strong className="text-slate-300">Öğrenme Çıktısı:</strong> Haritanın temel özelliklerini, elemanlarını ve coğrafi koordinat sistemini kavrar.</p>
+            <p><strong className="text-slate-300">İçerik Akışı:</strong> Konu anlatımı + etkileşimli etkinlik + ölçme ve değerlendirme testi</p>
+            <p><strong className="text-slate-300">Odak:</strong> Harita tanımı, harita elemanları, harita türleri ve koordinatlar</p>
+          </div>
+        </div>
+
         {/* 2. Kutu: Coğrafi Koordinatlar */}
         <div 
           onClick={() => setActiveActivity('activity2')}
@@ -167,23 +183,6 @@ export default function ContentCatalogPage() {
             <p><strong className="text-slate-300">Öğrenme Çıktıları:</strong> COĞ.9.2.1. Harita uygulamaları yapabilme</p>
             <p><strong className="text-slate-300">Süreç Bileşeni:</strong> b) Haritaya ait bileşenlerden yararlanarak haritadaki olay, olgu ve mekânlar arası ilişkileri çözümler.</p>
             <p><strong className="text-slate-300">Araç Seti:</strong> Harita</p>
-          </div>
-        </div>
-
-        {/* 10. Kutu: Harita Okuryazarligi */}
-        <div 
-          onClick={() => setActiveActivity('map-literacy')}
-          className="group cursor-pointer bg-slate-900 border-2 border-slate-800 hover:border-lime-500 rounded-3xl p-8 transition-all duration-300 hover:shadow-[0_0_40px_rgba(132,204,22,0.15)] hover:-translate-y-2 flex flex-col items-center text-center relative overflow-hidden"
-        >
-          <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-lime-600 to-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-          <div className="w-20 h-20 bg-lime-950 border border-lime-800 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
-            <Map size={36} className="text-lime-400" />
-          </div>
-          <h2 className="text-2xl font-bold text-lime-400 mb-4">1. Etkinlik: Harita Okuryazarlığı</h2>
-          <div className="text-sm text-slate-400 leading-relaxed font-medium text-left w-full bg-slate-950/50 p-4 rounded-xl space-y-2">
-            <p><strong className="text-slate-300">Öğrenme Çıktısı:</strong> Haritanın temel özelliklerini, elemanlarını ve coğrafi koordinat sistemini kavrar.</p>
-            <p><strong className="text-slate-300">İçerik Akışı:</strong> Konu anlatımı + etkileşimli etkinlik + ölçme ve değerlendirme testi</p>
-            <p><strong className="text-slate-300">Odak:</strong> Harita tanımı, harita elemanları, harita türleri ve koordinatlar</p>
           </div>
         </div>
       </div>
