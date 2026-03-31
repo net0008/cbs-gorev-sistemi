@@ -484,7 +484,7 @@ export default function HavaOlaylariActivity({ onClose }: { onClose: () => void 
                   {/* Güneş enerjisi akışı */}
                   <div style={{padding:"14px 16px",background:"rgba(0,0,0,0.28)",border:"1px solid rgba(249,115,22,0.15)",borderRadius:"11px"}}>
                     <div style={{fontSize:"11px",color:C2,letterSpacing:"2px",fontWeight:"800",marginBottom:"12px",fontFamily:FONT}}>GUNES ENERJISININ ATMOSFERDEKI DAGILIHI</div>
-                    <svg viewBox="0 0 480 80" width="100%" style={{maxWidth:"480px",display:"block",margin:"0 auto"}}>
+                    <svg viewBox="0 0 480 80" width="100%" style={{maxWidth:"480px",display:"block",margin:"0 auto"}}>{/* oklar */}
                       {[["Uzaya yansiyan",&6,"#94a3b8",0],["Atmosferde emilenler",&25,"#f59e0b",120],["Bulutlardan yansiyan",&20,"#60a5fa",240],["Yeryuzune gelen",&49,"#f97316",360]].map(([label,pctStr,color,x])=>{
                         const pct=parseInt(String(pctStr).replace("&",""));
                         return(
