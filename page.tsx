@@ -9,7 +9,7 @@ const TaskWorkspace = dynamic(
 );
 
 const HavaOlaylariActivity = dynamic(
-  () => import('./src/app/teacher/9/content/1_Unite/Havaolaylariactivity'),
+  () => import('./src/app/teacher/9/content/3_Unite/Havaolaylariactivity'),
   { ssr: false, loading: () => <div className="animate-pulse h-[600px] w-full bg-green-200 dark:bg-green-800 rounded-2xl"></div> }
 );
 
