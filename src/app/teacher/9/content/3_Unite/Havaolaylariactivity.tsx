@@ -507,7 +507,7 @@ export default function HavaOlaylariActivity({ onClose }: { onClose: () => void 
                   <div style={{padding:"12px 16px",background:"rgba(0,0,0,0.2)",border:"1px solid rgba(255,255,255,0.07)",borderRadius:"10px",fontSize:"13px",color:"#64748b",lineHeight:"1.8",fontFamily:FONT}}>
                     Sicaklik; insanlarin konforu ve sagligini, bitki ve hayvanlarin ozelliklerini, su kaynaklarini ve tarim faaliyetlerini etkileyen onemli bir faktordu. Termometre, Gunes isinlarina maruz kalmayan, hava girisine acik, yerden 1.5-2 m yuksekte ahsap kutu icine yerlestirilir.
                   </div>
-                </div> {/* Sıcaklık ölçüm koşulları */}
+                </div>
               )}
 
               {/* BASINÇ */}
