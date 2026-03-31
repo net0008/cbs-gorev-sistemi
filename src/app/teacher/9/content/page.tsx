@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Map, Navigation, Layers, Maximize, Database, Mountain, Compass, Clock, ChevronDown } from 'lucide-react';
 import RouteSimulationActivity from './RouteSimulationActivity';
-import ProjectionActivity from './ProjectionActivity';
+import ProjectionActivity from './Projectionactivity';
 import ScaleActivity from './Scaleactivity';
 import MapTypesActivity from './MapTypesActivity';
 import TopoActivity from './Topoactivity';
