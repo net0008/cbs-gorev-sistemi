@@ -1,7 +1,7 @@
 ﻿﻿'use client';
 
-import React, { useState } from 'react';
-import { Map, Navigation, Layers, Maximize, Database, Mountain, Compass, Clock, ChevronDown, BookOpen } from 'lucide-react';
+import React, { useState } from 'react'; // CloudRain iconunu eklemek için lucide-react'tan import edin
+import { Map, Navigation, Layers, Maximize, Database, Mountain, Compass, Clock, ChevronDown, BookOpen, CloudRain } from 'lucide-react';
 import CografyaBilimiActivity from './1_Unite/Cografyabilimiactivity';
 import RouteSimulationActivity from './2_Unite/RouteSimulationActivity';
 import ProjectionActivity from './2_Unite/Projectionactivity';
@@ -12,6 +12,7 @@ import LocationActivity from './2_Unite/Locationactivity';
 import MekanBilgiActivity from './2_Unite/Mekanbilgiactivity';
 import TimeZonesActivity from './2_Unite/TimeZonesActivity';
 import DistributionMethodsActivity from './2_Unite/DistributionMethodsActivity';
+import HavaOlaylariActivity from './1_Unite/Havaolaylariactivity';
 
 type ActivityType = null | 'cografya-bilimi' | 'activity2' | 'projections' | 'scale' | 'mapTypes' | 'topoactivity' | 'location' | 'mekanBilgi' | 'time-zones' | 'map-literacy';
 
@@ -218,6 +219,9 @@ export default function ContentCatalogPage() {
       )}
       {activeActivity === 'map-literacy' && (
         <DistributionMethodsActivity onClose={() => setActiveActivity(null)} />
+      )}
+      {activeActivity === 'hava-olaylari' && (
+        <HavaOlaylariActivity onClose={() => setActiveActivity(null)} />
       )}
     </div>
   );
