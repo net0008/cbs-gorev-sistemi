@@ -2,15 +2,15 @@
 
 import React, { useState } from 'react';
 import { Map, Navigation, Layers, Maximize, Database, Mountain, Compass, Clock, ChevronDown } from 'lucide-react';
-import RouteSimulationActivity from './1_Unite/RouteSimulationActivity';
-import ProjectionActivity from './1_Unite/Projectionactivity';
-import ScaleActivity from './1_Unite/Scaleactivity';
-import MapTypesActivity from './1_Unite/MapTypesActivity';
-import TopoActivity from './1_Unite/Topoactivity';
-import LocationActivity from './1_Unite/Locationactivity';
-import MekanBilgiActivity from './1_Unite/Mekanbilgiactivity';
-import TimeZonesActivity from './1_Unite/TimeZonesActivity';
-import DistributionMethodsActivity from './1_Unite/DistributionMethodsActivity';
+import RouteSimulationActivity from './RouteSimulationActivity';
+import ProjectionActivity from './Projectionactivity';
+import ScaleActivity from './Scaleactivity';
+import MapTypesActivity from './MapTypesActivity';
+import TopoActivity from './Topoactivity';
+import LocationActivity from './Locationactivity';
+import MekanBilgiActivity from './Mekanbilgiactivity';
+import TimeZonesActivity from './TimeZonesActivity';
+import DistributionMethodsActivity from './DistributionMethodsActivity';
 
 type ActivityType = null | 'activity2' | 'projections' | 'scale' | 'mapTypes' | 'topoactivity' | 'location' | 'mekanBilgi' | 'time-zones' | 'map-literacy';
 
