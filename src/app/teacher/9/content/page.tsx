@@ -1,10 +1,9 @@
 ﻿﻿'use client';
 
 import React, { useState } from 'react';
-import { Map, Navigation, Layers, Maximize, Database, Mountain, Compass, Clock } from 'lucide-react';
-import MapReadingActivity from './MapReadingActivity';
+import { Map, Navigation, Layers, Maximize, Database, Mountain, Compass, Clock, ChevronDown } from 'lucide-react';
 import RouteSimulationActivity from './RouteSimulationActivity';
-import ProjectionActivity from './Projectionactivity';
+import ProjectionActivity from './ProjectionActivity';
 import ScaleActivity from './Scaleactivity';
 import MapTypesActivity from './MapTypesActivity';
 import TopoActivity from './Topoactivity';
@@ -15,8 +14,111 @@ import DistributionMethodsActivity from './DistributionMethodsActivity';
 
 type ActivityType = null | 'activity2' | 'projections' | 'scale' | 'mapTypes' | 'topoactivity' | 'location' | 'mekanBilgi' | 'time-zones' | 'map-literacy';
 
+const units = [
+  {
+    id: 'unit1',
+    title: '1. Ünite: COĞRAFYANIN DOĞASI',
+    color: 'gray',
+    activities: [],
+  },
+  {
+    id: 'unit2',
+    title: '2. Ünite: MEKÂNSAL BİLGİ TEKNOLOJİLERİ',
+    color: 'teal',
+    activities: [
+      {
+        id: 'map-literacy',
+        title: '1. Etkinlik: Harita Okuryazarlığı',
+        icon: Map,
+        color: 'lime',
+        description: 'Haritanın temel özelliklerini, elemanlarını ve coğrafi koordinat sistemini kavrar.',
+      },
+      {
+        id: 'activity2',
+        title: '2. Etkinlik: Coğrafi Koordinatlar',
+        icon: Navigation,
+        color: 'blue',
+        description: 'COĞ.9.2.1. Harita uygulamaları yapabilme. Haritaya ait bileşenlerden yararlanarak haritaları okur.',
+      },
+      {
+        id: 'time-zones',
+        title: '3. Etkinlik: Yerel ve Ulusal Saat Hesaplamaları',
+        icon: Clock,
+        color: 'cyan',
+        description: 'COĞ.9.2.2. Dünya’nın günlük hareketine bağlı olarak yerel saat farklarını analiz eder.',
+      },
+      {
+        id: 'projections',
+        title: '4. Etkinlik: Harita Projeksiyonları',
+        icon: Layers,
+        color: 'purple',
+        description: 'Mekânsal Çıkarım ve İlişkilendirme. Orta zorluk.',
+      },
+      {
+        id: 'scale',
+        title: '5. Etkinlik: Harita Ölçeği ve Okuma',
+        icon: Maximize,
+        color: 'amber',
+        description: 'Harita Bileşenlerini Analiz Etme. Kolay zorluk.',
+      },
+      {
+        id: 'mapTypes',
+        title: '6. Etkinlik: Harita Türleri',
+        icon: Layers,
+        color: 'violet',
+        description: 'Harita Bileşenlerini Analiz Etme. Harita araç seti.',
+      },
+      {
+        id: 'topoactivity',
+        title: '7. Etkinlik: Haritada Yükselti ve Yer Şekilleri',
+        icon: Mountain,
+        color: 'orange',
+        description: 'COĞ.9.2.1. Olay, olgu ve mekânlar arası ilişkileri çözümler.',
+      },
+      {
+        id: 'location',
+        title: '8. Etkinlik: Türkiye’nin Coğrafi Konumu',
+        icon: Compass,
+        color: 'indigo',
+        description: 'COĞ.9.2.2. Türkiye’nin konum özelliklerini algılayabilme.',
+      },
+      {
+        id: 'mekanBilgi',
+        title: '9. Etkinlik: Mekânsal Bilgi Teknolojileri',
+        icon: Database,
+        color: 'pink',
+        description: 'COĞ.9.2.1. Olay, olgu ve mekânlar arası ilişkileri çözümler.',
+      },
+    ],
+  },
+  { id: 'unit3', title: '3. Ünite: DOĞAL SİSTEMLER VE SÜREÇLER', color: 'gray', activities: [] },
+  { id: 'unit4', title: '4. Ünite: BEŞERÎ SİSTEMLER VE SÜREÇLER', color: 'gray', activities: [] },
+  { id: 'unit5', title: '5. Ünite: EKONOMİK FAALİYETLER VE ETKİLERİ', color: 'gray', activities: [] },
+  { id: 'unit6', title: '6. Ünite: AFETLER VE SÜRDÜRÜLEBİLİR ÇEVRE', color: 'gray', activities: [] },
+  { id: 'unit7', title: '7. Ünite: BÖLGELER, ÜLKELER VE KÜRESEL BAĞLANTILAR', color: 'gray', activities: [] },
+];
+
+const colorClasses: { [key: string]: { border: string, text: string, bg: string, iconBorder: string } } = {
+  lime: { border: 'hover:border-lime-500', text: 'text-lime-400', bg: 'bg-lime-950', iconBorder: 'border-lime-800' },
+  blue: { border: 'hover:border-blue-500', text: 'text-blue-400', bg: 'bg-blue-950', iconBorder: 'border-blue-800' },
+  cyan: { border: 'hover:border-cyan-500', text: 'text-cyan-400', bg: 'bg-cyan-950', iconBorder: 'border-cyan-800' },
+  purple: { border: 'hover:border-purple-500', text: 'text-purple-400', bg: 'bg-purple-950', iconBorder: 'border-purple-800' },
+  amber: { border: 'hover:border-amber-500', text: 'text-amber-400', bg: 'bg-amber-950', iconBorder: 'border-amber-800' },
+  violet: { border: 'hover:border-violet-500', text: 'text-violet-400', bg: 'bg-violet-950', iconBorder: 'border-violet-800' },
+  orange: { border: 'hover:border-orange-500', text: 'text-orange-400', bg: 'bg-orange-950', iconBorder: 'border-orange-800' },
+  indigo: { border: 'hover:border-indigo-500', text: 'text-indigo-400', bg: 'bg-indigo-950', iconBorder: 'border-indigo-800' },
+  pink: { border: 'hover:border-pink-500', text: 'text-pink-400', bg: 'bg-pink-950', iconBorder: 'border-pink-800' },
+  gray: { border: 'border-gray-500', text: 'text-gray-400', bg: 'bg-gray-950', iconBorder: 'border-gray-800' },
+  teal: { border: 'border-teal-500', text: 'text-teal-400', bg: 'bg-teal-950', iconBorder: 'border-teal-800' },
+};
+
 export default function ContentCatalogPage() {
   const [activeActivity, setActiveActivity] = useState<ActivityType>(null);
+  const [expandedUnit, setExpandedUnit] = useState<string | null>('unit2');
+
+  const handleUnitClick = (unitId: string) => {
+    setExpandedUnit(prev => (prev === unitId ? null : unitId));
+  };
 
   return (
     <div className="w-full min-h-[calc(100vh-8rem)] bg-slate-950/50 p-6 md:p-12 rounded-3xl text-slate-100 flex flex-col">
@@ -24,167 +126,56 @@ export default function ContentCatalogPage() {
       <div className="mb-12 text-center">
         <h1 className="text-4xl font-extrabold text-white mb-4 tracking-tight">9. Sınıf Etkinlik Kataloğu</h1>
         <p className="text-lg text-slate-400 max-w-2xl mx-auto">
-          Lütfen başlamak istediğiniz etkileşimli harita görevini seçiniz.
+          Lütfen başlamak istediğiniz üniteyi seçerek ilgili etkileşimli harita görevine ulaşınız.
         </p>
       </div>
 
-      {/* CSS Grid - Etkinlik Kartları Alanı */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto w-full">
-        {/* 1. Kutu: Harita Okuryazarligi */}
-        <div 
-          onClick={() => setActiveActivity('map-literacy')}
-          className="group cursor-pointer bg-slate-900 border-2 border-slate-800 hover:border-lime-500 rounded-3xl p-8 transition-all duration-300 hover:shadow-[0_0_40px_rgba(132,204,22,0.15)] hover:-translate-y-2 flex flex-col items-center text-center relative overflow-hidden"
-        >
-          <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-lime-600 to-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-          <div className="w-20 h-20 bg-lime-950 border border-lime-800 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
-            <Map size={36} className="text-lime-400" />
-          </div>
-          <h2 className="text-2xl font-bold text-lime-400 mb-4">1. Etkinlik: Harita Okuryazarlığı</h2>
-          <div className="text-sm text-slate-400 leading-relaxed font-medium text-left w-full bg-slate-950/50 p-4 rounded-xl space-y-2">
-            <p><strong className="text-slate-300">Öğrenme Çıktısı:</strong> Haritanın temel özelliklerini, elemanlarını ve coğrafi koordinat sistemini kavrar.</p>
-            <p><strong className="text-slate-300">İçerik Akışı:</strong> Konu anlatımı + etkileşimli etkinlik + ölçme ve değerlendirme testi</p>
-            <p><strong className="text-slate-300">Odak:</strong> Harita tanımı, harita elemanları, harita türleri ve koordinatlar</p>
-          </div>
-        </div>
-
-        {/* 2. Kutu: Coğrafi Koordinatlar */}
-        <div 
-          onClick={() => setActiveActivity('activity2')}
-          className="group cursor-pointer bg-slate-900 border-2 border-slate-800 hover:border-blue-500 rounded-3xl p-8 transition-all duration-300 hover:shadow-[0_0_40px_rgba(59,130,246,0.15)] hover:-translate-y-2 flex flex-col items-center text-center relative overflow-hidden"
-        >
-          <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-600 to-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-          <div className="w-20 h-20 bg-blue-950 border border-blue-800 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
-            <Navigation size={36} className="text-blue-400" />
-          </div>
-          <h2 className="text-2xl font-bold text-blue-400 mb-4">2. Etkinlik: Coğrafi Koordinatlar</h2>
-          <div className="text-sm text-slate-400 leading-relaxed font-medium text-left w-full bg-slate-950/50 p-4 rounded-xl space-y-2">
-            <p><strong className="text-slate-300">Öğrenme Çıktıları:</strong> COĞ.9.2.1. Harita uygulamaları yapabilme</p>
-            <p><strong className="text-slate-300">Süreç Bileşeni:</strong> a) Haritaya ait bileşenlerden yararlanarak haritaları okur.</p>
-            <p><strong className="text-slate-300">Araç Seti:</strong> Harita</p>
-          </div>
-        </div>
-
-        {/* 3. Kutu: Yerel ve Ulusal Saat Hesaplamaları */}
-        <div 
-          onClick={() => setActiveActivity('time-zones')}
-          className="group cursor-pointer bg-slate-900 border-2 border-slate-800 hover:border-cyan-500 rounded-3xl p-8 transition-all duration-300 hover:shadow-[0_0_40px_rgba(6,182,212,0.15)] hover:-translate-y-2 flex flex-col items-center text-center relative overflow-hidden"
-        >
-          <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-cyan-600 to-sky-400 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-          <div className="w-20 h-20 bg-cyan-950 border border-cyan-800 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
-            <Clock size={36} className="text-cyan-400" />
-          </div>
-          <h2 className="text-2xl font-bold text-cyan-400 mb-4">3. Etkinlik: Yerel ve Ulusal Saat Hesaplamaları</h2>
-          <div className="text-sm text-slate-400 leading-relaxed font-medium text-left w-full bg-slate-950/50 p-4 rounded-xl space-y-2">
-            <p><strong className="text-slate-300">Öğrenme Çıktıları:</strong> COĞ.9.2.2. Dünya’nın günlük hareketine bağlı olarak yerel saat farklarını analiz eder.</p>
-            <p><strong className="text-slate-300">Araç Seti:</strong> Dünya Saati</p>
-            <p><strong className="text-slate-300">Açıklama:</strong> Meridyenler arası zaman farkını ve uluslararası saat dilimlerini interaktif olarak hesaplayın.</p>
-          </div>
-        </div>
-
-        {/* 3. Kutu: Harita Projeksiyonları */}
-        <div 
-          onClick={() => setActiveActivity('projections')}
-          className="group cursor-pointer bg-slate-900 border-2 border-slate-800 hover:border-purple-500 rounded-3xl p-8 transition-all duration-300 hover:shadow-[0_0_40px_rgba(168,85,247,0.15)] hover:-translate-y-2 flex flex-col items-center text-center relative overflow-hidden"
-        >
-          <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-purple-600 to-pink-400 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-          <div className="w-20 h-20 bg-purple-950 border border-purple-800 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
-            <Layers size={36} className="text-purple-400" />
-          </div>
-          <h2 className="text-2xl font-bold text-purple-400 mb-4">4. Etkinlik: Harita Projeksiyonları</h2>
-          <div className="text-sm text-slate-400 leading-relaxed font-medium text-left w-full bg-slate-950/50 p-4 rounded-xl space-y-2">
-            <p><strong className="text-slate-300">Öğrenme Çıktıları:</strong> COĞ.9.2.1</p>
-            <p><strong className="text-slate-300">Süreç Bileşeni:</strong> Mekânsal Çıkarım ve İlişkilendirme</p>
-            <p><strong className="text-slate-300">Zorluk:</strong> Orta</p>
-          </div>
-        </div>
-
-        {/* 4. Kutu: Harita Ölçeği */}
-        <div 
-          onClick={() => setActiveActivity('scale')}
-          className="group cursor-pointer bg-slate-900 border-2 border-slate-800 hover:border-amber-500 rounded-3xl p-8 transition-all duration-300 hover:shadow-[0_0_40px_rgba(245,158,11,0.15)] hover:-translate-y-2 flex flex-col items-center text-center relative overflow-hidden"
-        >
-          <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-amber-600 to-yellow-400 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-          <div className="w-20 h-20 bg-amber-950 border border-amber-800 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
-            <Maximize size={36} className="text-amber-400" />
-          </div>
-          <h2 className="text-2xl font-bold text-amber-400 mb-4">5. Etkinlik: Harita Ölçeği ve Okuma</h2>
-          <div className="text-sm text-slate-400 leading-relaxed font-medium text-left w-full bg-slate-950/50 p-4 rounded-xl space-y-2">
-            <p><strong className="text-slate-300">Öğrenme Çıktıları:</strong> COĞ.9.2.1.a</p>
-            <p><strong className="text-slate-300">Süreç Bileşeni:</strong> Harita Bileşenlerini Analiz Etme</p>
-            <p><strong className="text-slate-300">Zorluk:</strong> Kolay</p>
-          </div>
-        </div>
-
-        {/* 6. Kutu: Harita Türleri */}
-        <div 
-          onClick={() => setActiveActivity('mapTypes')}
-          className="group cursor-pointer bg-slate-900 border-2 border-slate-800 hover:border-violet-500 rounded-3xl p-8 transition-all duration-300 hover:shadow-[0_0_40px_rgba(139,92,246,0.15)] hover:-translate-y-2 flex flex-col items-center text-center relative overflow-hidden"
-        >
-          <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-violet-600 to-fuchsia-400 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-          <div className="w-20 h-20 bg-violet-950 border border-violet-800 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
-            <Layers size={36} className="text-violet-400" />
-          </div>
-          <h2 className="text-2xl font-bold text-violet-400 mb-4">6. Etkinlik: Harita Türleri</h2>
-          <div className="text-sm text-slate-400 leading-relaxed font-medium text-left w-full bg-slate-950/50 p-4 rounded-xl space-y-2">
-            <p><strong className="text-slate-300">Öğrenme Çıktıları:</strong> COĞ.9.2.1.a</p>
-            <p><strong className="text-slate-300">Süreç Bileşeni:</strong> Harita Bileşenlerini Analiz Etme</p>
-            <p><strong className="text-slate-300">Araç Seti:</strong> Harita</p>
-          </div>
-        </div>
-
-        {/* 7. Kutu: Haritada Yükselti ve Yer Şekilleri */}
-        <div 
-          onClick={() => setActiveActivity('topoactivity')}
-          className="group cursor-pointer bg-slate-900 border-2 border-slate-800 hover:border-orange-500 rounded-3xl p-8 transition-all duration-300 hover:shadow-[0_0_40px_rgba(249,115,22,0.15)] hover:-translate-y-2 flex flex-col items-center text-center relative overflow-hidden"
-        >
-          <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-orange-600 to-amber-400 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-          <div className="w-20 h-20 bg-orange-950 border border-orange-800 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
-            <Mountain size={36} className="text-orange-400" />
-          </div>
-          <h2 className="text-2xl font-bold text-orange-400 mb-4">7. Etkinlik: Haritada Yükselti ve Yer Şekilleri</h2>
-          <div className="text-sm text-slate-400 leading-relaxed font-medium text-left w-full bg-slate-950/50 p-4 rounded-xl space-y-2">
-            <p><strong className="text-slate-300">Öğrenme Çıktıları:</strong> COĞ.9.2.1. Harita uygulamaları yapabilme</p>
-            <p><strong className="text-slate-300">Süreç Bileşeni:</strong> a) Haritaya ait bileşenlerden yararlanarak haritaları okur.</p>
-            <p><strong className="text-slate-300">Süreç Bileşeni:</strong> b) Haritaya ait bileşenlerden yararlanarak haritadaki olay, olgu ve mekânlar arası ilişkileri çözümler.</p>
-            <p><strong className="text-slate-300">Araç Seti:</strong> Harita</p>
-          </div>
-        </div>
-
-        {/* 8. Kutu: Türkiye'nin Coğrafi Konumu */}
-        <div 
-          onClick={() => setActiveActivity('location')}
-          className="group cursor-pointer bg-slate-900 border-2 border-slate-800 hover:border-indigo-500 rounded-3xl p-8 transition-all duration-300 hover:shadow-[0_0_40px_rgba(99,102,241,0.15)] hover:-translate-y-2 flex flex-col items-center text-center relative overflow-hidden"
-        >
-          <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-indigo-600 to-blue-400 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-          <div className="w-20 h-20 bg-indigo-950 border border-indigo-800 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
-            <Compass size={36} className="text-indigo-400" />
-          </div>
-          <h2 className="text-2xl font-bold text-indigo-400 mb-4">8. Etkinlik: Türkiye’nin Coğrafi Konumu</h2>
-          <div className="text-sm text-slate-400 leading-relaxed font-medium text-left w-full bg-slate-950/50 p-4 rounded-xl space-y-2">
-            <p><strong className="text-slate-300">Öğrenme Çıktıları:</strong> COĞ.9.2.2. Türkiye’nin konum özelliklerini algılayabilme</p>
-            <p><strong className="text-slate-300">Süreç Bileşeni:</strong> a) Türkiye’nin konum özelliklerini belirler.</p>
-            <p><strong className="text-slate-300">Süreç Bileşeni:</strong> b) Türkiye’nin konum özelliklerini görselleştirir.</p>
-            <p><strong className="text-slate-300">Süreç Bileşeni:</strong> c) Türkiye’nin konum özelliklerini özetler.</p>
-            <p><strong className="text-slate-300">Araç Seti:</strong> Harita</p>
-          </div>
-        </div>
-
-        {/* 9. Kutu: Mekânsal Bilgi Teknolojileri */}
-        <div 
-          onClick={() => setActiveActivity('mekanBilgi')}
-          className="group cursor-pointer bg-slate-900 border-2 border-slate-800 hover:border-pink-500 rounded-3xl p-8 transition-all duration-300 hover:shadow-[0_0_40px_rgba(236,72,153,0.15)] hover:-translate-y-2 flex flex-col items-center text-center relative overflow-hidden"
-        >
-          <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-pink-600 to-rose-400 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-          <div className="w-20 h-20 bg-pink-950 border border-pink-800 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
-            <Database size={36} className="text-pink-400" />
-          </div>
-          <h2 className="text-2xl font-bold text-pink-400 mb-4">9. Etkinlik: Mekânsal Bilgi Teknolojileri</h2>
-          <div className="text-sm text-slate-400 leading-relaxed font-medium text-left w-full bg-slate-950/50 p-4 rounded-xl space-y-2">
-            <p><strong className="text-slate-300">Öğrenme Çıktıları:</strong> COĞ.9.2.1. Harita uygulamaları yapabilme</p>
-            <p><strong className="text-slate-300">Süreç Bileşeni:</strong> b) Haritaya ait bileşenlerden yararlanarak haritadaki olay, olgu ve mekânlar arası ilişkileri çözümler.</p>
-            <p><strong className="text-slate-300">Araç Seti:</strong> Harita</p>
-          </div>
-        </div>
+      {/* Ünite Listesi */}
+      <div className="max-w-6xl mx-auto w-full space-y-4">
+        {units.map(unit => {
+          const isExpanded = expandedUnit === unit.id;
+          const unitColors = colorClasses[unit.color] || colorClasses.gray;
+          return (
+            <div key={unit.id} className={`bg-slate-900 border-2 ${isExpanded ? unitColors.border : 'border-slate-800'} rounded-3xl transition-all duration-500`}>
+              <div
+                onClick={() => handleUnitClick(unit.id)}
+                className="cursor-pointer p-6 flex justify-between items-center"
+              >
+                <h2 className={`text-2xl font-bold ${isExpanded ? unitColors.text : 'text-white'}`}>{unit.title}</h2>
+                <ChevronDown className={`w-8 h-8 text-slate-500 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
+              </div>
+              {isExpanded && (
+                <div className="px-6 pb-6 animate-in fade-in-50 slide-in-from-top-5 duration-500">
+                  {unit.activities.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {unit.activities.map(activity => {
+                        const activityColors = colorClasses[activity.color] || colorClasses.gray;
+                        const Icon = activity.icon;
+                        return (
+                          <div
+                            key={activity.id}
+                            onClick={() => setActiveActivity(activity.id as ActivityType)}
+                            className={`group cursor-pointer bg-slate-800/50 border border-slate-700 ${activityColors.border} rounded-2xl p-6 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 flex flex-col items-center text-center`}
+                          >
+                            <div className={`w-16 h-16 ${activityColors.bg} border ${activityColors.iconBorder} rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
+                              <Icon size={28} className={activityColors.text} />
+                            </div>
+                            <h3 className={`text-lg font-semibold ${activityColors.text} mb-2`}>{activity.title}</h3>
+                            <p className="text-xs text-slate-400 leading-relaxed">{activity.description}</p>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <div className="text-slate-500 text-center py-8">
+                      Bu ünite için henüz etkinlik eklenmemiştir.
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
 
       {/* --- Aktif Modal / Tam Ekran Render Alanı --- */}
