@@ -101,7 +101,20 @@ const units = [
       },
     ],
   },
-  { id: 'unit3', title: '3. Ünite: DOĞAL SİSTEMLER VE SÜREÇLER', color: 'gray', activities: [] },
+  {
+    id: 'unit3',
+    title: '3. Ünite: DOĞAL SİSTEMLER VE SÜREÇLER',
+    color: 'blue',
+    activities: [
+      {
+        id: 'hava-olaylari',
+        title: '3.1.1. Hava Olayları',
+        icon: CloudRain,
+        color: 'blue',
+        description: 'İklim sistemini ve hava olaylarını anlamak.',
+      },
+    ],
+  },
   { id: 'unit4', title: '4. Ünite: BEŞERÎ SİSTEMLER VE SÜREÇLER', color: 'gray', activities: [] },
   { id: 'unit5', title: '5. Ünite: EKONOMİK FAALİYETLER VE ETKİLERİ', color: 'gray', activities: [] },
   { id: 'unit6', title: '6. Ünite: AFETLER VE SÜRDÜRÜLEBİLİR ÇEVRE', color: 'gray', activities: [] },
