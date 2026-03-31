@@ -1,25 +1,34 @@
 ﻿﻿'use client';
 
 import React, { useState } from 'react';
-import { Map, Navigation, Layers, Maximize, Database, Mountain, Compass, Clock, ChevronDown } from 'lucide-react';
-import RouteSimulationActivity from './RouteSimulationActivity';
-import ProjectionActivity from './Projectionactivity';
-import ScaleActivity from './Scaleactivity';
-import MapTypesActivity from './MapTypesActivity';
-import TopoActivity from './Topoactivity';
-import LocationActivity from './Locationactivity';
-import MekanBilgiActivity from './Mekanbilgiactivity';
-import TimeZonesActivity from './TimeZonesActivity';
-import DistributionMethodsActivity from './DistributionMethodsActivity';
+import { Map, Navigation, Layers, Maximize, Database, Mountain, Compass, Clock, ChevronDown, BookOpen } from 'lucide-react';
+import CografyaBilimiActivity from './1_Unite/Cografyabilimiactivity';
+import RouteSimulationActivity from './2_Unite/RouteSimulationActivity';
+import ProjectionActivity from './2_Unite/Projectionactivity';
+import ScaleActivity from './2_Unite/Scaleactivity';
+import MapTypesActivity from './2_Unite/MapTypesActivity';
+import TopoActivity from './2_Unite/Topoactivity';
+import LocationActivity from './2_Unite/Locationactivity';
+import MekanBilgiActivity from './2_Unite/Mekanbilgiactivity';
+import TimeZonesActivity from './2_Unite/TimeZonesActivity';
+import DistributionMethodsActivity from './2_Unite/DistributionMethodsActivity';
 
-type ActivityType = null | 'activity2' | 'projections' | 'scale' | 'mapTypes' | 'topoactivity' | 'location' | 'mekanBilgi' | 'time-zones' | 'map-literacy';
+type ActivityType = null | 'cografya-bilimi' | 'activity2' | 'projections' | 'scale' | 'mapTypes' | 'topoactivity' | 'location' | 'mekanBilgi' | 'time-zones' | 'map-literacy';
 
 const units = [
   {
     id: 'unit1',
     title: '1. Ünite: COĞRAFYANIN DOĞASI',
     color: 'gray',
-    activities: [],
+    activities: [
+      {
+        id: 'cografya-bilimi',
+        title: '1. Etkinlik: Coğrafya Bilimi',
+        icon: BookOpen,
+        color: 'green',
+        description: 'Coğrafya biliminin konusu, bölümleri ve tarihsel gelişimi.',
+      },
+    ],
   },
   {
     id: 'unit2',
@@ -102,6 +111,7 @@ const colorClasses: { [key: string]: { border: string, text: string, bg: string,
   lime: { border: 'hover:border-lime-500', text: 'text-lime-400', bg: 'bg-lime-950', iconBorder: 'border-lime-800' },
   blue: { border: 'hover:border-blue-500', text: 'text-blue-400', bg: 'bg-blue-950', iconBorder: 'border-blue-800' },
   cyan: { border: 'hover:border-cyan-500', text: 'text-cyan-400', bg: 'bg-cyan-950', iconBorder: 'border-cyan-800' },
+  green: { border: 'hover:border-green-500', text: 'text-green-400', bg: 'bg-green-950', iconBorder: 'border-green-800' },
   purple: { border: 'hover:border-purple-500', text: 'text-purple-400', bg: 'bg-purple-950', iconBorder: 'border-purple-800' },
   amber: { border: 'hover:border-amber-500', text: 'text-amber-400', bg: 'bg-amber-950', iconBorder: 'border-amber-800' },
   violet: { border: 'hover:border-violet-500', text: 'text-violet-400', bg: 'bg-violet-950', iconBorder: 'border-violet-800' },
@@ -179,6 +189,9 @@ export default function ContentCatalogPage() {
       </div>
 
       {/* --- Aktif Modal / Tam Ekran Render Alanı --- */}
+      {activeActivity === 'cografya-bilimi' && (
+        <CografyaBilimiActivity onClose={() => setActiveActivity(null)} />
+      )}
       {activeActivity === 'activity2' && (
         <RouteSimulationActivity onClose={() => setActiveActivity(null)} />
       )}
