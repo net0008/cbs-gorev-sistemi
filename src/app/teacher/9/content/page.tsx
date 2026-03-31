@@ -14,7 +14,7 @@ import TimeZonesActivity from './2_Unite/TimeZonesActivity';
 import DistributionMethodsActivity from './2_Unite/DistributionMethodsActivity';
 import HavaOlaylariActivity from './1_Unite/Havaolaylariactivity';
 
-type ActivityType = null | 'cografya-bilimi' | 'activity2' | 'projections' | 'scale' | 'mapTypes' | 'topoactivity' | 'location' | 'mekanBilgi' | 'time-zones' | 'map-literacy';
+type ActivityType = null | 'cografya-bilimi' | 'activity2' | 'projections' | 'scale' | 'mapTypes' | 'topoactivity' | 'location' | 'mekanBilgi' | 'time-zones' | 'map-literacy' | 'hava-olaylari';
 
 const units = [
   {
