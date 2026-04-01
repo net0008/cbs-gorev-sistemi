@@ -13,11 +13,21 @@ const HavaOlaylariActivity = dynamic(
   { ssr: false, loading: () => <div className="animate-pulse h-[600px] w-full bg-green-200 dark:bg-green-800 rounded-2xl"></div> }
 );
 
+const IklimSistemiActivity = dynamic(
+  () => import('./src/app/teacher/9/content/3_Unite/Iklimsistemiactivity'),
+  { ssr: false, loading: () => <div className="animate-pulse h-[600px] w-full bg-blue-200 dark:bg-blue-800 rounded-2xl"></div> }
+);
+
 export default function StudentPerformancePage() {
   const [showHavaOlaylari, setShowHavaOlaylari] = useState(false);
+  const [showIklimSistemi, setShowIklimSistemi] = useState(false);
 
   const handleCloseHavaOlaylari = () => {
     setShowHavaOlaylari(false);
+  };
+
+  const handleCloseIklimSistemi = () => {
+    setShowIklimSistemi(false);
   };
 
   return (
@@ -42,15 +52,40 @@ export default function StudentPerformancePage() {
           3. Ünite: DOĞAL SİSTEMLER VE SÜREÇLER
         </h2>
         <p className="text-slate-600 dark:text-slate-400 mt-3 text-lg">3.1. İKLİM SİSTEMİNİ ANLAMAK</p>
-        <button
-          onClick={() => setShowHavaOlaylari(true)}
-          className="mt-4 px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg shadow-md transition-colors duration-200"
-        >
-          3.1.1. Hava Olayları Aktivitesini Başlat
-        </button>
+        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <button
+            onClick={() => setShowHavaOlaylari(true)}
+            className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg shadow-md transition-colors duration-200 text-left"
+          >
+            3.1.1. Hava Olayları
+            <span className="block text-xs font-normal opacity-75">Aktiviteyi Başlat</span>
+          </button>
+          <button
+            onClick={() => setShowIklimSistemi(true)}
+            className="px-6 py-3 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-lg shadow-md transition-colors duration-200 text-left"
+          >
+            3.1.2. İklim Sistemi
+            <span className="block text-xs font-normal opacity-75">Aktiviteyi Başlat</span>
+          </button>
+          <button
+            disabled
+            className="px-6 py-3 bg-slate-400 dark:bg-slate-700 text-white font-bold rounded-lg shadow-md text-left opacity-50 cursor-not-allowed"
+          >
+            3.1.3. İklim Türleri
+            <span className="block text-xs font-normal opacity-75">Yakında</span>
+          </button>
+          <button
+            disabled
+            className="px-6 py-3 bg-slate-400 dark:bg-slate-700 text-white font-bold rounded-lg shadow-md text-left opacity-50 cursor-not-allowed"
+          >
+            3.1.4. İklim Sisteminde Yaşanan Değişiklikler
+            <span className="block text-xs font-normal opacity-75">Yakında</span>
+          </button>
+        </div>
       </div>
 
       {showHavaOlaylari && <HavaOlaylariActivity onClose={handleCloseHavaOlaylari} />}
+      {showIklimSistemi && <IklimSistemiActivity onClose={handleCloseIklimSistemi} />}
     </div>
   );
 }
