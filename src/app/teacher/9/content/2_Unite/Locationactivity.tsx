@@ -210,7 +210,7 @@ function LearnTab() {
           <SectionHeader icon="🌍" color="#10b981" title="Göreceli Konum" sub="Diğer yerlerle ilişkisel konum"/>
           <div style={{ fontSize:"11px", color:"#10b981", letterSpacing:"2px", fontWeight:"800", marginBottom:"-10px" }}>KARA KOMŞULARI</div>
           <iframe style={{ width: "100%", height: "800px", border: 0, borderRadius: "12px" }} allowFullScreen allow="geolocation" src="//umap.openstreetmap.fr/tr/map/turkiyenin-kara-komsular_1384373?scaleControl=false&miniMap=false&scrollWheelZoom=false&zoomControl=false&editMode=disabled&moreControl=false&searchControl=false&tilelayersControl=false&embedControl=false&datalayersControl=false&onLoadPanel=none&captionBar=false&captionMenus=false&homeControl=false&fullscreenControl=false&captionControl=false&locateControl=false&measureControl=false&printControl=false#6/39.410733/35.683594"></iframe>
-          <div style={{ fontSize:"11px", color:"#10b981", letterSpacing:"2px", fontWeight:"800", marginBottom:"-10px", marginTop: "10px" }}>DENİZ KOMŞULARI</div>
+          
           <InfoBox color={COLOR_ERROR} title="KARA KOMŞULARI (8)" icon="🤝">
               <div style={{ display:"flex", flexDirection:"column", gap:"5px", marginTop:"6px" }}>
                 {[["Doğu","Ermenistan, Gürcistan, Azerbaycan, İran"],["Güney","Irak, Suriye"],["Batı","Yunanistan, Bulgaristan"]].map(([y,u])=>(
@@ -218,7 +218,7 @@ function LearnTab() {
                 ))}
               </div>
             </InfoBox>        
-         
+         <div style={{ fontSize:"11px", color:"#10b981", letterSpacing:"2px", fontWeight:"800", marginBottom:"-10px", marginTop: "10px" }}>DENİZ KOMŞULARI</div>
           <iframe style={{ width: "100%", height: "800px", border: 0, borderRadius: "12px" }} allowFullScreen allow="geolocation" src="//umap.openstreetmap.fr/tr/map/turkiyenin-deniz-komsular_1384393?scaleControl=false&miniMap=false&scrollWheelZoom=true&zoomControl=false&editMode=disabled&moreControl=false&searchControl=false&tilelayersControl=false&embedControl=false&datalayersControl=false&onLoadPanel=none&captionBar=false&captionMenus=false&homeControl=false&fullscreenControl=false&captionControl=false&locateControl=false&measureControl=false&printControl=false#5/38.976492/34.716797"></iframe>
           <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"12px" }}>
             <InfoBox color={COLOR_SECONDARY} title="DENİZ KOMŞULARI (13)" icon="⚓">
