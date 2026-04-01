@@ -199,7 +199,7 @@ function LearnTab() {
             <div style={{ fontSize:"11px", color:COLOR_LOCATION, letterSpacing:"2px", fontWeight:"800", marginBottom:"12px", fontFamily:FONT_SANS }}>TÜRKİYE'NİN KOORDİNATLARI</div>
             <iframe style={{ width:"100%", height:"500px", border:0, borderRadius:"8px" }} allowFullScreen allow="geolocation"
               src="//umap.openstreetmap.fr/tr/map/turkiyenin-matematik-konumu_1380349?scaleControl=false&miniMap=false&scrollWheelZoom=true&zoomControl=false&editMode=disabled&moreControl=false&searchControl=false&tilelayersControl=false&embedControl=false&datalayersControl=false&onLoadPanel=none&captionBar=false&captionMenus=false&homeControl=false&fullscreenControl=false&captionControl=false&locateControl=false&measureControl=false&printControl=false#5/39.044786/36.210938"
-              title="Türkiye Matematik Konumu"/>
+              title="Türkiye Matematik Konumu" />
           </div>
           <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"14px" }}>
             <InfoBox color={COLOR_SUCCESS} title="KUZEY YARIM KÜRE" icon="⬆️"><div style={{ fontSize:"13px", color:"#3a6a50", lineHeight:"1.8" }}>Türkiye <strong style={{ color:COLOR_SUCCESS }}>36 - 42 Kuzey</strong> paralelleri arasındadır.</div></InfoBox>
@@ -208,7 +208,10 @@ function LearnTab() {
         </>}
         {section==="goreceli" && <>
           <SectionHeader icon="🌍" color="#10b981" title="Göreceli Konum" sub="Diğer yerlerle ilişkisel konum"/>
-          <TurkeyNeighborMap />
+          <div style={{ fontSize:"11px", color:"#10b981", letterSpacing:"2px", fontWeight:"800", marginBottom:"-10px" }}>KARA KOMŞULARI</div>
+          <iframe style={{ width: "100%", height: "300px", border: 0, borderRadius: "12px" }} allowFullScreen allow="geolocation" src="//umap.openstreetmap.fr/tr/map/turkiyenin-kara-komsular_1384373?scaleControl=false&miniMap=false&scrollWheelZoom=false&zoomControl=false&editMode=disabled&moreControl=false&searchControl=false&tilelayersControl=false&embedControl=false&datalayersControl=false&onLoadPanel=none&captionBar=false&captionMenus=false&homeControl=false&fullscreenControl=false&captionControl=false&locateControl=false&measureControl=false&printControl=false#6/39.410733/35.683594"></iframe>
+          <div style={{ fontSize:"11px", color:"#10b981", letterSpacing:"2px", fontWeight:"800", marginBottom:"-10px", marginTop: "10px" }}>DENİZ KOMŞULARI</div>
+          <iframe style={{ width: "100%", height: "300px", border: 0, borderRadius: "12px" }} allowFullScreen allow="geolocation" src="//umap.openstreetmap.fr/tr/map/turkiyenin-deniz-komsular_1384393?scaleControl=false&miniMap=false&scrollWheelZoom=true&zoomControl=false&editMode=disabled&moreControl=false&searchControl=false&tilelayersControl=false&embedControl=false&datalayersControl=false&onLoadPanel=none&captionBar=false&captionMenus=false&homeControl=false&fullscreenControl=false&captionControl=false&locateControl=false&measureControl=false&printControl=false#5/38.976492/34.716797"></iframe>
           <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"12px" }}>
             <InfoBox color={COLOR_ERROR} title="KARA KOMŞULARI (8)" icon="🤝">
               <div style={{ display:"flex", flexDirection:"column", gap:"5px", marginTop:"6px" }}>
@@ -247,43 +250,6 @@ function LearnTab() {
           </div>
         </>}
       </div>
-    </div>
-  );
-}
-
-function TurkeyNeighborMap() {
-  const [hov, setHov] = useState<string|null>(null);
-  const countries = [
-    { id:"bulgaristan", name:"Bulgaristan", x:100, y:30,  w:80,  h:45, fill:"#3b82f6" },
-    { id:"yunanistan",  name:"Yunanistan",  x:40,  y:70,  w:70,  h:60, fill:"#3b82f6" },
-    { id:"turkiye",     name:"TURKIYE",     x:120, y:80,  w:260, h:90, fill:"#6366f1" },
-    { id:"gurcistan",   name:"Gurcistan",   x:370, y:55,  w:70,  h:35, fill:"#ef4444" },
-    { id:"ermenistan",  name:"Ermenistan",  x:380, y:88,  w:55,  h:30, fill:"#ef4444" },
-    { id:"azerbaycan",  name:"Azerbaycan",  x:430, y:75,  w:55,  h:28, fill:"#ef4444" },
-    { id:"iran",        name:"Iran",        x:380, y:115, w:110, h:55, fill:"#ef4444" },
-    { id:"irak",        name:"Irak",        x:280, y:165, w:95,  h:50, fill:"#f97316" },
-    { id:"suriye",      name:"Suriye",      x:185, y:165, w:100, h:45, fill:"#f97316" },
-  ];
-  return (
-    <div style={{ width:"100%", maxWidth:"580px", padding:"14px 18px", background:"rgba(0,0,0,0.28)", border:`1px solid ${C}18`, borderRadius:"12px" }}>
-      <div style={{ fontSize:"11px", color:C, letterSpacing:"2px", fontWeight:"800", marginBottom:"10px" }}>ŞEMATİK KOMŞU HARİTASI</div>
-      <svg width="520" height="240" viewBox="0 0 520 240" style={{ width:"100%" }}>
-        <rect x="0" y="0" width="115" height="240" fill="#1a4a9e" opacity="0.18" rx="4"/>
-        <text x="30" y="130" fontSize="9" fill="#3a7acc" fontFamily={FONT} textAnchor="middle">Ege</text>
-        <rect x="120" y="0" width="270" height="30" fill="#1a4a9e" opacity="0.15"/>
-        <text x="255" y="22" fontSize="9" fill="#3a7acc" fontFamily={FONT} textAnchor="middle">Karadeniz</text>
-        <rect x="120" y="210" width="270" height="30" fill="#1a4a9e" opacity="0.15"/>
-        <text x="255" y="228" fontSize="9" fill="#3a7acc" fontFamily={FONT} textAnchor="middle">Akdeniz</text>
-        {countries.map(c=>{
-          const isHov=hov===c.id;
-          return (
-            <g key={c.id} onMouseEnter={()=>setHov(c.id)} onMouseLeave={()=>setHov(null)} style={{ cursor:"pointer" }}>
-              <rect x={c.x} y={c.y} width={c.w} height={c.h} fill={isHov?c.fill:`${c.fill}60`} stroke={isHov?c.fill:`${c.fill}80`} strokeWidth={isHov?2.5:1.5} rx="4" style={{ transition:"all 0.18s" }}/>
-              <text x={c.x+c.w/2} y={c.y+c.h/2+4} textAnchor="middle" fontSize={c.id==="turkiye"?14:10} fill={c.id==="turkiye"?"#fff":isHov?"#fff":"rgba(255,255,255,0.7)"} fontFamily={FONT} fontWeight={c.id==="turkiye"?"800":"600"}>{c.name}</text>
-            </g>
-          );
-        })}
-      </svg>
     </div>
   );
 }
