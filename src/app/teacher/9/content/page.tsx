@@ -119,7 +119,7 @@ const units = [
         title: '3.1.2. İklim Sistemi',
         icon: CloudSun,
         color: 'cyan', // Farklı bir renk seçildi
-        description: 'İKLİM SİSTEMİNİN BİLEŞENLERİ<br/>İKLİM SİSTEMİNİN DEĞİŞKENLERİ',
+        description: 'İklim Sisteminin Bileşenleri<br/>İklim Sisteminin Değişkenleri',
       },
     ],
   },
