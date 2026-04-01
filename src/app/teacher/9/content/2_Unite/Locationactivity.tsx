@@ -22,28 +22,28 @@ type Tab = "learn"|"act1"|"act2"|"act3"|"test";
 
 // Komsu ulkeler
 const KARA_KOMSULAR = [
-  { id:"ermenistan", name:"Ermenistan",            yon:"Dogu",  renk:"#ef4444" },
-  { id:"gurcistan",  name:"Gurcistan",             yon:"Dogu",  renk:"#ef4444" },
-  { id:"azerbaycan", name:"Azerbaycan (Nahcivan)",  yon:"Dogu",  renk:"#ef4444" },
-  { id:"iran",       name:"Iran",                  yon:"Dogu",  renk:"#ef4444" },
-  { id:"irak",       name:"Irak",                  yon:"Guney", renk:"#f97316" },
-  { id:"suriye",     name:"Suriye",                yon:"Guney", renk:"#f97316" },
-  { id:"yunanistan", name:"Yunanistan",             yon:"Bati",  renk:"#3b82f6" },
-  { id:"bulgaristan",name:"Bulgaristan",            yon:"Bati",  renk:"#3b82f6" },
+  { id:"ermenistan", name:"Ermenistan",            yon:"Doğu",  renk:"#ef4444" },
+  { id:"gurcistan",  name:"Gürcistan",             yon:"Doğu",  renk:"#ef4444" },
+  { id:"azerbaycan", name:"Azerbaycan (Nahçıvan)",  yon:"Doğu",  renk:"#ef4444" },
+  { id:"iran",       name:"İran",                  yon:"Doğu",  renk:"#ef4444" },
+  { id:"irak",       name:"Irak",                  yon:"Güney", renk:"#f97316" },
+  { id:"suriye",     name:"Suriye",                yon:"Güney", renk:"#f97316" },
+  { id:"yunanistan", name:"Yunanistan",            yon:"Batı",  renk:"#3b82f6" },
+  { id:"bulgaristan",name:"Bulgaristan",           yon:"Batı",  renk:"#3b82f6" },
 ];
 const DENIZ_KOMSULAR = [
   { id:"d_bulgaristan", name:"Bulgaristan",          deniz:"Karadeniz",  renk:"#0ea5e9" },
   { id:"d_romanya",     name:"Romanya",               deniz:"Karadeniz",  renk:"#0ea5e9" },
-  { id:"d_ukrayna",     name:"Ukrayna",               deniz:"Karadeniz",  renk:"#0ea5e9" },
+  { id:"d_ukrayna",     name:"Ukrayna",               deniz:"Karadeniz",  renk:"#0ea5e9" }, // Ukrayna
   { id:"d_rusya",       name:"Rusya Federasyonu",     deniz:"Karadeniz",  renk:"#0ea5e9" },
-  { id:"d_gurcistan",   name:"Gurcistan",             deniz:"Karadeniz",  renk:"#0ea5e9" },
-  { id:"d_yunanistan",  name:"Yunanistan",             deniz:"Ege Denizi", renk:"#6366f1" },
-  { id:"d_kktc",        name:"Kuzey Kibris Turk C.",  deniz:"Akdeniz",    renk:"#10b981" },
+  { id:"d_gurcistan",   name:"Gürcistan",             deniz:"Karadeniz",  renk:"#0ea5e9" },
+  { id:"d_yunanistan",  name:"Yunanistan",            deniz:"Ege Denizi", renk:"#6366f1" },
+  { id:"d_kktc",        name:"Kuzey Kıbrıs Türk C.",  deniz:"Akdeniz",    renk:"#10b981" },
   { id:"d_libya",       name:"Libya",                 deniz:"Akdeniz",    renk:"#10b981" },
-  { id:"d_misir",       name:"Misir",                 deniz:"Akdeniz",    renk:"#10b981" },
+  { id:"d_misir",       name:"Mısır",                 deniz:"Akdeniz",    renk:"#10b981" },
   { id:"d_filistin",    name:"Filistin",              deniz:"Akdeniz",    renk:"#10b981" },
-  { id:"d_israil",      name:"Israil",                deniz:"Akdeniz",    renk:"#10b981" },
-  { id:"d_lubnan",      name:"Lubnan",                deniz:"Akdeniz",    renk:"#10b981" },
+  { id:"d_israil",      name:"İsrail",                deniz:"Akdeniz",    renk:"#10b981" },
+  { id:"d_lubnan",      name:"Lübnan",                deniz:"Akdeniz",    renk:"#10b981" },
   { id:"d_suriye",      name:"Suriye",                deniz:"Akdeniz",    renk:"#10b981" },
 ];
 
