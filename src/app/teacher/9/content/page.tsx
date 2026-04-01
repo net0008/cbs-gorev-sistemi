@@ -1,7 +1,7 @@
-﻿﻿'use client';
+﻿﻿﻿﻿'use client';
 
 import React, { useState } from 'react'; // CloudRain iconunu eklemek için lucide-react'tan import edin
-import { Map, Navigation, Layers, Maximize, Database, Mountain, Compass, Clock, ChevronDown, BookOpen, CloudRain } from 'lucide-react';
+import { Map, Navigation, Layers, Maximize, Database, Mountain, Compass, Clock, ChevronDown, BookOpen, CloudRain, CloudSun } from 'lucide-react';
 import CografyaBilimiActivity from './1_Unite/Cografyabilimiactivity';
 import RouteSimulationActivity from './2_Unite/RouteSimulationActivity';
 import ProjectionActivity from './2_Unite/Projectionactivity';
@@ -13,8 +13,9 @@ import MekanBilgiActivity from './2_Unite/Mekanbilgiactivity';
 import TimeZonesActivity from './2_Unite/TimeZonesActivity';
 import DistributionMethodsActivity from './2_Unite/DistributionMethodsActivity';
 import HavaOlaylariActivity from './3_Unite/Havaolaylariactivity';
+import IklimSistemiActivity from './3_UnUnite/Iklimsistemiactivity';
 
-type ActivityType = null | 'cografya-bilimi' | 'activity2' | 'projections' | 'scale' | 'mapTypes' | 'topoactivity' | 'location' | 'mekanBilgi' | 'time-zones' | 'map-literacy' | 'hava-olaylari';
+type ActivityType = null | 'cografya-bilimi' | 'activity2' | 'projections' | 'scale' | 'mapTypes' | 'topoactivity' | 'location' | 'mekanBilgi' | 'time-zones' | 'map-literacy' | 'hava-olaylari' | 'iklim-sistemi';
 
 const units = [
   {
@@ -113,6 +114,13 @@ const units = [
         color: 'blue',
         description: 'İklim sistemini ve hava olaylarını anlamak.',
       },
+      {
+        id: 'iklim-sistemi',
+        title: '3.1.2. İklim Sistemi',
+        icon: CloudSun,
+        color: 'cyan', // Farklı bir renk seçildi
+        description: 'İKLİM SİSTEMİNİN BİLEŞENLERİ<br/>İKLİM SİSTEMİNİN DEĞİŞKENLERİ',
+      },
     ],
   },
   { id: 'unit4', title: '4. Ünite: BEŞERÎ SİSTEMLER VE SÜREÇLER', color: 'gray', activities: [] },
@@ -134,6 +142,7 @@ const colorClasses: { [key: string]: { border: string, text: string, bg: string,
   pink: { border: 'hover:border-pink-500', text: 'text-pink-400', bg: 'bg-pink-950', iconBorder: 'border-pink-800' },
   gray: { border: 'border-gray-500', text: 'text-gray-400', bg: 'bg-gray-950', iconBorder: 'border-gray-800' },
   teal: { border: 'border-teal-500', text: 'text-teal-400', bg: 'bg-teal-950', iconBorder: 'border-teal-800' },
+  cyan: { border: 'hover:border-cyan-500', text: 'text-cyan-400', bg: 'bg-cyan-950', iconBorder: 'border-cyan-800' },
 };
 
 export default function ContentCatalogPage() {
@@ -235,6 +244,9 @@ export default function ContentCatalogPage() {
       )}
       {activeActivity === 'hava-olaylari' && (
         <HavaOlaylariActivity onClose={() => setActiveActivity(null)} />
+      )}
+      {activeActivity === 'iklim-sistemi' && (
+        <IklimSistemiActivity onClose={() => setActiveActivity(null)} />
       )}
     </div>
   );
