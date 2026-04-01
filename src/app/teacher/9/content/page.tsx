@@ -13,7 +13,7 @@ import MekanBilgiActivity from './2_Unite/Mekanbilgiactivity';
 import TimeZonesActivity from './2_Unite/TimeZonesActivity';
 import DistributionMethodsActivity from './2_Unite/DistributionMethodsActivity';
 import HavaOlaylariActivity from './3_Unite/Havaolaylariactivity';
-import IklimSistemiActivity from './3_UnUnite/Iklimsistemiactivity';
+import IklimSistemiActivity from './3_Unite/Iklimsistemiactivity';
 
 type ActivityType = null | 'cografya-bilimi' | 'activity2' | 'projections' | 'scale' | 'mapTypes' | 'topoactivity' | 'location' | 'mekanBilgi' | 'time-zones' | 'map-literacy' | 'hava-olaylari' | 'iklim-sistemi';
 
@@ -131,7 +131,6 @@ const units = [
 
 const colorClasses: { [key: string]: { border: string, text: string, bg: string, iconBorder: string } } = {
   lime: { border: 'hover:border-lime-500', text: 'text-lime-400', bg: 'bg-lime-950', iconBorder: 'border-lime-800' },
-  blue: { border: 'hover:border-blue-500', text: 'text-blue-400', bg: 'bg-blue-950', iconBorder: 'border-blue-800' },
   cyan: { border: 'hover:border-cyan-500', text: 'text-cyan-400', bg: 'bg-cyan-950', iconBorder: 'border-cyan-800' },
   green: { border: 'hover:border-green-500', text: 'text-green-400', bg: 'bg-green-950', iconBorder: 'border-green-800' },
   purple: { border: 'hover:border-purple-500', text: 'text-purple-400', bg: 'bg-purple-950', iconBorder: 'border-purple-800' },
@@ -142,7 +141,6 @@ const colorClasses: { [key: string]: { border: string, text: string, bg: string,
   pink: { border: 'hover:border-pink-500', text: 'text-pink-400', bg: 'bg-pink-950', iconBorder: 'border-pink-800' },
   gray: { border: 'border-gray-500', text: 'text-gray-400', bg: 'bg-gray-950', iconBorder: 'border-gray-800' },
   teal: { border: 'border-teal-500', text: 'text-teal-400', bg: 'bg-teal-950', iconBorder: 'border-teal-800' },
-  cyan: { border: 'hover:border-cyan-500', text: 'text-cyan-400', bg: 'bg-cyan-950', iconBorder: 'border-cyan-800' },
 };
 
 export default function ContentCatalogPage() {
@@ -194,7 +192,7 @@ export default function ContentCatalogPage() {
                               <Icon size={28} className={activityColors.text} />
                             </div>
                             <h3 className={`text-lg font-semibold ${activityColors.text} mb-2`}>{activity.title}</h3>
-                            <p className="text-xs text-slate-400 leading-relaxed">{activity.description}</p>
+                            <p className="text-xs text-slate-400 leading-relaxed" dangerouslySetInnerHTML={{ __html: activity.description }} />
                           </div>
                         );
                       })}
@@ -244,6 +242,9 @@ export default function ContentCatalogPage() {
       )}
       {activeActivity === 'hava-olaylari' && (
         <HavaOlaylariActivity onClose={() => setActiveActivity(null)} />
+      )}
+      {activeActivity === 'iklim-sistemi' && (
+        <IklimSistemiActivity onClose={() => setActiveActivity(null)} />
       )}
       {activeActivity === 'iklim-sistemi' && (
         <IklimSistemiActivity onClose={() => setActiveActivity(null)} />
