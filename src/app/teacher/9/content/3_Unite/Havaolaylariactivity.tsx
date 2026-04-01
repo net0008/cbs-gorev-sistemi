@@ -31,41 +31,41 @@ type LearnSec = "atmosfer"|"sicaklik"|"basinc"|"ruzgar"|"nem"|"asiri"|"halk";
 
 interface AsiriOlay { id:string; ad:string; icon:string; color:string; tanim:string; etkiler:string[]; }
 const ASIRI_OLAYLAR: AsiriOlay[] = [
-  { id:"sicak",  ad:"Sicak Hava Dalgasi",  icon:"🌡️", color:"#dc2626",
-    tanim:"Mevsim normallerinin ortalama maksimum sicakliklardan 3-5 derece fazla olmasi ve art arda 5+ gun devam etmesidir (WMO).",
-    etkiler:["Insan sagligi riski","Tarim urunlerine zarar","Su kaynaklarinin azalmasi","Enerji tuketimi artisi"] },
-  { id:"soguk",  ad:"Soguk Hava Dalgasi",  icon:"🧊", color:"#0369a1",
-    tanim:"Belirli bir bolgeyi etkileyen ani ve onemli sicaklik dususudur. Normal mevsim kosullarinin cok altinda sicakliklar getirir.",
-    etkiler:["Bitki ve hayvanlar zarar gorur","Enerji tuketimi artar","Ulasim aksar","Insan sagligi tehlikeye girer"] },
-  { id:"firtina", ad:"Firtina",             icon:"⛈️", color:"#7c3aed",
-    tanim:"Kisa sureli, yogun ve tehlikeli hava kosullaridir. Ruzgar hizlari saatte 62-117 km arasinda degisir.",
-    etkiler:["Asiri yagis ve dolu","Yildirim dusmesi","Elektrik hatlarina hasar","Ulasimin aksamasi"] },
-  { id:"yagis",  ad:"Siddetli Yagis",       icon:"🌧️", color:"#0c4a6e",
-    tanim:"24 saat icinde 50 mm yi asan yagis miktari cogu bolgede siddetli yagis olarak kabul edilir (WMO).",
-    etkiler:["Sel ve taskin","Su baskinlari","Ulasimin aksamasi","Altyapi hasari"] },
-  { id:"kuraklik",ad:"Kuraklik",            icon:"☀️", color:"#b45309",
-    tanim:"Yagislarin belirli bir bolgede uzun sure boyunca normalin cok altinda kalmasidir. Yavas gelisen ama genis etkili bir olaydir.",
-    etkiler:["Su kaynaklarinin azalmasi","Tarimsal uretim dususu","Gida guvenligi tehdidi","Sosyoekonomik sonuclar"] },
+  { id:"sicak",  ad:"Sıcak Hava Dalgası",  icon:"🌡️", color:"#dc2626",
+    tanim:"Mevsim normallerinin ortalama maksimum sıcaklıklardan 3-5 derece fazla olması ve art arda 5+ gün devam etmesidir (WMO).",
+    etkiler:["İnsan sağlığı riski","Tarım ürünlerine zarar","Su kaynaklarının azalması","Enerji tüketimi artışı"] },
+  { id:"soguk",  ad:"Soğuk Hava Dalgası",  icon:"🧊", color:"#0369a1",
+    tanim:"Belirli bir bölgeyi etkileyen ani ve önemli sıcaklık düşüşüdür. Normal mevsim koşullarının çok altında sıcaklıklar getirir.",
+    etkiler:["Bitki ve hayvanlar zarar görür","Enerji tüketimi artar","Ulaşım aksar","İnsan sağlığı tehlikeye girer"] },
+  { id:"firtina", ad:"Fırtına",             icon:"⛈️", color:"#7c3aed",
+    tanim:"Kısa süreli, yoğun ve tehlikeli hava koşullarıdır. Rüzgar hızları saatte 62-117 km arasında değişir.",
+    etkiler:["Aşırı yağış ve dolu","Yıldırım düşmesi","Elektrik hatlarına hasar","Ulaşımın aksaması"] },
+  { id:"yagis",  ad:"Şiddetli Yağış",       icon:"🌧️", color:"#0c4a6e",
+    tanim:"24 saat içinde 50 mm yi aşan yağış miktarı çoğu bölgede şiddetli yağış olarak kabul edilir (WMO).",
+    etkiler:["Sel ve taşkın","Su baskınları","Ulaşımın aksaması","Altyapı hasarı"] },
+  { id:"kuraklik",ad:"Kuraklık",            icon:"☀️", color:"#b45309",
+    tanim:"Yağışların belirli bir bölgede uzun süre boyunca normalin çok altında kalmasıdır. Yavaş gelişen ama geniş etkili bir olaydır.",
+    etkiler:["Su kaynaklarının azalması","Tarımsal üretim düşüşü","Gıda güvenliği tehdidi","Sosyoekonomik sonuçlar"] },
   { id:"dolu",   ad:"Dolu",                icon:"🧊❄️", color:"#0891b2",
-    tanim:"Firtinali havalarda olusan, dusey akimli bulutlarda buz parcaciklarinin birlesmesiyle olusan kati yagis turudur.",
-    etkiler:["Tarim urunlerine zarar","Arac ve bina hasari","Ani akinti tehlikesi","Can kayiplari"] },
+    tanim:"Fırtınalı havalarda oluşan, düşey akımlı bulutlarda buz parçacıklarının birleşmesiyle oluşan katı yağış türüdür.",
+    etkiler:["Tarım ürünlerine zarar","Araç ve bina hasarı","Ani akıntı tehlikesi","Can kayıpları"] },
 ];
 
-const RUZGAR_YONLER = ["Kuzey","KD","Dogu","GD","Guney","GB","Bati","KB"];
+const RUZGAR_YONLER = ["Kuzey","KD","Doğu","GD","Güney","GB","Batı","KB"];
 const RUZGAR_FREQ_ANKARA = [90,40,60,20,10,10,50,40];
 const YONLER_EN = ["N","NE","E","SE","S","SW","W","NW"];
 
 const TEST_ITEMS = [
-  {q:"Hava olayi ile iklim arasindaki temel fark nedir?",opts:["Hava olayi uzun sureli, iklim kisa surelidir","Hava olayi belirli yer ve zamandaki anlik kosullar, iklim uzun sureli ortalamadir","Iklim meteoroloji, hava olayi klimatoloji tarafindan incelenir","Hava olayi yalnizca yagisi kapsar"],correct:1,exp:"Hava olayi; belirli yer ve zamanda gerceklesen sicaklik, ruzgar, nem, sis, yagis gibi anlik hava kosullaridir. Iklim ise bir bolgedeki hava olaylarinin uzun sureli ortalamalarinin genel durumudur."},
-  {q:"Atmosferin bilesimine gore en yuksek orana sahip gaz hangisidir?",opts:["Oksijen (%21)","Azot (%78)","Karbondioksit","Argon"],correct:1,exp:"Atmosferin yaklasik %78 i azottan, %21 i oksijenden, %1 i ise argon ve diger gazlardan (su buhari, karbondioksit, metan vb.) olusur."},
-  {q:"Hava sicakligi hangi olcum aleti ile olculur?",opts:["Barometre","Anemometre","Termometre","Higrometre"],correct:2,exp:"Hava sicakligini olcmek icin mekanik veya dijital termometre kullanilir. Sicaklik derece celsius (C) olarak ifade edilir."},
-  {q:"Alcak basinc merkezinin ozelligi hangisidir?",opts:["Yatay hava hareketi merkezden cevreye dogrudur, alçalici hava hareketi gorulur","Cevreden merkeze yatay hava akisi ve yukselici hava hareketi gorulur; genellikle bulutlu ve yagisli","Gunesli ve acik hava kosullari hakimdir","Bulut ve yagis olusumunu engeller"],correct:1,exp:"Alcak basinc merkezinde cevreden merkeze dogru yatay hava akisi ve yukselici hava hareketi vardir. Bu yukselici hareketler bulut gelisimi ve yagis olusumuna neden olur."},
-  {q:"Hava basinci hangi aletle olculur ve birimi nedir?",opts:["Higrometre — %","Termometre — C","Barometre — milibar (mb) veya hektopaskal (hPa)","Anemometre — m/sn"],correct:2,exp:"Basinc, barometreyle olculur ve birimi milibar (mb) veya hektopaskal (hPa) olarak ifade edilir. Standart hava basinci 45 enleminde deniz seviyesinde 1013 mb olarak kabul edilmistir."},
-  {q:"Atmosferdeki su buharina ne ad verilir ve hangi aletle olculur?",opts:["Yagis — pluviyometre","Nem — higrometre","Basinc — barometre","Sicaklik — termometre"],correct:1,exp:"Atmosferdeki su buharina nem adi verilir ve nem, higrometre (nemolcer) ile olculur. Yagis ise pluviyometre (yagisolcer) ile olculur."},
-  {q:"Ruzgarin yil icinde en sik estigi yone ne ad verilir?",opts:["Ruzgar frekansi","Hakim ruzgar yonu","Ruzgar hizi","Izobar yonu"],correct:1,exp:"Ruzgarin esme sikligi, ruzgarin bir yone ait esme sayisidir. Ruzgarin yil icinde en sik estigi yone hakim ruzgar yonu denir."},
-  {q:"Sicak hava dalgasinin tanimi WMO ya gore nasildir?",opts:["Mevsim normallerinden 1-2 derece yuksek sicakliklar 3 gun boyunca devam ederse","Mevsim normallerinden 3-5 derece yuksek sicakliklar art arda 5 gun veya daha fazla devam ederse","Herhangi bir gun sicakligin 40 derecenin uzerine cikmasi","Havanin neminin %80 in uzerinde olmasi"],correct:1,exp:"WMO ya gore mevsim normallerindeki sicakliklarin ortalama maksimum sicakliklardan 3-5 derece fazla olmasi ve art arda 5 gun veya daha fazla devam etmesi sicak hava dalgasi olarak tanimlanir."},
-  {q:"Yogusma nedir?",opts:["Su buharinin kati hale donmesi","Su buharinin sivi hale donmesi sureci","Suyun gaz hale gecmesi","Yagisin yere dusmesi sureci"],correct:1,exp:"Su buharinin sivi hale donmesi surecine yogusma denir. Yogusma, havanin doyma noktasina erismesi ve sicakligin bu doyma noktasinin altina dusmesiyle gerceklesir."},
-  {q:"Halk meteorolojisi ve halk takvimi ne icin kullanilmistir?",opts:["Bilimsel meteorolojik verileri derlemek icin","Teknolojinin yeterli olmadigi donemlerde tarim ve gunluk hayati duzenlemek icin","Meteoroloji istasyonlari kurmak icin","Asiri hava olaylarini tahmin etmek icin"],correct:1,exp:"Halk meteorolojisi, teknolojinin yeterli olmadigi donemlerde tarim ve hayvancilik faaliyetlerindeki belirsizligi ortadan kaldirarak gunluk hayati duzenleme ihtiyacindan ortaya cikmistir."},
+  {q:"Hava olayı ile iklim arasındaki temel fark nedir?",opts:["Hava olayı uzun süreli, iklim kısa sürelidir","Hava olayı belirli yer ve zamandaki anlık koşullar, iklim uzun süreli ortalamadır","İklim meteoroloji, hava olayı klimatoloji tarafından incelenir","Hava olayı yalnızca yağışı kapsar"],correct:1,exp:"Hava olayı; belirli yer ve zamanda gerçekleşen sıcaklık, rüzgar, nem, sis, yağış gibi anlık hava koşullarıdır. İklim ise bir bölgedeki hava olaylarının uzun süreli ortalamalarının genel durumudur."},
+  {q:"Atmosferin bileşimine göre en yüksek orana sahip gaz hangisidir?",opts:["Oksijen (%21)","Azot (%78)","Karbondioksit","Argon"],correct:1,exp:"Atmosferin yaklaşık %78'i azottan, %21'i oksijenden, %1'i ise argon ve diğer gazlardan (su buharı, karbondioksit, metan vb.) oluşur."},
+  {q:"Hava sıcaklığı hangi ölçüm aleti ile ölçülür?",opts:["Barometre","Anemometre","Termometre","Higrometre"],correct:2,exp:"Hava sıcaklığını ölçmek için mekanik veya dijital termometre kullanılır. Sıcaklık derece celsius (C) olarak ifade edilir."},
+  {q:"Alçak basınç merkezinin özelliği hangisidir?",opts:["Yatay hava hareketi merkezden çevreye doğrudur, alçalıcı hava hareketi görülür","Çevreden merkeze yatay hava akışı ve yükselici hava hareketi görülür; genellikle bulutlu ve yağışlı","Güneşli ve açık hava koşulları hakimdir","Bulut ve yağış oluşumunu engeller"],correct:1,exp:"Alçak basınç merkezinde çevreden merkeze doğru yatay hava akışı ve yükselici hava hareketi vardır. Bu yükselici hareketler bulut gelişimi ve yağış oluşumuna neden olur."},
+  {q:"Hava basıncı hangi aletle ölçülür ve birimi nedir?",opts:["Higrometre — %","Termometre — C","Barometre — milibar (mb) veya hektopaskal (hPa)","Anemometre — m/sn"],correct:2,exp:"Basınç, barometreyle ölçülür ve birimi milibar (mb) veya hektopaskal (hPa) olarak ifade edilir. Standart hava basıncı 45° enleminde deniz seviyesinde 1013 mb olarak kabul edilmiştir."},
+  {q:"Atmosferdeki su buharına ne ad verilir ve hangi aletle ölçülür?",opts:["Yağış — pluviyometre","Nem — higrometre","Basınç — barometre","Sıcaklık — termometre"],correct:1,exp:"Atmosferdeki su buharına nem adı verilir ve nem, higrometre (nemölçer) ile ölçülür. Yağış ise pluviyometre (yağışölçer) ile ölçülür."},
+  {q:"Rüzgarın yıl içinde en sık estiği yöne ne ad verilir?",opts:["Rüzgar frekansı","Hakim rüzgar yönü","Rüzgar hızı","İzobar yönü"],correct:1,exp:"Rüzgarın esme sıklığı, rüzgarın bir yöne ait esme sayısıdır. Rüzgarın yıl içinde en sık estiği yöne hakim rüzgar yönü denir."},
+  {q:"Sıcak hava dalgasının tanımı WMO'ya göre nasıldır?",opts:["Mevsim normallerinden 1-2 derece yüksek sıcaklıklar 3 gün boyunca devam ederse","Mevsim normallerinden 3-5 derece yüksek sıcaklıklar art arda 5 gün veya daha fazla devam ederse","Herhangi bir gün sıcaklığın 40 derecenin üzerine çıkması","Havanın neminin %80'in üzerinde olması"],correct:1,exp:"WMO'ya göre mevsim normallerindeki sıcaklıkların ortalama maksimum sıcaklıklardan 3-5 derece fazla olması ve art arda 5 gün veya daha fazla devam etmesi sıcak hava dalgası olarak tanımlanır."},
+  {q:"Yoğuşma nedir?",opts:["Su buharının katı hale dönmesi","Su buharının sıvı hale dönmesi süreci","Suyun gaz hale geçmesi","Yağışın yere düşmesi süreci"],correct:1,exp:"Su buharının sıvı hale dönmesi sürecine yoğuşma denir. Yoğuşma, havanın doyma noktasına erişmesi ve sıcaklığın bu doyma noktasının altına düşmesiyle gerçekleşir."},
+  {q:"Halk meteorolojisi ve halk takvimi ne için kullanılmıştır?",opts:["Bilimsel meteorolojik verileri derlemek için","Teknolojinin yeterli olmadığı dönemlerde tarım ve günlük hayatı düzenlemek için","Meteoroloji istasyonları kurmak için","Aşırı hava olaylarını tahmin etmek için"],correct:1,exp:"Halk meteorolojisi, teknolojinin yeterli olmadığı dönemlerde tarım ve hayvancılık faaliyetlerindeki belirsizliği ortadan kaldırarak günlük hayatı düzenleme ihtiyacından ortaya çıkmıştır."},
 ];
 
 // ─── Rüzgâr Gülü Bileşeni ───────────────────────────────────────────────────
@@ -143,8 +143,8 @@ function BasincAktivite() {
   const [done,setDone]     = useState(false);
 
   const BUCKETS = [
-    {id:"alcak",  label:"Alcak Basinc Merkezi (Siklon)", color:C3, icon:"⬆️", sub:"A semboluyle gosterilir"},
-    {id:"yuksek", label:"Yuksek Basinc Merkezi (Antisiklon)", color:C2, icon:"⬇️", sub:"Y semboluyle gosterilir"},
+    {id:"alcak",  label:"Alçak Basınç Merkezi (Siklon)", color:C3, icon:"⬆️", sub:"A sembolüyle gösterilir"},
+    {id:"yuksek", label:"Yüksek Basınç Merkezi (Antisiklon)", color:C2, icon:"⬇️", sub:"Y sembolüyle gösterilir"},
   ];
   const doDrop = (bid:string) => {
     if(!dragId)return;
@@ -160,11 +160,11 @@ function BasincAktivite() {
   const retry=()=>{setPlaced({});setWrong({});setScore(0);setDone(false);setDragId(null);};
   if(done)return(
     <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:"16px",padding:"48px 24px",textAlign:"center"}}>
-      <div style={{fontSize:"52px"}}>🌀</div> {/* Sınıflandırma Tamamlandı! */}
-      <div style={{fontSize:"26px",fontWeight:"800",color:"#e2e8f0",fontFamily:FONT}}>Siniflandirma Tamamlandi!</div>
+      <div style={{fontSize:"52px"}}>🌀</div>
+      <div style={{fontSize:"26px",fontWeight:"800",color:"#e2e8f0",fontFamily:FONT}}>Sınıflandırma Tamamlandı!</div>
       <div style={{fontSize:"50px",fontWeight:"800",color:C,fontFamily:MONO}}>{score}/{shuffled.length}</div>
-      <div style={{fontSize:"14px",color:"#475569",fontFamily:FONT}}>dogru siniflandirma</div> {/* doğru sınıflandırma */}
-      <button onClick={retry} style={{padding:"12px 28px",background:`linear-gradient(90deg,#0369a1,${C})`,border:"none",borderRadius:"10px",color:"#fff",fontSize:"14px",fontWeight:"800",cursor:"pointer",fontFamily:FONT}}>Tekrar Oyna</button> {/* Tekrar Oyna */}
+      <div style={{fontSize:"14px",color:"#475569",fontFamily:FONT}}>doğru sınıflandırma</div>
+      <button onClick={retry} style={{padding:"12px 28px",background:`linear-gradient(90deg,#0369a1,${C})`,border:"none",borderRadius:"10px",color:"#fff",fontSize:"14px",fontWeight:"800",cursor:"pointer",fontFamily:FONT}}>Tekrar Oyna</button>
     </div> 
   );
   const pending=shuffled.filter(m=>!placed[m.id]);
@@ -173,7 +173,7 @@ function BasincAktivite() {
       <div>
         <div style={{fontSize:"10px",color:C,letterSpacing:"3px",fontWeight:"800",fontFamily:MONO,marginBottom:"4px"}}>ETKİNLİK 1</div>
         <div style={{fontSize:"17px",fontWeight:"800",color:"#e2e8f0",fontFamily:FONT}}>🌀 Basınç Merkezlerini Sınıflandır</div>
-        <div style={{fontSize:"12px",color:"#475569",marginTop:"3px",fontFamily:FONT}}>Her ozelligi dogru basinc merkezine surukle birak</div>
+        <div style={{fontSize:"12px",color:"#475569",marginTop:"3px",fontFamily:FONT}}>Her özelliği doğru basınç merkezine sürükle bırak</div>
       </div>
       <div style={{padding:"12px 14px",background:"rgba(0,0,0,0.3)",border:"1px solid rgba(255,255,255,0.06)",borderRadius:"10px",minHeight:"52px"}}> {/* Özellikler */}
         <div style={{fontSize:"10px",color:"#475569",letterSpacing:"2px",fontWeight:"800",marginBottom:"8px",fontFamily:FONT}}>ÖZELLİKLER</div>
@@ -228,8 +228,8 @@ function BasincAktivite() {
         ))}
       </div>
       <div style={{padding:"9px 14px",background:"rgba(0,0,0,0.2)",border:"1px solid rgba(255,255,255,0.05)",borderRadius:"8px",display:"flex",justifyContent:"space-between"}}>
-        <span style={{fontSize:"12px",color:"#475569",fontFamily:FONT}}>Kalan: {pending.length} kart</span> {/* Kalan kart sayısı */}
-        <span style={{fontSize:"14px",fontWeight:"800",color:C,fontFamily:MONO}}>{score} dogru</span>
+        <span style={{fontSize:"12px",color:"#475569",fontFamily:FONT}}>Kalan: {pending.length} kart</span>
+        <span style={{fontSize:"14px",fontWeight:"800",color:C,fontFamily:MONO}}>{score} doğru</span>
       </div>
     </div>
   );
@@ -249,12 +249,12 @@ function TestTab() {
     const pct=Math.round((score/(TEST_ITEMS.length*10))*100);
     return(
       <div style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:"18px",padding:"40px",textAlign:"center"}}>
-        <div style={{fontSize:"52px"}}>⛅</div> {/* Test Tamamlandı! */}
-        <div style={{fontSize:"26px",fontWeight:"800",color:"#e2e8f0",fontFamily:FONT}}>Test Tamamlandi!</div> {/* Test Tamamlandı! */}
+        <div style={{fontSize:"52px"}}>⛅</div>
+        <div style={{fontSize:"26px",fontWeight:"800",color:"#e2e8f0",fontFamily:FONT}}>Test Tamamlandı!</div>
         <div style={{fontSize:"52px",fontWeight:"800",color:pct>=80?"#34d399":pct>=50?C2:C5,fontFamily:MONO}}>{score} PUAN</div>
-        <div style={{fontSize:"14px",color:"#475569",fontFamily:FONT}}>{answers.filter(Boolean).length}/{TEST_ITEMS.length} dogru · %{pct}</div> {/* doğru */}
+        <div style={{fontSize:"14px",color:"#475569",fontFamily:FONT}}>{answers.filter(Boolean).length}/{TEST_ITEMS.length} doğru · %{pct}</div>
         <div style={{fontSize:"14px",color:"#64748b",maxWidth:"420px",lineHeight:"1.8",fontFamily:FONT}}>
-          {pct>=80?"Mukemmel! Hava olaylarini cok iyi ogrendin.":pct>=50?"Iyi! Ogren sekmesini tekrar incele.":"Tekrar dene!"} {/* Mükemmel! Öğren sekmesini tekrar incele. Tekrar dene! */}
+          {pct>=80?"Mükemmel! Hava olaylarını çok iyi öğrendin.":pct>=50?"İyi! Öğren sekmesini tekrar incele.":"Tekrar dene!"}
         </div>
         <button onClick={retry} style={{padding:"13px 30px",background:`linear-gradient(90deg,#0369a1,${C})`,border:"none",borderRadius:"10px",color:"#fff",fontSize:"14px",fontWeight:"800",cursor:"pointer",fontFamily:FONT}}>Tekrar Dene</button>
       </div>
@@ -263,20 +263,20 @@ function TestTab() {
   return(
     <div style={{flex:1,display:"flex",overflow:"hidden"}}>
       <div style={{width:"220px",flexShrink:0,borderRight:"1px solid rgba(14,165,233,0.1)",background:"rgba(3,6,15,0.7)",padding:"20px 14px",display:"flex",flexDirection:"column",gap:"6px",overflowY:"auto"}}>
-        <div style={{fontSize:"11px",letterSpacing:"2px",color:"#475569",fontWeight:"800",fontFamily:FONT,marginBottom:"4px"}}>SORULAR</div> {/* Sorular */}
+        <div style={{fontSize:"11px",letterSpacing:"2px",color:"#475569",fontWeight:"800",fontFamily:FONT,marginBottom:"4px"}}>SORULAR</div>
         {TEST_ITEMS.map((_,i)=>{ const d=i<answers.length,cur=i===qIdx; return(
           <div key={i} style={{display:"flex",alignItems:"center",gap:"8px",padding:"8px 10px",
             background:cur?`${C}10`:"rgba(0,0,0,0.15)",
             border:`1.5px solid ${cur?C:d?(answers[i]?"rgba(52,211,153,0.3)":"rgba(239,68,68,0.3)"):"rgba(255,255,255,0.04)"}`,
             borderRadius:"7px"}}>
             <div style={{width:"20px",height:"20px",borderRadius:"50%",background:d?(answers[i]?"#34d399":"#ef4444"):cur?C:"rgba(255,255,255,0.06)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"10px",fontWeight:"800",color:"#fff",flexShrink:0,fontFamily:MONO}}>
-              {d?(answers[i]?"V":"X"):i+1}
-            </div> {/* Soru {i+1} */}
-            <span style={{fontSize:"12px",fontWeight:"700",color:cur?C:d?(answers[i]?"#34d399":"#ef4444"):"#334155",fontFamily:FONT}}>Soru {i+1}</span> {/* Soru {i+1} */}
+              {d?(answers[i]?"✓":"✗"):i+1}
+            </div>
+            <span style={{fontSize:"12px",fontWeight:"700",color:cur?C:d?(answers[i]?"#34d399":"#ef4444"):"#334155",fontFamily:FONT}}>Soru {i+1}</span>
           </div>
         );})}
         <div style={{marginTop:"auto",padding:"12px",background:"rgba(0,0,0,0.3)",border:"1px solid rgba(255,255,255,0.05)",borderRadius:"9px",textAlign:"center"}}>
-          <div style={{fontSize:"11px",color:"#475569",fontWeight:"700",fontFamily:FONT,marginBottom:"4px"}}>PUAN</div> {/* Puan */}
+          <div style={{fontSize:"11px",color:"#475569",fontWeight:"700",fontFamily:FONT,marginBottom:"4px"}}>PUAN</div>
           <div style={{fontSize:"30px",fontWeight:"800",color:C,fontFamily:MONO}}>{score}</div>
           <div style={{fontSize:"11px",color:"#334155",fontFamily:FONT}}>/ {TEST_ITEMS.length*10}</div>
         </div>
@@ -284,7 +284,7 @@ function TestTab() {
       <div style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",padding:"28px 32px",overflowY:"auto",gap:"16px"}}>
         <div style={{width:"100%",maxWidth:"640px"}}>
           <div style={{display:"flex",justifyContent:"space-between",marginBottom:"8px"}}>
-            <span style={{fontSize:"12px",color:"#475569",fontWeight:"700",fontFamily:FONT}}>SORU {qIdx+1}/{TEST_ITEMS.length}</span> {/* Soru {qIdx+1} */}
+            <span style={{fontSize:"12px",color:"#475569",fontWeight:"700",fontFamily:FONT}}>SORU {qIdx+1}/{TEST_ITEMS.length}</span>
             <span style={{fontSize:"12px",color:C,fontFamily:FONT}}>{Math.round((qIdx/TEST_ITEMS.length)*100)}%</span>
           </div>
           <div style={{height:"4px",background:`${C}18`,borderRadius:"2px",overflow:"hidden"}}>
@@ -300,7 +300,7 @@ function TestTab() {
               style={{padding:"13px 15px",background:bg,border:`2px solid ${border}`,borderRadius:"10px",cursor:sel!==null?"default":"pointer",fontFamily:FONT,textAlign:"left",transition:"all 0.18s"}}>
               <div style={{display:"flex",alignItems:"flex-start",gap:"9px"}}>
                 <span style={{width:"22px",height:"22px",borderRadius:"50%",background:show&&isCorr?"#34d399":show&&isSel?"#ef4444":`${C}20`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:"10px",fontWeight:"800",color:show?"#fff":"#94a3b8",flexShrink:0,marginTop:"1px",fontFamily:MONO}}>
-                  {show&&isCorr?"V":show&&isSel&&!isCorr?"X":String.fromCharCode(65+i)}
+                  {show&&isCorr?"✓":show&&isSel&&!isCorr?"✗":String.fromCharCode(65+i)}
                 </span>
                 <span style={{fontSize:"13px",color,fontWeight:"600",lineHeight:"1.6",fontFamily:FONT}}>{opt}</span>
               </div>
@@ -309,15 +309,15 @@ function TestTab() {
         </div>
         {sel!==null&&(
           <div style={{maxWidth:"640px",width:"100%",padding:"15px 18px",background:sel===q.correct?"rgba(52,211,153,0.07)":"rgba(239,68,68,0.07)",border:`1.5px solid ${sel===q.correct?"rgba(52,211,153,0.25)":"rgba(239,68,68,0.25)"}`,borderRadius:"12px"}}>
-            <div style={{fontSize:"14px",fontWeight:"800",color:sel===q.correct?"#34d399":"#ef4444",marginBottom:"8px",fontFamily:FONT}}>{sel===q.correct?"DOGRU!":"YANLIS!"}</div> {/* Doğru! Yanlış! */}
+            <div style={{fontSize:"14px",fontWeight:"800",color:sel===q.correct?"#34d399":"#ef4444",marginBottom:"8px",fontFamily:FONT}}>{sel===q.correct?"DOĞRU!":"YANLIŞ!"}</div>
             <p style={{fontSize:"13px",color:"#64748b",lineHeight:"1.85",margin:0,fontFamily:FONT}}>{q.exp}</p>
           </div>
         )}
-        {sel!==null&&( // Sonuçları Gör, Sonraki Soru
+        {sel!==null&&(
           <button onClick={next} style={{padding:"12px 34px",background:`linear-gradient(90deg,#0369a1,${C})`,border:"none",borderRadius:"10px",color:"#fff",fontSize:"14px",fontWeight:"800",cursor:"pointer",fontFamily:FONT}}
             onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-2px)"}}
             onMouseLeave={e=>{e.currentTarget.style.transform="none"}}>
-            {qIdx>=TEST_ITEMS.length-1?"Sonuclari Gor":"Sonraki Soru"}
+            {qIdx>=TEST_ITEMS.length-1?"Sonuçları Gör":"Sonraki Soru"}
           </button>
         )}
       </div>
@@ -333,18 +333,18 @@ export default function HavaOlaylariActivity({ onClose }: { onClose: () => void 
   const [actTab,setActTab]   = useState<"basinc"|"ruzgar">("basinc");
 
   const TABS = [
-    {id:"learn" as Tab,icon:"📖",label:"OGREN"}, // Öğren
-    {id:"act"   as Tab,icon:"🌀",label:"ETKINLIK"}, // Etkinlik
-    {id:"test"  as Tab,icon:"✏️",label:"TEST"}, // Test
+    {id:"learn" as Tab,icon:"📖",label:"ÖĞREN"},
+    {id:"act"   as Tab,icon:"🌀",label:"ETKİNLİK"},
+    {id:"test"  as Tab,icon:"✏️",label:"TEST"},
   ];
   const SECTIONS: {id:LearnSec;icon:string;label:string;color:string}[] = [
     {id:"atmosfer", icon:"🌬️", label:"Atmosfer",       color:C},
-    {id:"sicaklik", icon:"🌡️", label:"Sicaklik",        color:C2}, // Sıcaklık
-    {id:"basinc",   icon:"🌀", label:"Basinc",          color:C3},
-    {id:"ruzgar",   icon:"💨", label:"Ruzgar",          color:"#64748b"},
-    {id:"nem",      icon:"💧", label:"Nem & Yagis",     color:C4},
-    {id:"asiri",    icon:"⚡", label:"Asiri Hava",      color:C5},
-    {id:"halk",     icon:"🌾", label:"Halk Meteoroloji",color:"#a78bfa"},
+    {id:"sicaklik", icon:"🌡️", label:"Sıcaklık",        color:C2},
+    {id:"basinc",   icon:"🌀", label:"Basınç",          color:C3},
+    {id:"ruzgar",   icon:"💨", label:"Rüzgar",          color:"#64748b"},
+    {id:"nem",      icon:"💧", label:"Nem & Yağış",     color:C4},
+    {id:"asiri",    icon:"⚡", label:"Aşırı Hava",      color:C5},
+    {id:"halk",     icon:"🌾", label:"Halk Meteorolojisi",color:"#a78bfa"},
   ];
 
   return(
@@ -353,10 +353,10 @@ export default function HavaOlaylariActivity({ onClose }: { onClose: () => void 
 
       {/* Üst bar */}
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"0 24px",height:"64px",borderBottom:`1px solid ${C}1a`,background:"rgba(2,5,12,0.95)",flexShrink:0}}>
-        <div style={{display:"flex",alignItems:"center",gap:"24px"}}> {/* 3. Ünite: Doğal Sistemler ve Süreçler */}
+        <div style={{display:"flex",alignItems:"center",gap:"24px"}}>
           <div>
-            <div style={{fontSize:"10px",letterSpacing:"4px",color:C,opacity:0.6,fontFamily:MONO}}>3. UNITE: DOGAL SISTEMLER VE SURECLER</div>
-            <div style={{fontSize:"19px",fontWeight:"800",color:"#e2e8f0"}}>Hava Olaylari</div> {/* Hava Olayları */}
+            <div style={{fontSize:"10px",letterSpacing:"4px",color:C,opacity:0.6,fontFamily:MONO}}>3. ÜNİTE: DOĞAL SİSTEMLER VE SÜREÇLER</div>
+            <div style={{fontSize:"19px",fontWeight:"800",color:"#e2e8f0"}}>Hava Olayları</div>
           </div>
           <div style={{display:"flex",gap:"3px",background:"rgba(0,0,0,0.4)",padding:"4px",borderRadius:"10px"}}>
             {TABS.map(t=>(
@@ -366,7 +366,7 @@ export default function HavaOlaylariActivity({ onClose }: { onClose: () => void 
               </button>
             ))}
           </div>
-        </div> {/* Kapat */}
+        </div>
         <button onClick={onClose} style={{padding:"8px 18px",background:"transparent",border:"1px solid rgba(255,80,80,0.3)",borderRadius:"8px",color:"#f87171",fontSize:"12px",fontWeight:"700",cursor:"pointer",fontFamily:FONT}}
           onMouseEnter={e=>e.currentTarget.style.background="rgba(255,80,80,0.1)"}
           onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
@@ -391,10 +391,10 @@ export default function HavaOlaylariActivity({ onClose }: { onClose: () => void 
                   </button>
                 ))}
               </div>
-              <div style={{height:"1px",background:`${C}10`,margin:"16px 0"}}/> {/* Aletler */}
-              <div style={{fontSize:"11px",letterSpacing:"2px",color:"#475569",fontWeight:"800",fontFamily:FONT,marginBottom:"10px"}}>ALETLER</div> {/* Aletler */}
+              <div style={{height:"1px",background:`${C}10`,margin:"16px 0"}}/>
+              <div style={{fontSize:"11px",letterSpacing:"2px",color:"#475569",fontWeight:"800",fontFamily:FONT,marginBottom:"10px"}}>ALETLER</div>
               <div style={{display:"flex",flexDirection:"column",gap:"5px"}}>
-                {[["🌡️","Termometre","Sicaklik olcer"],["🧱","Barometre","Basinc olcer"],["💨","Anemometre","Ruzgar olcer"],["💧","Higrometre","Nem olcer"],["🌧️","Pluviyometre","Yagis olcer"]].map(([icon,alet,desc])=>( // Sıcaklık ölçer, Basınç ölçer, Rüzgar ölçer, Nem ölçer, Yağış ölçer
+                {[["🌡️","Termometre","Sıcaklık ölçer"],["🧱","Barometre","Basınç ölçer"],["💨","Anemometre","Rüzgar ölçer"],["💧","Higrometre","Nem ölçer"],["🌧️","Pluviyometre","Yağış ölçer"]].map(([icon,alet,desc])=>(
                   <div key={alet} style={{padding:"6px 8px",background:"rgba(0,0,0,0.2)",borderRadius:"6px",borderLeft:`2px solid ${C}40`}}>
                     <div style={{fontSize:"11px",color:C,fontWeight:"700",fontFamily:FONT}}>{icon} {alet}</div>
                     <div style={{fontSize:"10px",color:"#334155",fontFamily:FONT,marginTop:"1px"}}>{desc}</div>
@@ -411,25 +411,25 @@ export default function HavaOlaylariActivity({ onClose }: { onClose: () => void 
                 <div style={{animation:"fadeUp 0.22s ease",display:"flex",flexDirection:"column",gap:"16px"}}>
                   <div>
                     <div style={{display:"flex",alignItems:"center",gap:"12px",marginBottom:"8px"}}>
-                      <span style={{fontSize:"28px"}}>🌬️</span> {/* Atmosfer */}
+                      <span style={{fontSize:"28px"}}>🌬️</span>
                       <div>
                         <div style={{fontSize:"21px",fontWeight:"800",color:"#e2e8f0",fontFamily:FONT}}>Atmosfer</div>
-                        <div style={{fontSize:"13px",color:C,fontWeight:"600",fontFamily:FONT}}>Yeryuzundeki tum yasam bicimlerinin vazgecilmez ortami</div> {/* Yeryüzündeki tüm yaşam biçimlerinin vazgeçilmez ortamı */}
+                        <div style={{fontSize:"13px",color:C,fontWeight:"600",fontFamily:FONT}}>Yeryüzündeki tüm yaşam biçimlerinin vazgeçilmez ortamı</div>
                       </div>
                     </div>
                     <div style={{height:"2px",background:`linear-gradient(90deg,${C},transparent)`,opacity:0.35,borderRadius:"2px"}}/>
                   </div>
                   <div style={{padding:"16px 20px",background:`${C}0a`,border:`1.5px solid ${C}22`,borderRadius:"12px"}}>
                     <p style={{fontSize:"14px",color:"#94a3b8",lineHeight:"1.95",margin:0,fontFamily:FONT}}>
-                      Atmosfer; havada asili halde bulunan su damlaciklari, buz kristalleri, toz tanecikleri gibi sivi ve kati tanecikler iceren gaz karisimlarindan olusur. <strong style={{color:C}}>Azot (%78)</strong>, <strong style={{color:C2}}>oksijen (%21)</strong> ve diger gazlar (%1) atmosferin temel bilesenleridir.
-                    </p> {/* Atmosfer bileşimi */}
+                      Atmosfer; havada asılı halde bulunan su damlacıkları, buz kristalleri, toz tanecikleri gibi sıvı ve katı tanecikler içeren gaz karışımlarından oluşur. <strong style={{color:C}}>Azot (%78)</strong>, <strong style={{color:C2}}>oksijen (%21)</strong> ve diğer gazlar (%1) atmosferin temel bileşenleridir.
+                    </p>
                   </div>
                   {/* Atmosfer bileşimi SVG */}
                   <div style={{padding:"16px 18px",background:"rgba(0,0,0,0.28)",border:"1px solid rgba(14,165,233,0.12)",borderRadius:"12px"}}>
-                    <div style={{fontSize:"11px",color:C,letterSpacing:"2px",fontWeight:"800",marginBottom:"12px",fontFamily:FONT}}>ATMOSFER BILESIMI</div>
+                    <div style={{fontSize:"11px",color:C,letterSpacing:"2px",fontWeight:"800",marginBottom:"12px",fontFamily:FONT}}>ATMOSFER BİLEŞİMİ</div>
                     <svg viewBox="0 0 400 90" width="100%" style={{maxWidth:"400px",display:"block",margin:"0 auto"}}>
                       {/* Bar chart */}
-                      {[["Azot",78,"#0ea5e9",0],["Oksijen",21,"#f97316",100],["Diger",1,"#64748b",175]].map(([label,pct,color,x])=>(
+                      {[["Azot",78,"#0ea5e9",0],["Oksijen",21,"#f97316",100],["Diğer",1,"#64748b",175]].map(([label,pct,color,x])=>(
                         <g key={String(label)}>
                           <rect x={Number(x)} y={20} width={Number(pct)*1.8} height={30} fill={String(color)} rx="4" opacity="0.85"/>
                           <text x={Number(x)+Number(pct)*0.9} y={38} textAnchor="middle" fontSize="11" fill="#fff" fontFamily={FONT} fontWeight="700">%{pct}</text>
@@ -440,15 +440,15 @@ export default function HavaOlaylariActivity({ onClose }: { onClose: () => void 
                   </div>
                   {/* Atmosfer özellikleri */}
                   <div>
-                    <div style={{fontSize:"11px",color:C,letterSpacing:"2px",fontWeight:"800",marginBottom:"10px",fontFamily:FONT}}>ATMOSFERIN TEMEL OZELLIKLERI</div> {/* Atmosferin Temel Özellikleri */}
+                    <div style={{fontSize:"11px",color:C,letterSpacing:"2px",fontWeight:"800",marginBottom:"10px",fontFamily:FONT}}>ATMOSFERİN TEMEL ÖZELLİKLERİ</div>
                     <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"8px"}}>
                       {[
-                        ["🌦️","Hava olaylarini olusturur","Yagis, sis, bulut, ruzgar"],
-                        ["☀️","Zararli isinlari emer","UV ve diger zararli isinlari filtreler"],
-                        ["🪨","Meteorlara karsi korur","Buyuk kutleli meteorlarin dusmesini engeller"],
-                        ["🌡️","Asiri isi ve sogumaya karsi","Dunyanin asiri isinmasini ve sogumayi onler"],
-                        ["💡","Isinlari dagitir","Golge alanlarin da aydinlanmasini saglar"],
-                        ["🌿","Yasam icin optimal kosullar","Gaz oranlariyla yasam icin en uygun kosullar"],
+                        ["🌦️","Hava olaylarını oluşturur","Yağış, sis, bulut, rüzgar"],
+                        ["☀️","Zararlı ışınları emer","UV ve diğer zararlı ışınları filtreler"],
+                        ["🪨","Meteorlara karşı korur","Büyük kütleli meteorların düşmesini engeller"],
+                        ["🌡️","Aşırı ısı ve soğumaya karşı","Dünyanın aşırı ısınmasını ve soğumayı önler"],
+                        ["💡","Işınları dağıtır","Gölge alanların da aydınlanmasını sağlar"],
+                        ["🌿","Yaşam için optimal kosullar","Gaz oranlarıyla yaşam için en uygun koşullar"],
                       ].map(([icon,title,sub])=>(
                         <div key={String(title)} style={{padding:"10px 12px",background:`${C}08`,border:`1px solid ${C}15`,borderRadius:"9px",display:"flex",gap:"9px",alignItems:"flex-start"}}>
                           <span style={{fontSize:"18px",flexShrink:0}}>{icon}</span>
@@ -468,24 +468,24 @@ export default function HavaOlaylariActivity({ onClose }: { onClose: () => void 
                 <div style={{animation:"fadeUp 0.22s ease",display:"flex",flexDirection:"column",gap:"16px"}}>
                   <div>
                     <div style={{display:"flex",alignItems:"center",gap:"12px",marginBottom:"8px"}}>
-                      <span style={{fontSize:"28px"}}>🌡️</span> {/* Hava Sıcaklığı */}
+                      <span style={{fontSize:"28px"}}>🌡️</span>
                       <div>
-                        <div style={{fontSize:"21px",fontWeight:"800",color:"#e2e8f0",fontFamily:FONT}}>Hava Sicakligi</div>
-                        <div style={{fontSize:"13px",color:C2,fontWeight:"600",fontFamily:FONT}}>Termometre ile olcum · Derece Celsius</div> {/* Termometre ile ölçüm · Derece Celsius */}
+                        <div style={{fontSize:"21px",fontWeight:"800",color:"#e2e8f0",fontFamily:FONT}}>Hava Sıcaklığı</div>
+                        <div style={{fontSize:"13px",color:C2,fontWeight:"600",fontFamily:FONT}}>Termometre ile ölçüm · Derece Celsius</div>
                       </div>
                     </div>
                     <div style={{height:"2px",background:`linear-gradient(90deg,${C2},transparent)`,opacity:0.35,borderRadius:"2px"}}/>
                   </div>
                   <div style={{padding:"16px 20px",background:`${C2}0a`,border:`1.5px solid ${C2}22`,borderRadius:"12px"}}>
                     <p style={{fontSize:"14px",color:"#94a3b8",lineHeight:"1.95",margin:0,fontFamily:FONT}}>
-                      Sicaklik, hava ve iklimy en onemli unsurlarinan biridir. <strong style={{color:C2}}>Gunes, atmosferdeki sicakligin kaynagidir.</strong> Atmosfere giren Gunes isinlarinin bir kismi yeryuzu tarafindan sogurulduktan sonra bir kismi atmosfere yansitilir. Hava sicakligi; saatlik, gunluk, mevsimlik olarak farklilik gosterir.
-                    </p> {/* Güneş enerjisi akışı */}
+                      Sıcaklık, hava ve iklimin en önemli unsurlarından biridir. <strong style={{color:C2}}>Güneş, atmosferdeki sıcaklığın kaynağıdır.</strong> Atmosfere giren Güneş ışınlarının bir kısmı yeryüzü tarafından soğurulduktan sonra bir kısmı atmosfere yansıtılır. Hava sıcaklığı; saatlik, günlük, mevsimlik olarak farklılık gösterir.
+                    </p>
                   </div>
                   {/* Güneş enerjisi akışı */}
                   <div style={{padding:"14px 16px",background:"rgba(0,0,0,0.28)",border:"1px solid rgba(249,115,22,0.15)",borderRadius:"11px"}}>
-                    <div style={{fontSize:"11px",color:C2,letterSpacing:"2px",fontWeight:"800",marginBottom:"12px",fontFamily:FONT}}>GUNES ENERJISININ ATMOSFERDEKI DAGILIHI</div>
+                    <div style={{fontSize:"11px",color:C2,letterSpacing:"2px",fontWeight:"800",marginBottom:"12px",fontFamily:FONT}}>GÜNEŞ ENERJİSİNİN ATMOSFERDEKİ DAĞILIMI</div>
                     <svg viewBox="0 0 480 80" width="100%" style={{maxWidth:"480px",display:"block",margin:"0 auto"}}>{/* oklar */}
-                      {[["Uzaya yansiyan","&6","#94a3b8",0],["Atmosferde emilenler","&25","#f59e0b",120],["Bulutlardan yansiyan","&20","#60a5fa",240],["Yeryuzune gelen","&49","#f97316",360]].map(([label,pctStr,color,x])=>{
+                      {[["Uzaya yansıyan","&6","#94a3b8",0],["Atmosferde emilenler","&25","#f59e0b",120],["Bulutlardan yansıyan","&20","#60a5fa",240],["Yeryüzüne gelen","&49","#f97316",360]].map(([label,pctStr,color,x])=>{
                         const pct=parseInt(String(pctStr).replace("&",""));
                         return(
                           <g key={String(label)}>
@@ -499,13 +499,13 @@ export default function HavaOlaylariActivity({ onClose }: { onClose: () => void 
                   </div>
                   {/* Albedo kutusu */}
                   <div style={{padding:"12px 16px",background:`${C2}08`,border:`1px solid ${C2}20`,borderRadius:"10px"}}>
-                    <div style={{fontSize:"12px",color:C2,fontWeight:"800",marginBottom:"6px",fontFamily:FONT}}>ALBEDO NEDIR?</div> {/* Albedo Nedir? */}
+                    <div style={{fontSize:"12px",color:C2,fontWeight:"800",marginBottom:"6px",fontFamily:FONT}}>ALBEDO NEDİR?</div>
                     <p style={{fontSize:"13px",color:"#64748b",lineHeight:"1.8",margin:0,fontFamily:FONT}}>
-                      Yeryuzunun Gunesten gelen isinimi atmosfere dogru ortalama yansitma yuzdesidir. Toprak, su, bitki, buzul, asfalt, beton gibi yuzeyler farkli albedo degerlerine sahiptir.
-                    </p> {/* Sıcaklık ölçüm koşulları */}
+                      Yeryüzünün Güneşten gelen ışınımı atmosfere doğru ortalama yansıtma yüzdesidir. Toprak, su, bitki, buzul, asfalt, beton gibi yüzeyler farklı albedo değerlerine sahiptir.
+                    </p>
                   </div>
                   <div style={{padding:"12px 16px",background:"rgba(0,0,0,0.2)",border:"1px solid rgba(255,255,255,0.07)",borderRadius:"10px",fontSize:"13px",color:"#64748b",lineHeight:"1.8",fontFamily:FONT}}>
-                    Sicaklik; insanlarin konforu ve sagligini, bitki ve hayvanlarin ozelliklerini, su kaynaklarini ve tarim faaliyetlerini etkileyen onemli bir faktordu. Termometre, Gunes isinlarina maruz kalmayan, hava girisine acik, yerden 1.5-2 m yuksekte ahsap kutu icine yerlestirilir.
+                    Sıcaklık; insanların konforu ve sağlığını, bitki ve hayvanların özelliklerini, su kaynaklarını ve tarım faaliyetlerini etkileyen önemli bir faktördür. Termometre, Güneş ışınlarına maruz kalmayan, hava girişine açık, yerden 1.5-2 m yüksekte ahşap kutu içine yerleştirilir.
                   </div>
                 </div>
               )}
@@ -515,24 +515,24 @@ export default function HavaOlaylariActivity({ onClose }: { onClose: () => void 
                 <div style={{animation:"fadeUp 0.22s ease",display:"flex",flexDirection:"column",gap:"16px"}}>
                   <div>
                     <div style={{display:"flex",alignItems:"center",gap:"12px",marginBottom:"8px"}}>
-                      <span style={{fontSize:"28px"}}>🌀</span> {/* Hava Basıncı */}
+                      <span style={{fontSize:"28px"}}>🌀</span>
                       <div>
-                        <div style={{fontSize:"21px",fontWeight:"800",color:"#e2e8f0",fontFamily:FONT}}>Hava Basinci</div>
-                        <div style={{fontSize:"13px",color:C3,fontWeight:"600",fontFamily:FONT}}>Barometre ile olcum · milibar (mb) / hPa</div> {/* Barometre ile ölçüm · milibar (mb) / hPa */}
+                        <div style={{fontSize:"21px",fontWeight:"800",color:"#e2e8f0",fontFamily:FONT}}>Hava Basıncı</div>
+                        <div style={{fontSize:"13px",color:C3,fontWeight:"600",fontFamily:FONT}}>Barometre ile ölçüm · milibar (mb) / hPa</div>
                       </div>
                     </div>
                     <div style={{height:"2px",background:`linear-gradient(90deg,${C3},transparent)`,opacity:0.35,borderRadius:"2px"}}/>
                   </div>
                   <div style={{padding:"16px 20px",background:`${C3}0a`,border:`1.5px solid ${C3}22`,borderRadius:"12px"}}>
                     <p style={{fontSize:"14px",color:"#94a3b8",lineHeight:"1.95",margin:0,fontFamily:FONT}}>
-                      Atmosferi olusturan gazlarin birim yuzeye uyguladigi kuvvete <strong style={{color:C3}}>hava basinci</strong> adiyla verilir. Standart hava basinci; <strong style={{color:"#e2e8f0"}}>45 enleminde, deniz seviyesinde ve 15°C sicaklikta, 1013 mb</strong> olarak kabul edilmistir.
-                    </p> {/* Alçak / Yüksek Basınç karşılaştırma */}
+                      Atmosferi oluşturan gazların birim yüzeye uyguladığı kuvvete <strong style={{color:C3}}>hava basıncı</strong> adıyla verilir. Standart hava basıncı; <strong style={{color:"#e2e8f0"}}>45° enleminde, deniz seviyesinde ve 15°C sıcaklıkta, 1013 mb</strong> olarak kabul edilmiştir.
+                    </p>
                   </div>
-                  {/* Alcak / Yuksek Basınç karşılaştırma */}
-                  <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"12px"}}> {/* Alçak / Yüksek Basınç karşılaştırma */}
+                  {/* Alçak / Yüksek Basınç karşılaştırma */}
+                  <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"12px"}}>
                     {[
-                      {id:"alcak",title:"Alcak Basinc Merkezi (A)",icon:"⬆️",color:"#7c3aed",symbol:"A",props:["Yatay hava: Cevreden merkeze","Dikey hava: Yukselici","Bulutlu ve yagisli hava","Siklon olarak da bilinir"]},
-                      {id:"yuksek",title:"Yuksek Basinc Merkezi (Y)",icon:"⬇️",color:"#f97316",symbol:"Y",props:["Yatay hava: Merkezden cevreye","Dikey hava: Alcalici","Gunesli ve acik hava","Antisiklon olarak da bilinir"]},
+                      {id:"alcak",title:"Alçak Basınç Merkezi (A)",icon:"⬆️",color:"#7c3aed",symbol:"A",props:["Yatay hava: Çevreden merkeze","Dikey hava: Yükselici","Bulutlu ve yağışlı hava","Siklon olarak da bilinir"]},
+                      {id:"yuksek",title:"Yüksek Basınç Merkezi (Y)",icon:"⬇️",color:"#f97316",symbol:"Y",props:["Yatay hava: Merkezden çevreye","Dikey hava: Alçalıcı","Güneşli ve açık hava","Antisiklon olarak da bilinir"]},
                     ].map(bp=>(
                       <div key={bp.id} style={{padding:"14px 16px",background:`${bp.color}0d`,border:`1.5px solid ${bp.color}28`,borderRadius:"11px"}}>
                         <div style={{fontSize:"22px",marginBottom:"6px"}}>{bp.icon}</div>
@@ -545,8 +545,8 @@ export default function HavaOlaylariActivity({ onClose }: { onClose: () => void 
                       </div>
                     ))}
                   </div>
-                  <div style={{padding:"12px 16px",background:"rgba(0,0,0,0.2)",border:"1px solid rgba(255,255,255,0.07)",borderRadius:"10px",fontSize:"13px",color:"#64748b",lineHeight:"1.8",fontFamily:FONT}}> {/* İzobar tanımı */}
-                    Izobar: Ayni basinc degerine sahip noktalarin birlestirilmesiyle olusturulan esbasinc egrileridir. Basinc; ruzgar, hava dolasimi ve yagis olusumunu etkiler.
+                  <div style={{padding:"12px 16px",background:"rgba(0,0,0,0.2)",border:"1px solid rgba(255,255,255,0.07)",borderRadius:"10px",fontSize:"13px",color:"#64748b",lineHeight:"1.8",fontFamily:FONT}}>
+                    İzobar: Aynı basınç değerine sahip noktaların birleştirilmesiyle oluşturulan eşbasınç eğrileridir. Basınç; rüzgar, hava dolaşımı ve yağış oluşumunu etkiler.
                   </div>
                 </div>
               )}
@@ -556,24 +556,24 @@ export default function HavaOlaylariActivity({ onClose }: { onClose: () => void 
                 <div style={{animation:"fadeUp 0.22s ease",display:"flex",flexDirection:"column",gap:"16px"}}>
                   <div>
                     <div style={{display:"flex",alignItems:"center",gap:"12px",marginBottom:"8px"}}>
-                      <span style={{fontSize:"28px"}}>💨</span> {/* Rüzgar */}
+                      <span style={{fontSize:"28px"}}>💨</span>
                       <div>
-                        <div style={{fontSize:"21px",fontWeight:"800",color:"#e2e8f0",fontFamily:FONT}}>Ruzgar</div>
-                        <div style={{fontSize:"13px",color:"#94a3b8",fontWeight:"600",fontFamily:FONT}}>Yuksek basinctan alcak basinca yatay hava hareketi</div> {/* Yüksek basınçtan alçak basınca yatay hava hareketi */}
+                        <div style={{fontSize:"21px",fontWeight:"800",color:"#e2e8f0",fontFamily:FONT}}>Rüzgar</div>
+                        <div style={{fontSize:"13px",color:"#94a3b8",fontWeight:"600",fontFamily:FONT}}>Yüksek basınçtan alçak basınca yatay hava hareketi</div>
                       </div>
                     </div>
                     <div style={{height:"2px",background:"linear-gradient(90deg,#94a3b8,transparent)",opacity:0.35,borderRadius:"2px"}}/>
                   </div>
                   <div style={{padding:"16px 20px",background:"rgba(148,163,184,0.08)",border:"1.5px solid rgba(148,163,184,0.2)",borderRadius:"12px"}}>
                     <p style={{fontSize:"14px",color:"#94a3b8",lineHeight:"1.95",margin:0,fontFamily:FONT}}>
-                      Yuksek basinc alanindan alcak basinc alanina dogru yeryuzune gore <strong style={{color:"#e2e8f0"}}>yatay dogrultuda olan hava hareketlerine ruzgar</strong> adı verilir. Ruzgarlar; estigi yere sicak, soguk, nemli veya kuru hava kutlelerini getirerek hava durumu ve iklim uzerinde rol oynar.
-                    </p> {/* Rüzgar özellikleri */}
+                      Yüksek basınç alanından alçak basınç alanına doğru yeryüzüne göre <strong style={{color:"#e2e8f0"}}>yatay doğrultuda olan hava hareketlerine rüzgar</strong> adı verilir. Rüzgarlar; estiği yere sıcak, soğuk, nemli veya kuru hava kütlelerini getirerek hava durumu ve iklim üzerinde rol oynar.
+                    </p>
                   </div>
                   <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"10px"}}>
-                    {[ // Rüzgar özellikleri
-                      {icon:"⚡",color:"#f59e0b",title:"Hizi (Siddeti)","desc":"Birim zamanda yatay dogrultuda alinan yoldur. Anemometre ile olculur. m/sn veya km/sa ile belirtilir."},
-                      {icon:"🧭",color:C,title:"Yonu","desc":"Ruzgarlarin bir merkeze gore estigi dogrultudur. Cografik yonlere gore ifade edilir."},
-                      {icon:"📊",color:C4,title:"Esme Sikligi (Frekansi)","desc":"Ruzgarin bir yone ait esme sayisidir. Yil ici en sik estigi yona hakim ruzgar yonu denir."},
+                    {[
+                      {icon:"⚡",color:"#f59e0b",title:"Hızı (Şiddeti)","desc":"Birim zamanda yatay doğrultuda alınan yoldur. Anemometre ile ölçülür. m/sn veya km/sa ile belirtilir."},
+                      {icon:"🧭",color:C,title:"Yönü","desc":"Rüzgarların bir merkeze göre estiği doğrultudur. Coğrafik yönlere göre ifade edilir."},
+                      {icon:"📊",color:C4,title:"Esme Sıklığı (Frekansı)","desc":"Rüzgarın bir yöne ait esme sayısıdır. Yıl içi en sık estiği yöne hakim rüzgar yönü denir."},
                     ].map(item=>(
                       <div key={item.title} style={{padding:"12px 14px",background:`${item.color}08`,border:`1px solid ${item.color}20`,borderRadius:"10px",textAlign:"center"}}>
                         <div style={{fontSize:"22px",marginBottom:"6px"}}>{item.icon}</div>
@@ -583,10 +583,10 @@ export default function HavaOlaylariActivity({ onClose }: { onClose: () => void 
                     ))}
                   </div>
                   {/* Rüzgâr hız tablosu */}
-                  <div style={{padding:"14px 16px",background:"rgba(0,0,0,0.28)",border:"1px solid rgba(148,163,184,0.15)",borderRadius:"11px"}}> {/* Rüzgar Hızı ve İnsan Üzerindeki Etkisi */}
-                    <div style={{fontSize:"11px",color:"#94a3b8",letterSpacing:"2px",fontWeight:"800",marginBottom:"10px",fontFamily:FONT}}>RUZGAR HIZI VE INSAN UZERINDEKI ETKISI</div> {/* Rüzgar Hızı ve İnsan Üzerindeki Etkisi */}
+                  <div style={{padding:"14px 16px",background:"rgba(0,0,0,0.28)",border:"1px solid rgba(148,163,184,0.15)",borderRadius:"11px"}}>
+                    <div style={{fontSize:"11px",color:"#94a3b8",letterSpacing:"2px",fontWeight:"800",marginBottom:"10px",fontFamily:FONT}}>RÜZGAR HIZI VE İNSAN ÜZERİNDEKİ ETKİSİ</div>
                     <div style={{display:"flex",flexDirection:"column",gap:"4px"}}>
-                      {[["4","Saclar dagilir"],["5","Giysiler ucusmaya baslar"],["6-8","Toz ve kagit parcaciklari havalanir"],["8-11","Ruzgarin kuvveti vucutta hissedilir"],["11-14","Semsiye kullanmak guc hale gelir"],["14-17","Ruzgara karsi yurumek guclesiyor"],["17-21","Ruzgara karsi yurumek mumkun olmaz"]].map(([hiz,etki])=>( // Saçlar dağılır, Giysiler uçuşmaya başlar, Rüzgarın kuvveti vücutta hissedilir, Şemsiye kullanmak güç hale gelir, Rüzgara karşı yürümek güçleşiyor, Rüzgara karşı yürümek mümkün olmaz
+                      {[["4","Saçlar dağılır"],["5","Giysiler uçuşmaya başlar"],["6-8","Toz ve kağıt parçacıkları havalanır"],["8-11","Rüzgarın kuvveti vücutta hissedilir"],["11-14","Şemsiye kullanmak güç hale gelir"],["14-17","Rüzgara karşı yürümek güçleşiyor"],["17-21","Rüzgara karşı yürümek mümkün olmaz"]].map(([hiz,etki])=>(
                         <div key={hiz} style={{display:"flex",gap:"10px",padding:"5px 8px",background:"rgba(255,255,255,0.02)",borderRadius:"5px"}}>
                           <div style={{width:"50px",fontSize:"12px",fontWeight:"800",color:"#94a3b8",fontFamily:MONO,flexShrink:0}}>{hiz} m/sn</div>
                           <div style={{fontSize:"12px",color:"#475569",fontFamily:FONT}}>{etki}</div>
@@ -596,12 +596,12 @@ export default function HavaOlaylariActivity({ onClose }: { onClose: () => void 
                   </div>
                   {/* Rüzgâr gülü görseli */}
                   <div style={{padding:"14px 16px",background:"rgba(0,0,0,0.28)",border:`1px solid ${C}15`,borderRadius:"11px"}}>
-                    <div style={{fontSize:"11px",color:C,letterSpacing:"2px",fontWeight:"800",marginBottom:"10px",fontFamily:FONT}}>ORNEK RUZGAR FREKANS GULU — Ankara</div>
+                    <div style={{fontSize:"11px",color:C,letterSpacing:"2px",fontWeight:"800",marginBottom:"10px",fontFamily:FONT}}>ÖRNEK RÜZGAR FREKANS GÜLÜ — Ankara</div>
                     <div style={{display:"flex",gap:"16px",alignItems:"flex-start",flexWrap:"wrap"}}>
                       <RuzgarGulu freq={RUZGAR_FREQ_ANKARA} labels={YONLER_EN}/>
-                      <div style={{flex:1,minWidth:"180px"}}> {/* Rüzgar gülü açıklaması */}
+                      <div style={{flex:1,minWidth:"180px"}}>
                         <div style={{fontSize:"12px",color:"#64748b",lineHeight:"1.8",fontFamily:FONT,marginBottom:"8px"}}>
-                          Bu ornekte kuzey ruzgari 90 gun esme frekansiyla hakim ruzgar yonudur. Dogu ruzgari 60 gunle ikinci siradadir.
+                          Bu örnekte kuzey rüzgarı 90 gün esme frekansıyla hakim rüzgar yönüdür. Doğu rüzgarı 60 günle ikinci sıradadır.
                         </div>
                         <div style={{display:"flex",flexDirection:"column",gap:"4px"}}>
                           {RUZGAR_YONLER.map((y,i)=>(
@@ -625,22 +625,22 @@ export default function HavaOlaylariActivity({ onClose }: { onClose: () => void 
                 <div style={{animation:"fadeUp 0.22s ease",display:"flex",flexDirection:"column",gap:"16px"}}>
                   <div>
                     <div style={{display:"flex",alignItems:"center",gap:"12px",marginBottom:"8px"}}>
-                      <span style={{fontSize:"28px"}}>💧</span> {/* Nem & Yağış */}
+                      <span style={{fontSize:"28px"}}>💧</span>
                       <div>
-                        <div style={{fontSize:"21px",fontWeight:"800",color:"#e2e8f0",fontFamily:FONT}}>Nem & Yagis</div>
-                        <div style={{fontSize:"13px",color:C4,fontWeight:"600",fontFamily:FONT}}>Su dongusu · Yogusma · Doyma noktasi</div> {/* Su döngüsü · Yoğuşma · Doyma noktası */}
+                        <div style={{fontSize:"21px",fontWeight:"800",color:"#e2e8f0",fontFamily:FONT}}>Nem & Yağış</div>
+                        <div style={{fontSize:"13px",color:C4,fontWeight:"600",fontFamily:FONT}}>Su döngüsü · Yoğuşma · Doyma noktası</div>
                       </div>
                     </div>
                     <div style={{height:"2px",background:`linear-gradient(90deg,${C4},transparent)`,opacity:0.35,borderRadius:"2px"}}/>
                   </div>
                   <div style={{padding:"16px 20px",background:`${C4}0a`,border:`1.5px solid ${C4}22`,borderRadius:"12px"}}>
                     <p style={{fontSize:"14px",color:"#94a3b8",lineHeight:"1.95",margin:0,fontFamily:FONT}}>
-                      Atmosferdeki su buharina <strong style={{color:C4}}>nem</strong> adi verilir. Suyun atmosfer, litosfer, hidrosfer ve biyosfer arasinda surekli yer degistirmesine <strong style={{color:"#e2e8f0"}}>su dongusu</strong> denir. Atmosferdeki nemin yogusmasi sonucunda <strong style={{color:C4}}>yagis</strong> meydana gelir.
-                    </p> {/* Su döngüsü SVG */}
+                      Atmosferdeki su buharına <strong style={{color:C4}}>nem</strong> adı verilir. Suyun atmosfer, litosfer, hidrosfer ve biyosfer arasında sürekli yer değiştirmesine <strong style={{color:"#e2e8f0"}}>su döngüsü</strong> denir. Atmosferdeki nemin yoğuşması sonucunda <strong style={{color:C4}}>yağış</strong> meydana gelir.
+                    </p>
                   </div>
                   {/* Su döngüsü SVG */}
                   <div style={{padding:"14px 16px",background:"rgba(0,0,0,0.28)",border:`1px solid ${C4}18`,borderRadius:"11px"}}>
-                    <div style={{fontSize:"11px",color:C4,letterSpacing:"2px",fontWeight:"800",marginBottom:"10px",fontFamily:FONT}}>SU DONGUSU</div>
+                    <div style={{fontSize:"11px",color:C4,letterSpacing:"2px",fontWeight:"800",marginBottom:"10px",fontFamily:FONT}}>SU DÖNGÜSÜ</div>
                     <svg viewBox="0 0 520 100" width="100%" style={{maxWidth:"520px",display:"block",margin:"0 auto"}}>
                       {/* oklar */}
                       <defs>
@@ -652,19 +652,19 @@ export default function HavaOlaylariActivity({ onClose }: { onClose: () => void 
                       <line x1="200" y1="30" x2="300" y2="30" stroke={C4} strokeWidth="1.5" markerEnd="url(#arr)"/>
                       <line x1="320" y1="30" x2="420" y2="65" stroke={C4} strokeWidth="1.5" markerEnd="url(#arr)"/>
                       <line x1="400" y1="75" x2="100" y2="75" stroke={C4} strokeWidth="1.5" markerEnd="url(#arr)"/>
-                      {[["Buharlasma",20,80],["Yukselmek",130,20],["Bulut Olusumu",230,18],["Yogusma & Yagis",350,20],["Yuzey Akisi",250,88]].map(([label,x,y])=>( // Buharlaşma, Yükselmek, Bulut Oluşumu, Yoğuşma & Yağış, Yüzey Akışı
+                      {[["Buharlaşma",20,80],["Yükselme",130,20],["Bulut Oluşumu",230,18],["Yoğuşma & Yağış",350,20],["Yüzey Akışı",250,88]].map(([label,x,y])=>(
                         <text key={String(label)} x={Number(x)} y={Number(y)} fontSize="9" fill="#94a3b8" fontFamily={FONT} textAnchor="middle">{String(label)}</text>
                       ))}
-                      {[["Deniz/Su",30,78],["Bulut",240,35,"#60a5fa"],["Yagis",410,60,"#0ea5e9"]].map(([label,x,y,c])=>( // Deniz/Su, Bulut, Yağış
+                      {[["Deniz/Su",30,78],["Bulut",240,35,"#60a5fa"],["Yağış",410,60,"#0ea5e9"]].map(([label,x,y,c])=>(
                         <text key={String(label)} x={Number(x)} y={Number(y)} fontSize="10" fill={String(c)||C4} fontFamily={FONT} fontWeight="700">{String(label)}</text>
                       ))}
                     </svg>
                   </div>
                   <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"10px"}}>
                     {[
-                      {icon:"💧",color:C4,title:"Nem",desc:"Higrometre ile olculur. Asiri isinma ve sogumayi engelleyerek sicaklik uzerinde etkilidir."},
-                      {icon:"🌡️",color:"#0369a1",title:"Doyma Noktasi",desc:"Hava kutlesinin basincinda degisim olmaksizin doymasi icin sogumasi gereken sicaklik."},
-                      {icon:"🌧️",color:C,title:"Yogusma & Yagis",desc:"Su buharinin sivi hale donmesidir. Yogusma, doyma noktasina ulasildiktan sonra gerceklesir."}, // Yoğuşma & Yağış
+                      {icon:"💧",color:C4,title:"Nem",desc:"Higrometre ile ölçülür. Aşırı ısınma ve soğumayı engelleyerek sıcaklık üzerinde etkilidir."},
+                      {icon:"🌡️",color:"#0369a1",title:"Doyma Noktası",desc:"Hava kütlesinin basıncında değişim olmaksızın doyması için soğuması gereken sıcaklık."},
+                      {icon:"🌧️",color:C,title:"Yoğuşma & Yağış",desc:"Su buharının sıvı hale dönmesidir. Yoğuşma, doyma noktasına ulaşıldıktan sonra gerçekleşir."},
                     ].map(item=>(
                       <div key={item.title} style={{padding:"12px 14px",background:`${item.color}08`,border:`1px solid ${item.color}20`,borderRadius:"10px",textAlign:"center"}}>
                         <div style={{fontSize:"22px",marginBottom:"6px"}}>{item.icon}</div>
@@ -681,18 +681,18 @@ export default function HavaOlaylariActivity({ onClose }: { onClose: () => void 
                 <div style={{animation:"fadeUp 0.22s ease",display:"flex",flexDirection:"column",gap:"16px"}}>
                   <div>
                     <div style={{display:"flex",alignItems:"center",gap:"12px",marginBottom:"8px"}}>
-                      <span style={{fontSize:"28px"}}>⚡</span> {/* Aşırı Hava Olayları */}
+                      <span style={{fontSize:"28px"}}>⚡</span>
                       <div>
-                        <div style={{fontSize:"21px",fontWeight:"800",color:"#e2e8f0",fontFamily:FONT}}>Asiri Hava Olaylari</div>
-                        <div style={{fontSize:"13px",color:C5,fontWeight:"600",fontFamily:FONT}}>Normal kosullarin otesine gecen siddeti veya ani olaylar</div> {/* Normal koşulların ötesine geçen şiddeti veya ani olaylar */}
+                        <div style={{fontSize:"21px",fontWeight:"800",color:"#e2e8f0",fontFamily:FONT}}>Aşırı Hava Olayları</div>
+                        <div style={{fontSize:"13px",color:C5,fontWeight:"600",fontFamily:FONT}}>Normal koşulların ötesine geçen şiddeti veya ani olaylar</div>
                       </div>
                     </div>
                     <div style={{height:"2px",background:`linear-gradient(90deg,${C5},transparent)`,opacity:0.35,borderRadius:"2px"}}/>
                   </div>
                   <div style={{padding:"16px 20px",background:`${C5}0a`,border:`1.5px solid ${C5}22`,borderRadius:"12px"}}>
                     <p style={{fontSize:"14px",color:"#94a3b8",lineHeight:"1.95",margin:0,fontFamily:FONT}}>
-                      Asiri hava olaylari; sicaklik, yagis, ruzgar hizi, basinc gibi hava olaylarinki <strong style={{color:C5}}>uc degerler nedeniyle olusan</strong> ve ciddi maddi hasara, can kayiplarina neden olabilen meteorolojik olaylardir.
-                    </p> {/* Olay kartları */}
+                      Aşırı hava olayları; sıcaklık, yağış, rüzgar hızı, basınç gibi hava olaylarındaki <strong style={{color:C5}}>uç değerler nedeniyle oluşan</strong> ve ciddi maddi hasara, can kayıplarına neden olabilen meteorolojik olaylardir.
+                    </p>
                   </div>
                   {/* Olay kartları */}
                   <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"8px"}}>
@@ -710,12 +710,12 @@ export default function HavaOlaylariActivity({ onClose }: { onClose: () => void 
                     if(!olay)return null;
                     return(
                       <div style={{padding:"16px 18px",background:`${olay.color}0d`,border:`1.5px solid ${olay.color}28`,borderRadius:"12px",animation:"fadeUp 0.2s ease"}}>
-                        <div style={{display:"flex",gap:"10px",alignItems:"flex-start",marginBottom:"10px"}}> {/* Başlıca Etkileri */}
+                        <div style={{display:"flex",gap:"10px",alignItems:"flex-start",marginBottom:"10px"}}>
                           <span style={{fontSize:"26px"}}>{olay.icon}</span>
                           <div style={{fontSize:"15px",fontWeight:"800",color:olay.color,fontFamily:FONT}}>{olay.ad}</div>
                         </div>
                         <p style={{fontSize:"13px",color:"#94a3b8",lineHeight:"1.85",margin:"0 0 12px",fontFamily:FONT}}>{olay.tanim}</p>
-                        <div style={{fontSize:"11px",color:olay.color,letterSpacing:"1.5px",fontWeight:"800",marginBottom:"8px",fontFamily:FONT}}>BASLICA ETKILERI</div>
+                        <div style={{fontSize:"11px",color:olay.color,letterSpacing:"1.5px",fontWeight:"800",marginBottom:"8px",fontFamily:FONT}}>BAŞLICA ETKİLERİ</div>
                         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"5px"}}>
                           {olay.etkiler.map(etki=>(
                             <div key={etki} style={{padding:"6px 9px",background:"rgba(0,0,0,0.2)",borderRadius:"6px",borderLeft:`2px solid ${olay.color}60`,fontSize:"12px",color:"#475569",fontFamily:FONT}}>{etki}</div>
@@ -724,21 +724,21 @@ export default function HavaOlaylariActivity({ onClose }: { onClose: () => void 
                       </div>
                     );
                   })()}
-                  {/* Türkiye istatistik */} {/* Türkiye 2023 — Rekor Seviyeye Ulaşan Aşırı Hava Olayları */}
-                  <div style={{padding:"14px 16px",background:"rgba(239,68,68,0.06)",border:"1px solid rgba(239,68,68,0.2)",borderRadius:"10px"}}> {/* Türkiye 2023 — Rekor Seviyeye Ulaşan Aşırı Hava Olayları */}
-                    <div style={{fontSize:"11px",color:C5,letterSpacing:"2px",fontWeight:"800",marginBottom:"10px",fontFamily:FONT}}>TURKIYE 2023 — REKOR SEIYEYE ULASAN ASIRI HAVA OLAYLARI</div> {/* Türkiye 2023 — Rekor Seviyeye Ulaşan Aşırı Hava Olayları */}
-                    <div style={{display:"flex",gap:"12px",alignItems:"center",flexWrap:"wrap"}}> {/* 2023 toplam olay, bir yıllık artış */}
+                  {/* Türkiye istatistik */}
+                  <div style={{padding:"14px 16px",background:"rgba(239,68,68,0.06)",border:"1px solid rgba(239,68,68,0.2)",borderRadius:"10px"}}>
+                    <div style={{fontSize:"11px",color:C5,letterSpacing:"2px",fontWeight:"800",marginBottom:"10px",fontFamily:FONT}}>TÜRKİYE 2023 — REKOR SEVİYEYE ULAŞAN AŞIRI HAVA OLAYLARI</div>
+                    <div style={{display:"flex",gap:"12px",alignItems:"center",flexWrap:"wrap"}}>
                       <div style={{padding:"12px 16px",background:"rgba(239,68,68,0.1)",border:"1.5px solid rgba(239,68,68,0.3)",borderRadius:"9px",textAlign:"center",minWidth:"100px"}}>
                         <div style={{fontSize:"28px",fontWeight:"800",color:C5,fontFamily:MONO}}>1475</div>
                         <div style={{fontSize:"11px",color:"#94a3b8",fontFamily:FONT}}>2023 toplam olay</div>
                       </div>
                       <div style={{padding:"12px 16px",background:"rgba(239,68,68,0.08)",border:"1px solid rgba(239,68,68,0.2)",borderRadius:"9px",textAlign:"center",minWidth:"100px"}}>
                         <div style={{fontSize:"28px",fontWeight:"800",color:"#f97316",fontFamily:MONO}}>%45</div>
-                        <div style={{fontSize:"11px",color:"#94a3b8",fontFamily:FONT}}>bir yillik artis</div>
+                        <div style={{fontSize:"11px",color:"#94a3b8",fontFamily:FONT}}>bir yıllık artış</div>
                       </div>
                       <p style={{fontSize:"12px",color:"#64748b",lineHeight:"1.75",margin:0,fontFamily:FONT,flex:1,minWidth:"180px"}}>
-                        Turkiye de asiri hava olaylarinin sayisi son alti yildir surekli artmaktadir. Bu artis; kuresel iklim degisikligi ve insan faaliyetleriyle iliksilidir.
-                      </p> {/* Türkiye'de aşırı hava olayları artışı */}
+                        Türkiye'de aşırı hava olaylarının sayısı son altı yıldır sürekli artmaktadır. Bu artış; küresel iklim değişikliği ve insan faaliyetleriyle ilişkilidir.
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -749,25 +749,25 @@ export default function HavaOlaylariActivity({ onClose }: { onClose: () => void 
                 <div style={{animation:"fadeUp 0.22s ease",display:"flex",flexDirection:"column",gap:"16px"}}>
                   <div>
                     <div style={{display:"flex",alignItems:"center",gap:"12px",marginBottom:"8px"}}>
-                      <span style={{fontSize:"28px"}}>🌾</span> {/* Halk Meteorolojisi & Halk Takvimi */}
+                      <span style={{fontSize:"28px"}}>🌾</span>
                       <div>
                         <div style={{fontSize:"21px",fontWeight:"800",color:"#e2e8f0",fontFamily:FONT}}>Halk Meteorolojisi & Halk Takvimi</div>
-                        <div style={{fontSize:"13px",color:"#a78bfa",fontWeight:"600",fontFamily:FONT}}>Yerel bilgi · Gozlem · Deneyim</div> {/* Yerel bilgi · Gözlem · Deneyim */}
+                        <div style={{fontSize:"13px",color:"#a78bfa",fontWeight:"600",fontFamily:FONT}}>Yerel bilgi · Gözlem · Deneyim</div>
                       </div>
                     </div>
                     <div style={{height:"2px",background:"linear-gradient(90deg,#a78bfa,transparent)",opacity:0.35,borderRadius:"2px"}}/>
                   </div>
                   <div style={{padding:"16px 20px",background:"rgba(167,139,250,0.08)",border:"1.5px solid rgba(167,139,250,0.22)",borderRadius:"12px"}}>
                     <p style={{fontSize:"14px",color:"#94a3b8",lineHeight:"1.95",margin:0,fontFamily:FONT}}>
-                      <strong style={{color:"#a78bfa"}}>Halk meteorolojisi</strong>, hava olaylarini halkin cografi ve kulturel bilgisi dogrultusunda ele alan yerel hava durumu tahminleridir. Teknolojinin yeterli olmadigi donemde <strong style={{color:"#e2e8f0"}}>tarim ve hayvancilik</strong> faaliyetlerindeki belirsizligi ortadan kaldirarak ortaya cikmiştir.
-                    </p> {/* Halk meteorolojisi tanımı */}
+                      <strong style={{color:"#a78bfa"}}>Halk meteorolojisi</strong>, hava olaylarını halkın coğrafi ve kültürel bilgisi doğrultusunda ele alan yerel hava durumu tahminleridir. Teknolojinin yeterli olmadığı dönemde <strong style={{color:"#e2e8f0"}}>tarım ve hayvancılık</strong> faaliyetlerindeki belirsizliği ortadan kaldırarak ortaya çıkmıştır.
+                    </p>
                   </div>
                   <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"10px"}}>
                     {[
-                      {icon:"👁️",color:"#a78bfa",title:"Dogayi Gozlemlemek","desc":"Ruzgarin elis yonu, bulutlar, bitkiler, hayvanlar ve gok cisimlerine bakarak hava tahminleri yapilmistir."},
-                      {icon:"📅",color:"#0ea5e9",title:"Halk Takvimi","desc":"Yillar boyunca elde edilen bilgilerle olusturulan, yaşanilan yere ait yerel bilgiyi iceren zaman cizgisidir."},
-                      {icon:"🌾",color:"#34d399",title:"Pratik Zaman Siniflandirmasi","desc":"Cografi kosullara gore pratik zaman siniflandirmasi yapilarak gunluk hayat duzenlenmistir."}, // Pratik Zaman Sınıflandırması
-                      {icon:"🌿",color:"#f97316",title:"Dogayla Uyum","desc":"Insanlar dogal cevrelerinin dinamigini anlayip onunla uyumlu yasamaya calismislardir."},
+                      {icon:"👁️",color:"#a78bfa",title:"Doğayı Gözlemlemek","desc":"Rüzgarın geliş yönü, bulutlar, bitkiler, hayvanlar ve gök cisimlerine bakarak hava tahminleri yapılmıştır."},
+                      {icon:"📅",color:"#0ea5e9",title:"Halk Takvimi","desc":"Yıllar boyunca elde edilen bilgilerle oluşturulan, yaşanılan yere ait yerel bilgiyi içeren zaman çizgisidir."},
+                      {icon:"🌾",color:"#34d399",title:"Pratik Zaman Sınıflandırması","desc":"Coğrafi koşullara göre pratik zaman sınıflandırması yapılarak günlük hayat düzenlenmiştir."},
+                      {icon:"🌿",color:"#f97316",title:"Doğayla Uyum","desc":"İnsanlar doğal çevrelerinin dinamiğini anlayıp onunla uyumlu yaşamaya çalışmışlardır."},
                     ].map(item=>(
                       <div key={item.title} style={{padding:"12px 14px",background:`${item.color}08`,border:`1px solid ${item.color}20`,borderRadius:"10px",display:"flex",gap:"9px",alignItems:"flex-start"}}>
                         <span style={{fontSize:"20px",flexShrink:0}}>{item.icon}</span>
@@ -778,10 +778,10 @@ export default function HavaOlaylariActivity({ onClose }: { onClose: () => void 
                       </div>
                     ))}
                   </div>
-                  <div style={{padding:"14px 16px",background:"rgba(0,0,0,0.25)",border:"1px solid rgba(167,139,250,0.15)",borderRadius:"10px"}}> {/* Halk Meteorolojisi Örnek Gözlemler */}
-                    <div style={{fontSize:"11px",color:"#a78bfa",letterSpacing:"2px",fontWeight:"800",marginBottom:"10px",fontFamily:FONT}}>HALK METEOROLOJISI ORNEK GOZLEMLER</div> {/* Halk Meteorolojisi Örnek Gözlemler */}
+                  <div style={{padding:"14px 16px",background:"rgba(0,0,0,0.25)",border:"1px solid rgba(167,139,250,0.15)",borderRadius:"10px"}}>
+                    <div style={{fontSize:"11px",color:"#a78bfa",letterSpacing:"2px",fontWeight:"800",marginBottom:"10px",fontFamily:FONT}}>HALK METEOROLOJİSİ ÖRNEK GÖZLEMLER</div>
                     <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"6px"}}>
-                      {[["Kuzeyden esen ruzgar","Soguk ve kar haber veriyor"],["Gunbatiminda kizillik","Ertesi gun gunesli olabilir"],["Karincalar yuvaya don","Yagmur yaklasiyor"],["Ay etrafinda hale","Yagisli hava yaklasiyor"]].map(([olay,anlam])=>( // Kuzeyden esen rüzgar, Soğuk ve kar haber veriyor, Günbatımında kızıllık, Ertesi gün güneşli olabilir, Karıncalar yuvaya dön, Yağmur yaklaşıyor, Ay etrafında hale, Yağışlı hava yaklaşıyor
+                      {[["Kuzeyden esen rüzgar","Soğuk ve kar haber veriyor"],["Günbatımında kızıllık","Ertesi gün güneşli olabilir"],["Karıncalar yuvaya dön","Yağmur yaklaşıyor"],["Ay etrafında hale","Yağışlı hava yaklaşıyor"]].map(([olay,anlam])=>(
                         <div key={olay} style={{padding:"8px 10px",background:"rgba(167,139,250,0.06)",borderRadius:"7px",borderLeft:"2px solid rgba(167,139,250,0.4)"}}>
                           <div style={{fontSize:"11px",color:"#a78bfa",fontWeight:"700",fontFamily:FONT}}>{olay}</div>
                           <div style={{fontSize:"11px",color:"#475569",fontFamily:FONT,marginTop:"2px"}}>{anlam}</div>
@@ -801,7 +801,7 @@ export default function HavaOlaylariActivity({ onClose }: { onClose: () => void 
           <div style={{flex:1,display:"flex",flexDirection:"column",overflow:"hidden"}}>
             {/* Aktivite sekme seçici */}
             <div style={{display:"flex",gap:"3px",padding:"12px 20px",borderBottom:`1px solid ${C}12`,background:"rgba(2,5,12,0.6)",flexShrink:0}}>
-              {[{id:"basinc" as const,icon:"🌀",label:"Basinc Merkezleri"},{id:"ruzgar" as const,icon:"🌹",label:"Ruzgar Gulu"}].map(t=>( // Basınç Merkezleri, Rüzgar Gülü
+              {[{id:"basinc" as const,icon:"🌀",label:"Basınç Merkezleri"},{id:"ruzgar" as const,icon:"🌹",label:"Rüzgar Gülü"}].map(t=>(
                 <button key={t.id} onClick={()=>{sndClick();setActTab(t.id);}}
                   style={{padding:"7px 16px",borderRadius:"7px",border:"none",cursor:"pointer",fontFamily:FONT,fontSize:"12px",fontWeight:"700",background:actTab===t.id?C:"transparent",color:actTab===t.id?"#fff":"#475569",transition:"all 0.18s"}}>
                   {t.icon} {t.label} 
@@ -812,19 +812,19 @@ export default function HavaOlaylariActivity({ onClose }: { onClose: () => void 
               {actTab==="basinc" && <BasincAktivite/>}
               {actTab==="ruzgar" && (
                 <div style={{display:"flex",flexDirection:"column",gap:"16px"}}>
-                  <div> {/* Rüzgar Gülü İnceleme */}
+                  <div>
                     <div style={{fontSize:"10px",color:C,letterSpacing:"3px",fontWeight:"800",fontFamily:MONO,marginBottom:"4px"}}>ETKİNLİK 2</div>
-                    <div style={{fontSize:"17px",fontWeight:"800",color:"#e2e8f0",fontFamily:FONT}}>🌹 Ruzgar Gulu Inceleme</div> {/* Rüzgar Gülü İnceleme */}
-                    <div style={{fontSize:"12px",color:"#475569",marginTop:"3px",fontFamily:FONT}}>Bir yerlesim merkezinin ruzgar frekansi gulunu incele ve hakim ruzgar yonunu bul</div> {/* Bir yerleşim merkezinin rüzgar frekansı gülünü incele ve hakim rüzgar yönünü bul */}
+                    <div style={{fontSize:"17px",fontWeight:"800",color:"#e2e8f0",fontFamily:FONT}}>🌹 Rüzgar Gülü İnceleme</div>
+                    <div style={{fontSize:"12px",color:"#475569",marginTop:"3px",fontFamily:FONT}}>Bir yerleşim merkezinin rüzgar frekansı gülünü incele ve hakim rüzgar yönünü bul</div>
                   </div>
                   <div style={{display:"grid",gridTemplateColumns:"auto 1fr",gap:"16px",alignItems:"start"}}>
                     <div style={{padding:"14px",background:"rgba(0,0,0,0.3)",border:`1px solid ${C}20`,borderRadius:"12px"}}>
-                      <div style={{fontSize:"11px",color:C,letterSpacing:"1.5px",fontWeight:"800",marginBottom:"10px",fontFamily:FONT,textAlign:"center"}}>RUZGAR FREKANSI GULU</div>
+                      <div style={{fontSize:"11px",color:C,letterSpacing:"1.5px",fontWeight:"800",marginBottom:"10px",fontFamily:FONT,textAlign:"center"}}>RÜZGAR FREKANS GÜLÜ</div>
                       <RuzgarGulu freq={RUZGAR_FREQ_ANKARA} labels={YONLER_EN}/>
                     </div>
                     <div style={{display:"flex",flexDirection:"column",gap:"10px"}}>
-                      <div style={{padding:"14px 16px",background:`${C}0a`,border:`1.5px solid ${C}22`,borderRadius:"11px"}}> {/* Rüzgar Frekansı Değerleri (Gün) */}
-                        <div style={{fontSize:"12px",color:C,fontWeight:"800",marginBottom:"8px",fontFamily:FONT}}>Ruzgar Frekansi Degerleri (Gun)</div>
+                      <div style={{padding:"14px 16px",background:`${C}0a`,border:`1.5px solid ${C}22`,borderRadius:"11px"}}>
+                        <div style={{fontSize:"12px",color:C,fontWeight:"800",marginBottom:"8px",fontFamily:FONT}}>Rüzgar Frekansı Değerleri (Gün)</div>
                         {RUZGAR_YONLER.map((y,i)=>(
                           <div key={y} style={{display:"flex",gap:"8px",alignItems:"center",marginBottom:"5px"}}>
                             <div style={{width:"80px",fontSize:"12px",color:"#94a3b8",fontFamily:FONT}}>{y}</div>
@@ -835,9 +835,9 @@ export default function HavaOlaylariActivity({ onClose }: { onClose: () => void 
                           </div>
                         ))}
                       </div>
-                      <div style={{padding:"12px 16px",background:`${C}08`,border:`1px solid ${C}18`,borderRadius:"10px",fontSize:"13px",fontFamily:FONT}}> {/* Analiz Soruları */}
-                        <div style={{color:C,fontWeight:"800",marginBottom:"6px"}}>Analiz Sorulari</div> {/* Analiz Soruları */}
-                        {["Bu yerlesim merkezinin hakim ruzgar yonu hangi yondur? Kac gun esmistir?","Kuzey ruzgari icin esme frekansi 90 gunken; guney ruzgari kac gun esmistir?","Bir fabrika kurmak isteseydiniz, yerlesim merkezine gore hangi yonde kurardiniz?"].map((soru,i)=>( // Bu yerleşim merkezinin hakim rüzgar yönü hangi yöndür? Kaç gün esmiştir? Kuzey rüzgarı için esme frekansı 90 günken; güney rüzgarı kaç gün esmiştir? Bir fabrika kurmak isteseydiniz, yerleşim merkezine göre hangi yönde kurardınız?
+                      <div style={{padding:"12px 16px",background:`${C}08`,border:`1px solid ${C}18`,borderRadius:"10px",fontSize:"13px",fontFamily:FONT}}>
+                        <div style={{color:C,fontWeight:"800",marginBottom:"6px"}}>Analiz Soruları</div>
+                        {["Bu yerleşim merkezinin hakim rüzgar yönü hangi yöndür? Kaç gün esmiştir?","Kuzey rüzgarı için esme frekansı 90 günken; güney rüzgarı kaç gün esmiştir?","Bir fabrika kurmak isteseydiniz, yerleşim merkezine göre hangi yönde kurardınız?"].map((soru,i)=>(
                           <div key={i} style={{marginBottom:"8px",paddingLeft:"10px",borderLeft:`2px solid ${C}40`,fontSize:"12px",color:"#64748b",lineHeight:"1.7"}}>{i+1}. {soru}</div>
                         ))}
                       </div>
