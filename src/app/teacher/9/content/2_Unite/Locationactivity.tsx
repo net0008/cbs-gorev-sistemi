@@ -50,40 +50,40 @@ const DENIZ_KOMSULAR = [
 type GzftCat = "G"|"Z"|"F"|"T";
 interface GzftItem { id:string; text:string; cat:GzftCat; }
 const GZFT_ITEMS: GzftItem[] = [
-  { id:"g1", cat:"G", text:"Uc tarafi denizlerle cevrili - dis ticaret ve ulasim avantaji" },
-  { id:"g2", cat:"G", text:"Asya ile Avrupa'yi birlestiren kopru konumu" },
-  { id:"g3", cat:"G", text:"Turk Bogazlari (Istanbul & Canakkale) - Karadeniz-Akdeniz baglantisi" },
-  { id:"g4", cat:"G", text:"Orta enlemlerde yer almasi - dort mevsim yasanmasi" },
-  { id:"g5", cat:"G", text:"Tarihi ticaret yollarinin (Ipek Yolu) kesisim noktasi" },
-  { id:"z1", cat:"Z", text:"Siyasi acidan istikrarsiz komsu bolgelere yakinlik" },
-  { id:"z2", cat:"Z", text:"Dogu ile bati arasindaki yerel saat farki (76 dakika)" },
-  { id:"z3", cat:"Z", text:"Bolgesel catismalara cografi yakinlik - guvenlik riski" },
-  { id:"f1", cat:"F", text:"Enerji koridoru - Orta Dogu ve Kafkasya kaynaklarini Avrupa'ya tasima" },
-  { id:"f2", cat:"F", text:"Turizm potansiyeli - zengin kulturel miras ve iklim cesitliligi" },
-  { id:"f3", cat:"F", text:"Istanbul'un kuresel finans ve ticaret merkezi olma potansiyeli" },
-  { id:"f4", cat:"F", text:"Tarim, turizm ve sanayide iklim cesitliliginden kaynaklanan zenginlik" },
-  { id:"t1", cat:"T", text:"Komsu bolgelerdeki jeopolitik gerilimler - ekonomik istikrar tehdidi" },
-  { id:"t2", cat:"T", text:"Bolgesel catismalarin yarattigi goc baskisi" },
-  { id:"t3", cat:"T", text:"Enerji kaynaklarina erisim guvenligini tehdit eden bolgesel anlasmazliklar" },
+  { id:"g1", cat:"G", text:"Üç tarafı denizlerle çevrili - dış ticaret ve ulaşım avantajı" },
+  { id:"g2", cat:"G", text:"Asya ile Avrupa'yı birleştiren köprü konumu" },
+  { id:"g3", cat:"G", text:"Türk Boğazları (İstanbul & Çanakkale) - Karadeniz-Akdeniz bağlantısı" },
+  { id:"g4", cat:"G", text:"Orta enlemlerde yer alması - dört mevsim yaşanması" },
+  { id:"g5", cat:"G", text:"Tarihi ticaret yollarının (İpek Yolu) kesişim noktası" },
+  { id:"z1", cat:"Z", text:"Siyasi açıdan istikrarsız komşu bölgelere yakınlık" },
+  { id:"z2", cat:"Z", text:"Doğu ile batı arasındaki yerel saat farkı (76 dakika)" },
+  { id:"z3", cat:"Z", text:"Bölgesel çatışmalara coğrafi yakınlık - güvenlik riski" },
+  { id:"f1", cat:"F", text:"Enerji koridoru - Orta Doğu ve Kafkasya kaynaklarını Avrupa'ya taşıma" },
+  { id:"f2", cat:"F", text:"Turizm potansiyeli - zengin kültürel miras ve iklim çeşitliliği" },
+  { id:"f3", cat:"F", text:"İstanbul'un küresel finans ve ticaret merkezi olma potansiyeli" },
+  { id:"f4", cat:"F", text:"Tarım, turizm ve sanayide iklim çeşitliliğinden kaynaklanan zenginlik" },
+  { id:"t1", cat:"T", text:"Komşu bölgelerdeki jeopolitik gerilimler - ekonomik istikrar tehdidi" },
+  { id:"t2", cat:"T", text:"Bölgesel çatışmaların yarattığı göç baskısı" },
+  { id:"t3", cat:"T", text:"Enerji kaynaklarına erişim güvenliğini tehdit eden bölgesel anlaşmazlıklar" },
 ];
 const GZFT_CATS = [
-  { id:"G" as GzftCat, label:"GUCLU YONLER",  emoji:"\u{1F4AA}", color:"#10b981", bg:"rgba(16,185,129,0.08)" },
-  { id:"Z" as GzftCat, label:"ZAYIF YONLER",  emoji:"\u26A0\uFE0F", color:"#ef4444", bg:"rgba(239,68,68,0.08)" },
+  { id:"G" as GzftCat, label:"GÜÇLÜ YÖNLER",  emoji:"\u{1F4AA}", color:"#10b981", bg:"rgba(16,185,129,0.08)" },
+  { id:"Z" as GzftCat, label:"ZAYIF YÖNLER",  emoji:"\u26A0\uFE0F", color:"#ef4444", bg:"rgba(239,68,68,0.08)" },
   { id:"F" as GzftCat, label:"FIRSATLAR",     emoji:"\u{1F680}", color:"#f59e0b", bg:"rgba(245,158,11,0.08)" },
-  { id:"T" as GzftCat, label:"TEHDITLER",     emoji:"\u{1F6E1}\uFE0F", color:"#8b5cf6", bg:"rgba(139,92,246,0.08)" },
+  { id:"T" as GzftCat, label:"TEHDİTLER",     emoji:"\u{1F6E1}\uFE0F", color:"#8b5cf6", bg:"rgba(139,92,246,0.08)" },
 ];
 
 const TEST_ITEMS = [
-  { q:"Turkiye hangi paralel ve meridyen araliginda yer alir?", opts:["26-42K ve 36-45D","36-42K ve 26-45D","36-45K ve 26-42D","26-36K ve 42-45D"], correct:1, exp:"Turkiye; 36-42 kuzey paralelleri, 26-45 dogu meridyenleri arasinda yer alir." },
-  { q:"Turkiye'nin dogusu ile batisi arasindaki yerel saat farki ne kadardir?", opts:["Yaklasik 30 dakika","Yaklasik 76 dakika","Yaklasik 1 saat","Yaklasik 2 saat"], correct:1, exp:"Yaklasik 76 dakikalik yerel saat farki bulunur." },
-  { q:"Mutlak konum nedir?", opts:["Ulkenin diger ulkelere gore konumu","Ekvator ve baslangic meridyenine gore kesin konum","Komsu ulkelere olan mesafe","Deniz kiyisina yakinlik"], correct:1, exp:"Mutlak konum koordinatlarla ifade edilen kesin konumdur." },
-  { q:"Turkiye'nin kara siniri komsularindan hangisi DOGU yonunde degildir?", opts:["Ermenistan","Gurcistan","Bulgaristan","Azerbaycan"], correct:2, exp:"Bulgaristan BATI komsusudur. Dogu: Ermenistan, Gurcistan, Azerbaycan, Iran." },
-  { q:"Turk Bogazlari hangi iki denizi birlestirir?", opts:["Ege-Kizildeniz","Karadeniz-Akdeniz","Karadeniz-Ege","Akdeniz-Hint Okyanusu"], correct:1, exp:"Turk Bogazlari Karadeniz'i Akdeniz'e baglar." },
-  { q:"Gorecel konum ile mutlak konum arasindaki temel fark nedir?", opts:["Mutlak degisebilir","Goreceli iliskisel; mutlak koordinatlarla sabittir","Ikisi ayni anlama gelir","Goreceli yalniz kitalara gore belirlenir"], correct:1, exp:"Mutlak konum koordinatlarla kesin; goreceli ise iliskiseldir." },
-  { q:"Turkiye'nin Akdeniz'deki deniz siniri komsularindan hangisi dogru listelenmistir?", opts:["Romanya, Ukrayna, Rusya","KKTC, Libya, Misir, Filistin, Israil, Lubnan, Suriye","Yunanistan, Bulgaristan, Iran","Gurcistan, Ermenistan, Azerbaycan"], correct:1, exp:"Akdeniz deniz siniri komsulari: KKTC, Libya, Misir, Filistin, Israil, Lubnan, Suriye." },
-  { q:"Turkiye'nin orta enlemlerde yer almasinin en onemli sonucu nedir?", opts:["Yil boyunca tek mevsim","Dort mevsimin belirgin yasanmasi","Tropikal iklimin hakimiyeti","Col iklimine yakinlik"], correct:1, exp:"36-42 kuzey enlemi dort mevsimin belirgin yasanmasini saglar." },
-  { q:"Turkiye'nin enerji koridoru konumunda olmasi hangi GZFT kategorisine girer?", opts:["Guclu yon (G)","Zayif yon (Z)","Firsat (F)","Tehdit (T)"], correct:2, exp:"Enerji koridoru olmak gelecekte elde edilecek kazanim oldugu icin FIRSAT (F) kategorisindedir." },
-  { q:"Kibris Adasi Dogu Akdeniz'de buyukluk siralamasi nedir?", opts:["En buyuk ada","Ikinci buyuk","Ucuncu","Dorduncu"], correct:0, exp:"Kibris (9.251 km2) Dogu Akdeniz'in en buyuk adasidir." },
+  { q:"Türkiye hangi paralel ve meridyen aralığında yer alır?", opts:["26-42K ve 36-45D","36-42K ve 26-45D","36-45K ve 26-42D","26-36K ve 42-45D"], correct:1, exp:"Türkiye; 36-42 kuzey paralelleri, 26-45 doğu meridyenleri arasında yer alır." },
+  { q:"Türkiye'nin doğusu ile batısı arasındaki yerel saat farkı ne kadardır?", opts:["Yaklaşık 30 dakika","Yaklaşık 76 dakika","Yaklaşık 1 saat","Yaklaşık 2 saat"], correct:1, exp:"Yaklaşık 76 dakikalık yerel saat farkı bulunur." },
+  { q:"Mutlak konum nedir?", opts:["Ülkenin diğer ülkelere göre konumu","Ekvator ve başlangıç meridyenine göre kesin konum","Komşu ülkelere olan mesafe","Deniz kıyısına yakınlık"], correct:1, exp:"Mutlak konum koordinatlarla ifade edilen kesin konumdur." },
+  { q:"Türkiye'nin kara sınırı komşularından hangisi DOĞU yönünde değildir?", opts:["Ermenistan","Gürcistan","Bulgaristan","Azerbaycan"], correct:2, exp:"Bulgaristan BATI komşusudur. Doğu: Ermenistan, Gürcistan, Azerbaycan, İran." },
+  { q:"Türk Boğazları hangi iki denizi birleştirir?", opts:["Ege-Kızıldeniz","Karadeniz-Akdeniz","Karadeniz-Ege","Akdeniz-Hint Okyanusu"], correct:1, exp:"Türk Boğazları Karadeniz'i Akdeniz'e bağlar." },
+  { q:"Göreceli konum ile mutlak konum arasındaki temel fark nedir?", opts:["Mutlak değişebilir","Göreceli ilişkisel; mutlak koordinatlarla sabittir","İkisi aynı anlama gelir","Göreceli yalnız kıtalara göre belirlenir"], correct:1, exp:"Mutlak konum koordinatlarla kesin; göreceli ise ilişkiseldir." },
+  { q:"Türkiye'nin Akdeniz'deki deniz sınırı komşularından hangisi doğru listelenmiştir?", opts:["Romanya, Ukrayna, Rusya","KKTC, Libya, Mısır, Filistin, İsrail, Lübnan, Suriye","Yunanistan, Bulgaristan, İran","Gürcistan, Ermenistan, Azerbaycan"], correct:1, exp:"Akdeniz deniz sınırı komşuları: KKTC, Libya, Mısır, Filistin, İsrail, Lübnan, Suriye." },
+  { q:"Türkiye'nin orta enlemlerde yer almasının en önemli sonucu nedir?", opts:["Yıl boyunca tek mevsim","Dört mevsimin belirgin yaşanması","Tropikal iklimin hakimiyeti","Çöl iklimine yakınlık"], correct:1, exp:"36-42 kuzey enlemi dört mevsimin belirgin yaşanmasını sağlar." },
+  { q:"Türkiye'nin enerji koridoru konumunda olması hangi GZFT kategorisine girer?", opts:["Güçlü yön (G)","Zayıf yön (Z)","Fırsat (F)","Tehdit (T)"], correct:2, exp:"Enerji koridoru olmak gelecekte elde edilecek kazanım olduğu için FIRSAT (F) kategorisindedir." },
+  { q:"Kıbrıs Adası Doğu Akdeniz'de büyüklük sıralaması nedir?", opts:["En büyük ada","İkinci büyük","Üçüncü","Dördüncü"], correct:0, exp:"Kıbrıs (9.251 km2) Doğu Akdeniz'in en büyük adasıdır." },
 ];
 
 // ─── Koordinat soruları
@@ -119,9 +119,9 @@ export default function LocationActivity({ onClose }: { onClose: () => void }) {
   const [tab, setTab] = useState<Tab>("learn");
   const TABS = [
     { id:"learn" as Tab, icon:"📖", label:"OGREN"   },
-    { id:"act1"  as Tab, icon:"🎯", label:"ETK · 1" },
-    { id:"act2"  as Tab, icon:"🗺️", label:"ETK · 2" },
-    { id:"act3"  as Tab, icon:"⚖️", label:"ETK · 3" },
+    { id:"act1"  as Tab, icon:"🎯", label:"ETK. 1" },
+    { id:"act2"  as Tab, icon:"🗺️", label:"ETK. 2" },
+    { id:"act3"  as Tab, icon:"⚖️", label:"ETK. 3" },
     { id:"test"  as Tab, icon:"✏️", label:"TEST"     },
   ];
   return (
@@ -129,8 +129,8 @@ export default function LocationActivity({ onClose }: { onClose: () => void }) {
       <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", padding:"0 24px", height:"64px", borderBottom:"1px solid rgba(99,102,241,0.2)", background:"rgba(3,4,10,0.85)", flexShrink:0 }}>
         <div style={{ display:"flex", alignItems:"center", gap:"24px" }}>
           <div>
-            <div style={{ fontSize:"10px", letterSpacing:"4px", color:C, opacity:0.6, fontFamily:MONO }}>TURKIYE COGRAFI KONUMU</div>
-            <div style={{ fontSize:"20px", fontWeight:"800", color:"#c7d2fe" }}>Mutlak & Goreceli Konum</div>
+            <div style={{ fontSize:"10px", letterSpacing:"4px", color:C, opacity:0.6, fontFamily:MONO }}>TÜRKİYE COĞRAFİ KONUMU</div>
+            <div style={{ fontSize:"20px", fontWeight:"800", color:"#c7d2fe" }}>Mutlak & Göreceli Konum</div>
           </div>
           <div style={{ display:"flex", gap:"3px", background:"rgba(0,0,0,0.4)", padding:"4px", borderRadius:"10px" }}>
             {TABS.map(t=>(
@@ -169,8 +169,8 @@ function LearnTab() {
         <div style={{ display:"flex", flexDirection:"column", gap:"7px", marginTop:"12px" }}>
           {([
             { id:"mutlak" as const,    icon:"📍", title:"Mutlak Konum",    sub:"Koordinatlar & paralel/meridyen" },
-            { id:"goreceli" as const,  icon:"🌍", title:"Goreceli Konum",  sub:"Komsular & stratejik onem" },
-            { id:"jeopolitik" as const,icon:"⚡",  title:"Jeopolitik Onem", sub:"Bogazlar & enerji & kultur" },
+            { id:"goreceli" as const,  icon:"🌍", title:"Göreceli Konum",  sub:"Komşular & stratejik önem" },
+            { id:"jeopolitik" as const,icon:"⚡",  title:"Jeopolitik Önem", sub:"Boğazlar & enerji & kültür" },
           ]).map(s=>(
             <button key={s.id} onClick={()=>{sndClick();setSection(s.id);}}
               style={{ padding:"12px 14px", background:section===s.id?`${COLOR_LOCATION}18`:"rgba(0,0,0,0.22)", border:`2px solid ${section===s.id?COLOR_LOCATION:"rgba(99,102,241,0.08)"}`, borderRadius:"10px", cursor:"pointer", textAlign:"left", fontFamily:FONT_SANS, transition:"all 0.18s" }}>
@@ -181,9 +181,9 @@ function LearnTab() {
           ))}
         </div>
         <SDivider />
-        <SLabel>HIZLI OZET</SLabel>
+        <SLabel>HIZLI ÖZET</SLabel>
         <div style={{ marginTop:"10px", display:"flex", flexDirection:"column", gap:"6px" }}>
-          {[["36-42 Kuzey paraleli","Kuzey Yarim Kure"],["26-45 Dogu meridyeni","Dogu Yarim Kure"],["8 kara komsulari","D/G/B"],["13 deniz komsulari","3 deniz: K/E/A"],["76 dk saat farki","Dogu-Bati arasi"]].map(([k,v])=>(
+          {[["36-42 Kuzey paraleli","Kuzey Yarım Küre"],["26-45 Doğu meridyeni","Doğu Yarım Küre"],["8 kara komşusu","D/G/B"],["13 deniz komşusu","3 deniz: K/E/A"],["76 dk saat farkı","Doğu-Batı arası"]].map(([k,v])=>(
             <div key={k} style={{ display:"flex", justifyContent:"space-between", padding:"6px 10px", background:"rgba(0,0,0,0.2)", borderRadius:"6px" }}>
               <span style={{ fontSize:"11px", color:COLOR_LOCATION, fontWeight:"700" }}>{k}</span>
               <span style={{ fontSize:"11px", color:"#3a3a6a" }}>{v}</span>
@@ -194,32 +194,32 @@ function LearnTab() {
       <div style={{ flex:1, overflowY:"auto", padding:"26px 32px", display:"flex", flexDirection:"column", gap:"20px", background:`radial-gradient(ellipse at 20% 20%,${COLOR_LOCATION}08 0%,${BG_DARK} 70%)` }}>
         {section==="mutlak" && <>
           <SectionHeader icon="📍" color={COLOR_LOCATION} title="Mutlak Konum" sub="Koordinatlarla kesin konum belirleme"/>
-          <InfoCard color={COLOR_LOCATION}><p style={{ fontSize:"14px", color:"#c7d2fe", lineHeight:"1.9", margin:0, fontWeight:"500" }}>Ekvator ve baslangic meridyenine gore belirlenen kesin konum <strong style={{ color:COLOR_LOCATION }}>mutlak konum</strong>'dur.</p></InfoCard>
+          <InfoCard color={COLOR_LOCATION}><p style={{ fontSize:"14px", color:"#c7d2fe", lineHeight:"1.9", margin:0, fontWeight:"500" }}>Ekvator ve başlangıç meridyenine göre belirlenen kesin konum <strong style={{ color:COLOR_LOCATION }}>mutlak konum</strong>'dur.</p></InfoCard>
           <div style={{ width:"100%", maxWidth:"840px", margin:"0 auto", padding:"16px 20px", background:"rgba(0,0,0,0.28)", border:`1px solid ${COLOR_LOCATION}18`, borderRadius:"12px" }}>
-            <div style={{ fontSize:"11px", color:COLOR_LOCATION, letterSpacing:"2px", fontWeight:"800", marginBottom:"12px", fontFamily:FONT_SANS }}>TURKIYE'NIN KOORDINATLARI</div>
+            <div style={{ fontSize:"11px", color:COLOR_LOCATION, letterSpacing:"2px", fontWeight:"800", marginBottom:"12px", fontFamily:FONT_SANS }}>TÜRKİYE'NİN KOORDİNATLARI</div>
             <iframe style={{ width:"100%", height:"500px", border:0, borderRadius:"8px" }} allowFullScreen allow="geolocation"
               src="//umap.openstreetmap.fr/tr/map/turkiyenin-matematik-konumu_1380349?scaleControl=false&miniMap=false&scrollWheelZoom=true&zoomControl=false&editMode=disabled&moreControl=false&searchControl=false&tilelayersControl=false&embedControl=false&datalayersControl=false&onLoadPanel=none&captionBar=false&captionMenus=false&homeControl=false&fullscreenControl=false&captionControl=false&locateControl=false&measureControl=false&printControl=false#5/39.044786/36.210938"
-              title="Turkiye Matematik Konumu"/>
+              title="Türkiye Matematik Konumu"/>
           </div>
           <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"14px" }}>
-            <InfoBox color={COLOR_SUCCESS} title="KUZEY YARI KURE" icon="⬆️"><div style={{ fontSize:"13px", color:"#3a6a50", lineHeight:"1.8" }}>Turkiye <strong style={{ color:COLOR_SUCCESS }}>36 - 42 Kuzey</strong> paralelleri arasindadir.</div></InfoBox>
-            <InfoBox color={COLOR_LOCATION} title="DOGU YARI KURE" icon="➡️"><div style={{ fontSize:"13px", color:"#3a3a6a", lineHeight:"1.8" }}>Turkiye <strong style={{ color:COLOR_LOCATION }}>26 - 45 Dogu</strong> meridyenleri arasindadir. <strong style={{ color:COLOR_LOCATION }}>76 dakika</strong> yerel saat farki vardir.</div></InfoBox>
+            <InfoBox color={COLOR_SUCCESS} title="KUZEY YARIM KÜRE" icon="⬆️"><div style={{ fontSize:"13px", color:"#3a6a50", lineHeight:"1.8" }}>Türkiye <strong style={{ color:COLOR_SUCCESS }}>36 - 42 Kuzey</strong> paralelleri arasındadır.</div></InfoBox>
+            <InfoBox color={COLOR_LOCATION} title="DOĞU YARIM KÜRE" icon="➡️"><div style={{ fontSize:"13px", color:"#3a3a6a", lineHeight:"1.8" }}>Türkiye <strong style={{ color:COLOR_LOCATION }}>26 - 45 Doğu</strong> meridyenleri arasındadır. <strong style={{ color:COLOR_LOCATION }}>76 dakika</strong> yerel saat farkı vardır.</div></InfoBox>
           </div>
         </>}
         {section==="goreceli" && <>
-          <SectionHeader icon="🌍" color="#10b981" title="Goreceli Konum" sub="Diger yerlerle iliskisel konum"/>
+          <SectionHeader icon="🌍" color="#10b981" title="Göreceli Konum" sub="Diğer yerlerle ilişkisel konum"/>
           <TurkeyNeighborMap />
           <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"12px" }}>
-            <InfoBox color={COLOR_ERROR} title="KARA KOMSULARI (8)" icon="🤝">
+            <InfoBox color={COLOR_ERROR} title="KARA KOMŞULARI (8)" icon="🤝">
               <div style={{ display:"flex", flexDirection:"column", gap:"5px", marginTop:"6px" }}>
-                {[["Dogu","Ermenistan, Gurcistan, Azerbaycan, Iran"],["Guney","Irak, Suriye"],["Bati","Yunanistan, Bulgaristan"]].map(([y,u])=>(
+                {[["Doğu","Ermenistan, Gürcistan, Azerbaycan, İran"],["Güney","Irak, Suriye"],["Batı","Yunanistan, Bulgaristan"]].map(([y,u])=>(
                   <div key={y} style={{ fontSize:"12px", color:"#6a3a30", lineHeight:"1.6" }}><strong style={{ color:COLOR_ERROR }}>{y}: </strong>{u}</div>
                 ))}
               </div>
             </InfoBox>
-            <InfoBox color={COLOR_SECONDARY} title="DENIZ KOMSULARI (13)" icon="⚓">
+            <InfoBox color={COLOR_SECONDARY} title="DENİZ KOMŞULARI (13)" icon="⚓">
               <div style={{ display:"flex", flexDirection:"column", gap:"5px", marginTop:"6px" }}>
-                {[["Karadeniz","Bulgaristan, Romanya, Ukrayna, Rusya, Gurcistan"],["Ege Denizi","Yunanistan"],["Akdeniz","KKTC, Libya, Misir, Filistin, Israil, Lubnan, Suriye"]].map(([d,u])=>(
+                {[["Karadeniz","Bulgaristan, Romanya, Ukrayna, Rusya, Gürcistan"],["Ege Denizi","Yunanistan"],["Akdeniz","KKTC, Libya, Mısır, Filistin, İsrail, Lübnan, Suriye"]].map(([d,u])=>(
                   <div key={d} style={{ fontSize:"12px", color:"#1a4a6a", lineHeight:"1.6" }}><strong style={{ color:COLOR_SECONDARY }}>{d}: </strong>{u}</div>
                 ))}
               </div>
@@ -227,14 +227,14 @@ function LearnTab() {
           </div>
         </>}
         {section==="jeopolitik" && <>
-          <SectionHeader icon="⚡" color="#f59e0b" title="Jeopolitik Onem" sub="Stratejik konum avantajlari"/>
+          <SectionHeader icon="⚡" color="#f59e0b" title="Jeopolitik Önem" sub="Stratejik konum avantajları"/>
           <div style={{ display:"flex", flexDirection:"column", gap:"12px" }}>
             {[
-              { icon:"🌊", color:COLOR_SECONDARY, title:"Turk Bogazlari", desc:"Istanbul ve Canakkale Bogazi, Karadeniz'i Akdeniz'e baglar." },
-              { icon:"⛽", color:COLOR_TOPO, title:"Enerji Koridoru", desc:"Orta Dogu ve Kafkasya enerji kaynaklari Turkiye uzerinden Avrupa'ya tasir." },
-              { icon:"🏛️", color:COLOR_UA, title:"Kulturel Miras", desc:"Bircok medeniyete ev sahipligi yapmis zengin kulturel miras." },
-              { icon:"💼", color:COLOR_SUCCESS, title:"Ticaret Merkezi", desc:"Kisalar arasi ticaret yollarinin kesisiminde Istanbul kuresel merkez kapasitesi tasir." },
-              { icon:"🏝️", color:COLOR_PINK, title:"Kibris'in Onemi", desc:"Kibris (9.251 km2) Dogu Akdeniz'in en buyuk adasidir. KKTC Turkiye'nin dis politikasinda kritik oneme sahiptir." },
+              { icon:"🌊", color:COLOR_SECONDARY, title:"Türk Boğazları", desc:"İstanbul ve Çanakkale Boğazı, Karadeniz'i Akdeniz'e bağlar." },
+              { icon:"⛽", color:COLOR_TOPO, title:"Enerji Koridoru", desc:"Orta Doğu ve Kafkasya enerji kaynakları Türkiye üzerinden Avrupa'ya taşınır." },
+              { icon:"🏛️", color:COLOR_UA, title:"Kültürel Miras", desc:"Birçok medeniyete ev sahipliği yapmış zengin kültürel miras." },
+              { icon:"💼", color:COLOR_SUCCESS, title:"Ticaret Merkezi", desc:"Kıtalar arası ticaret yollarının kesişiminde İstanbul küresel merkez kapasitesi taşır." },
+              { icon:"🏝️", color:COLOR_PINK, title:"Kıbrıs'ın Önemi", desc:"Kıbrıs (9.251 km2) Doğu Akdeniz'in en büyük adasıdır. KKTC Türkiye'nin dış politikasında kritik öneme sahiptir." },
             ].map(item=>(
               <div key={item.title} style={{ padding:"16px 20px", background:`${item.color}08`, border:`1.5px solid ${item.color}22`, borderRadius:"12px", display:"flex", gap:"14px", alignItems:"flex-start" }}>
                 <span style={{ fontSize:"24px", flexShrink:0 }}>{item.icon}</span>
@@ -266,7 +266,7 @@ function TurkeyNeighborMap() {
   ];
   return (
     <div style={{ width:"100%", maxWidth:"580px", padding:"14px 18px", background:"rgba(0,0,0,0.28)", border:`1px solid ${C}18`, borderRadius:"12px" }}>
-      <div style={{ fontSize:"11px", color:C, letterSpacing:"2px", fontWeight:"800", marginBottom:"10px" }}>SEMATIK KOMSU HARITASI</div>
+      <div style={{ fontSize:"11px", color:C, letterSpacing:"2px", fontWeight:"800", marginBottom:"10px" }}>ŞEMATİK KOMŞU HARİTASI</div>
       <svg width="520" height="240" viewBox="0 0 520 240" style={{ width:"100%" }}>
         <rect x="0" y="0" width="115" height="240" fill="#1a4a9e" opacity="0.18" rx="4"/>
         <text x="30" y="130" fontSize="9" fill="#3a7acc" fontFamily={FONT} textAnchor="middle">Ege</text>
@@ -295,7 +295,7 @@ function Act1KoordinatOyunu() {
   const [done, setDone] = useState(false);
   const [timeLeft, setTimeLeft] = useState(15);
   const [isShaking, setIsShaking] = useState(false);
-  
+
   // YENİ STATE'LER
   const [status, setStatus] = useState<'idle' | 'success' | 'hint'>('idle');
   const [selectedOpt, setSelectedOpt] = useState<string | null>(null);
@@ -322,7 +322,7 @@ function Act1KoordinatOyunu() {
     if (status === 'success') return; // Zaten bildiyse işlem yapma
 
     setSelectedOpt(choice);
-    
+
     if (choice === q.cevap) {
       setStatus('success');
       setScore(s => s + 1);
@@ -423,7 +423,7 @@ function Act1KoordinatOyunu() {
                 key={i}
                 onClick={() => handleAnswer(opt)}
                 disabled={status === 'success'} // Sadece doğru bilince butonlar kilitlenir
-                className={`p-4 rounded-lg text-left text-sm font-semibold transition-all duration-200 border-2 
+                className={`p-4 rounded-lg text-left text-sm font-semibold transition-all duration-200 border-2
                   ${status === 'success' && isCorrect ? "bg-green-500/30 border-green-500 text-green-200 shadow-[0_0_15px_rgba(34,197,94,0.3)]" : 
                     status === 'hint' && isSelected ? "bg-red-500/10 border-red-500/50 text-red-400" :
                     "bg-slate-800 border-slate-700 text-slate-300 hover:border-blue-500"}`}
@@ -552,7 +552,7 @@ function Act2Komsular() {
           </div>
           <div style={{ fontSize: "10px", color: "#4a4a8a" }}>İpucu: Haritayı kaydırarak sınırları incele</div>
         </div>
-        
+
         <div style={{ flex: 1, borderRadius: "12px", overflow: "hidden", border: `2px solid ${COLOR_LOCATION}20`, background: "#000" }}>
           <iframe 
             style={{ width: "100%", height: "100%", border: 0 }} 
@@ -576,8 +576,8 @@ function Act2Komsular() {
             {pending.map(item => (
               <div key={item.id} draggable
                 onDragStart={e => { setDragId(item.id); e.dataTransfer.setData("text/plain", item.id); }}
-                style={{ 
-                padding: "8px 14px", background: "rgba(99,102,241,0.15)", border: `1px solid ${COLOR_LOCATION}50`, 
+                style={{
+                padding: "8px 14px", background: "rgba(99,102,241,0.15)", border: `1px solid ${COLOR_LOCATION}50`,
                   borderRadius: "6px", cursor: "grab", color: "#fff", fontSize: "13px", fontWeight: "600" 
                 }}>
                 {item.name}
@@ -594,7 +594,7 @@ function Act2Komsular() {
               onDragOver={e => { e.preventDefault(); setHovBucket(b.id); }}
               onDragLeave={() => setHovBucket(null)}
               onDrop={(e) => { e.preventDefault(); doDrop(b.id); }}
-              style={{ 
+              style={{
                 minHeight: "110px", padding: "12px", borderRadius: "10px", transition: "all 0.2s",
                 background: hovBucket === b.id ? `${b.color}20` : "rgba(0,0,0,0.2)",
                 border: `2px ${hovBucket === b.id ? "solid" : "dashed"} ${b.color}${hovBucket === b.id ? "99" : "40"}`,
@@ -604,8 +604,8 @@ function Act2Komsular() {
               </div>
               <div style={{ display: "flex", flexWrap: "wrap", gap: "4px" }}>
                 {cards.filter(it => placed[it.id] === b.id).map(it => (
-                  <div key={it.id} style={{ 
-                    fontSize: "10px", padding: "4px 8px", borderRadius: "4px", 
+                  <div key={it.id} style={{
+                    fontSize: "10px", padding: "4px 8px", borderRadius: "4px",
                     background: wrong[it.id] ? "#ef444420" : "#10b98120",
                     color: wrong[it.id] ? "#ef4444" : "#10b981",
                     border: `1px solid ${wrong[it.id] ? "#ef444440" : "#10b98140"}`
@@ -634,7 +634,7 @@ function Act3Gzft() {
   const [done,   setDone]   = useState(false);
   const [dragId, setDragId] = useState<string|null>(null);
   const [hovBucket,setHovBucket]=useState<string|null>(null);
-
+  
   const handleDrop=(itemId:string,cat:GzftCat)=>{
     const item=GZFT_ITEMS.find(i=>i.id===itemId);
     if(!item||placed[itemId])return;
@@ -661,8 +661,8 @@ function Act3Gzft() {
   return(
     <div style={{ flex:1,display:"flex",flexDirection:"column",padding:"20px 24px",gap:"16px",overflowY:"auto",background:`radial-gradient(ellipse at 30% 20%,${COLOR_LOCATION}08 0%,${BG_DARK} 100%)` }}>
       <div>
-        <div style={{ fontSize:"10px",letterSpacing:"3px",color:COLOR_LOCATION,fontFamily:FONT_MONO,marginBottom:"4px" }}>ETK 3 - GZFT ANALIZI</div>
-        <div style={{ fontSize:"18px",fontWeight:"800",color:"#c7d2fe" }}>Turkiye'nin Konum Analizi</div>
+        <div style={{ fontSize:"10px",letterSpacing:"3px",color:COLOR_LOCATION,fontFamily:FONT_MONO,marginBottom:"4px" }}>ETK 3 - GZFT ANALİZİ</div>
+        <div style={{ fontSize:"18px",fontWeight:"800",color:"#c7d2fe" }}>Türkiye'nin Konum Analizi</div>
         <div style={{ fontSize:"13px",color:"#4a4a8a",marginTop:"4px" }}>Her karti dogru GZFT kategorisine surukle</div>
       </div>
 
@@ -714,7 +714,7 @@ function Act3Gzft() {
             }}>
             <div style={{ fontSize:"14px",fontWeight:"800",color:cat.color,marginBottom:"3px" }}>{cat.emoji} {cat.label}</div>
             <div style={{ fontSize:"11px",color:`${cat.color}80`,marginBottom:"10px" }}>
-              {cat.id==="G"?"Var olan avantajlar":cat.id==="Z"?"Var olan dezavantajlar":cat.id==="F"?"Gelecekteki firsatlar":"Olasi tehditler"}
+              {cat.id==="G"?"Var olan avantajlar":cat.id==="Z"?"Var olan dezavantajlar":cat.id==="F"?"Gelecekteki fırsatlar":"Olası tehditler"}
             </div>
             <div style={{ display:"flex",flexDirection:"column",gap:"5px" }}>
               {GZFT_ITEMS.filter(i=>placed[i.id]===cat.id).map(it=>(
