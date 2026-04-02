@@ -1,7 +1,8 @@
 ﻿﻿﻿﻿'use client';
 
 import React, { useState } from 'react'; // CloudRain iconunu eklemek için lucide-react'tan import edin
-import { Map, Navigation, Layers, Maximize, Database, Mountain, Compass, Clock, ChevronDown, BookOpen, CloudRain, CloudSun } from 'lucide-react';
+// Globe ikonunu eklemek için lucide-react'tan import edin
+import { Map, Navigation, Layers, Maximize, Database, Mountain, Compass, Clock, ChevronDown, BookOpen, CloudRain, CloudSun, Globe } from 'lucide-react';
 import CografyaBilimiActivity from './1_Unite/Cografyabilimiactivity';
 import RouteSimulationActivity from './2_Unite/RouteSimulationActivity';
 import ProjectionActivity from './2_Unite/Projectionactivity';
@@ -14,8 +15,9 @@ import TimeZonesActivity from './2_Unite/TimeZonesActivity';
 import DistributionMethodsActivity from './2_Unite/DistributionMethodsActivity';
 import HavaOlaylariActivity from './3_Unite/Havaolaylariactivity';
 import IklimSistemiActivity from './3_Unite/Iklimsistemiactivity';
+import IklimTurleriActivity from './3_Unite/Iklimturleriactivity';
 
-type ActivityType = null | 'cografya-bilimi' | 'activity2' | 'projections' | 'scale' | 'mapTypes' | 'topoactivity' | 'location' | 'mekanBilgi' | 'time-zones' | 'map-literacy' | 'hava-olaylari' | 'iklim-sistemi';
+type ActivityType = null | 'cografya-bilimi' | 'activity2' | 'projections' | 'scale' | 'mapTypes' | 'topoactivity' | 'location' | 'mekanBilgi' | 'time-zones' | 'map-literacy' | 'hava-olaylari' | 'iklim-sistemi' | 'iklim-turleri';
 
 const units = [
   {
@@ -120,6 +122,13 @@ const units = [
         icon: CloudSun,
         color: 'cyan', // Farklı bir renk seçildi
         description: 'İklim Sisteminin Bileşenleri<br/>İklim Sisteminin Değişkenleri',
+      },
+      {
+        id: 'iklim-turleri',
+        title: '3.1.3. İklim Türleri',
+        icon: Globe,
+        color: 'indigo',
+        description: 'Dünyadaki İklim Türleri'
       },
     ],
   },
@@ -246,8 +255,8 @@ export default function ContentCatalogPage() {
       {activeActivity === 'iklim-sistemi' && (
         <IklimSistemiActivity onClose={() => setActiveActivity(null)} />
       )}
-      {activeActivity === 'iklim-sistemi' && (
-        <IklimSistemiActivity onClose={() => setActiveActivity(null)} />
+      {activeActivity === 'iklim-turleri' && (
+        <IklimTurleriActivity onClose={() => setActiveActivity(null)} />
       )}
     </div>
   );
