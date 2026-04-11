@@ -1,8 +1,7 @@
-﻿﻿﻿﻿'use client';
+﻿﻿﻿﻿﻿﻿'use client';
 
 import React, { useState } from 'react'; // CloudRain iconunu eklemek için lucide-react'tan import edin
-// Globe ikonunu eklemek için lucide-react'tan import edin
-import { Map, Navigation, Layers, Maximize, Database, Mountain, Compass, Clock, ChevronDown, BookOpen, CloudRain, CloudSun, Globe } from 'lucide-react';
+import { Map, Navigation, Layers, Maximize, Database, Mountain, Compass, Clock, ChevronDown, BookOpen, CloudRain, CloudSun, Globe, Users } from 'lucide-react';
 import CografyaBilimiActivity from './1_Unite/Cografyabilimiactivity';
 import RouteSimulationActivity from './2_Unite/RouteSimulationActivity';
 import ProjectionActivity from './2_Unite/Projectionactivity';
@@ -16,8 +15,9 @@ import DistributionMethodsActivity from './2_Unite/DistributionMethodsActivity';
 import HavaOlaylariActivity from './3_Unite/Havaolaylariactivity';
 import IklimSistemiActivity from './3_Unite/Iklimsistemiactivity';
 import IklimTurleriActivity from './3_Unite/Iklimturleriactivity';
+import NufusDinamikleriActivity from './4_Unite/NufusDinamikleriActivity';
 
-type ActivityType = null | 'cografya-bilimi' | 'activity2' | 'projections' | 'scale' | 'mapTypes' | 'topoactivity' | 'location' | 'mekanBilgi' | 'time-zones' | 'map-literacy' | 'hava-olaylari' | 'iklim-sistemi' | 'iklim-turleri';
+type ActivityType = null | 'cografya-bilimi' | 'activity2' | 'projections' | 'scale' | 'mapTypes' | 'topoactivity' | 'location' | 'mekanBilgi' | 'time-zones' | 'map-literacy' | 'hava-olaylari' | 'iklim-sistemi' | 'iklim-turleri' | 'nufus-dinamikleri';
 
 const units = [
   {
@@ -132,7 +132,20 @@ const units = [
       },
     ],
   },
-  { id: 'unit4', title: '4. Ünite: BEŞERÎ SİSTEMLER VE SÜREÇLER', color: 'gray', activities: [] },
+  {
+    id: 'unit4',
+    title: '4. Ünite: BEŞERÎ SİSTEMLER VE SÜREÇLER',
+    color: 'purple',
+    activities: [
+      {
+        id: 'nufus-dinamikleri',
+        title: '4.1.1. Nüfusun Tarihsel Değişimi ve Geleceği',
+        icon: Users,
+        color: 'purple',
+        description: 'Nüfusun tarihsel süreçteki değişimi ve gelecek projeksiyonları.',
+      },
+    ],
+  },
   { id: 'unit5', title: '5. Ünite: EKONOMİK FAALİYETLER VE ETKİLERİ', color: 'gray', activities: [] },
   { id: 'unit6', title: '6. Ünite: AFETLER VE SÜRDÜRÜLEBİLİR ÇEVRE', color: 'gray', activities: [] },
   { id: 'unit7', title: '7. Ünite: BÖLGELER, ÜLKELER VE KÜRESEL BAĞLANTILAR', color: 'gray', activities: [] },
@@ -257,6 +270,9 @@ export default function ContentCatalogPage() {
       )}
       {activeActivity === 'iklim-turleri' && (
         <IklimTurleriActivity onClose={() => setActiveActivity(null)} />
+      )}
+      {activeActivity === 'nufus-dinamikleri' && (
+        <NufusDinamikleriActivity onClose={() => setActiveActivity(null)} />
       )}
     </div>
   );
