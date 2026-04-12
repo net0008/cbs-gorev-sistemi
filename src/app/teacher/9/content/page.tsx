@@ -283,7 +283,7 @@ export default function ContentCatalogPage() {
         <NufusDinamikleriActivity onClose={() => setActiveActivity(null)} />
       )}
       {activeActivity === 'goc-hareketleri' && (
-        <NufusDinamikleriActivity onClose={() => setActiveActivity(null)} />
+        <NufusDagilisiActivity onClose={() => setActiveActivity(null)} />
       )}
     </div>
   );
