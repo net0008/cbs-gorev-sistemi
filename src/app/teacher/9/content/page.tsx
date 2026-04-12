@@ -1,7 +1,7 @@
 ﻿﻿﻿﻿﻿﻿'use client';
 
 import React, { useState } from 'react'; // CloudRain iconunu eklemek için lucide-react'tan import edin
-import { Map, Navigation, Layers, Maximize, Database, Mountain, Compass, Clock, ChevronDown, BookOpen, CloudRain, CloudSun, Globe, Users, PlaneLanding, BarChart3 } from 'lucide-react';
+import { Map, Navigation, Layers, Maximize, Database, Mountain, Compass, Clock, ChevronDown, BookOpen, CloudRain, CloudSun, Globe, Users, PlaneLanding, BarChart3, LineChart } from 'lucide-react';
 import CografyaBilimiActivity from './1_Unite/Cografyabilimiactivity';
 import RouteSimulationActivity from './2_Unite/RouteSimulationActivity';
 import ProjectionActivity from './2_Unite/Projectionactivity';
@@ -18,8 +18,9 @@ import IklimTurleriActivity from './3_Unite/Iklimturleriactivity';
 import NufusDinamikleriActivity from './4_Unite/NufusDinamikleriActivity';
 import DemografikDonusumActivity from './4_Unite/Demografikdonusumactivity';
 import NufusDagilisiActivity from './4_Unite/Nufusdagilisiactivity';
+import NufusPolitikalariActivity from './4_Unite/Nufuspolitikalariactivity';
 
-type ActivityType = null | 'cografya-bilimi' | 'activity2' | 'projections' | 'scale' | 'mapTypes' | 'topoactivity' | 'location' | 'mekanBilgi' | 'time-zones' | 'map-literacy' | 'hava-olaylari' | 'iklim-sistemi' | 'iklim-turleri' | 'nufus-dinamikleri' | 'goc-hareketleri' | 'demografik-donusum';
+type ActivityType = null | 'cografya-bilimi' | 'activity2' | 'projections' | 'scale' | 'mapTypes' | 'topoactivity' | 'location' | 'mekanBilgi' | 'time-zones' | 'map-literacy' | 'hava-olaylari' | 'iklim-sistemi' | 'iklim-turleri' | 'nufus-dinamikleri' | 'goc-hareketleri' | 'demografik-donusum' | 'nufus-politikalari';
 
 const units = [
   {
@@ -160,6 +161,13 @@ const units = [
         color: 'fuchsia',
         description: 'Demografik geçiş aşamaları ve nüfus piramidi analizi.',
       },
+      {
+        id: 'nufus-politikalari',
+        title: '4.1.4. Nüfus Politikaları',
+        icon: LineChart,
+        color: 'pink',
+        description: 'Dünya genelinde uygulanan nüfus politikaları ve etkileri.',
+      },
     ],
   },
   { id: 'unit5', title: '5. Ünite: EKONOMİK FAALİYETLER VE ETKİLERİ', color: 'gray', activities: [] },
@@ -296,6 +304,9 @@ export default function ContentCatalogPage() {
       )}
       {activeActivity === 'demografik-donusum' && (
         <DemografikDonusumActivity onClose={() => setActiveActivity(null)} />
+      )}
+      {activeActivity === 'nufus-politikalari' && (
+        <NufusPolitikalariActivity onClose={() => setActiveActivity(null)} />
       )}
     </div>
   );
