@@ -1,7 +1,7 @@
 ﻿﻿﻿﻿﻿﻿'use client';
 
 import React, { useState } from 'react'; // CloudRain iconunu eklemek için lucide-react'tan import edin
-import { Map, Navigation, Layers, Maximize, Database, Mountain, Compass, Clock, ChevronDown, BookOpen, CloudRain, CloudSun, Globe, Users } from 'lucide-react';
+import { Map, Navigation, Layers, Maximize, Database, Mountain, Compass, Clock, ChevronDown, BookOpen, CloudRain, CloudSun, Globe, Users, PlaneLanding } from 'lucide-react';
 import CografyaBilimiActivity from './1_Unite/Cografyabilimiactivity';
 import RouteSimulationActivity from './2_Unite/RouteSimulationActivity';
 import ProjectionActivity from './2_Unite/Projectionactivity';
@@ -16,8 +16,9 @@ import HavaOlaylariActivity from './3_Unite/Havaolaylariactivity';
 import IklimSistemiActivity from './3_Unite/Iklimsistemiactivity';
 import IklimTurleriActivity from './3_Unite/Iklimturleriactivity';
 import NufusDinamikleriActivity from './4_Unite/NufusDinamikleriActivity';
+import NufusDagilisiActivity from './4_Unite/Nufusdagilisiactivity';
 
-type ActivityType = null | 'cografya-bilimi' | 'activity2' | 'projections' | 'scale' | 'mapTypes' | 'topoactivity' | 'location' | 'mekanBilgi' | 'time-zones' | 'map-literacy' | 'hava-olaylari' | 'iklim-sistemi' | 'iklim-turleri' | 'nufus-dinamikleri';
+type ActivityType = null | 'cografya-bilimi' | 'activity2' | 'projections' | 'scale' | 'mapTypes' | 'topoactivity' | 'location' | 'mekanBilgi' | 'time-zones' | 'map-literacy' | 'hava-olaylari' | 'iklim-sistemi' | 'iklim-turleri' | 'nufus-dinamikleri' | 'goc-hareketleri';
 
 const units = [
   {
@@ -143,6 +144,13 @@ const units = [
         icon: Users,
         color: 'purple',
         description: 'Nüfusun tarihsel süreçteki değişimi ve gelecek projeksiyonları.',
+      },
+      {
+        id: 'goc-hareketleri',
+        title: '4.1.2. Göçler',
+        icon: PlaneLanding,
+        color: 'violet',
+        description: 'Faktörler · Göç Türleri · Tarihsel Göçler · Beyin Göçü',
       },
     ],
   },
@@ -272,6 +280,9 @@ export default function ContentCatalogPage() {
         <IklimTurleriActivity onClose={() => setActiveActivity(null)} />
       )}
       {activeActivity === 'nufus-dinamikleri' && (
+        <NufusDinamikleriActivity onClose={() => setActiveActivity(null)} />
+      )}
+      {activeActivity === 'goc-hareketleri' && (
         <NufusDinamikleriActivity onClose={() => setActiveActivity(null)} />
       )}
     </div>
