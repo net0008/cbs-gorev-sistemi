@@ -27,20 +27,29 @@ function ComparisonControl({ layerLeft, layerRight }: { layerLeft: any, layerRig
   const controlRef = useRef<any>(null);
 
   useEffect(() => {
-    // leaflet-side-by-side kütüphanesini dinamik olarak çağırıyoruz
+    if (!map || !layerLeft || !layerRight) return;
+
+    // 1. Katmanları haritaya ekliyoruz (primitive hatasının çözümü)
+    layerLeft.addTo(map);
+    layerRight.addTo(map);
+
+    // 2. Slider'ı yüklüyoruz
     // @ts-ignore
     import('leaflet-side-by-side').then(() => {
-        if (!controlRef.current && layerLeft && layerRight) {
+        if (!controlRef.current) {
             // @ts-ignore
             controlRef.current = L.control.sideBySide(layerLeft, layerRight).addTo(map);
         }
     });
 
     return () => {
+      // Temizlik aşaması (Sayfa değiştiğinde katmanları kaldırır)
       if (controlRef.current) {
         controlRef.current.remove();
         controlRef.current = null;
       }
+      if (map.hasLayer(layerLeft)) map.removeLayer(layerLeft);
+      if (map.hasLayer(layerRight)) map.removeLayer(layerRight);
     };
   }, [map, layerLeft, layerRight]);
 
@@ -107,11 +116,7 @@ export default function IklimTurleriActivity({ onClose }: IklimTurleriActivityPr
         <MapContainer center={[39, 35]} zoom={5} className="h-full w-full">
           <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
           {layers && (
-            <>
-              <ComparisonControl layerLeft={layers.left} layerRight={layers.right} />
-              <primitive object={layers.left} />
-              <primitive object={layers.right} />
-            </>
+             <ComparisonControl layerLeft={layers.left} layerRight={layers.right} />
           )}
         </MapContainer>
 
