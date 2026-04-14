@@ -377,7 +377,7 @@ function FaktorFaaliyetAktivite() {
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    ANA BİLEŞEN
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-export default function EkonomikFaaliyetlerDogalActivity() {
+export default function EkonomikFaaliyetlerDogalActivity({ onClose }: { onClose: () => void }) {
   const [tab,      setTab]      = useState<Tab>("learn");
   const [sec,      setSec]      = useState<LearnSec>("tanim");
   const [answers,  setAnswers]  = useState<Record<number, number>>({});
@@ -794,16 +794,26 @@ export default function EkonomikFaaliyetlerDogalActivity() {
   const activeSec = SECTIONS.find(s => s.id === sec)!;
 
   return (
-    <div style={{ background: BG, minHeight: "100vh", color: "#e2e8f0", fontFamily: FONT }}>
+    <div style={{ position: "fixed", inset: 0, zIndex: 1000, background: BG, display: "flex", flexDirection: "column", color: "#e2e8f0", fontFamily: FONT }}>
       {/* Header */}
-      <div style={{ padding: "20px 20px 0", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-        <div style={{ fontSize: 9, color: C, letterSpacing: 4, fontWeight: 800, fontFamily: MONO, marginBottom: 4 }}>5. ÜNİTE · EKONOMİK FAALİYETLER VE ETKİLERİ</div>
-        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
-          <div style={{ width: 38, height: 38, borderRadius: 10, background: `linear-gradient(135deg,${C}30,${C}08)`, border: `1px solid ${C}35`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, flexShrink: 0 }}>🌍</div>
-          <div>
-            <div style={{ fontSize: 18, fontWeight: 800, color: "#f1f5f9", lineHeight: 1.2, fontFamily: FONT }}>Ekonomik Faaliyetleri Etkileyen Doğal Faktörler</div>
-            <div style={{ fontSize: 11, color: "#475569", marginTop: 2, fontFamily: FONT }}>5.1.1 — Konum · İklim · Topoğrafya · Su · Toprak · Bitki · Maden</div>
-          </div>
+      <div style={{ padding: "20px 20px 0", borderBottom: "1px solid rgba(255,255,255,0.05)", flexShrink: 0 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <div>
+                <div style={{ fontSize: 9, color: C, letterSpacing: 4, fontWeight: 800, fontFamily: MONO, marginBottom: 4 }}>5. ÜNİTE · EKONOMİK FAALİYETLER VE ETKİLERİ</div>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
+                <div style={{ width: 38, height: 38, borderRadius: 10, background: `linear-gradient(135deg,${C}30,${C}08)`, border: `1px solid ${C}35`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, flexShrink: 0 }}>🌍</div>
+                <div>
+                    <div style={{ fontSize: 18, fontWeight: 800, color: "#f1f5f9", lineHeight: 1.2, fontFamily: FONT }}>Ekonomik Faaliyetleri Etkileyen Doğal Faktörler</div>
+                    <div style={{ fontSize: 11, color: "#475569", marginTop: 2, fontFamily: FONT }}>5.1.1 — Konum · İklim · Topoğrafya · Su · Toprak · Bitki · Maden</div>
+                </div>
+                </div>
+            </div>
+            <button onClick={onClose}
+                style={{ padding:"8px 18px", background:"transparent", border:"1px solid rgba(255,80,80,0.3)", borderRadius:8, color:"#f87171", fontSize:12, fontWeight:700, cursor:"pointer", fontFamily:FONT }}
+                onMouseEnter={e => e.currentTarget.style.background = "rgba(255,80,80,0.1)"}
+                onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
+                ✕ KAPAT
+            </button>
         </div>
         <div style={{ display: "flex", marginTop: 12 }}>
           <TabBtn id="learn" label="ÖĞREN" icon="📖" />
@@ -813,7 +823,7 @@ export default function EkonomikFaaliyetlerDogalActivity() {
       </div>
 
       {/* İçerik */}
-      <div style={{ display: "flex", gap: 0 }}>
+      <div style={{ flex: 1, display: "flex", gap: 0, overflow: "hidden" }}>
         {tab === "learn" && (
           <div style={{ width: 200, flexShrink: 0, padding: "14px 10px", borderRight: "1px solid rgba(255,255,255,0.05)", display: "flex", flexDirection: "column", gap: 4 }}>
             {SECTIONS.map(s => {
@@ -855,7 +865,7 @@ export default function EkonomikFaaliyetlerDogalActivity() {
           </div>
         )}
 
-        <div style={{ flex: 1, padding: 18, overflowY: "auto" }}>
+        <div style={{ flex: 1, padding: "18px 24px", overflowY: "auto" }}>
           {tab === "learn" && (
             <>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
@@ -870,18 +880,6 @@ export default function EkonomikFaaliyetlerDogalActivity() {
           )}
           {tab === "act"  && <FaktorFaaliyetAktivite />}
           {tab === "test" && renderTest()}
-        </div>
-      </div>
-
-      {/* Footer */}
-      <div style={{ padding: "10px 20px", borderTop: "1px solid rgba(255,255,255,0.04)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <div style={{ fontSize: 10, color: "#1a1200", fontFamily: MONO }}>9. SINIF COĞRAFYA · 5.1.1</div>
-        <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
-          {SECTIONS.map(s => (
-            <div key={s.id}
-              onClick={() => { if (tab !== "learn") { sndClick(); setTab("learn"); } setSec(s.id); sndClick(); }}
-              style={{ width: 8, height: 8, borderRadius: "50%", background: sec === s.id && tab === "learn" ? s.color : "#1a1200", cursor: "pointer", transition: "background 0.2s" }} />
-          ))}
         </div>
       </div>
     </div>
