@@ -70,14 +70,14 @@ export default function IklimTurleriActivity({ onClose }: IklimTurleriActivityPr
         const layerLeft = new GeoRasterLayer({
           georaster: georaster1930,
           opacity: 0.7,
-          pixelValuesToColorFn: (v) => climateLegend[v[0]]?.color || 'transparent',
+          pixelValuesToColorFn: (v: number[]) => climateLegend[v[0]]?.color || 'transparent',
           resolution: 256
         });
 
         const layerRight = new GeoRasterLayer({
           georaster: georaster2099,
           opacity: 0.7,
-          pixelValuesToColorFn: (v) => climateLegend[v[0]]?.color || 'transparent',
+          pixelValuesToColorFn: (v: number[]) => climateLegend[v[0]]?.color || 'transparent',
           resolution: 256
         });
 
