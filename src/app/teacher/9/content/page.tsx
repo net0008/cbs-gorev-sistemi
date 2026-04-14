@@ -1,7 +1,7 @@
-﻿﻿﻿﻿﻿﻿'use client';
+﻿﻿﻿﻿﻿﻿﻿﻿'use client';
 
-import React, { useState } from 'react'; // CloudRain iconunu eklemek için lucide-react'tan import edin
-import { Map, Navigation, Layers, Maximize, Database, Mountain, Compass, Clock, ChevronDown, BookOpen, CloudRain, CloudSun, Globe, Users, PlaneLanding, BarChart3, LineChart } from 'lucide-react';
+import React, { useState } from 'react';
+import { Map, Navigation, Layers, Maximize, Database, Mountain, Compass, Clock, ChevronDown, BookOpen, CloudRain, CloudSun, Globe, Users, PlaneLanding, BarChart3, LineChart, Leaf } from 'lucide-react';
 import CografyaBilimiActivity from './1_Unite/Cografyabilimiactivity';
 import RouteSimulationActivity from './2_Unite/RouteSimulationActivity';
 import ProjectionActivity from './2_Unite/Projectionactivity';
@@ -19,8 +19,9 @@ import NufusDinamikleriActivity from './4_Unite/NufusDinamikleriActivity';
 import DemografikDonusumActivity from './4_Unite/Demografikdonusumactivity';
 import NufusDagilisiActivity from './4_Unite/Nufusdagilisiactivity';
 import NufusPolitikalariActivity from './4_Unite/Nufuspolitikalariactivity';
+import EkonomikFaaliyetlerDogalActivity from './5_Unite/Ekonomikfaaliyetlerdogalactivity';
 
-type ActivityType = null | 'cografya-bilimi' | 'activity2' | 'projections' | 'scale' | 'mapTypes' | 'topoactivity' | 'location' | 'mekanBilgi' | 'time-zones' | 'map-literacy' | 'hava-olaylari' | 'iklim-sistemi' | 'iklim-turleri' | 'nufus-dinamikleri' | 'goc-hareketleri' | 'demografik-donusum' | 'nufus-politikalari';
+type ActivityType = null | 'cografya-bilimi' | 'activity2' | 'projections' | 'scale' | 'mapTypes' | 'topoactivity' | 'location' | 'mekanBilgi' | 'time-zones' | 'map-literacy' | 'hava-olaylari' | 'iklim-sistemi' | 'iklim-turleri' | 'nufus-dinamikleri' | 'goc-hareketleri' | 'demografik-donusum' | 'nufus-politikalari' | 'ekonomik-faaliyetler-dogal';
 
 const units = [
   {
@@ -170,7 +171,18 @@ const units = [
       },
     ],
   },
-  { id: 'unit5', title: '5. Ünite: EKONOMİK FAALİYETLER VE ETKİLERİ', color: 'gray', activities: [] },
+  {
+    id: 'unit5',
+    title: '5. Ünite: EKONOMİK FAALİYETLER VE ETKİLERİ',
+    color: 'emerald',
+    activities: [{
+      id: 'ekonomik-faaliyetler-dogal',
+      title: '5.1.1. Ekonomik Faaliyetleri Etkileyen Doğal Faktörler',
+      icon: Leaf,
+      color: 'emerald',
+      description: 'İklim, yer şekilleri ve su kaynaklarının ekonomik faaliyetler üzerindeki etkisi.',
+    },]
+  },
   { id: 'unit6', title: '6. Ünite: AFETLER VE SÜRDÜRÜLEBİLİR ÇEVRE', color: 'gray', activities: [] },
   { id: 'unit7', title: '7. Ünite: BÖLGELER, ÜLKELER VE KÜRESEL BAĞLANTILAR', color: 'gray', activities: [] },
 ];
@@ -186,6 +198,7 @@ const colorClasses: { [key: string]: { border: string, text: string, bg: string,
   indigo: { border: 'hover:border-indigo-500', text: 'text-indigo-400', bg: 'bg-indigo-950', iconBorder: 'border-indigo-800' },
   pink: { border: 'hover:border-pink-500', text: 'text-pink-400', bg: 'bg-pink-950', iconBorder: 'border-pink-800' },
   fuchsia: { border: 'hover:border-fuchsia-500', text: 'text-fuchsia-400', bg: 'bg-fuchsia-950', iconBorder: 'border-fuchsia-800' },
+  emerald: { border: 'hover:border-emerald-500', text: 'text-emerald-400', bg: 'bg-emerald-950', iconBorder: 'border-emerald-800' },
   gray: { border: 'border-gray-500', text: 'text-gray-400', bg: 'bg-gray-950', iconBorder: 'border-gray-800' },
   teal: { border: 'border-teal-500', text: 'text-teal-400', bg: 'bg-teal-950', iconBorder: 'border-teal-800' },
 };
@@ -307,6 +320,9 @@ export default function ContentCatalogPage() {
       )}
       {activeActivity === 'nufus-politikalari' && (
         <NufusPolitikalariActivity onClose={() => setActiveActivity(null)} />
+      )}
+      {activeActivity === 'ekonomik-faaliyetler-dogal' && (
+        <EkonomikFaaliyetlerDogalActivity onClose={() => setActiveActivity(null)} />
       )}
     </div>
   );
