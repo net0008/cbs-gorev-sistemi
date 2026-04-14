@@ -17,6 +17,7 @@
     "georaster-layer-for-leaflet": "^4.1.2",
     "leaflet": "^1.9.4",
     "leaflet-draw": "^1.0.4",
+    "leaflet-side-by-side": "^2.2.0",
     "lucide-react": "^0.577.0",
     "nanoid": "^5.0.7",
     "next": "16.1.6",
