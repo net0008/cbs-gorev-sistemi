@@ -1,25 +1,34 @@
 ﻿﻿﻿﻿﻿﻿﻿﻿'use client';
 
 import React, { useState } from 'react';
+import dynamic from 'next/dynamic';
 import { Map, Navigation, Layers, Maximize, Database, Mountain, Compass, Clock, ChevronDown, BookOpen, CloudRain, CloudSun, Globe, Users, PlaneLanding, BarChart3, LineChart, Leaf } from 'lucide-react';
-import CografyaBilimiActivity from './1_Unite/Cografyabilimiactivity';
-import RouteSimulationActivity from './2_Unite/RouteSimulationActivity';
-import ProjectionActivity from './2_Unite/Projectionactivity';
-import ScaleActivity from './2_Unite/Scaleactivity';
-import MapTypesActivity from './2_Unite/MapTypesActivity';
-import TopoActivity from './2_Unite/Topoactivity';
-import LocationActivity from './2_Unite/Locationactivity';
-import MekanBilgiActivity from './2_Unite/Mekanbilgiactivity';
-import TimeZonesActivity from './2_Unite/TimeZonesActivity';
-import DistributionMethodsActivity from './2_Unite/DistributionMethodsActivity';
-import HavaOlaylariActivity from './3_Unite/Havaolaylariactivity';
-import IklimSistemiActivity from './3_Unite/Iklimsistemiactivity';
-import IklimTurleriActivity from './3_Unite/Iklimturleriactivity';
-import NufusDinamikleriActivity from './4_Unite/NufusDinamikleriActivity';
-import DemografikDonusumActivity from './4_Unite/Demografikdonusumactivity';
-import NufusDagilisiActivity from './4_Unite/Nufusdagilisiactivity';
-import NufusPolitikalariActivity from './4_Unite/Nufuspolitikalariactivity';
-import EkonomikFaaliyetlerDogalActivity from './5_Unite/Ekonomikfaaliyetlerdogalactivity';
+
+const loadingComponent = () => (
+  <div className="fixed inset-0 bg-slate-950 z-[2000] flex items-center justify-center">
+    <p className="text-white animate-pulse">Aktivite Yükleniyor...</p>
+  </div>
+);
+
+// Aktiviteleri SSR olmadan dinamik olarak yüklüyoruz
+const CografyaBilimiActivity = dynamic(() => import('./1_Unite/Cografyabilimiactivity'), { ssr: false, loading: loadingComponent });
+const RouteSimulationActivity = dynamic(() => import('./2_Unite/RouteSimulationActivity'), { ssr: false, loading: loadingComponent });
+const ProjectionActivity = dynamic(() => import('./2_Unite/Projectionactivity'), { ssr: false, loading: loadingComponent });
+const ScaleActivity = dynamic(() => import('./2_Unite/Scaleactivity'), { ssr: false, loading: loadingComponent });
+const MapTypesActivity = dynamic(() => import('./2_Unite/MapTypesActivity'), { ssr: false, loading: loadingComponent });
+const TopoActivity = dynamic(() => import('./2_Unite/Topoactivity'), { ssr: false, loading: loadingComponent });
+const LocationActivity = dynamic(() => import('./2_Unite/Locationactivity'), { ssr: false, loading: loadingComponent });
+const MekanBilgiActivity = dynamic(() => import('./2_Unite/Mekanbilgiactivity'), { ssr: false, loading: loadingComponent });
+const TimeZonesActivity = dynamic(() => import('./2_Unite/TimeZonesActivity'), { ssr: false, loading: loadingComponent });
+const DistributionMethodsActivity = dynamic(() => import('./2_Unite/DistributionMethodsActivity'), { ssr: false, loading: loadingComponent });
+const HavaOlaylariActivity = dynamic(() => import('./3_Unite/Havaolaylariactivity'), { ssr: false, loading: loadingComponent });
+const IklimSistemiActivity = dynamic(() => import('./3_Unite/Iklimsistemiactivity'), { ssr: false, loading: loadingComponent });
+const IklimTurleriActivity = dynamic(() => import('./3_Unite/Iklimturleriactivity'), { ssr: false, loading: loadingComponent });
+const NufusDinamikleriActivity = dynamic(() => import('./4_Unite/NufusDinamikleriActivity'), { ssr: false, loading: loadingComponent });
+const DemografikDonusumActivity = dynamic(() => import('./4_Unite/Demografikdonusumactivity'), { ssr: false, loading: loadingComponent });
+const NufusDagilisiActivity = dynamic(() => import('./4_Unite/Nufusdagilisiactivity'), { ssr: false, loading: loadingComponent });
+const NufusPolitikalariActivity = dynamic(() => import('./4_Unite/Nufuspolitikalariactivity'), { ssr: false, loading: loadingComponent });
+const EkonomikFaaliyetlerDogalActivity = dynamic(() => import('./5_Unite/Ekonomikfaaliyetlerdogalactivity'), { ssr: false, loading: loadingComponent });
 
 type ActivityType = null | 'cografya-bilimi' | 'activity2' | 'projections' | 'scale' | 'mapTypes' | 'topoactivity' | 'location' | 'mekanBilgi' | 'time-zones' | 'map-literacy' | 'hava-olaylari' | 'iklim-sistemi' | 'iklim-turleri' | 'nufus-dinamikleri' | 'goc-hareketleri' | 'demografik-donusum' | 'nufus-politikalari' | 'ekonomik-faaliyetler-dogal';
 
