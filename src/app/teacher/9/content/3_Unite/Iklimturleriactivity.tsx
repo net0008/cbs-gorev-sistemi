@@ -11,8 +11,33 @@ import 'leaflet/dist/leaflet.css';
  */
 const climateLegend: Record<number, { code: string; name: string; color: string }> = {
   1: { code: 'Af', name: 'Tropikal, Yağmur Ormanı', color: 'rgb(0, 0, 255)' },
+  2: { code: 'Am', name: 'Tropikal, Muson', color: 'rgb(0, 120, 255)' },
+  3: { code: 'Aw', name: 'Tropikal, Savan', color: 'rgb(70, 170, 250)' },
   4: { code: 'BWh', name: 'Kurak, Çöl, Sıcak', color: 'rgb(255, 0, 0)' },
-  8: { code: 'Csa', name: 'Ilıman, Akdeniz İklimi (Sıcak Yaz)', color: 'rgb(255, 255, 0)' },
+  5: { code: 'BWk', name: 'Kurak, Çöl, Soğuk', color: 'rgb(255, 150, 150)' },
+  6: { code: 'BSh', name: 'Kurak, Bozkır, Sıcak', color: 'rgb(245, 165, 0)' },
+  7: { code: 'BSk', name: 'Kurak, Bozkır, Soğuk', color: 'rgb(255, 220, 100)' },
+  8: { code: 'Csa', name: 'Ilıman, Kurak Yaz, Sıcak Yaz (Akdeniz)', color: 'rgb(255, 255, 0)' },
+  9: { code: 'Csb', name: 'Ilıman, Kurak Yaz, Ilık Yaz', color: 'rgb(200, 200, 0)' },
+  10: { code: 'Csc', name: 'Ilıman, Kurak Yaz, Soğuk Yaz', color: 'rgb(150, 150, 0)' },
+  11: { code: 'Cwa', name: 'Ilıman, Kurak Kış, Sıcak Yaz', color: 'rgb(150, 255, 150)' },
+  12: { code: 'Cwb', name: 'Ilıman, Kurak Kış, Ilık Yaz', color: 'rgb(100, 200, 100)' },
+  13: { code: 'Cwc', name: 'Ilıman, Kurak Kış, Soğuk Yaz', color: 'rgb(50, 150, 50)' },
+  14: { code: 'Cfa', name: 'Ilıman, Kurak Mevsim Yok, Sıcak Yaz', color: 'rgb(200, 255, 80)' },
+  15: { code: 'Cfb', name: 'Ilıman, Kurak Mevsim Yok, Ilık Yaz', color: 'rgb(100, 255, 80)' },
+  16: { code: 'Cfc', name: 'Ilıman, Kurak Mevsim Yok, Soğuk Yaz', color: 'rgb(50, 200, 0)' },
+  17: { code: 'Dsa', name: 'Soğuk, Kurak Yaz, Sıcak Yaz', color: 'rgb(255, 0, 255)' },
+  18: { code: 'Dsb', name: 'Soğuk, Kurak Yaz, Ilık Yaz', color: 'rgb(200, 0, 200)' },
+  19: { code: 'Dsc', name: 'Soğuk, Kurak Yaz, Soğuk Yaz', color: 'rgb(150, 50, 150)' },
+  20: { code: 'Dsd', name: 'Soğuk, Kurak Yaz, Çok Soğuk Kış', color: 'rgb(150, 100, 150)' },
+  21: { code: 'Dwa', name: 'Soğuk, Kurak Kış, Sıcak Yaz', color: 'rgb(170, 175, 255)' },
+  22: { code: 'Dwb', name: 'Soğuk, Kurak Kış, Ilık Yaz', color: 'rgb(90, 120, 220)' },
+  23: { code: 'Dwc', name: 'Soğuk, Kurak Kış, Soğuk Yaz', color: 'rgb(75, 80, 180)' },
+  24: { code: 'Dwd', name: 'Soğuk, Kurak Kış, Çok Soğuk Kış', color: 'rgb(50, 0, 135)' },
+  25: { code: 'Dfa', name: 'Soğuk, Kurak Mevsim Yok, Sıcak Yaz', color: 'rgb(0, 255, 255)' },
+  26: { code: 'Dfb', name: 'Soğuk, Kurak Mevsim Yok, Ilık Yaz', color: 'rgb(55, 200, 255)' },
+  27: { code: 'Dfc', name: 'Soğuk, Kurak Mevsim Yok, Soğuk Yaz', color: 'rgb(0, 125, 125)' },
+  28: { code: 'Dfd', name: 'Soğuk, Kurak Mevsim Yok, Çok Soğuk Kış', color: 'rgb(0, 70, 95)' },
   29: { code: 'ET', name: 'Polar, Tundra', color: 'rgb(178, 178, 178)' },
   30: { code: 'EF', name: 'Polar, Buzul', color: 'rgb(102, 102, 102)' }
 };
@@ -52,6 +77,24 @@ function ComparisonControl({ layerLeft, layerRight }: { layerLeft: any, layerRig
   return null;
 }
 
+function SingleLayerControl({ layer }: { layer: any }) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!map || !layer) return;
+
+    layer.addTo(map);
+
+    return () => {
+      if (map.hasLayer(layer)) {
+        map.removeLayer(layer);
+      }
+    };
+  }, [map, layer]);
+
+  return null;
+}
+
 interface Props {
   onClose: () => void;
 }
@@ -59,6 +102,8 @@ interface Props {
 export default function IklimTurleriActivity({ onClose }: Props) {
   const [layers, setLayers] = useState<{ left: any, right: any } | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isComparisonMode, setIsComparisonMode] = useState(true);
+  const [activeYear, setActiveYear] = useState<'1930' | '2099'>('1930');
 
   useEffect(() => {
     const initRasters = async () => {
@@ -77,7 +122,7 @@ export default function IklimTurleriActivity({ onClose }: Props) {
 
         const [buf1930, buf2099] = await Promise.all([res1930.arrayBuffer(), res2099.arrayBuffer()]);
         const [georaster1930, georaster2099] = await Promise.all([
-          parseGeoraster(buf1930), 
+          parseGeoraster(buf1930),
           parseGeoraster(buf2099)
         ]);
 
@@ -120,9 +165,30 @@ export default function IklimTurleriActivity({ onClose }: Props) {
             <p className="text-xs text-slate-500">Veri: Beck et al. (2023) | 1km Çözünürlüklü Projeksiyon</p>
           </div>
         </div>
-        <div className="flex items-center gap-2 bg-indigo-500/10 px-4 py-2 rounded-xl border border-indigo-500/20 text-indigo-400">
-          <Globe size={18} />
-          <span className="text-sm font-semibold uppercase tracking-wider">Karşılaştırma Modu</span>
+        <div className="flex items-center gap-2">
+          {!isComparisonMode && (
+            <div className="flex bg-slate-800/50 p-1 rounded-xl border border-white/10 mr-2">
+              <button
+                onClick={() => setActiveYear('1930')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors ${activeYear === '1930' ? 'bg-indigo-500 text-white' : 'text-slate-400 hover:text-slate-200'}`}
+              >
+                1930
+              </button>
+              <button
+                onClick={() => setActiveYear('2099')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors ${activeYear === '2099' ? 'bg-indigo-500 text-white' : 'text-slate-400 hover:text-slate-200'}`}
+              >
+                2099
+              </button>
+            </div>
+          )}
+          <button
+            onClick={() => setIsComparisonMode(!isComparisonMode)}
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl border transition-colors ${isComparisonMode ? 'bg-indigo-500/20 border-indigo-500/40 text-indigo-300' : 'bg-slate-800/50 border-white/10 text-slate-400 hover:bg-slate-800'}`}
+          >
+            <Globe size={18} />
+            <span className="text-sm font-semibold uppercase tracking-wider">Karşılaştırma Modu</span>
+          </button>
         </div>
       </div>
 
@@ -138,24 +204,27 @@ export default function IklimTurleriActivity({ onClose }: Props) {
         {typeof window !== 'undefined' && (
           <MapContainer center={[39, 35]} zoom={5} className="h-full w-full">
             <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
-            {layers && (
-               <ComparisonControl layerLeft={layers.left} layerRight={layers.right} />
+            {layers && isComparisonMode && (
+              <ComparisonControl layerLeft={layers.left} layerRight={layers.right} />
+            )}
+            {layers && !isComparisonMode && (
+              <SingleLayerControl layer={activeYear === '1930' ? layers.left : layers.right} />
             )}
           </MapContainer>
         )}
 
         {/* Gösterge (Floating Legend) */}
-        <div className="absolute bottom-10 right-10 z-[2000] bg-slate-900/90 p-5 rounded-2xl border border-white/10 backdrop-blur-xl shadow-2xl max-w-[260px]">
-           <h4 className="text-xs font-bold mb-4 text-indigo-400 border-b border-white/10 pb-2">İKLİM TİPLERİ</h4>
-           <div className="space-y-2 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
-             {Object.entries(climateLegend).map(([val, info]) => (
-               <div key={val} className="flex items-center gap-3 text-[11px] group cursor-help">
-                 <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: info.color }} />
-                 <span className="text-slate-300 font-mono w-6">{info.code}</span>
-                 <span className="text-slate-500 group-hover:text-slate-200 transition-colors truncate">{info.name}</span>
-               </div>
-             ))}
-           </div>
+        <div className="absolute bottom-10 right-10 z-[2000] bg-slate-900/90 p-5 rounded-2xl border border-white/10 backdrop-blur-xl shadow-2xl max-w-[300px]">
+          <h4 className="text-xs font-bold mb-4 text-indigo-400 border-b border-white/10 pb-2">İKLİM TİPLERİ</h4>
+          <div className="space-y-2 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+            {Object.entries(climateLegend).map(([val, info]) => (
+              <div key={val} className="flex items-center gap-3 text-[11px] group cursor-help">
+                <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: info.color }} />
+                <span className="text-slate-300 font-mono w-6">{info.code}</span>
+                <span className="text-slate-500 group-hover:text-slate-200 transition-colors truncate">{info.name}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
