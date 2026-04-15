@@ -43,6 +43,14 @@ const climateLegend: Record<number, { code: string; name: string; color: string 
 };
 
 const AVAILABLE_YEARS = ['1930', '1960', '1990', '2020', '2070', '2099'];
+const FILE_PATHS: Record<string, string> = {
+  '1930': '/maps/climate/1930Koppen_geiger.tif',
+  '1960': '/maps/climate/1960Koppen_geiger.tif',
+  '1990': '/maps/climate/1990Koppen_geiger.tif',
+  '2020': '/maps/climate/2020Koppen_geiger.tif',
+  '2070': '/maps/climate/2070Koppen_geiger.tif',
+  '2099': '/maps/climate/2099Koppen_geiger.tif',
+};
 
 function SingleYearRasterControl({ year, setLoading, setError }: { year: string, setLoading: (b: boolean) => void, setError: (e: string | null) => void }) {
   const map = useMap();
@@ -66,8 +74,13 @@ function SingleYearRasterControl({ year, setLoading, setError }: { year: string,
         const GeoRasterLayerModule = await import('georaster-layer-for-leaflet');
         const GeoRasterLayer = GeoRasterLayerModule.default || GeoRasterLayerModule;
 
+        const filePath = FILE_PATHS[year];
+        if (!filePath) {
+          throw new Error(`'${year}' yılı için harita yolu bulunamadı.`);
+        }
+
         // Tarayıcı ve Next.js önbelleğini (cache) atlamak için timestamp ekliyoruz
-        const res = await fetch(`/maps/climate/${year}Koppen_geiger.tif?v=${new Date().getTime()}`, { cache: 'no-store' });
+        const res = await fetch(`${filePath}?v=${new Date().getTime()}`, { cache: 'no-store' });
         if (!res.ok) throw new Error(`Harita bulunamadı: ${res.statusText}`);
 
         const buf = await res.arrayBuffer();
