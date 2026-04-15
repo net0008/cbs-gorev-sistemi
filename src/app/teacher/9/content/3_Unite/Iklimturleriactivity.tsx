@@ -67,6 +67,8 @@ function SingleYearRasterControl({ year, setLoading, setError }: { year: string,
         const GeoRasterLayer = GeoRasterLayerModule.default || GeoRasterLayerModule;
 
         const res = await fetch(`/maps/climate/${year}Koppen_geiger.tif`);
+        // Tarayıcı ve Next.js önbelleğini (cache) atlamak için timestamp ekliyoruz
+        const res = await fetch(`/maps/climate/${year}Koppen_geiger.tif?v=${new Date().getTime()}`, { cache: 'no-store' });
         if (!res.ok) throw new Error(`Harita bulunamadı: ${res.statusText}`);
 
         const buf = await res.arrayBuffer();
@@ -78,6 +80,7 @@ function SingleYearRasterControl({ year, setLoading, setError }: { year: string,
           georaster,
           opacity: 0.7,
           pixelValuesToColorFn: (v: number[]) => climateLegend[v[0]]?.color || 'transparent',
+          pixelValuesToColorFn: (v: number[]) => climateLegend[Math.round(v[0])]?.color || 'transparent',
           resolution: 128
         });
 
@@ -172,8 +175,15 @@ export default function IklimTurleriActivity({ onClose }: Props) {
           <MapContainer center={[39, 35]} zoom={5} minZoom={3} className="h-full w-full">
             <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
             <SingleYearRasterControl year={activeYear} setLoading={setLoading} setError={setError} />
+            <SingleYearRasterControl key={activeYear} year={activeYear} setLoading={setLoading} setError={setError} />
           </MapContainer>
         )}
+
+        {/* Yıl Filigranı (Watermark) */}
+        <div className="absolute bottom-10 left-10 z-[2000] bg-slate-900/90 px-6 py-4 rounded-2xl border border-white/10 backdrop-blur-xl shadow-2xl pointer-events-none">
+          <div className="text-[10px] text-slate-400 font-bold tracking-widest mb-1 uppercase">Seçili Projeksiyon</div>
+          <div className="text-4xl font-black text-white font-mono drop-shadow-[0_0_15px_rgba(99,102,241,0.5)]">{activeYear}</div>
+        </div>
 
         {/* İpucu Kutusu */}
         <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[2000] bg-slate-900/90 px-5 py-2.5 rounded-full border border-indigo-500/30 backdrop-blur-xl text-[13px] text-indigo-100 flex items-center gap-3 shadow-xl shadow-indigo-500/10 w-max max-w-[90%]">
