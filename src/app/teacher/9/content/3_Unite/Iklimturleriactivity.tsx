@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from 'react';
-import { ArrowLeft, Globe, Loader2 } from 'lucide-react';
+import React, { useEffect, useState, useRef } from "react";
+import { ArrowLeft, Globe, Loader2, AlertTriangle } from "lucide-react";
 import { MapContainer, TileLayer, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -102,6 +102,7 @@ interface Props {
 export default function IklimTurleriActivity({ onClose }: Props) {
   const [allLayers, setAllLayers] = useState<Record<string, any> | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [isComparisonMode, setIsComparisonMode] = useState(true);
 
   const availableYears = ['1930', '1990', '2020', '2060', '2070', '2099'];
@@ -113,13 +114,14 @@ export default function IklimTurleriActivity({ onClose }: Props) {
     const initRasters = async () => {
       try {
         setLoading(true);
+        setError(null);
         // Kütüphaneleri sadece tarayıcıda dinamik olarak yüklüyoruz (SSR Hatasını önler)
         const parseGeoraster = (await import('georaster')).default;
         const GeoRasterLayerModule = await import('georaster-layer-for-leaflet');
         const GeoRasterLayer = GeoRasterLayerModule.default || GeoRasterLayerModule;
 
         const responses = await Promise.all(
-          availableYears.map(year => fetch(`/maps/climate/${year}Koppen_geiger.tif`))
+          availableYears.map(year => fetch(`/maps/climate/${year}_Koppen-Geiger.tif`))
         );
 
         const buffers = await Promise.all(responses.map(res => {
@@ -144,7 +146,9 @@ export default function IklimTurleriActivity({ onClose }: Props) {
 
       } catch (err) {
         console.error("Raster yükleme hatası:", err);
-        // Hata durumunda kullanıcıya bilgi vermek için bir state eklenebilir.
+        setError(
+          "Harita verileri yüklenirken bir hata oluştu. Lütfen dosya yollarını ve internet bağlantınızı kontrol edin."
+        );
       } finally {
         setLoading(false);
       }
@@ -228,6 +232,19 @@ export default function IklimTurleriActivity({ onClose }: Props) {
           <div className="absolute inset-0 z-[1000] bg-slate-950/80 flex flex-col items-center justify-center gap-4">
             <Loader2 className="w-12 h-12 text-indigo-500 animate-spin" />
             <p className="text-slate-400 animate-pulse text-lg">Raster verileri haritaya işleniyor...</p>
+          </div>
+        )}
+        {error && !loading && (
+          <div className="absolute inset-0 z-[1000] bg-slate-950/80 flex flex-col items-center justify-center gap-4 text-center p-8">
+            <div className="text-red-500 bg-red-500/10 p-4 rounded-full">
+              <AlertTriangle className="w-12 h-12" />
+            </div>
+            <h3 className="text-xl font-bold text-red-400">Harita Yüklenemedi</h3>
+            <p className="text-slate-400">{error}</p>
+            <p className="text-xs text-slate-500 mt-4">
+              Geliştirici Notu: Tarayıcınızın geliştirici konsolunu (F12)
+              kontrol ederek ağ (network) hatalarını veya diğer detaylı hata mesajlarını görebilirsiniz. Dosyaların `public/maps/climate/` klasöründe doğru isimlerle (`YYYY_Koppen-Geiger.tif`) bulunduğundan emin olun.
+            </p>
           </div>
         )}
 
