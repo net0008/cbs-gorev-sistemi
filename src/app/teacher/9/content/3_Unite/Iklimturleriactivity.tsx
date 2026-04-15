@@ -47,33 +47,23 @@ const AVAILABLE_YEARS = ['1930', '1960', '1990', '2020', '2070', '2099'];
 function MultiLayerControl({ layers, activeYear }: { layers: Record<string, any>, activeYear: string }) {
   const map = useMap();
 
-  // 1. Tüm katmanları haritaya BİR KERE ekle
-  // (Katmanların üst üste binip silinmeme hatasını önler)
   useEffect(() => {
     if (!map || !layers) return;
 
-    Object.values(layers).forEach(layer => {
-      if (!map.hasLayer(layer)) {
-        layer.setOpacity(0); // Başlangıçta görünmez yap
-        layer.addTo(map);
+    const activeLayer = layers[activeYear];
+
+    // Sadece aktif yılı haritaya ekle
+    if (activeLayer && !map.hasLayer(activeLayer)) {
+      activeLayer.addTo(map);
+    }
+
+    // Bellek sızıntısını (Out of Memory) önlemek için diğer katmanları haritadan tamamen kaldır
+    Object.entries(layers).forEach(([year, layer]) => {
+      if (year !== activeYear && map.hasLayer(layer)) {
+        map.removeLayer(layer);
       }
     });
-
-    return () => {
-      Object.values(layers).forEach(layer => {
-        if (map.hasLayer(layer)) map.removeLayer(layer);
-      });
-    };
-  }, [map, layers]);
-
-  // 2. Sadece aktif olan yılı görünür yap, diğerlerini saydam (görünmez) yap
-  useEffect(() => {
-    if (!layers) return;
-
-    Object.entries(layers).forEach(([year, layer]) => {
-      layer.setOpacity(year === activeYear ? 0.7 : 0);
-    });
-  }, [layers, activeYear]);
+  }, [map, layers, activeYear]);
 
   return null;
 }
@@ -129,9 +119,9 @@ export default function IklimTurleriActivity({ onClose }: Props) {
           const year = AVAILABLE_YEARS[index];
           acc[year] = new (GeoRasterLayer as any)({
             georaster,
-            opacity: 0, // İlk başta saydam başlat, MultiLayerControl yönetecek
+            opacity: 0.7,
             pixelValuesToColorFn: (v: number[]) => climateLegend[v[0]]?.color || 'transparent',
-            resolution: 256
+            resolution: 128 // Performans ve bellek kullanımı için 256'dan 128'e düşürüldü
           });
           return acc;
         }, {} as Record<string, any>);
@@ -214,7 +204,7 @@ export default function IklimTurleriActivity({ onClose }: Props) {
         )}
 
         {typeof window !== 'undefined' && (
-          <MapContainer center={[39, 35]} zoom={5} className="h-full w-full">
+          <MapContainer center={[39, 35]} zoom={5} minZoom={3} className="h-full w-full">
             <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
             {allLayers && (
               <MultiLayerControl layers={allLayers} activeYear={activeYear} />
