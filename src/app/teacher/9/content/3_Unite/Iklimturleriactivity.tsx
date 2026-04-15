@@ -105,7 +105,7 @@ export default function IklimTurleriActivity({ onClose }: Props) {
   const [error, setError] = useState<string | null>(null);
   const [isComparisonMode, setIsComparisonMode] = useState(true);
 
-  const availableYears = ['1930', '1990', '2020', '2060', '2070', '2099'];
+  const availableYears = ['1930', '1960', '1990', '2020', '2070', '2099'];
   const [activeYear, setActiveYear] = useState(availableYears[0]);
   const [leftYear, setLeftYear] = useState(availableYears[0]);
   const [rightYear, setRightYear] = useState(availableYears[availableYears.length - 1]);
@@ -121,7 +121,7 @@ export default function IklimTurleriActivity({ onClose }: Props) {
         const GeoRasterLayer = GeoRasterLayerModule.default || GeoRasterLayerModule;
 
         const responses = await Promise.all(
-          availableYears.map(year => fetch(`/maps/climate/${year}_Koppen-Geiger.tif`))
+          availableYears.map(year => fetch(`/maps/climate/${year}Koppen_geiger.tif`))
         );
 
         const buffers = await Promise.all(responses.map(res => {
@@ -243,7 +243,7 @@ export default function IklimTurleriActivity({ onClose }: Props) {
             <p className="text-slate-400">{error}</p>
             <p className="text-xs text-slate-500 mt-4">
               Geliştirici Notu: Tarayıcınızın geliştirici konsolunu (F12)
-              kontrol ederek ağ (network) hatalarını veya diğer detaylı hata mesajlarını görebilirsiniz. Dosyaların `public/maps/climate/` klasöründe doğru isimlerle (`YYYY_Koppen-Geiger.tif`) bulunduğundan emin olun.
+              kontrol ederek ağ (network) hatalarını veya diğer detaylı hata mesajlarını görebilirsiniz. Dosyaların `public/maps/climate/` klasöründe doğru isimlerle (`YYYYKoppen_geiger.tif`) bulunduğundan emin olun.
             </p>
           </div>
         )}
