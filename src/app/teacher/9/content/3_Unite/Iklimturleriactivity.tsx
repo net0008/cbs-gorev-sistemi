@@ -80,12 +80,6 @@ function SingleYearRasterControl({ year, setLoading, setError }: { year: string,
         const buf = await res.arrayBuffer();
         const georaster = await parseGeoraster(buf);
 
-        // KESİN KANIT: TIF dosyalarının gerçekten farklı olup olmadığını anlamak için 
-        // dosya boyutunu ve içindeki ham verinin bir kısmını konsola yazdırıyoruz.
-        const u8 = new Uint8Array(buf);
-        const mid = Math.floor(u8.length / 2);
-        console.log(`[${year}] YÜKLENDİ -> Boyut: ${u8.length} bytes | Veri Örneği: ${u8.slice(mid, mid + 4).join('-')}`);
-
         if (!isMounted) return;
 
         currentLayer = new (GeoRasterLayer as any)({
