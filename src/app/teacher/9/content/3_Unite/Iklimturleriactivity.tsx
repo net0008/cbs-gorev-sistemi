@@ -47,17 +47,33 @@ const AVAILABLE_YEARS = ['1930', '1960', '1990', '2020', '2070', '2099'];
 function MultiLayerControl({ layers, activeYear }: { layers: Record<string, any>, activeYear: string }) {
   const map = useMap();
 
+  // 1. Tüm katmanları haritaya BİR KERE ekle
+  // (Katmanların üst üste binip silinmeme hatasını önler)
   useEffect(() => {
     if (!map || !layers) return;
 
-    Object.entries(layers).forEach(([year, layer]) => {
-      if (year === activeYear) {
-        if (!map.hasLayer(layer)) layer.addTo(map);
-      } else {
-        if (map.hasLayer(layer)) map.removeLayer(layer);
+    Object.values(layers).forEach(layer => {
+      if (!map.hasLayer(layer)) {
+        layer.setOpacity(0); // Başlangıçta görünmez yap
+        layer.addTo(map);
       }
     });
-  }, [map, layers, activeYear]);
+
+    return () => {
+      Object.values(layers).forEach(layer => {
+        if (map.hasLayer(layer)) map.removeLayer(layer);
+      });
+    };
+  }, [map, layers]);
+
+  // 2. Sadece aktif olan yılı görünür yap, diğerlerini saydam (görünmez) yap
+  useEffect(() => {
+    if (!layers) return;
+
+    Object.entries(layers).forEach(([year, layer]) => {
+      layer.setOpacity(year === activeYear ? 0.7 : 0);
+    });
+  }, [layers, activeYear]);
 
   return null;
 }
@@ -113,7 +129,7 @@ export default function IklimTurleriActivity({ onClose }: Props) {
           const year = AVAILABLE_YEARS[index];
           acc[year] = new (GeoRasterLayer as any)({
             georaster,
-            opacity: 0.7,
+            opacity: 0, // İlk başta saydam başlat, MultiLayerControl yönetecek
             pixelValuesToColorFn: (v: number[]) => climateLegend[v[0]]?.color || 'transparent',
             resolution: 256
           });
