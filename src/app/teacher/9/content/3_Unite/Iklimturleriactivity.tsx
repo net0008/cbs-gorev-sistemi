@@ -100,50 +100,53 @@ interface Props {
 }
 
 export default function IklimTurleriActivity({ onClose }: Props) {
-  const [layers, setLayers] = useState<{ left: any, right: any } | null>(null);
+  const [allLayers, setAllLayers] = useState<Record<string, any> | null>(null);
   const [loading, setLoading] = useState(true);
   const [isComparisonMode, setIsComparisonMode] = useState(true);
-  const [activeYear, setActiveYear] = useState<'1930' | '2099'>('1930');
+
+  const availableYears = ['1930', '1990', '2020', '2060', '2070', '2099'];
+  const [activeYear, setActiveYear] = useState(availableYears[0]);
+  const [leftYear, setLeftYear] = useState(availableYears[0]);
+  const [rightYear, setRightYear] = useState(availableYears[availableYears.length - 1]);
 
   useEffect(() => {
     const initRasters = async () => {
       try {
+        setLoading(true);
         // Kütüphaneleri sadece tarayıcıda dinamik olarak yüklüyoruz (SSR Hatasını önler)
         const parseGeoraster = (await import('georaster')).default;
         const GeoRasterLayerModule = await import('georaster-layer-for-leaflet');
         const GeoRasterLayer = GeoRasterLayerModule.default || GeoRasterLayerModule;
 
-        // DİKKAT: public/maps/climate içindeki dosya isimlerinin 
-        // buradakilerle birebir aynı olduğundan emin olun!
-        const [res1930, res2099] = await Promise.all([
-          fetch('/maps/climate/1930Koppen_geiger.tif'),
-          fetch('/maps/climate/2099Koppen_geiger.tif')
-        ]);
+        const responses = await Promise.all(
+          availableYears.map(year => fetch(`/maps/climate/${year}Koppen_geiger.tif`))
+        );
 
-        const [buf1930, buf2099] = await Promise.all([res1930.arrayBuffer(), res2099.arrayBuffer()]);
-        const [georaster1930, georaster2099] = await Promise.all([
-          parseGeoraster(buf1930),
-          parseGeoraster(buf2099)
-        ]);
+        const buffers = await Promise.all(responses.map(res => {
+          if (!res.ok) throw new Error(`Failed to fetch ${res.url}: ${res.statusText}`);
+          return res.arrayBuffer();
+        }));
 
-        const layerLeft = new (GeoRasterLayer as any)({
-          georaster: georaster1930,
-          opacity: 0.7,
-          pixelValuesToColorFn: (v: number[]) => climateLegend[v[0]]?.color || 'transparent',
-          resolution: 256
-        });
+        const georasters = await Promise.all(buffers.map(buf => parseGeoraster(buf)));
 
-        const layerRight = new (GeoRasterLayer as any)({
-          georaster: georaster2099,
-          opacity: 0.7,
-          pixelValuesToColorFn: (v: number[]) => climateLegend[v[0]]?.color || 'transparent',
-          resolution: 256
-        });
+        const layers = georasters.reduce((acc, georaster, index) => {
+          const year = availableYears[index];
+          acc[year] = new (GeoRasterLayer as any)({
+            georaster,
+            opacity: 0.7,
+            pixelValuesToColorFn: (v: number[]) => climateLegend[v[0]]?.color || 'transparent',
+            resolution: 256
+          });
+          return acc;
+        }, {} as Record<string, any>);
 
-        setLayers({ left: layerLeft, right: layerRight });
-        setLoading(false);
+        setAllLayers(layers);
+
       } catch (err) {
         console.error("Raster yükleme hatası:", err);
+        // Hata durumunda kullanıcıya bilgi vermek için bir state eklenebilir.
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -166,20 +169,47 @@ export default function IklimTurleriActivity({ onClose }: Props) {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          {!isComparisonMode && (
-            <div className="flex bg-slate-800/50 p-1 rounded-xl border border-white/10 mr-2">
-              <button
-                onClick={() => setActiveYear('1930')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors ${activeYear === '1930' ? 'bg-indigo-500 text-white' : 'text-slate-400 hover:text-slate-200'}`}
+          {isComparisonMode ? (
+            <div className="flex items-center gap-2 text-sm text-slate-400 mr-2">
+              <label htmlFor="left-year" className="sr-only">Sol Harita Yılı</label>
+              <select
+                id="left-year"
+                value={leftYear}
+                onChange={(e) => {
+                  const newLeftYear = e.target.value;
+                  if (newLeftYear === rightYear) setRightYear(leftYear);
+                  setLeftYear(newLeftYear);
+                }}
+                className="bg-slate-800/50 border border-white/10 rounded-md px-2 py-1.5 text-slate-200 focus:ring-indigo-500 focus:border-indigo-500 cursor-pointer"
               >
-                1930
-              </button>
-              <button
-                onClick={() => setActiveYear('2099')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors ${activeYear === '2099' ? 'bg-indigo-500 text-white' : 'text-slate-400 hover:text-slate-200'}`}
+                {availableYears.map(year => <option key={`left-${year}`} value={year}>{year}</option>)}
+              </select>
+              <span className="text-slate-600">↔️</span>
+              <label htmlFor="right-year" className="sr-only">Sağ Harita Yılı</label>
+              <select
+                id="right-year"
+                value={rightYear}
+                onChange={(e) => {
+                  const newRightYear = e.target.value;
+                  if (newRightYear === leftYear) setLeftYear(rightYear);
+                  setRightYear(newRightYear);
+                }}
+                className="bg-slate-800/50 border border-white/10 rounded-md px-2 py-1.5 text-slate-200 focus:ring-indigo-500 focus:border-indigo-500 cursor-pointer"
               >
-                2099
-              </button>
+                {availableYears.map(year => <option key={`right-${year}`} value={year}>{year}</option>)}
+              </select>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2 text-sm text-slate-400 mr-2">
+              <label htmlFor="active-year" className="sr-only">Yıl</label>
+              <select
+                id="active-year"
+                value={activeYear}
+                onChange={(e) => setActiveYear(e.target.value)}
+                className="bg-slate-800/50 border border-white/10 rounded-md px-2 py-1.5 text-slate-200 focus:ring-indigo-500 focus:border-indigo-500 cursor-pointer"
+              >
+                {availableYears.map(year => <option key={`active-${year}`} value={year}>{year}</option>)}
+              </select>
             </div>
           )}
           <button
@@ -204,11 +234,11 @@ export default function IklimTurleriActivity({ onClose }: Props) {
         {typeof window !== 'undefined' && (
           <MapContainer center={[39, 35]} zoom={5} className="h-full w-full">
             <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
-            {layers && isComparisonMode && (
-              <ComparisonControl layerLeft={layers.left} layerRight={layers.right} />
+            {allLayers && isComparisonMode && leftYear !== rightYear && (
+              <ComparisonControl layerLeft={allLayers[leftYear]} layerRight={allLayers[rightYear]} />
             )}
-            {layers && !isComparisonMode && (
-              <SingleLayerControl layer={activeYear === '1930' ? layers.left : layers.right} />
+            {allLayers && !isComparisonMode && (
+              <SingleLayerControl layer={allLayers[activeYear]} />
             )}
           </MapContainer>
         )}
