@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
-import { ArrowLeft, Globe, Loader2, AlertTriangle } from "lucide-react";
+import { ArrowLeft, Globe, Loader2, AlertTriangle, Play, Pause, Info } from "lucide-react";
 import { MapContainer, TileLayer, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -42,20 +42,22 @@ const climateLegend: Record<number, { code: string; name: string; color: string 
   30: { code: 'EF', name: 'Polar, Buzul', color: 'rgb(102, 102, 102)' }
 };
 
-function SingleLayerControl({ layer }: { layer: any }) {
+const AVAILABLE_YEARS = ['1930', '1960', '1990', '2020', '2070', '2099'];
+
+function MultiLayerControl({ layers, activeYear }: { layers: Record<string, any>, activeYear: string }) {
   const map = useMap();
 
   useEffect(() => {
-    if (!map || !layer) return;
+    if (!map || !layers) return;
 
-    layer.addTo(map);
-
-    return () => {
-      if (map.hasLayer(layer)) {
-        map.removeLayer(layer);
+    Object.entries(layers).forEach(([year, layer]) => {
+      if (year === activeYear) {
+        if (!map.hasLayer(layer)) layer.addTo(map);
+      } else {
+        if (map.hasLayer(layer)) map.removeLayer(layer);
       }
-    };
-  }, [map, layer]);
+    });
+  }, [map, layers, activeYear]);
 
   return null;
 }
@@ -69,8 +71,22 @@ export default function IklimTurleriActivity({ onClose }: Props) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const availableYears = ['1930', '1960', '1990', '2020', '2070', '2099'];
-  const [activeYear, setActiveYear] = useState(availableYears[0]);
+  const [activeYear, setActiveYear] = useState(AVAILABLE_YEARS[0]);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (isPlaying) {
+      interval = setInterval(() => {
+        setActiveYear(current => {
+          const currentIndex = AVAILABLE_YEARS.indexOf(current);
+          const nextIndex = (currentIndex + 1) % AVAILABLE_YEARS.length;
+          return AVAILABLE_YEARS[nextIndex];
+        });
+      }, 1500); // 1.5 saniyede bir değiştir
+    }
+    return () => clearInterval(interval);
+  }, [isPlaying]);
 
   useEffect(() => {
     const initRasters = async () => {
@@ -83,7 +99,7 @@ export default function IklimTurleriActivity({ onClose }: Props) {
         const GeoRasterLayer = GeoRasterLayerModule.default || GeoRasterLayerModule;
 
         const responses = await Promise.all(
-          availableYears.map(year => fetch(`/maps/climate/${year}Koppen_geiger.tif`))
+          AVAILABLE_YEARS.map(year => fetch(`/maps/climate/${year}Koppen_geiger.tif`))
         );
 
         const buffers = await Promise.all(responses.map(res => {
@@ -94,7 +110,7 @@ export default function IklimTurleriActivity({ onClose }: Props) {
         const georasters = await Promise.all(buffers.map(buf => parseGeoraster(buf)));
 
         const layers = georasters.reduce((acc, georaster, index) => {
-          const year = availableYears[index];
+          const year = AVAILABLE_YEARS[index];
           acc[year] = new (GeoRasterLayer as any)({
             georaster,
             opacity: 0.7,
@@ -135,13 +151,22 @@ export default function IklimTurleriActivity({ onClose }: Props) {
           </div>
         </div>
         <div className="flex items-center gap-2 bg-slate-800/50 p-1 rounded-xl border border-white/10">
-          {availableYears.map(year => (
+          <button
+            onClick={() => setIsPlaying(!isPlaying)}
+            className={`px-3 py-1.5 rounded-lg text-sm font-bold transition-all flex items-center gap-1 ${isPlaying ? 'bg-amber-500 text-white shadow-lg shadow-amber-500/20' : 'bg-emerald-500 text-white hover:bg-emerald-600'
+              }`}
+            title={isPlaying ? "Animasyonu Durdur" : "Yılları Otomatik Oynat"}
+          >
+            {isPlaying ? <Pause size={16} /> : <Play size={16} />}
+          </button>
+          <div className="w-px h-6 bg-white/10 mx-1"></div>
+          {AVAILABLE_YEARS.map(year => (
             <button
               key={year}
               onClick={() => setActiveYear(year)}
               className={`px-4 py-1.5 rounded-lg text-sm font-bold transition-colors ${activeYear === year
-                  ? 'bg-indigo-500 text-white'
-                  : 'text-slate-400 hover:bg-slate-700/50 hover:text-slate-200'
+                ? 'bg-indigo-500 text-white'
+                : 'text-slate-400 hover:bg-slate-700/50 hover:text-slate-200'
                 }`}
             >
               {year}
@@ -176,10 +201,18 @@ export default function IklimTurleriActivity({ onClose }: Props) {
           <MapContainer center={[39, 35]} zoom={5} className="h-full w-full">
             <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
             {allLayers && (
-              <SingleLayerControl layer={allLayers[activeYear]} />
+              <MultiLayerControl layers={allLayers} activeYear={activeYear} />
             )}
           </MapContainer>
         )}
+
+        {/* İpucu Kutusu */}
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[2000] bg-slate-900/90 px-5 py-2.5 rounded-full border border-indigo-500/30 backdrop-blur-xl text-[13px] text-indigo-100 flex items-center gap-3 shadow-xl shadow-indigo-500/10 w-max max-w-[90%]">
+          <Info size={16} className="text-indigo-400 flex-shrink-0" />
+          <span>
+            <strong>İpucu:</strong> İklim sınırları yavaş değişir. Net bir fark görmek için <strong>Oynat</strong> butonuna basarak izleyin veya <strong>1930</strong> ile <strong>2099</strong> yılları arasında geçiş yapın. (Örn: Kuzey Rusya / Kanada buzulları)
+          </span>
+        </div>
 
         {/* Gösterge (Floating Legend) */}
         <div className="absolute bottom-10 right-10 z-[2000] bg-slate-900/90 p-5 rounded-2xl border border-white/10 backdrop-blur-xl shadow-2xl max-w-[300px]">
