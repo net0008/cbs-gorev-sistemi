@@ -71,8 +71,8 @@ export default function IklimTurleriActivity({ onClose }: Props) {
         // DİKKAT: public/maps/climate içindeki dosya isimlerinin 
         // buradakilerle birebir aynı olduğundan emin olun!
         const [res1930, res2099] = await Promise.all([
-          fetch('/maps/climate/1930koppen_geiger_0p1.tif'),
-          fetch('/maps/climate/2099_koppen_geiger_0p1.tif')
+          fetch('/maps/climate/1930Koppen_geiger.tif'),
+          fetch('/maps/climate/2099Koppen_geiger.tif')
         ]);
 
         const [buf1930, buf2099] = await Promise.all([res1930.arrayBuffer(), res2099.arrayBuffer()]);
