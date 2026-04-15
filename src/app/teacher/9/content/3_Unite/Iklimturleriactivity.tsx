@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
-import { ArrowLeft, Globe, Loader2, AlertTriangle, Play, Pause, Info } from "lucide-react";
+import { ArrowLeft, Globe, Loader2, AlertTriangle, Info } from "lucide-react";
 import { MapContainer, TileLayer, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -44,26 +44,65 @@ const climateLegend: Record<number, { code: string; name: string; color: string 
 
 const AVAILABLE_YEARS = ['1930', '1960', '1990', '2020', '2070', '2099'];
 
-function MultiLayerControl({ layers, activeYear }: { layers: Record<string, any>, activeYear: string }) {
+function SingleYearRasterControl({ year, setLoading, setError }: { year: string, setLoading: (b: boolean) => void, setError: (e: string | null) => void }) {
   const map = useMap();
+  const currentLayerRef = useRef<any>(null);
 
   useEffect(() => {
-    if (!map || !layers) return;
+    let isMounted = true;
 
-    const activeLayer = layers[activeYear];
+    const loadLayer = async () => {
+      try {
+        setLoading(true);
+        setError(null);
 
-    // Sadece aktif yılı haritaya ekle
-    if (activeLayer && !map.hasLayer(activeLayer)) {
-      activeLayer.addTo(map);
-    }
+        // Yeni haritayı yüklemeden önce, bellek sızıntısını önlemek için eski haritayı tamamen sil
+        if (currentLayerRef.current) {
+          map.removeLayer(currentLayerRef.current);
+          currentLayerRef.current = null;
+        }
 
-    // Bellek sızıntısını (Out of Memory) önlemek için diğer katmanları haritadan tamamen kaldır
-    Object.entries(layers).forEach(([year, layer]) => {
-      if (year !== activeYear && map.hasLayer(layer)) {
-        map.removeLayer(layer);
+        const parseGeoraster = (await import('georaster')).default;
+        const GeoRasterLayerModule = await import('georaster-layer-for-leaflet');
+        const GeoRasterLayer = GeoRasterLayerModule.default || GeoRasterLayerModule;
+
+        const res = await fetch(`/maps/climate/${year}Koppen_geiger.tif`);
+        if (!res.ok) throw new Error(`Harita bulunamadı: ${res.statusText}`);
+
+        const buf = await res.arrayBuffer();
+        const georaster = await parseGeoraster(buf);
+
+        if (!isMounted) return;
+
+        const layer = new (GeoRasterLayer as any)({
+          georaster,
+          opacity: 0.7,
+          pixelValuesToColorFn: (v: number[]) => climateLegend[v[0]]?.color || 'transparent',
+          resolution: 128
+        });
+
+        layer.addTo(map);
+        currentLayerRef.current = layer;
+      } catch (err: any) {
+        if (isMounted) {
+          console.error("Raster yükleme hatası:", err);
+          setError(err.message || "Harita yüklenirken bir hata oluştu.");
+        }
+      } finally {
+        if (isMounted) setLoading(false);
       }
-    });
-  }, [map, layers, activeYear]);
+    };
+
+    if (typeof window !== 'undefined') loadLayer();
+
+    return () => {
+      isMounted = false;
+      if (currentLayerRef.current) {
+        map.removeLayer(currentLayerRef.current);
+        currentLayerRef.current = null;
+      }
+    };
+  }, [map, year, setLoading, setError]);
 
   return null;
 }
@@ -73,75 +112,10 @@ interface Props {
 }
 
 export default function IklimTurleriActivity({ onClose }: Props) {
-  const [allLayers, setAllLayers] = useState<Record<string, any> | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const [activeYear, setActiveYear] = useState(AVAILABLE_YEARS[0]);
-  const [isPlaying, setIsPlaying] = useState(false);
-
-  useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (isPlaying) {
-      interval = setInterval(() => {
-        setActiveYear(current => {
-          const currentIndex = AVAILABLE_YEARS.indexOf(current);
-          const nextIndex = (currentIndex + 1) % AVAILABLE_YEARS.length;
-          return AVAILABLE_YEARS[nextIndex];
-        });
-      }, 1500); // 1.5 saniyede bir değiştir
-    }
-    return () => clearInterval(interval);
-  }, [isPlaying]);
-
-  useEffect(() => {
-    const initRasters = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        // Kütüphaneleri sadece tarayıcıda dinamik olarak yüklüyoruz (SSR Hatasını önler)
-        const parseGeoraster = (await import('georaster')).default;
-        const GeoRasterLayerModule = await import('georaster-layer-for-leaflet');
-        const GeoRasterLayer = GeoRasterLayerModule.default || GeoRasterLayerModule;
-
-        const responses = await Promise.all(
-          AVAILABLE_YEARS.map(year => fetch(`/maps/climate/${year}Koppen_geiger.tif`))
-        );
-
-        const buffers = await Promise.all(responses.map(res => {
-          if (!res.ok) throw new Error(`Failed to fetch ${res.url}: ${res.statusText}`);
-          return res.arrayBuffer();
-        }));
-
-        const georasters = await Promise.all(buffers.map(buf => parseGeoraster(buf)));
-
-        const layers = georasters.reduce((acc, georaster, index) => {
-          const year = AVAILABLE_YEARS[index];
-          acc[year] = new (GeoRasterLayer as any)({
-            georaster,
-            opacity: 0.7,
-            pixelValuesToColorFn: (v: number[]) => climateLegend[v[0]]?.color || 'transparent',
-            resolution: 128 // Performans ve bellek kullanımı için 256'dan 128'e düşürüldü
-          });
-          return acc;
-        }, {} as Record<string, any>);
-
-        setAllLayers(layers);
-
-      } catch (err) {
-        console.error("Raster yükleme hatası:", err);
-        setError(
-          "Harita verileri yüklenirken bir hata oluştu. Lütfen dosya yollarını ve internet bağlantınızı kontrol edin."
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (typeof window !== 'undefined') {
-      initRasters();
-    }
-  }, []);
 
   return (
     <div className="fixed inset-0 z-[9999] flex flex-col bg-slate-950 text-slate-100 overflow-hidden">
@@ -157,15 +131,6 @@ export default function IklimTurleriActivity({ onClose }: Props) {
           </div>
         </div>
         <div className="flex items-center gap-2 bg-slate-800/50 p-1 rounded-xl border border-white/10">
-          <button
-            onClick={() => setIsPlaying(!isPlaying)}
-            className={`px-3 py-1.5 rounded-lg text-sm font-bold transition-all flex items-center gap-1 ${isPlaying ? 'bg-amber-500 text-white shadow-lg shadow-amber-500/20' : 'bg-emerald-500 text-white hover:bg-emerald-600'
-              }`}
-            title={isPlaying ? "Animasyonu Durdur" : "Yılları Otomatik Oynat"}
-          >
-            {isPlaying ? <Pause size={16} /> : <Play size={16} />}
-          </button>
-          <div className="w-px h-6 bg-white/10 mx-1"></div>
           {AVAILABLE_YEARS.map(year => (
             <button
               key={year}
@@ -206,9 +171,7 @@ export default function IklimTurleriActivity({ onClose }: Props) {
         {typeof window !== 'undefined' && (
           <MapContainer center={[39, 35]} zoom={5} minZoom={3} className="h-full w-full">
             <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
-            {allLayers && (
-              <MultiLayerControl layers={allLayers} activeYear={activeYear} />
-            )}
+            <SingleYearRasterControl year={activeYear} setLoading={setLoading} setError={setError} />
           </MapContainer>
         )}
 
@@ -216,7 +179,7 @@ export default function IklimTurleriActivity({ onClose }: Props) {
         <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[2000] bg-slate-900/90 px-5 py-2.5 rounded-full border border-indigo-500/30 backdrop-blur-xl text-[13px] text-indigo-100 flex items-center gap-3 shadow-xl shadow-indigo-500/10 w-max max-w-[90%]">
           <Info size={16} className="text-indigo-400 flex-shrink-0" />
           <span>
-            <strong>İpucu:</strong> İklim sınırları yavaş değişir. Net bir fark görmek için <strong>Oynat</strong> butonuna basarak izleyin veya <strong>1930</strong> ile <strong>2099</strong> yılları arasında geçiş yapın. (Örn: Kuzey Rusya / Kanada buzulları)
+            <strong>İpucu:</strong> İklim sınırları yavaş değişir. Yüksek çözünürlüklü haritaların yüklenmesi zaman alabilir, lütfen bekleyiniz. <strong>1930</strong> ile <strong>2099</strong> yılları arasında geçiş yaparak farkı gözlemleyebilirsiniz.
           </span>
         </div>
 
