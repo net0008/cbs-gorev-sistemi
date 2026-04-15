@@ -66,7 +66,6 @@ function SingleYearRasterControl({ year, setLoading, setError }: { year: string,
         const GeoRasterLayerModule = await import('georaster-layer-for-leaflet');
         const GeoRasterLayer = GeoRasterLayerModule.default || GeoRasterLayerModule;
 
-        const res = await fetch(`/maps/climate/${year}Koppen_geiger.tif`);
         // Tarayıcı ve Next.js önbelleğini (cache) atlamak için timestamp ekliyoruz
         const res = await fetch(`/maps/climate/${year}Koppen_geiger.tif?v=${new Date().getTime()}`, { cache: 'no-store' });
         if (!res.ok) throw new Error(`Harita bulunamadı: ${res.statusText}`);
@@ -79,7 +78,6 @@ function SingleYearRasterControl({ year, setLoading, setError }: { year: string,
         const layer = new (GeoRasterLayer as any)({
           georaster,
           opacity: 0.7,
-          pixelValuesToColorFn: (v: number[]) => climateLegend[v[0]]?.color || 'transparent',
           pixelValuesToColorFn: (v: number[]) => climateLegend[Math.round(v[0])]?.color || 'transparent',
           resolution: 128
         });
@@ -174,7 +172,6 @@ export default function IklimTurleriActivity({ onClose }: Props) {
         {typeof window !== 'undefined' && (
           <MapContainer center={[39, 35]} zoom={5} minZoom={3} className="h-full w-full">
             <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
-            <SingleYearRasterControl year={activeYear} setLoading={setLoading} setError={setError} />
             <SingleYearRasterControl key={activeYear} year={activeYear} setLoading={setLoading} setError={setError} />
           </MapContainer>
         )}
