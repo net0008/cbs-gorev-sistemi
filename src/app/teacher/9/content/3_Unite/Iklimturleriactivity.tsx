@@ -42,41 +42,6 @@ const climateLegend: Record<number, { code: string; name: string; color: string 
   30: { code: 'EF', name: 'Polar, Buzul', color: 'rgb(102, 102, 102)' }
 };
 
-/**
- * KARŞILAŞTIRMA KONTROLÜ (SLIDER)
- */
-function ComparisonControl({ layerLeft, layerRight }: { layerLeft: any, layerRight: any }) {
-  const map = useMap();
-  const controlRef = useRef<any>(null);
-
-  useEffect(() => {
-    if (!map || !layerLeft || !layerRight) return;
-
-    layerLeft.addTo(map);
-    layerRight.addTo(map);
-
-    // Dinamik import ile Side-by-side eklentisini yüklüyoruz
-    // @ts-ignore
-    import('leaflet-side-by-side').then(() => {
-      if (!controlRef.current) {
-        // @ts-ignore
-        controlRef.current = L.control.sideBySide(layerLeft, layerRight).addTo(map);
-      }
-    });
-
-    return () => {
-      if (controlRef.current) {
-        controlRef.current.remove();
-        controlRef.current = null;
-      }
-      if (map.hasLayer(layerLeft)) map.removeLayer(layerLeft);
-      if (map.hasLayer(layerRight)) map.removeLayer(layerRight);
-    };
-  }, [map, layerLeft, layerRight]);
-
-  return null;
-}
-
 function SingleLayerControl({ layer }: { layer: any }) {
   const map = useMap();
 
@@ -103,12 +68,9 @@ export default function IklimTurleriActivity({ onClose }: Props) {
   const [allLayers, setAllLayers] = useState<Record<string, any> | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [isComparisonMode, setIsComparisonMode] = useState(true);
 
   const availableYears = ['1930', '1960', '1990', '2020', '2070', '2099'];
   const [activeYear, setActiveYear] = useState(availableYears[0]);
-  const [leftYear, setLeftYear] = useState(availableYears[0]);
-  const [rightYear, setRightYear] = useState(availableYears[availableYears.length - 1]);
 
   useEffect(() => {
     const initRasters = async () => {
@@ -172,57 +134,19 @@ export default function IklimTurleriActivity({ onClose }: Props) {
             <p className="text-xs text-slate-500">Veri: Beck et al. (2023) | 1km Çözünürlüklü Projeksiyon</p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          {isComparisonMode ? (
-            <div className="flex items-center gap-2 text-sm text-slate-400 mr-2">
-              <label htmlFor="left-year" className="sr-only">Sol Harita Yılı</label>
-              <select
-                id="left-year"
-                value={leftYear}
-                onChange={(e) => {
-                  const newLeftYear = e.target.value;
-                  if (newLeftYear === rightYear) setRightYear(leftYear);
-                  setLeftYear(newLeftYear);
-                }}
-                className="bg-slate-800/50 border border-white/10 rounded-md px-2 py-1.5 text-slate-200 focus:ring-indigo-500 focus:border-indigo-500 cursor-pointer"
-              >
-                {availableYears.map(year => <option key={`left-${year}`} value={year}>{year}</option>)}
-              </select>
-              <span className="text-slate-600">↔️</span>
-              <label htmlFor="right-year" className="sr-only">Sağ Harita Yılı</label>
-              <select
-                id="right-year"
-                value={rightYear}
-                onChange={(e) => {
-                  const newRightYear = e.target.value;
-                  if (newRightYear === leftYear) setLeftYear(rightYear);
-                  setRightYear(newRightYear);
-                }}
-                className="bg-slate-800/50 border border-white/10 rounded-md px-2 py-1.5 text-slate-200 focus:ring-indigo-500 focus:border-indigo-500 cursor-pointer"
-              >
-                {availableYears.map(year => <option key={`right-${year}`} value={year}>{year}</option>)}
-              </select>
-            </div>
-          ) : (
-            <div className="flex items-center gap-2 text-sm text-slate-400 mr-2">
-              <label htmlFor="active-year" className="sr-only">Yıl</label>
-              <select
-                id="active-year"
-                value={activeYear}
-                onChange={(e) => setActiveYear(e.target.value)}
-                className="bg-slate-800/50 border border-white/10 rounded-md px-2 py-1.5 text-slate-200 focus:ring-indigo-500 focus:border-indigo-500 cursor-pointer"
-              >
-                {availableYears.map(year => <option key={`active-${year}`} value={year}>{year}</option>)}
-              </select>
-            </div>
-          )}
-          <button
-            onClick={() => setIsComparisonMode(!isComparisonMode)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl border transition-colors ${isComparisonMode ? 'bg-indigo-500/20 border-indigo-500/40 text-indigo-300' : 'bg-slate-800/50 border-white/10 text-slate-400 hover:bg-slate-800'}`}
-          >
-            <Globe size={18} />
-            <span className="text-sm font-semibold uppercase tracking-wider">Karşılaştırma Modu</span>
-          </button>
+        <div className="flex items-center gap-2 bg-slate-800/50 p-1 rounded-xl border border-white/10">
+          {availableYears.map(year => (
+            <button
+              key={year}
+              onClick={() => setActiveYear(year)}
+              className={`px-4 py-1.5 rounded-lg text-sm font-bold transition-colors ${activeYear === year
+                  ? 'bg-indigo-500 text-white'
+                  : 'text-slate-400 hover:bg-slate-700/50 hover:text-slate-200'
+                }`}
+            >
+              {year}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -251,10 +175,7 @@ export default function IklimTurleriActivity({ onClose }: Props) {
         {typeof window !== 'undefined' && (
           <MapContainer center={[39, 35]} zoom={5} className="h-full w-full">
             <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
-            {allLayers && isComparisonMode && leftYear !== rightYear && (
-              <ComparisonControl layerLeft={allLayers[leftYear]} layerRight={allLayers[rightYear]} />
-            )}
-            {allLayers && !isComparisonMode && (
+            {allLayers && (
               <SingleLayerControl layer={allLayers[activeYear]} />
             )}
           </MapContainer>
