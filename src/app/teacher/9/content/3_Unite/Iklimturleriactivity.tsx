@@ -73,9 +73,8 @@ function SingleYearRasterControl({ year, setLoading, setError }: { year: string,
           throw new Error(`'${year}' yılı için harita yolu bulunamadı.`);
         }
 
-        // Tarayıcı ve Next.js önbelleğini (cache) atlamak için timestamp ekliyoruz
-        const res = await fetch(`${filePath}?v=${new Date().getTime()}`, { cache: 'no-store' });
-        if (!res.ok) throw new Error(`Harita bulunamadı: ${res.statusText}`);
+        const res = await fetch(filePath);
+        if (!res.ok) throw new Error(`HTTP ${res.status}: ${filePath} dosyasına ulaşılamadı.`);
 
         const buf = await res.arrayBuffer();
         const georaster = await parseGeoraster(buf);
