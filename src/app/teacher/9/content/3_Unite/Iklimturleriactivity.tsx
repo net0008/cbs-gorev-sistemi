@@ -54,21 +54,15 @@ const FILE_PATHS: Record<string, string> = {
 
 function SingleYearRasterControl({ year, setLoading, setError }: { year: string, setLoading: (b: boolean) => void, setError: (e: string | null) => void }) {
   const map = useMap();
-  const currentLayerRef = useRef<any>(null);
 
   useEffect(() => {
     let isMounted = true;
+    let currentLayer: any = null;
 
     const loadLayer = async () => {
       try {
         setLoading(true);
         setError(null);
-
-        // Yeni haritayı yüklemeden önce, bellek sızıntısını önlemek için eski haritayı tamamen sil
-        if (currentLayerRef.current) {
-          map.removeLayer(currentLayerRef.current);
-          currentLayerRef.current = null;
-        }
 
         const parseGeoraster = (await import('georaster')).default;
         const GeoRasterLayerModule = await import('georaster-layer-for-leaflet');
@@ -86,27 +80,33 @@ function SingleYearRasterControl({ year, setLoading, setError }: { year: string,
         const buf = await res.arrayBuffer();
         const georaster = await parseGeoraster(buf);
 
-        // KONTROL: Yüklenen raster verisinin teknik özelliklerini konsola yazdır.
-        // Eğer farklı yıllara tıklandığında bu değerler değişmiyorsa,
-        // /public/maps/climate/ klasöründeki .tif dosyaları muhtemelen aynıdır.
-        console.log(`[${year}] Raster Yüklendi:`, {
-          width: georaster.width,
-          height: georaster.height,
-          mins: georaster.mins,
-          maxs: georaster.maxs,
-        });
+        // KESİN KANIT: TIF dosyalarının gerçekten farklı olup olmadığını anlamak için 
+        // dosya boyutunu ve içindeki ham verinin bir kısmını konsola yazdırıyoruz.
+        const u8 = new Uint8Array(buf);
+        const mid = Math.floor(u8.length / 2);
+        console.log(`[${year}] YÜKLENDİ -> Boyut: ${u8.length} bytes | Veri Örneği: ${u8.slice(mid, mid + 4).join('-')}`);
 
         if (!isMounted) return;
 
-        const layer = new (GeoRasterLayer as any)({
+        currentLayer = new (GeoRasterLayer as any)({
           georaster,
           opacity: 0.7,
           pixelValuesToColorFn: (v: number[]) => climateLegend[Math.round(v[0])]?.color || 'transparent',
-          resolution: 128
+          resolution: 256 // Detaylar kaybolmasın diye çözünürlük 128'den 256'ya çıkarıldı
         });
 
-        layer.addTo(map);
-        currentLayerRef.current = layer;
+        // "ŞEYTAN" BURADAYDI (Ghost Layer Problemi):
+        // React asenkron çalıştığı için indirmesi uzun süren eski katmanlar,
+        // arka planda Leaflet'e yapışıp kalabiliyor ve alttan görünerek haritanın 
+        // aynı kalmış gibi algılanmasına sebep oluyordu.
+        // Yeni katmanı haritaya basmadan HEMEN ÖNCE, haritadaki TÜM iklim katmanlarını siliyoruz.
+        map.eachLayer((l: any) => {
+          if (l.options && l.options.pixelValuesToColorFn) {
+            map.removeLayer(l);
+          }
+        });
+
+        currentLayer.addTo(map);
       } catch (err: any) {
         if (isMounted) {
           console.error("Raster yükleme hatası:", err);
@@ -121,9 +121,8 @@ function SingleYearRasterControl({ year, setLoading, setError }: { year: string,
 
     return () => {
       isMounted = false;
-      if (currentLayerRef.current) {
-        map.removeLayer(currentLayerRef.current);
-        currentLayerRef.current = null;
+      if (currentLayer && map.hasLayer(currentLayer)) {
+        map.removeLayer(currentLayer);
       }
     };
   }, [map, year, setLoading, setError]);
