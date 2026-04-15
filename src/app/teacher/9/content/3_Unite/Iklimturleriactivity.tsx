@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
-import { ArrowLeft, Globe, Loader2, AlertTriangle, Info } from "lucide-react";
+import { ArrowLeft, Globe, Loader2, AlertTriangle, Info, Play, Pause } from "lucide-react";
 import { MapContainer, TileLayer, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -52,90 +52,25 @@ const FILE_PATHS: Record<string, string> = {
   '2099': '/maps/climate/2099Koppen_geiger.tif',
 };
 
-function SingleYearRasterControl({ year, setLoading, setError }: { year: string, setLoading: (b: boolean) => void, setError: (e: string | null) => void }) {
+function MultiLayerControl({ layers, activeYear }: { layers: Record<string, any>, activeYear: string }) {
   const map = useMap();
 
   useEffect(() => {
-    let isMounted = true;
-    let currentLayer: any = null;
+    if (!map || !layers) return;
 
-    const loadLayer = async () => {
-      try {
-        setLoading(true);
-        setError(null);
+    const activeLayer = layers[activeYear];
 
-        const parseGeoraster = (await import('georaster')).default;
-        const GeoRasterLayerModule = await import('georaster-layer-for-leaflet');
-        const GeoRasterLayer = GeoRasterLayerModule.default || GeoRasterLayerModule;
+    if (activeLayer && !map.hasLayer(activeLayer)) {
+      activeLayer.addTo(map);
+    }
 
-        const filePath = FILE_PATHS[year];
-        if (!filePath) {
-          throw new Error(`'${year}' yılı için harita yolu bulunamadı.`);
-        }
-
-        const res = await fetch(filePath, { headers: { 'Cache-Control': 'no-cache' } });
-        if (!res.ok) throw new Error(`HTTP ${res.status}: ${filePath} dosyasına ulaşılamadı.`);
-
-        const buf = await res.arrayBuffer();
-
-        // GÜVENLİK KONTROLÜ: Dosya gerçekten TIFF mi? (Github'dan yanlışlıkla HTML inmesini engellemek için)
-        const u8 = new Uint8Array(buf);
-        const isTIFF = (u8[0] === 0x49 && u8[1] === 0x49) || (u8[0] === 0x4D && u8[1] === 0x4D); // 'II' veya 'MM'
-
-        if (!isTIFF) {
-          const headStr = Array.from(u8.slice(0, 15)).map(c => String.fromCharCode(c)).join('').toLowerCase();
-          if (headStr.includes("<!doctype") || headStr.includes("<html")) {
-            throw new Error("Geçersiz Format: TIF dosyası yerine Github web sayfası (HTML) indirilmiş! Lütfen dosyayı indirirken 'Raw' (Ham) butonunu kullanın.");
-          }
-          throw new Error("Geçersiz Format: İndirilen dosya geçerli bir GeoTIFF haritası değil. Dosyanın bozuk olmadığından emin olun.");
-        }
-
-        // ZAMAN AŞIMI: Ayrıştırıcının sonsuz döngüye girip ekranı dondurmasını engeller.
-        const georaster: any = await Promise.race([
-          parseGeoraster(buf),
-          new Promise((_, reject) => setTimeout(() => reject(new Error("Zaman Aşımı: Harita ayrıştırma işlemi çok uzun sürdü. Dosya bozuk veya çok büyük olabilir.")), 20000))
-        ]);
-
-        if (!isMounted) return;
-
-        currentLayer = new (GeoRasterLayer as any)({
-          georaster,
-          opacity: 0.7,
-          pixelValuesToColorFn: (v: number[]) => climateLegend[Math.round(v[0])]?.color || 'transparent',
-          resolution: 256 // Detaylar kaybolmasın diye çözünürlük 128'den 256'ya çıkarıldı
-        });
-
-        // "ŞEYTAN" BURADAYDI (Ghost Layer Problemi):
-        // React asenkron çalıştığı için indirmesi uzun süren eski katmanlar,
-        // arka planda Leaflet'e yapışıp kalabiliyor ve alttan görünerek haritanın 
-        // aynı kalmış gibi algılanmasına sebep oluyordu.
-        // Yeni katmanı haritaya basmadan HEMEN ÖNCE, haritadaki TÜM iklim katmanlarını siliyoruz.
-        map.eachLayer((l: any) => {
-          if (l.options && l.options.pixelValuesToColorFn) {
-            map.removeLayer(l);
-          }
-        });
-
-        currentLayer.addTo(map);
-      } catch (err: any) {
-        if (isMounted) {
-          console.error("Raster yükleme hatası:", err);
-          setError(err.message || "Harita yüklenirken bir hata oluştu.");
-        }
-      } finally {
-        if (isMounted) setLoading(false);
+    // RAM'i korumak için (Out of Memory hatasını önlemek) diğer katmanları haritadan kaldır
+    Object.entries(layers).forEach(([year, layer]) => {
+      if (year !== activeYear && map.hasLayer(layer)) {
+        map.removeLayer(layer);
       }
-    };
-
-    if (typeof window !== 'undefined') loadLayer();
-
-    return () => {
-      isMounted = false;
-      if (currentLayer && map.hasLayer(currentLayer)) {
-        map.removeLayer(currentLayer);
-      }
-    };
-  }, [map, year, setLoading, setError]);
+    });
+  }, [map, layers, activeYear]);
 
   return null;
 }
@@ -145,10 +80,75 @@ interface Props {
 }
 
 export default function IklimTurleriActivity({ onClose }: Props) {
-  const [loading, setLoading] = useState(false);
+  const [allLayers, setAllLayers] = useState<Record<string, any> | null>(null);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const [activeYear, setActiveYear] = useState(AVAILABLE_YEARS[0]);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (isPlaying) {
+      interval = setInterval(() => {
+        setActiveYear(current => {
+          const currentIndex = AVAILABLE_YEARS.indexOf(current);
+          const nextIndex = (currentIndex + 1) % AVAILABLE_YEARS.length;
+          return AVAILABLE_YEARS[nextIndex];
+        });
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [isPlaying]);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const initRasters = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const parseGeoraster = (await import('georaster')).default;
+        const GeoRasterLayerModule = await import('georaster-layer-for-leaflet');
+        const GeoRasterLayer = GeoRasterLayerModule.default || GeoRasterLayerModule;
+
+        const layers: Record<string, any> = {};
+
+        await Promise.all(AVAILABLE_YEARS.map(async (year) => {
+          const filePath = FILE_PATHS[year];
+          const res = await fetch(filePath);
+          if (!res.ok) throw new Error(`HTTP ${res.status}: ${filePath} dosyasına ulaşılamadı.`);
+
+          const buf = await res.arrayBuffer();
+          const georaster = await parseGeoraster(buf);
+
+          layers[year] = new (GeoRasterLayer as any)({
+            georaster,
+            opacity: 0.7,
+            pixelValuesToColorFn: (v: number[]) => climateLegend[Math.round(v[0])]?.color || 'transparent',
+            resolution: 128 // Performans ve bellek yönetimi (OOM önleyici) için çözünürlük 128'e ayarlandı
+          });
+        }));
+
+        if (!isMounted) return;
+        setAllLayers(layers);
+      } catch (err: any) {
+        if (isMounted) {
+          console.error("Raster yükleme hatası:", err);
+          setError(err.message || "Haritalar yüklenirken bir hata oluştu.");
+        }
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    };
+
+    if (typeof window !== 'undefined') initRasters();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <div className="fixed inset-0 z-[9999] flex flex-col bg-slate-950 text-slate-100 overflow-hidden">
@@ -164,10 +164,19 @@ export default function IklimTurleriActivity({ onClose }: Props) {
           </div>
         </div>
         <div className="flex items-center gap-2 bg-slate-800/50 p-1 rounded-xl border border-white/10">
+          <button
+            onClick={() => setIsPlaying(!isPlaying)}
+            className={`px-3 py-1.5 rounded-lg text-sm font-bold transition-all flex items-center gap-1 ${isPlaying ? 'bg-amber-500 text-white shadow-lg shadow-amber-500/20' : 'bg-emerald-500 text-white hover:bg-emerald-600'
+              }`}
+            title={isPlaying ? "Animasyonu Durdur" : "Yılları Otomatik Oynat"}
+          >
+            {isPlaying ? <Pause size={16} /> : <Play size={16} />}
+          </button>
+          <div className="w-px h-6 bg-white/10 mx-1"></div>
           {AVAILABLE_YEARS.map(year => (
             <button
               key={year}
-              onClick={() => setActiveYear(year)}
+              onClick={() => { setIsPlaying(false); setActiveYear(year); }}
               className={`px-4 py-1.5 rounded-lg text-sm font-bold transition-colors ${activeYear === year
                 ? 'bg-indigo-500 text-white'
                 : 'text-slate-400 hover:bg-slate-700/50 hover:text-slate-200'
@@ -204,7 +213,9 @@ export default function IklimTurleriActivity({ onClose }: Props) {
         {typeof window !== 'undefined' && (
           <MapContainer center={[39, 35]} zoom={5} minZoom={3} className="h-full w-full">
             <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
-            <SingleYearRasterControl key={activeYear} year={activeYear} setLoading={setLoading} setError={setError} />
+            {allLayers && (
+              <MultiLayerControl layers={allLayers} activeYear={activeYear} />
+            )}
           </MapContainer>
         )}
 
@@ -218,7 +229,7 @@ export default function IklimTurleriActivity({ onClose }: Props) {
         <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[2000] bg-slate-900/90 px-5 py-2.5 rounded-full border border-indigo-500/30 backdrop-blur-xl text-[13px] text-indigo-100 flex items-center gap-3 shadow-xl shadow-indigo-500/10 w-max max-w-[90%]">
           <Info size={16} className="text-indigo-400 flex-shrink-0" />
           <span>
-            <strong>İpucu:</strong> İklim sınırları yavaş değişir. Yüksek çözünürlüklü haritaların yüklenmesi zaman alabilir, lütfen bekleyiniz. <strong>1930</strong> ile <strong>2099</strong> yılları arasında geçiş yaparak farkı gözlemleyebilirsiniz.
+            <strong>İpucu:</strong> İklim sınırları çok yavaş değişir (sadece birkaç km kayma). Farkı net görebilmek için <strong>Oynat</strong> düğmesine basarak değişimi izleyebilirsiniz.
           </span>
         </div>
 
