@@ -73,6 +73,16 @@ function SingleYearRasterControl({ year, setLoading, setError }: { year: string,
         const buf = await res.arrayBuffer();
         const georaster = await parseGeoraster(buf);
 
+        // KONTROL: Yüklenen raster verisinin teknik özelliklerini konsola yazdır.
+        // Eğer farklı yıllara tıklandığında bu değerler değişmiyorsa,
+        // /public/maps/climate/ klasöründeki .tif dosyaları muhtemelen aynıdır.
+        console.log(`[${year}] Raster Yüklendi:`, {
+          width: georaster.width,
+          height: georaster.height,
+          mins: georaster.mins,
+          maxs: georaster.maxs,
+        });
+
         if (!isMounted) return;
 
         const layer = new (GeoRasterLayer as any)({
