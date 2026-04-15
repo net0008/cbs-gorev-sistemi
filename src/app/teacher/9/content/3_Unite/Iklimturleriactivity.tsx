@@ -73,11 +73,28 @@ function SingleYearRasterControl({ year, setLoading, setError }: { year: string,
           throw new Error(`'${year}' yılı için harita yolu bulunamadı.`);
         }
 
-        const res = await fetch(filePath);
+        const res = await fetch(filePath, { headers: { 'Cache-Control': 'no-cache' } });
         if (!res.ok) throw new Error(`HTTP ${res.status}: ${filePath} dosyasına ulaşılamadı.`);
 
         const buf = await res.arrayBuffer();
-        const georaster = await parseGeoraster(buf);
+
+        // GÜVENLİK KONTROLÜ: Dosya gerçekten TIFF mi? (Github'dan yanlışlıkla HTML inmesini engellemek için)
+        const u8 = new Uint8Array(buf);
+        const isTIFF = (u8[0] === 0x49 && u8[1] === 0x49) || (u8[0] === 0x4D && u8[1] === 0x4D); // 'II' veya 'MM'
+
+        if (!isTIFF) {
+          const headStr = Array.from(u8.slice(0, 15)).map(c => String.fromCharCode(c)).join('').toLowerCase();
+          if (headStr.includes("<!doctype") || headStr.includes("<html")) {
+            throw new Error("Geçersiz Format: TIF dosyası yerine Github web sayfası (HTML) indirilmiş! Lütfen dosyayı indirirken 'Raw' (Ham) butonunu kullanın.");
+          }
+          throw new Error("Geçersiz Format: İndirilen dosya geçerli bir GeoTIFF haritası değil. Dosyanın bozuk olmadığından emin olun.");
+        }
+
+        // ZAMAN AŞIMI: Ayrıştırıcının sonsuz döngüye girip ekranı dondurmasını engeller.
+        const georaster: any = await Promise.race([
+          parseGeoraster(buf),
+          new Promise((_, reject) => setTimeout(() => reject(new Error("Zaman Aşımı: Harita ayrıştırma işlemi çok uzun sürdü. Dosya bozuk veya çok büyük olabilir.")), 20000))
+        ]);
 
         if (!isMounted) return;
 
