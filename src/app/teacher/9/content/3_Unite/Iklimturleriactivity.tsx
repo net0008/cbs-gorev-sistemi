@@ -1,14 +1,13 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from 'react';
-import { ArrowLeft, Globe, Loader2, Info, BookOpen } from 'lucide-react';
+import { ArrowLeft, Globe, Loader2, BookOpen } from 'lucide-react';
 import { MapContainer, TileLayer, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
 /**
- * 1. TAM İKLİM SÖZLÜĞÜ (Beck et al. 2023)
- * Tüm 30 sınıf ve RGB renkleri eklendi.
+ * 1. BECK ET AL. (2023) - TAM İKLİM LİSTESİ (30 TİP)
  */
 const climateLegend: Record<number, { code: string; name: string; color: string }> = {
   1: { code: 'Af', name: 'Tropical, rainforest', color: 'rgb(0, 0, 255)' },
@@ -44,7 +43,7 @@ const climateLegend: Record<number, { code: string; name: string; color: string 
 };
 
 /**
- * HARİTA KARŞILAŞTIRMA SLIDER BİLEŞENİ
+ * 2. SLIDER VE CSS BİLEŞENİ
  */
 function ComparisonControl({ layerLeft, layerRight }: { layerLeft: any, layerRight: any }) {
   const map = useMap();
@@ -53,30 +52,63 @@ function ComparisonControl({ layerLeft, layerRight }: { layerLeft: any, layerRig
   useEffect(() => {
     if (!map || !layerLeft || !layerRight) return;
 
+    // Katmanları ekle
     layerLeft.addTo(map);
     layerRight.addTo(map);
 
-    import('leaflet-side-by-side').then(() => {
+    const initSideBySide = async () => {
+      // @ts-ignore
+      await import('leaflet-side-by-side');
       if (!controlRef.current) {
         // @ts-ignore
         controlRef.current = L.control.sideBySide(layerLeft, layerRight).addTo(map);
       }
-    });
+    };
+
+    initSideBySide();
 
     return () => {
-      if (controlRef.current) { controlRef.current.remove(); controlRef.current = null; }
+      if (controlRef.current) {
+        controlRef.current.remove();
+        controlRef.current = null;
+      }
       if (map.hasLayer(layerLeft)) map.removeLayer(layerLeft);
       if (map.hasLayer(layerRight)) map.removeLayer(layerRight);
     };
   }, [map, layerLeft, layerRight]);
 
-  return null;
+  return (
+    <style dangerouslySetInnerHTML={{ __html: `
+      .leaflet-sbs-range {
+        position: absolute;
+        top: 50%;
+        width: 100%;
+        z-index: 999;
+        margin: 0;
+        transform: translateY(-50%);
+        cursor: pointer;
+        background: transparent;
+        -webkit-appearance: none;
+      }
+      .leaflet-sbs-divider {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        width: 4px;
+        margin-left: -2px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        z-index: 998;
+        pointer-events: none;
+      }
+    `}} />
+  );
 }
 
 export default function IklimTurleriActivity({ onClose }: { onClose: () => void }) {
   const [layers, setLayers] = useState<{ left: any, right: any } | null>(null);
   const [loading, setLoading] = useState(true);
-  const [showCitation, setShowCitation] = useState(false);
 
   useEffect(() => {
     const init = async () => {
@@ -84,13 +116,10 @@ export default function IklimTurleriActivity({ onClose }: { onClose: () => void 
         const parseGeoraster = (await import('georaster')).default;
         const GeoRasterLayer = (await import('georaster-layer-for-leaflet')).default;
 
-        // Dosya yolları ve isimleri GitHub deponuzdakilerle eşleştirildi
         const [res1, res2] = await Promise.all([
           fetch('/maps/climate/1930Koppen_geiger.tif'),
           fetch('/maps/climate/2099Koppen_geiger.tif')
         ]);
-
-        if (!res1.ok || !res2.ok) throw new Error("TIF dosyaları yüklenemedi!");
 
         const [buf1, buf2] = await Promise.all([res1.arrayBuffer(), res2.arrayBuffer()]);
         const [geo1, geo2] = await Promise.all([parseGeoraster(buf1), parseGeoraster(buf2)]);
@@ -106,7 +135,7 @@ export default function IklimTurleriActivity({ onClose }: { onClose: () => void 
         setLayers({ left: new GeoRasterLayer(config(geo1)), right: new GeoRasterLayer(config(geo2)) });
         setLoading(false);
       } catch (err) {
-        console.error("Yükleme Hatası:", err);
+        console.error("Yükleme hatası:", err);
         setLoading(false);
       }
     };
@@ -114,82 +143,52 @@ export default function IklimTurleriActivity({ onClose }: { onClose: () => void 
   }, []);
 
   return (
-    <div className="fixed inset-0 z-[10000] flex flex-col bg-slate-950 text-slate-100 animate-in fade-in duration-300">
-      {/* Üst Header */}
+    <div className="fixed inset-0 z-[10000] flex flex-col bg-slate-950 text-slate-100">
+      {/* Üst Panel */}
       <div className="flex items-center justify-between p-4 border-b border-white/10 bg-slate-900/80 backdrop-blur-md">
         <div className="flex items-center gap-4">
-          <button onClick={onClose} className="p-2 hover:bg-slate-800 rounded-full transition-all">
+          <button onClick={onClose} className="p-2 hover:bg-slate-800 rounded-full">
             <ArrowLeft className="text-white" />
           </button>
-          <div>
-            <h1 className="text-xl font-bold">3.1.3. İklim Türleri Değişimi (1930 vs 2099)</h1>
-            <button 
-              onClick={() => setShowCitation(!showCitation)}
-              className="text-[10px] text-indigo-400 flex items-center gap-1 hover:text-indigo-300"
-            >
-              <BookOpen size={12} /> Kaynak: Beck et al. (2023)
-            </button>
-          </div>
+          <h1 className="text-xl font-bold italic">İklim Türleri Değişimi (1930 vs 2099)</h1>
         </div>
-
-        <div className="flex items-center gap-3">
-          <div className="hidden sm:flex px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-[11px] border border-indigo-500/30 items-center gap-2">
-            <Globe size={14}/> 1930 (Mevcut) | 2099 (Projeksiyon)
-          </div>
+        <div className="flex items-center gap-2 px-4 py-2 bg-indigo-500 rounded-lg text-sm font-bold animate-pulse">
+          <Globe size={16} /> KARŞILAŞTIRMA AKTİF
         </div>
       </div>
 
-      {/* Ana Harita Alanı */}
-      <div className="flex-1 relative bg-slate-900 overflow-hidden">
+      <div className="flex-1 relative overflow-hidden bg-slate-900">
         {loading && (
-          <div className="absolute inset-0 z-[2000] bg-slate-950/90 flex flex-col items-center justify-center gap-4">
-            <Loader2 className="w-12 h-12 text-indigo-500 animate-spin" />
-            <p className="text-slate-300 font-medium">Küresel İklim Verileri Analiz Ediliyor...</p>
-          </div>
-        )}
-
-        {/* Atıf Paneli (Toggle) */}
-        {showCitation && (
-          <div className="absolute top-4 left-4 right-4 z-[3000] p-4 bg-slate-900 border border-white/20 rounded-xl shadow-2xl text-xs leading-relaxed animate-in slide-in-from-top-2">
-            <h3 className="font-bold mb-2 text-indigo-400 uppercase tracking-wider">Akademik Atıf</h3>
-            <p className="text-slate-300 italic">
-              Beck, H. E., T. R. McVicar, N. Vergopolan, A. Berg, N. J. Lutsko, A. Dufour,
-              Z. Zeng, X. Jiang, A. I. J. M. van Dijk, and D. G. Miralles. High-resolution
-              (1 km) Köppen-Geiger maps for 1901–2099 based on constrained CMIP6 
-              projections, Scientific Data 10, 724 (2023).
-            </p>
-            <button 
-              onClick={() => setShowCitation(false)}
-              className="mt-2 text-slate-500 hover:text-white underline"
-            >
-              Kapat
-            </button>
+          <div className="absolute inset-0 z-[11000] bg-slate-950 flex flex-col items-center justify-center">
+            <Loader2 className="w-12 h-12 text-indigo-500 animate-spin mb-4" />
+            <p>Bilimsel Veriler Haritaya İşleniyor...</p>
           </div>
         )}
 
         {typeof window !== 'undefined' && (
-          <MapContainer center={[39, 35]} zoom={5} className="h-full w-full outline-none">
+          <MapContainer center={[39, 35]} zoom={5} className="h-full w-full">
             <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
             {layers && <ComparisonControl layerLeft={layers.left} layerRight={layers.right} />}
           </MapContainer>
         )}
 
-        {/* Dinamik ve Kaydırılabilir Legend (Gösterge) */}
-        <div className="absolute bottom-6 left-6 z-[1000] w-[280px] bg-slate-900/95 border border-white/10 rounded-2xl backdrop-blur-md shadow-2xl flex flex-col max-h-[70%]">
-           <div className="p-4 border-b border-white/5">
-              <p className="text-[10px] font-bold text-indigo-400 tracking-widest uppercase">Köppen-Geiger İklim Sınıfları</p>
-           </div>
-           <div className="p-4 overflow-y-auto custom-scrollbar space-y-2">
-              {Object.entries(climateLegend).map(([k,v]) => (
-                <div key={k} className="flex items-center gap-3 group">
-                  <div className="w-3 h-3 rounded-full flex-shrink-0" style={{backgroundColor: v.color}}/>
-                  <div className="flex flex-col">
-                    <span className="text-[11px] text-slate-200 font-bold group-hover:text-white">{v.code}</span>
-                    <span className="text-[9px] text-slate-500">{v.name}</span>
-                  </div>
+        {/* Legend Panel - Sağ Altta */}
+        <div className="absolute bottom-6 left-6 z-[1000] w-72 bg-slate-900/95 border border-white/20 rounded-2xl flex flex-col shadow-2xl overflow-hidden max-h-[60%] backdrop-blur-sm">
+          <div className="p-3 bg-indigo-600/20 border-b border-white/10 flex items-center gap-2">
+            <BookOpen size={14} className="text-indigo-400" />
+            <span className="text-xs font-bold uppercase tracking-widest text-indigo-300">Gösterge</span>
+          </div>
+          <div className="p-3 overflow-y-auto custom-scrollbar">
+            {Object.entries(climateLegend).map(([k, v]) => (
+              <div key={k} className="flex items-center gap-3 mb-2 hover:bg-white/5 p-1 rounded transition-colors">
+                <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: v.color }} />
+                <div className="flex flex-col">
+                  <span className="text-[10px] font-bold text-slate-200">{v.code}</span>
+                  <span className="text-[9px] text-slate-500 leading-tight">{v.name}</span>
                 </div>
-              ))}
-           </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
