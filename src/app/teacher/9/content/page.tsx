@@ -23,7 +23,10 @@ const TimeZonesActivity = dynamic(() => import('./2_Unite/TimeZonesActivity'), {
 const DistributionMethodsActivity = dynamic(() => import('./2_Unite/DistributionMethodsActivity'), { ssr: false, loading: loadingComponent });
 const HavaOlaylariActivity = dynamic(() => import('./3_Unite/Havaolaylariactivity'), { ssr: false, loading: loadingComponent });
 const IklimSistemiActivity = dynamic(() => import('./3_Unite/Iklimsistemiactivity'), { ssr: false, loading: loadingComponent });
-const IklimTurleriActivity = dynamic(() => import('./3_Unite/Iklimturleriactivity'), { ssr: false, loading: loadingComponent });
+const IklimTurleriActivity = dynamic(
+  () => import('./3_Unite/Iklimturleriactivity'),
+  { ssr: false, loading: () => <div className="fixed inset-0 bg-slate-950 flex items-center justify-center text-white">Harita Modülü Yükleniyor...</div> }
+);
 const NufusDinamikleriActivity = dynamic(() => import('./4_Unite/NufusDinamikleriActivity'), { ssr: false, loading: loadingComponent });
 const DemografikDonusumActivity = dynamic(() => import('./4_Unite/Demografikdonusumactivity'), { ssr: false, loading: loadingComponent });
 const NufusDagilisiActivity = dynamic(() => import('./4_Unite/Nufusdagilisiactivity'), { ssr: false, loading: loadingComponent });

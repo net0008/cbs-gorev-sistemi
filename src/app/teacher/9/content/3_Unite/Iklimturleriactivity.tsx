@@ -16,31 +16,30 @@ const climateLegend: Record<number, { code: string; name: string; color: string 
   6: { code: 'BSh', name: 'Arid, steppe, hot', color: 'rgb(245, 165, 0)' },
   7: { code: 'BSk', name: 'Arid, steppe, cold', color: 'rgb(255, 220, 100)' },
   8: { code: 'Csa', name: 'Temperate, hot summer (Mediterranean)', color: 'rgb(255, 255, 0)' },
-  9: { code: 'Csb', name: 'Temperate, warm summer', color: 'rgb(200, 200, 0)' },
-  10: { code: 'Csc', name: 'Temperate, cold summer', color: 'rgb(150, 150, 0)' },
-  11: { code: 'Cwa', name: 'Temperate, dry winter/hot summer', color: 'rgb(150, 255, 150)' },
-  12: { code: 'Cwb', name: 'Temperate, dry winter/warm summer', color: 'rgb(100, 200, 100)' },
-  13: { code: 'Cwc', name: 'Temperate, dry winter/cold summer', color: 'rgb(50, 150, 50)' },
-  14: { code: 'Cfa', name: 'Temperate, no dry season/hot summer', color: 'rgb(200, 255, 80)' },
-  15: { code: 'Cfb', name: 'Temperate, no dry season/warm summer', color: 'rgb(100, 255, 80)' },
-  16: { code: 'Cfc', name: 'Temperate, no dry season/cold summer', color: 'rgb(50, 200, 0)' },
-  17: { code: 'Dsa', name: 'Cold, dry/hot summer', color: 'rgb(255, 0, 255)' },
-  18: { code: 'Dsb', name: 'Cold, dry/warm summer', color: 'rgb(200, 0, 200)' },
-  19: { code: 'Dsc', name: 'Cold, dry/cold summer', color: 'rgb(150, 50, 150)' },
-  20: { code: 'Dsd', name: 'Cold, dry summer/very cold winter', color: 'rgb(150, 100, 150)' },
-  21: { code: 'Dwa', name: 'Cold, dry winter/hot summer', color: 'rgb(170, 175, 255)' },
-  22: { code: 'Dwb', name: 'Cold, dry winter/warm summer', color: 'rgb(90, 120, 220)' },
-  23: { code: 'Dwc', name: 'Cold, dry winter/cold summer', color: 'rgb(75, 80, 180)' },
-  24: { code: 'Dwd', name: 'Cold, dry/very cold winter', color: 'rgb(50, 0, 135)' },
-  25: { code: 'Dfa', name: 'Cold, no dry season/hot summer', color: 'rgb(0, 255, 255)' },
-  26: { code: 'Dfb', name: 'Cold, no dry season/warm summer', color: 'rgb(55, 200, 255)' },
-  27: { code: 'Dfc', name: 'Cold, no dry season/cold summer', color: 'rgb(0, 125, 125)' },
-  28: { code: 'Dfd', name: 'Cold, no dry season/very cold winter', color: 'rgb(0, 70, 95)' },
+  9: { code: 'Csb', name: 'Temperate, dry summer, warm summer', color: 'rgb(200, 200, 0)' },
+  10: { code: 'Csc', name: 'Temperate, dry summer, cold summer', color: 'rgb(150, 150, 0)' },
+  11: { code: 'Cwa', name: 'Temperate, dry winter, hot summer', color: 'rgb(150, 255, 150)' },
+  12: { code: 'Cwb', name: 'Temperate, dry winter, warm summer', color: 'rgb(100, 200, 100)' },
+  13: { code: 'Cwc', name: 'Temperate, dry winter, cold summer', color: 'rgb(50, 150, 50)' },
+  14: { code: 'Cfa', name: 'Temperate, no dry season, hot summer', color: 'rgb(200, 255, 80)' },
+  15: { code: 'Cfb', name: 'Temperate, no dry season, warm summer', color: 'rgb(100, 255, 80)' },
+  16: { code: 'Cfc', name: 'Temperate, no dry season, cold summer', color: 'rgb(50, 200, 0)' },
+  17: { code: 'Dsa', name: 'Cold, dry summer, hot summer', color: 'rgb(255, 0, 255)' },
+  18: { code: 'Dsb', name: 'Cold, dry summer, warm summer', color: 'rgb(200, 0, 200)' },
+  19: { code: 'Dsc', name: 'Cold, dry summer, cold summer', color: 'rgb(150, 50, 150)' },
+  20: { code: 'Dsd', name: 'Cold, dry summer, very cold winter', color: 'rgb(150, 100, 150)' },
+  21: { code: 'Dwa', name: 'Cold, dry winter, hot summer', color: 'rgb(170, 175, 255)' },
+  22: { code: 'Dwb', name: 'Cold, dry winter, warm summer', color: 'rgb(90, 120, 220)' },
+  23: { code: 'Dwc', name: 'Cold, dry winter, cold summer', color: 'rgb(75, 80, 180)' },
+  24: { code: 'Dwd', name: 'Cold, dry winter, very cold winter', color: 'rgb(50, 0, 135)' },
+  25: { code: 'Dfa', name: 'Cold, no dry season, hot summer', color: 'rgb(0, 255, 255)' },
+  26: { code: 'Dfb', name: 'Cold, no dry season, warm summer', color: 'rgb(55, 200, 255)' },
+  27: { code: 'Dfc', name: 'Cold, no dry season, cold summer', color: 'rgb(0, 125, 125)' },
+  28: { code: 'Dfd', name: 'Cold, no dry season, very cold winter', color: 'rgb(0, 70, 95)' },
   29: { code: 'ET', name: 'Polar, tundra', color: 'rgb(178, 178, 178)' },
   30: { code: 'EF', name: 'Polar, frost', color: 'rgb(102, 102, 102)' }
 };
 
-// 2. SLIDER VE CSS KONTROLÜ
 function ComparisonControl({ layerLeft, layerRight }: { layerLeft: any, layerRight: any }) {
   const map = useMap();
   const controlRef = useRef<any>(null);
@@ -51,6 +50,7 @@ function ComparisonControl({ layerLeft, layerRight }: { layerLeft: any, layerRig
     layerRight.addTo(map);
 
     const initSlider = async () => {
+      // @ts-ignore
       await import('leaflet-side-by-side');
       if (!controlRef.current) {
         // @ts-ignore
@@ -113,34 +113,34 @@ export default function IklimTurleriActivity({ onClose }: { onClose: () => void 
     <div className="fixed inset-0 z-[10000] flex flex-col bg-slate-950 text-slate-100">
       <div className="flex items-center justify-between p-4 border-b border-white/10 bg-slate-900/90 backdrop-blur-md">
         <div className="flex items-center gap-4">
-          <button onClick={onClose} className="p-2 hover:bg-slate-800 rounded-full">
+          <button onClick={onClose} className="p-2 hover:bg-slate-800 rounded-full transition-all">
             <ArrowLeft className="text-white" />
           </button>
-          <h1 className="text-xl font-bold">3.1.3. İklim Türleri Değişimi</h1>
+          <h1 className="text-xl font-bold italic underline">İklim Türleri Değişimi (1930 - 2099)</h1>
         </div>
-        <div className="bg-blue-500/20 px-3 py-1 rounded-full text-blue-400 text-xs border border-blue-500/30 flex items-center gap-2">
-           <Globe size={14} /> Karşılaştırma Modu: 1930 | 2099
+        <div className="flex items-center gap-2 bg-blue-500/20 px-4 py-2 rounded-full border border-blue-500/30 text-blue-400 text-xs animate-pulse font-bold">
+           <Globe size={14} /> KARŞILAŞTIRMA AKTİF
         </div>
       </div>
 
       <div className="flex-1 relative bg-slate-900 overflow-hidden">
         {loading && (
-          <div className="absolute inset-0 z-[11000] bg-slate-950/80 flex flex-col items-center justify-center gap-4">
+          <div className="absolute inset-0 z-[11000] bg-slate-950/80 flex flex-col items-center justify-center gap-4 text-center">
             <Loader2 className="w-12 h-12 text-blue-500 animate-spin" />
-            <p className="text-slate-300">İklim Verileri İşleniyor...</p>
+            <p className="text-slate-300 font-mono text-sm tracking-widest">RASTER VERİLERİ HARİTAYA İŞLENİYOR...</p>
           </div>
         )}
 
-        {typeof window !== 'undefined' && (
-          <MapContainer center={[39, 35]} zoom={5} className="h-full w-full outline-none">
-            <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
-            {layers && <ComparisonControl layerLeft={layers.left} layerRight={layers.right} />}
-          </MapContainer>
-        )}
+        <MapContainer center={[39, 35]} zoom={5} className="h-full w-full outline-none">
+          <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
+          {layers && <ComparisonControl layerLeft={layers.left} layerRight={layers.right} />}
+        </MapContainer>
 
-        {/* Kaydırılabilir Legend */}
         <div className="absolute bottom-6 left-6 z-[2000] w-64 bg-slate-900/95 border border-white/10 rounded-2xl flex flex-col shadow-2xl max-h-[60%] backdrop-blur-md">
-          <div className="p-3 border-b border-white/5 font-bold text-[10px] text-blue-400 uppercase tracking-widest">İklim Göstergesi</div>
+          <div className="p-3 border-b border-white/5 font-bold text-[10px] text-blue-400 uppercase tracking-widest flex justify-between">
+            <span>İklim Göstergesi</span>
+            <Info size={12}/>
+          </div>
           <div className="p-3 overflow-y-auto custom-scrollbar">
             {Object.entries(climateLegend).map(([k, v]) => (
               <div key={k} className="flex items-center gap-3 mb-2 group">
