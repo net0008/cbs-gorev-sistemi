@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from 'react';
-import { ArrowLeft, Loader2, Calendar } from 'lucide-react';
+import { ArrowLeft, Loader2, Calendar, Map as MapIcon } from 'lucide-react';
 import { MapContainer, TileLayer, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-// 1. TÜRKÇE İKLİM LEJANDI (Beck et al. 2023)
+// TÜRKÇE LEJAND (Beck et al. 2023)
 const climateLegend: Record<number, { code: string; name: string; color: string }> = {
   1: { code: 'Af', name: 'Tropikal, yağmur ormanı', color: 'rgb(0, 0, 255)' },
   2: { code: 'Am', name: 'Tropikal, muson', color: 'rgb(0, 120, 255)' },
@@ -36,23 +36,21 @@ const climateLegend: Record<number, { code: string; name: string; color: string 
   26: { code: 'Dfb', name: 'Soğuk, her mevsim yağışlı, yazı ılık', color: 'rgb(55, 200, 255)' },
   27: { code: 'Dfc', name: 'Soğuk, her mevsim yağışlı, yazı soğuk', color: 'rgb(0, 125, 125)' },
   28: { code: 'Dfd', name: 'Soğuk, her mevsim yağışlı, çok soğuk kış', color: 'rgb(0, 70, 95)' },
-  29: { code: 'ET', name: 'Polar, tundra', color: 'rgb(178, 178, 178)' },
-  30: { code: 'EF', name: 'Polar, buzul', color: 'rgb(102, 102, 102)' }
+  29: { code: 'ET', name: 'Kutup, tundra', color: 'rgb(178, 178, 178)' },
+  30: { code: 'EF', name: 'Kutup, buzul', color: 'rgb(102, 102, 102)' }
 };
 
 const years = [1930, 1960, 1990, 2020, 2070, 2099];
 
-// Harita katmanını yöneten yardımcı bileşen
-function GeoRasterTile({ georaster }: { georaster: any }) {
+function RasterLayer({ georaster }: { georaster: any }) {
   const map = useMap();
   const layerRef = useRef<any>(null);
 
   useEffect(() => {
     if (!georaster || !map) return;
 
-    const loadLayer = async () => {
+    const addLayer = async () => {
       const GeoRasterLayer = (await import('georaster-layer-for-leaflet')).default;
-      
       if (layerRef.current) map.removeLayer(layerRef.current);
 
       layerRef.current = new (GeoRasterLayer as any)({
@@ -61,15 +59,11 @@ function GeoRasterTile({ georaster }: { georaster: any }) {
         pixelValuesToColorFn: (v: number[]) => climateLegend[v[0]]?.color || 'transparent',
         resolution: 256
       });
-
       layerRef.current.addTo(map);
     };
 
-    loadLayer();
-
-    return () => {
-      if (layerRef.current) map.removeLayer(layerRef.current);
-    };
+    addLayer();
+    return () => { if (layerRef.current) map.removeLayer(layerRef.current); };
   }, [georaster, map]);
 
   return null;
@@ -80,89 +74,81 @@ export default function IklimTurleriActivity({ onClose }: { onClose: () => void 
   const [currentRaster, setCurrentRaster] = useState<any>(null);
   const [loading, setLoading] = useState(false);
 
-  const fetchAndSetRaster = async (year: number) => {
+  const loadRaster = async (year: number) => {
     setLoading(true);
     try {
       const parseGeoraster = (await import('georaster')).default;
+      // Dosya isimlerinin public/maps/climate içindekilerle eşleştiğinden emin olun
       const response = await fetch(`/maps/climate/${year}Koppen_geiger.tif`);
       const arrayBuffer = await response.arrayBuffer();
       const georaster = await parseGeoraster(arrayBuffer);
       setCurrentRaster(georaster);
       setActiveYear(year);
     } catch (err) {
-      console.error("Yükleme hatası:", err);
+      console.error("Raster yükleme hatası:", err);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      fetchAndSetRaster(1930);
-    }
+    loadRaster(1930);
   }, []);
 
   return (
-    <div className="fixed inset-0 z-[10000] flex flex-col bg-slate-950 text-slate-100 animate-in fade-in duration-300">
-      {/* Üst Header */}
-      <div className="flex flex-col sm:flex-row items-center justify-between p-4 border-b border-white/10 bg-slate-900/90 gap-4">
+    <div className="fixed inset-0 z-[10000] flex flex-col bg-slate-950 text-slate-100 animate-in fade-in duration-300 overflow-hidden">
+      {/* Üst Header ve Yıl Seçimi */}
+      <div className="flex flex-col md:flex-row items-center justify-between p-4 border-b border-white/10 bg-slate-900/95 gap-4 shadow-xl">
         <div className="flex items-center gap-4">
           <button onClick={onClose} className="p-2 hover:bg-slate-800 rounded-full transition-all">
             <ArrowLeft className="text-white" />
           </button>
-          <div>
-            <h1 className="text-xl font-bold">3.1.3. İklim Türleri Değişimi</h1>
-            <p className="text-[10px] text-indigo-400 font-medium">Veri Kaynağı: Beck et al. (2023)</p>
-          </div>
+          <h1 className="text-xl font-bold tracking-tight">İklim Türleri Analizi</h1>
         </div>
 
-        {/* Yıl Butonları */}
         <div className="flex flex-wrap justify-center gap-2">
           {years.map((year) => (
             <button
               key={year}
-              onClick={() => fetchAndSetRaster(year)}
-              disabled={loading}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+              onClick={() => loadRaster(year)}
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border ${
                 activeYear === year 
-                ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/30' 
-                : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
+                ? 'bg-indigo-600 border-indigo-400 text-white shadow-[0_0_15px_rgba(79,70,229,0.5)]' 
+                : 'bg-slate-800 border-white/5 text-slate-400 hover:border-white/20'
               }`}
             >
-              <Calendar size={14} />
               {year}
             </button>
           ))}
         </div>
       </div>
 
-      <div className="flex-1 relative bg-slate-900 overflow-hidden">
+      <div className="flex-1 relative bg-slate-900">
         {loading && (
-          <div className="absolute inset-0 z-[11000] bg-slate-950/70 backdrop-blur-sm flex flex-col items-center justify-center gap-3">
+          <div className="absolute inset-0 z-[1000] bg-slate-950/60 backdrop-blur-sm flex flex-col items-center justify-center gap-3">
             <Loader2 className="w-10 h-10 text-indigo-500 animate-spin" />
-            <p className="text-sm font-mono tracking-widest text-indigo-300 uppercase italic">Veriler İşleniyor {activeYear}...</p>
+            <p className="text-sm font-medium text-indigo-200 uppercase tracking-widest">{activeYear} Verisi İşleniyor...</p>
           </div>
         )}
 
-        {typeof window !== 'undefined' && (
-          <MapContainer center={[39, 35]} zoom={5} className="h-full w-full outline-none">
-            <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
-            {currentRaster && <GeoRasterTile georaster={currentRaster} />}
-          </MapContainer>
-        )}
+        <MapContainer center={[39, 35]} zoom={5} className="h-full w-full outline-none" zoomControl={false}>
+          <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
+          {currentRaster && <RasterLayer georaster={currentRaster} />}
+        </MapContainer>
 
-        {/* Türkçe Legend (Lejand) - Sağ Altta */}
-        <div className="absolute bottom-6 right-6 z-[2000] w-64 md:w-80 bg-slate-900/95 border border-white/10 rounded-2xl flex flex-col shadow-2xl max-h-[70%] backdrop-blur-md">
-          <div className="p-3 border-b border-white/5 font-bold text-[10px] text-indigo-400 uppercase tracking-widest bg-indigo-500/5 rounded-t-2xl">
-            Köppen-Geiger İklim Sınıflandırması
+        {/* Türkçe Lejand Paneli */}
+        <div className="absolute bottom-6 right-6 z-[2000] w-72 md:w-80 bg-slate-950/90 border border-white/10 rounded-2xl flex flex-col shadow-2xl max-h-[75%] backdrop-blur-md">
+          <div className="p-3 border-b border-white/10 flex items-center gap-2 bg-white/5 rounded-t-2xl">
+            <MapIcon size={14} className="text-indigo-400" />
+            <span className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">İklim Lejandı</span>
           </div>
           <div className="p-3 overflow-y-auto custom-scrollbar space-y-2">
             {Object.entries(climateLegend).map(([k, v]) => (
-              <div key={k} className="flex items-center gap-3 group">
+              <div key={k} className="flex items-center gap-3 hover:bg-white/5 p-1 rounded-lg transition-colors group">
                 <div className="w-3 h-3 rounded-full flex-shrink-0 shadow-sm" style={{ backgroundColor: v.color }} />
                 <div className="flex flex-col min-w-0">
-                  <span className="text-[10px] font-bold text-slate-200">{v.code}</span>
-                  <span className="text-[9px] text-slate-500 group-hover:text-slate-300 transition-colors leading-tight">
+                  <span className="text-[10px] font-bold text-slate-200 group-hover:text-white">{v.code}</span>
+                  <span className="text-[9px] text-slate-500 group-hover:text-slate-400 leading-tight">
                     {v.name}
                   </span>
                 </div>

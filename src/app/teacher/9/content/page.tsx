@@ -25,7 +25,10 @@ const HavaOlaylariActivity = dynamic(() => import('./3_Unite/Havaolaylariactivit
 const IklimSistemiActivity = dynamic(() => import('./3_Unite/Iklimsistemiactivity'), { ssr: false, loading: loadingComponent });
 const IklimTurleriActivity = dynamic(
   () => import('./3_Unite/Iklimturleriactivity'),
-  { ssr: false, loading: () => <div className="fixed inset-0 bg-slate-950 flex items-center justify-center text-white">Harita Modülü Yükleniyor...</div> }
+  { 
+    ssr: false, 
+    loading: () => <div className="fixed inset-0 bg-slate-950 flex items-center justify-center text-white z-[10000]">Harita Modülü Yükleniyor...</div> 
+  }
 );
 const NufusDinamikleriActivity = dynamic(() => import('./4_Unite/NufusDinamikleriActivity'), { ssr: false, loading: loadingComponent });
 const DemografikDonusumActivity = dynamic(() => import('./4_Unite/Demografikdonusumactivity'), { ssr: false, loading: loadingComponent });
