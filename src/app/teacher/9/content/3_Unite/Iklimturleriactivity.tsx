@@ -85,7 +85,9 @@ export default function IklimTurleriActivity({ onClose }: { onClose: () => void 
     setAktifYil(yil);
     try {
       const parseGeoraster = (await import('georaster')).default;
-      const response = await fetch(`/maps/climate/${yil}Koppen_geiger.tif`);
+      const response = await fetch(`/maps/climate/${year}Koppen_geiger.tif`, {
+  cache: 'no-store' // Tarayıcının dosyayı hep taze çekmesini sağlar
+});
       const arrayBuffer = await response.arrayBuffer();
       const georaster = await parseGeoraster(arrayBuffer);
       setAktifRaster(georaster);
@@ -143,17 +145,15 @@ export default function IklimTurleriActivity({ onClose }: { onClose: () => void 
           </div>
         )}
 
-        <MapContainer
-          center={[20, 0]}
-          zoom={2}
-          className="h-full w-full outline-none"
-        >
-          <TileLayer
-            url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-            attribution="&copy; CartoDB"
-          />
-
-          {aktifRaster && <RasterLayer georaster={aktifRaster} />}
+        <<MapContainer center={[20, 0]} zoom={2} className="h-full w-full outline-none">
+  <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
+  
+  {aktifRaster && (
+    <RasterLayer 
+      key={aktifYil} // BU SATIR KRİTİK: Her yıl değişiminde haritayı tazeler
+      georaster={aktifRaster} 
+    />
+  )}
         </MapContainer>
 
         {/* ── Türkçe Lejand ── */}
