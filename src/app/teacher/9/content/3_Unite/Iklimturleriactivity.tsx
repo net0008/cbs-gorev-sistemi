@@ -6,7 +6,7 @@ import { MapContainer, TileLayer, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-/* ─── Köppen-Geiger Türkçe Renk Tablosu (Hatasız) ─── */
+/* ─── Köppen-Geiger Türkçe Renk Tablosu (Tam Liste) ─── */
 const klimaRenk: Record<number, { kod: string; ad: string; color: string }> = {
   1:  { kod: 'Af',  ad: 'Tropikal, yağmur ormanı',            color: 'rgb(0, 0, 255)' },
   2:  { kod: 'Am',  ad: 'Tropikal, muson',                    color: 'rgb(0, 120, 255)' },
@@ -43,7 +43,7 @@ const klimaRenk: Record<number, { kod: string; ad: string; color: string }> = {
 const YILLAR = [1930, 1960, 1990, 2020, 2070, 2099];
 
 /**
- * TIFF Verisini haritaya tam oturtan (reproject yapan) yardımcı bileşen
+ * TIFF Verisini haritaya tam oturtan katman bileşeni
  */
 function RasterLayer({ georaster }: { georaster: any }) {
   const map = useMap();
@@ -53,23 +53,27 @@ function RasterLayer({ georaster }: { georaster: any }) {
     if (!georaster || !map) return;
 
     const addLayer = async () => {
-      // Projeksiyonu doğru yapan kütüphaneyi dinamik çağır
       const GeoRasterLayer = (await import('georaster-layer-for-leaflet')).default;
       
-      if (layerRef.current) map.removeLayer(layerRef.current);
+      if (layerRef.current) {
+        map.removeLayer(layerRef.current);
+      }
 
       layerRef.current = new (GeoRasterLayer as any)({
         georaster: georaster,
         opacity: 0.8,
         pixelValuesToColorFn: (v: number[]) => klimaRenk[v[0]]?.color || 'transparent',
-        resolution: 256 // Performans ve netlik dengesi
+        resolution: 256
       });
 
       layerRef.current.addTo(map);
     };
 
     addLayer();
-    return () => { if (layerRef.current) map.removeLayer(layerRef.current); };
+
+    return () => { 
+      if (layerRef.current) map.removeLayer(layerRef.current); 
+    };
   }, [georaster, map]);
 
   return null;
@@ -85,9 +89,8 @@ export default function IklimTurleriActivity({ onClose }: { onClose: () => void 
     setAktifYil(yil);
     try {
       const parseGeoraster = (await import('georaster')).default;
-      const response = await fetch(`/maps/climate/${year}Koppen_geiger.tif`, {
-  cache: 'no-store' // Tarayıcının dosyayı hep taze çekmesini sağlar
-});
+      // 'no-store' eklenerek tarayıcının aynı dosyayı göstermesi engellendi
+      const response = await fetch(`/maps/climate/${yil}Koppen_geiger.tif`, { cache: 'no-store' });
       const arrayBuffer = await response.arrayBuffer();
       const georaster = await parseGeoraster(arrayBuffer);
       setAktifRaster(georaster);
@@ -107,8 +110,8 @@ export default function IklimTurleriActivity({ onClose }: { onClose: () => void 
   return (
     <div className="fixed inset-0 z-[10000] flex flex-col bg-slate-950 text-slate-100 overflow-hidden">
       
-      {/* ── Üst Panel: Başlık ve Yıl Butonları ── */}
-      <div className="flex flex-col md:flex-row items-center justify-between p-4 border-b border-white/10 bg-slate-900/95 gap-4 shadow-xl z-20">
+      {/* ── Üst Panel ── */}
+      <div className="flex flex-col md:flex-row items-center justify-between p-4 border-b border-white/10 bg-slate-900/95 gap-4 z-20">
         <div className="flex items-center gap-4">
           <button onClick={onClose} className="p-2 hover:bg-slate-800 rounded-full transition-all">
             <ArrowLeft className="text-white" />
@@ -124,7 +127,7 @@ export default function IklimTurleriActivity({ onClose }: { onClose: () => void 
               disabled={yukleniyor}
               className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border ${
                 aktifYil === yil
-                  ? 'bg-indigo-600 border-indigo-400 text-white shadow-lg shadow-indigo-500/20'
+                  ? 'bg-indigo-600 border-indigo-400 text-white shadow-lg'
                   : 'bg-slate-800 border-white/5 text-slate-400 hover:border-white/20 disabled:opacity-40'
               }`}
             >
@@ -139,30 +142,37 @@ export default function IklimTurleriActivity({ onClose }: { onClose: () => void 
         {yukleniyor && (
           <div className="absolute inset-0 z-[1000] bg-slate-950/70 backdrop-blur-sm flex flex-col items-center justify-center gap-3">
             <Loader2 className="w-10 h-10 text-indigo-500 animate-spin" />
-            <p className="text-xs font-bold text-indigo-200 uppercase tracking-widest italic">
-              {aktifYil} Verisi Hesaplanıyor...
+            <p className="text-xs font-bold text-indigo-200 tracking-widest uppercase italic">
+              {aktifYil} Verisi Yükleniyor...
             </p>
           </div>
         )}
 
-        <<MapContainer center={[20, 0]} zoom={2} className="h-full w-full outline-none">
-  <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
-  
-  {aktifRaster && (
-    <RasterLayer 
-      key={aktifYil} // BU SATIR KRİTİK: Her yıl değişiminde haritayı tazeler
-      georaster={aktifRaster} 
-    />
-  )}
+        <MapContainer
+          center={[20, 0]}
+          zoom={2}
+          className="h-full w-full outline-none"
+        >
+          <TileLayer
+            url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+            attribution="&copy; CartoDB"
+          />
+
+          {aktifRaster && (
+            <RasterLayer 
+              key={aktifYil} // BU SATIR KRİTİK: Her yıl değişiminde katmanı tazeler
+              georaster={aktifRaster} 
+            />
+          )}
         </MapContainer>
 
         {/* ── Türkçe Lejand ── */}
-        <div className="absolute bottom-6 right-6 z-[2000] w-72 md:w-80 bg-slate-950/90 border border-white/10 rounded-2xl flex flex-col shadow-2xl max-h-[70vh] backdrop-blur-md">
-          <div className="p-3 border-b border-white/10 flex items-center justify-between bg-white/5 rounded-t-2xl">
+        <div className="absolute bottom-6 right-6 z-[2000] w-72 md:w-80 bg-slate-950/90 border border-white/10 rounded-2xl flex flex-col shadow-2xl max-h-[70vh] backdrop-blur-md overflow-hidden">
+          <div className="p-3 border-b border-white/10 flex items-center justify-between bg-white/5">
             <div className="flex items-center gap-2">
               <MapIcon size={14} className="text-indigo-400" />
               <span className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">
-                Köppen İklim Sınıfları
+                Köppen İklim Tipleri
               </span>
             </div>
             <span className="text-[10px] font-bold text-indigo-400">{aktifYil}</span>
