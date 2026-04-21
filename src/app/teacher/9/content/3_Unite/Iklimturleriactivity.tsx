@@ -2,10 +2,11 @@
 
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { ArrowLeft, Loader2, Map as MapIcon, Calendar } from 'lucide-react';
-import { MapContainer, TileLayer, ImageOverlay } from 'react-leaflet';
+import { MapContainer, TileLayer, useMap } from 'react-leaflet';
+import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-/* ─── Köppen-Geiger Türkçe Renk Tablosu (Tam Liste) ─── */
+/* ─── Köppen-Geiger Renk Tablosu (Tam Liste) ─── */
 const klimaRenk: Record<number, { kod: string; ad: string; rgb: [number, number, number] }> = {
   1:  { kod: 'Af',  ad: 'Tropikal, yağmur ormanı',            rgb: [0,   0,   255] },
   2:  { kod: 'Am',  ad: 'Tropikal, muson',                    rgb: [0,   120, 255] },
@@ -42,69 +43,62 @@ const klimaRenk: Record<number, { kod: string; ad: string; rgb: [number, number,
 const YILLAR = [1930, 1960, 1990, 2020, 2070, 2099];
 
 /**
- * GeoTIFF verisini görsel bir PNG kaplamasına dönüştüren fonksiyon.
- * Çift döngü kullanılarak (x,y) koordinat hatası giderildi.
+ * KAYMA SORUNUNU ÇÖZEN BİLEŞEN
+ * georaster-layer-for-leaflet, TIFF piksellerini otomatik re-project yapar.
  */
-async function georasterToDataURL(georaster: any): Promise<string> {
-  const { width, height, values, noDataValue } = georaster;
-  const canvas = document.createElement('canvas');
-  canvas.width = width;
-  canvas.height = height;
-  const ctx = canvas.getContext('2d')!;
-  const imageData = ctx.createImageData(width, height);
-  const px = imageData.data;
+function RasterLayer({ georaster }: { georaster: any }) {
+  const map = useMap();
+  const layerRef = useRef<any>(null);
 
-  // VERİ İŞLEME (Düzeltildi): values[0] genellikle 2 boyutlu bir dizidir.
-  for (let y = 0; y < height; y++) {
-    for (let x = 0; x < width; x++) {
-      const v = values[0][y][x];
-      const p = (y * width + x) * 4;
+  useEffect(() => {
+    if (!georaster || !map) return;
 
-      if (v == null || v === noDataValue || v === 0 || v < 1 || v > 30) {
-        px[p + 3] = 0; // Geçersiz pikseller şeffaf
-        continue;
+    const addLayer = async () => {
+      // Dinamik import ile kütüphaneyi yükle
+      const GeoRasterLayer = (await import('georaster-layer-for-leaflet')).default;
+      
+      if (layerRef.current) {
+        map.removeLayer(layerRef.current);
       }
 
-      const entry = klimaRenk[v];
-      if (!entry) {
-        px[p + 3] = 0;
-        continue;
-      }
+      layerRef.current = new (GeoRasterLayer as any)({
+        georaster: georaster,
+        opacity: 0.8,
+        pixelValuesToColorFn: (v: number[]) => {
+          const entry = klimaRenk[v[0]];
+          return entry ? `rgb(${entry.rgb[0]},${entry.rgb[1]},${entry.rgb[2]})` : 'transparent';
+        },
+        resolution: 256 // Daha iyi performans için çözünürlük ayarı
+      });
 
-      px[p]     = entry.rgb[0];
-      px[p + 1] = entry.rgb[1];
-      px[p + 2] = entry.rgb[2];
-      px[p + 3] = 230; // ~0.9 opaklık
-    }
-  }
+      layerRef.current.addTo(map);
+    };
 
-  ctx.putImageData(imageData, 0, 0);
-  return canvas.toDataURL('image/png');
-}
+    addLayer();
 
-interface YilVerisi {
-  yil: number;
-  url: string;
-  boyutMB: string;
+    return () => { 
+      if (layerRef.current) map.removeLayer(layerRef.current); 
+    };
+  }, [georaster, map]);
+
+  return null;
 }
 
 export default function IklimTurleriActivity({ onClose }: { onClose: () => void }) {
-  const [aktifVeri, setAktifVeri] = useState<YilVerisi | null>(null);
+  const [aktifRaster, setAktifRaster] = useState<any>(null);
   const [yukleniyor, setYukleniyor] = useState(false);
   const [hata, setHata] = useState<string | null>(null);
   const [aktifYil, setAktifYil] = useState<number>(1930);
 
   const yukleYil = useCallback(async (yil: number) => {
-    if (yil === aktifVeri?.yil && !hata) return;
-
     setAktifYil(yil);
     setYukleniyor(true);
     setHata(null);
 
     try {
-      // 1. KISALTILMIŞ DOSYA ADLARI (1930.tif gibi)
+      // Kısaltılmış isimler kullanılıyor
       const url = `/maps/climate/${yil}.tif`;
-      const res = await fetch(url, { cache: 'no-store' }); // Önbelleği devre dışı bırak
+      const res = await fetch(url, { cache: 'no-store' });
 
       if (!res.ok) throw new Error(`Dosya bulunamadı: ${url}`);
 
@@ -112,42 +106,31 @@ export default function IklimTurleriActivity({ onClose }: { onClose: () => void 
       const parseGeoraster = (await import('georaster')).default;
       const georaster = await parseGeoraster(buf);
       
-      const dataURL = await georasterToDataURL(georaster);
-      
-      setAktifVeri({ 
-        yil, 
-        url: dataURL, 
-        boyutMB: (buf.byteLength / 1024 / 1024).toFixed(2) 
-      });
+      setAktifRaster(georaster);
 
     } catch (err: any) {
       console.error("Yükleme Hatası:", err);
-      setHata("Harita verisi yüklenemedi.");
+      setHata("Veri yüklenemedi.");
     } finally {
       setYukleniyor(false);
     }
-  }, [aktifVeri, hata]);
+  }, []);
 
   useEffect(() => {
     if (typeof window !== 'undefined') yukleYil(1930);
-  }, []);
+  }, [yukleYil]);
 
   return (
     <div className="fixed inset-0 z-[10000] flex flex-col bg-slate-950 text-slate-100 overflow-hidden">
       
-      {/* ── Üst Panel: Başlık ve Butonlar ── */}
+      {/* ── Header ── */}
       <div className="flex flex-col md:flex-row items-center justify-between p-4 border-b border-white/10 bg-slate-900/95 gap-4 z-20 shadow-xl">
         <div className="flex items-center gap-4">
           <button onClick={onClose} className="p-2 hover:bg-slate-800 rounded-full transition-all">
             <ArrowLeft className="text-white" />
           </button>
           <div>
-            <h1 className="text-xl font-bold">İklim Türleri Analizi ({aktifYil})</h1>
-            {aktifVeri && (
-               <p className="text-[10px] text-indigo-400 font-mono italic">
-                 {aktifVeri.yil} Verisi Yüklendi ({aktifVeri.boyutMB} MB)
-               </p>
-            )}
+            <h1 className="text-xl font-bold tracking-tight">İklim Türleri Analizi ({aktifYil})</h1>
           </div>
         </div>
 
@@ -174,34 +157,25 @@ export default function IklimTurleriActivity({ onClose }: { onClose: () => void 
           <div className="absolute inset-0 z-[2000] bg-slate-950/70 backdrop-blur-sm flex flex-col items-center justify-center gap-3">
             <Loader2 className="w-10 h-10 text-indigo-500 animate-spin" />
             <p className="text-xs font-bold text-indigo-200 uppercase tracking-widest italic">
-              {aktifYil} Verisi Hesaplanıyor...
+              {aktifYil} Verisi Yükleniyor...
             </p>
           </div>
-        )}
-
-        {hata && (
-           <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[3000] bg-red-600 px-4 py-2 rounded-lg text-xs font-bold">
-             {hata}
-           </div>
         )}
 
         <MapContainer center={[20, 0]} zoom={2} className="h-full w-full outline-none" zoomControl={true}>
           <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" attribution="&copy; CartoDB" />
 
-          {aktifVeri && (
-            <ImageOverlay
-              key={aktifVeri.yil} // HARİTAYI GÜNCELLEMEK İÇİN KRİTİK: Her yıl değişiminde overlay tazelenir.
-              url={aktifVeri.url}
-              bounds={[[-90, -180], [90, 180]]}
-              opacity={0.85}
-              zIndex={10}
+          {aktifRaster && (
+            <RasterLayer 
+              key={aktifYil} // Haritayı güncellemek için kritik
+              georaster={aktifRaster} 
             />
           )}
         </MapContainer>
 
         {/* ── Türkçe Lejand ── */}
         <div className="absolute bottom-6 right-6 z-[2000] w-72 md:w-80 bg-slate-950/90 border border-white/10 rounded-2xl flex flex-col shadow-2xl max-h-[70vh] backdrop-blur-md overflow-hidden">
-          <div className="p-3 border-b border-white/10 flex items-center justify-between bg-white/5">
+          <div className="p-3 border-b border-white/10 flex items-center justify-between bg-white/5 rounded-t-2xl">
             <div className="flex items-center gap-2">
               <MapIcon size={14} className="text-indigo-400" />
               <span className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Lejand</span>
