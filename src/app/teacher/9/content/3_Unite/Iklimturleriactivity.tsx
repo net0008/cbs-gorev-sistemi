@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { ArrowLeft, Loader2, Calendar, Map as MapIcon } from 'lucide-react';
 import { MapContainer, TileLayer, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-// 1. TÜRKÇE İKLİM LEJANDI (Beck et al. 2023 - Tam Liste)
+// 1. TÜRKÇE İKLİM LEJANDI
 const climateLegend: Record<number, { code: string; name: string; color: string }> = {
   1: { code: 'Af', name: 'Tropikal, yağmur ormanı', color: 'rgb(0, 0, 255)' },
   2: { code: 'Am', name: 'Tropikal, muson', color: 'rgb(0, 120, 255)' },
@@ -43,7 +43,7 @@ const climateLegend: Record<number, { code: string; name: string; color: string 
 const YILLAR = [1930, 1960, 1990, 2020, 2070, 2099];
 
 /**
- * 📍 HARİTAYI OTOMATİK TAZELEYEN KATMAN BİLEŞENİ
+ * 📍 HARİTAYI OTOMATİK TEMİZLEYEN VE TAZELEYEN BİLEŞEN
  */
 function RasterLayer({ georaster }: { georaster: any }) {
   const map = useMap();
@@ -52,9 +52,9 @@ function RasterLayer({ georaster }: { georaster: any }) {
   useEffect(() => {
     if (!georaster || !map) return;
 
-    // Önce haritadaki tüm eski katmanları süpür (aynı harita kalma sorununu çözer)
+    // 1. Temizlik: Haritadaki TileLayer olmayan her şeyi süpür
     map.eachLayer((l: any) => {
-      if (l.options && l.options.georaster) {
+      if (!(l instanceof L.TileLayer)) {
         map.removeLayer(l);
       }
     });
@@ -66,15 +66,15 @@ function RasterLayer({ georaster }: { georaster: any }) {
         georaster: georaster,
         opacity: 0.8,
         pixelValuesToColorFn: (v: number[]) => climateLegend[v[0]]?.color || 'transparent',
-        resolution: 128 // Performans için ideal çözünürlük
+        resolution: 128
       });
 
       layerRef.current.addTo(map);
       
-      // ZOOM YAPMADAN YÜKLENMESİ İÇİN KRİTİK: Haritayı milimetrik hareket ettirir
+      // 2. Zorla Tazele: Zoom yapmadan görünmesi için
       setTimeout(() => {
         map.invalidateSize();
-      }, 100);
+      }, 200);
     };
 
     addLayer();
@@ -92,13 +92,16 @@ export default function IklimTurleriActivity({ onClose }: { onClose: () => void 
   const [yukleniyor, setYukleniyor] = useState(false);
   const [aktifYil, setAktifYil] = useState<number>(1930);
 
-  const yukleYil = async (yil: number) => {
+  const yukleYil = useCallback(async (yil: number) => {
+    setAktifRaster(null); // Eski veriyi anında sil
     setYukleniyor(true);
     setAktifYil(yil);
     try {
       const parseGeoraster = (await import('georaster')).default;
-      // 'cache: no-store' tarayıcının hep aynı dosyayı göstermesini engeller
-      const response = await fetch(`/maps/climate/${yil}Koppen_geiger.tif`, { cache: 'no-store' });
+      // Cache-busting ile tarayıcı belleğini atla
+      const response = await fetch(`/maps/climate/${yil}Koppen_geiger.tif?t=${Date.now()}`, { 
+        cache: 'no-store' 
+      });
       const arrayBuffer = await response.arrayBuffer();
       const georaster = await parseGeoraster(arrayBuffer);
       setAktifRaster(georaster);
@@ -107,16 +110,14 @@ export default function IklimTurleriActivity({ onClose }: { onClose: () => void 
     } finally {
       setYukleniyor(false);
     }
-  };
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      yukleYil(1930); // İlk açılışta 1930 yükle
-    }
   }, []);
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') yukleYil(1930);
+  }, [yukleYil]);
+
   return (
-    <div className="fixed inset-0 z-[10000] flex flex-col bg-slate-950 text-slate-100 overflow-hidden">
+    <div className="fixed inset-0 z-[10000] flex flex-col bg-slate-950 text-slate-100 overflow-hidden font-sans">
       
       {/* Üst Panel: Başlık ve Butonlar */}
       <div className="flex flex-col md:flex-row items-center justify-between p-4 border-b border-white/10 bg-slate-900/95 gap-4 z-20 shadow-xl">
@@ -124,23 +125,23 @@ export default function IklimTurleriActivity({ onClose }: { onClose: () => void 
           <button onClick={onClose} className="p-2 hover:bg-slate-800 rounded-full transition-all">
             <ArrowLeft className="text-white" />
           </button>
-          <h1 className="text-xl font-bold tracking-tight text-white">İklim Türleri Analizi ({aktifYil})</h1>
+          <h1 className="text-xl font-bold tracking-tight">İklim Türleri Analizi ({aktifYil})</h1>
         </div>
 
-        {/* Yıl Butonları */}
+        {/* Yıl Butonları - Değişken Adı Düzeltildi */}
         <div className="flex flex-wrap justify-center gap-2">
           {YILLAR.map((yil) => (
             <button
-              key={year}
-              onClick={() => yukleYil(year)}
+              key={yil}
+              onClick={() => yukleYil(yil)}
               disabled={yukleniyor}
               className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border ${
-                aktifYil === year
-                  ? 'bg-indigo-600 border-indigo-400 text-white shadow-lg'
-                  : 'bg-slate-800 border-white/5 text-slate-400 hover:border-white/20'
+                aktifYil === yil
+                  ? 'bg-indigo-600 border-indigo-400 text-white shadow-lg shadow-indigo-500/20'
+                  : 'bg-slate-800 border-white/5 text-slate-400 hover:border-white/20 disabled:opacity-40'
               }`}
             >
-              {year}
+              <Calendar size={14} className="inline mr-1" /> {yil}
             </button>
           ))}
         </div>
@@ -148,10 +149,10 @@ export default function IklimTurleriActivity({ onClose }: { onClose: () => void 
 
       <div className="flex-1 relative bg-slate-900">
         {yukleniyor && (
-          <div className="absolute inset-0 z-[1000] bg-slate-950/70 backdrop-blur-sm flex flex-col items-center justify-center gap-3">
+          <div className="absolute inset-0 z-[1000] bg-slate-950/70 backdrop-blur-sm flex flex-col items-center justify-center gap-3 pointer-events-none">
             <Loader2 className="w-10 h-10 text-indigo-500 animate-spin" />
             <p className="text-xs font-bold text-indigo-200 uppercase tracking-widest italic">
-              {aktifYil} Verisi Yükleniyor...
+              {aktifYil} Verisi Hazırlanıyor...
             </p>
           </div>
         )}
@@ -161,13 +162,13 @@ export default function IklimTurleriActivity({ onClose }: { onClose: () => void 
           
           {aktifRaster && (
             <RasterLayer 
-              key={aktifYil} // BU SATIR ÇOK ÖNEMLİ: Yıl değişince haritayı sıfırdan kurar
+              key={`raster-${aktifYil}-${Date.now()}`} // Her seferinde sıfırdan oluşturur
               georaster={aktifRaster} 
             />
           )}
         </MapContainer>
 
-        {/* Türkçe Lejand */}
+        {/* Türkçe Lejand Paneli */}
         <div className="absolute bottom-6 right-6 z-[2000] w-72 md:w-80 bg-slate-950/90 border border-white/10 rounded-2xl flex flex-col shadow-2xl max-h-[70vh] backdrop-blur-md overflow-hidden">
           <div className="p-3 border-b border-white/10 flex items-center justify-between bg-white/5 rounded-t-2xl">
             <div className="flex items-center gap-2">
