@@ -6,7 +6,7 @@ import { MapContainer, TileLayer, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-/* ─── Köppen-Geiger Türkçe Renk Tablosu (Tam Liste) ─── */
+/* ─── Köppen-Geiger Türkçe Renk Tablosu (30 Tip) ─── */
 const klimaRenk: Record<number, { kod: string; ad: string; color: string }> = {
   1:  { kod: 'Af',  ad: 'Tropikal, yağmur ormanı',            color: 'rgb(0, 0, 255)' },
   2:  { kod: 'Am',  ad: 'Tropikal, muson',                    color: 'rgb(0, 120, 255)' },
@@ -43,16 +43,19 @@ const klimaRenk: Record<number, { kod: string; ad: string; color: string }> = {
 const YILLAR = [1930, 1960, 1990, 2020, 2070, 2099];
 
 /**
- * 📍 KAYMA VE YENİLENME SORUNUNU ÇÖZEN KRİTİK BİLEŞEN
+ * 📍 AGRESİF TEMİZLİK YAPAN KATMAN BİLEŞENİ
  */
-function RasterLayer({ georaster, yil }: { georaster: any, yil: number }) {
+function RasterLayer({ georaster }: { georaster: any }) {
   const map = useMap();
   const layerRef = useRef<any>(null);
 
   useEffect(() => {
-    // Önce haritadaki tüm eski raster katmanlarını zorla temizle
+    if (!georaster || !map) return;
+
+    // 1. ADIM: Haritadaki her şeyi tara ve TileLayer olmayan her şeyi SİL
     map.eachLayer((l: any) => {
-      if (l.options && l.options.georaster) {
+      // Sadece TileLayer (Arka plan haritası) kalsın, gerisini süpür
+      if (!(l instanceof L.TileLayer)) {
         map.removeLayer(l);
       }
     });
@@ -60,12 +63,12 @@ function RasterLayer({ georaster, yil }: { georaster: any, yil: number }) {
     const addLayer = async () => {
       const GeoRasterLayer = (await import('georaster-layer-for-leaflet')).default;
       
-      // Yeni katmanı oluştur
+      // 2. ADIM: Yeni katmanı oluştur ve milimetrik oturt
       layerRef.current = new (GeoRasterLayer as any)({
         georaster: georaster,
         opacity: 0.8,
         pixelValuesToColorFn: (v: number[]) => klimaRenk[v[0]]?.color || 'transparent',
-        resolution: 128 // Geçiş hızı için ideal çözünürlük
+        resolution: 128
       });
 
       layerRef.current.addTo(map);
@@ -73,10 +76,14 @@ function RasterLayer({ georaster, yil }: { georaster: any, yil: number }) {
 
     addLayer();
 
-    return () => {
-      if (layerRef.current) map.removeLayer(layerRef.current);
+    // 3. ADIM: Bileşen yıkıldığında hafızayı temizle
+    return () => { 
+      if (layerRef.current) {
+        map.removeLayer(layerRef.current);
+        layerRef.current = null;
+      }
     };
-  }, [georaster, map, yil]); // Yıl her değiştiğinde bu efekti tetikle
+  }, [georaster, map]);
 
   return null;
 }
@@ -87,14 +94,23 @@ export default function IklimTurleriActivity({ onClose }: { onClose: () => void 
   const [aktifYil, setAktifYil] = useState<number>(1930);
 
   const yukleYil = useCallback(async (yil: number) => {
+    // 4. ADIM: Yükleme başlamadan önce eski veriyi TAMAMEN SİL (Reset)
+    setAktifRaster(null); 
     setYukleniyor(true);
     setAktifYil(yil);
+
     try {
       const parseGeoraster = (await import('georaster')).default;
-      // 'cache: no-store' tarayıcı takılmasını önler
-      const response = await fetch(`/maps/climate/${yil}.tif`, { cache: 'no-store' });
+      
+      // 5. ADIM: CACHE BUSTING - Dosya sonuna zaman damgası ekleyerek belleği temiz çek
+      const response = await fetch(`/maps/climate/${yil}.tif?t=${Date.now()}`, { 
+        cache: 'no-store',
+        headers: { 'Cache-Control': 'no-cache' }
+      });
+      
       const arrayBuffer = await response.arrayBuffer();
       const georaster = await parseGeoraster(arrayBuffer);
+      
       setAktifRaster(georaster);
     } catch (err) {
       console.error("Yükleme hatası:", err);
@@ -110,7 +126,7 @@ export default function IklimTurleriActivity({ onClose }: { onClose: () => void 
   return (
     <div className="fixed inset-0 z-[10000] flex flex-col bg-slate-950 text-slate-100 overflow-hidden">
       
-      {/* Üst Panel */}
+      {/* Header */}
       <div className="flex flex-col md:flex-row items-center justify-between p-4 border-b border-white/10 bg-slate-900/95 gap-4 z-20 shadow-xl">
         <div className="flex items-center gap-4">
           <button onClick={onClose} className="p-2 hover:bg-slate-800 rounded-full transition-all">
@@ -119,6 +135,7 @@ export default function IklimTurleriActivity({ onClose }: { onClose: () => void 
           <h1 className="text-xl font-bold tracking-tight">İklim Türleri Analizi ({aktifYil})</h1>
         </div>
 
+        {/* Yıl Butonları */}
         <div className="flex flex-wrap justify-center gap-2">
           {YILLAR.map((yil) => (
             <button
@@ -128,7 +145,7 @@ export default function IklimTurleriActivity({ onClose }: { onClose: () => void 
               className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border ${
                 aktifYil === yil
                   ? 'bg-indigo-600 border-indigo-400 text-white shadow-lg'
-                  : 'bg-slate-800 border-white/5 text-slate-400 hover:border-white/20'
+                  : 'bg-slate-800 border-white/5 text-slate-400 hover:border-white/20 disabled:opacity-40'
               }`}
             >
               <Calendar size={14} className="inline mr-1" /> {yil}
@@ -137,12 +154,13 @@ export default function IklimTurleriActivity({ onClose }: { onClose: () => void 
         </div>
       </div>
 
+      {/* Harita */}
       <div className="flex-1 relative bg-slate-900">
         {yukleniyor && (
           <div className="absolute inset-0 z-[1000] bg-slate-950/70 backdrop-blur-sm flex flex-col items-center justify-center gap-3">
             <Loader2 className="w-10 h-10 text-indigo-500 animate-spin" />
             <p className="text-xs font-bold text-indigo-200 uppercase tracking-widest italic">
-              {aktifYil} Haritası Hazırlanıyor...
+              {aktifYil} Haritası Güncelleniyor...
             </p>
           </div>
         )}
@@ -152,19 +170,20 @@ export default function IklimTurleriActivity({ onClose }: { onClose: () => void 
 
           {aktifRaster && (
             <RasterLayer 
-              key={`raster-${aktifYil}`} // REACT'I SİLMEYE ZORLAR
+              key={`raster-${aktifYil}-${Date.now()}`} // Her tıklamada BENZERSİZ anahtar
               georaster={aktifRaster} 
-              yil={aktifYil} // DEĞİŞİMİ TETİKLER
             />
           )}
         </MapContainer>
 
         {/* Lejand */}
         <div className="absolute bottom-6 right-6 z-[2000] w-72 md:w-80 bg-slate-950/90 border border-white/10 rounded-2xl flex flex-col shadow-2xl max-h-[70vh] backdrop-blur-md overflow-hidden">
-          <div className="p-3 border-b border-white/10 flex items-center justify-between bg-white/5">
+          <div className="p-3 border-b border-white/10 flex items-center justify-between bg-white/5 rounded-t-2xl">
             <div className="flex items-center gap-2">
               <MapIcon size={14} className="text-indigo-400" />
-              <span className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Lejand</span>
+              <span className="text-[10px] font-bold text-slate-300 uppercase tracking-widest text-center">
+                Köppen İklim Sınıflandırması
+              </span>
             </div>
             <span className="text-[10px] font-bold text-indigo-400">{aktifYil}</span>
           </div>
