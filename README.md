@@ -1,1 +1,1 @@
-Lise Coğrafya dersi müfredatı için hazırlanan eğitsel içerikler ve ders öğretmeninin hızlıca CBS kullanabileceği, öğrencilere ödev verebileceği bir site hedefi ile yola çıkılmıştır. Proje tam bitmemiş olup fırsat buludukça yapılmaya devam edilmektedir. https://cbs-gorev-sistemi.vercel.app/
+Lise Coğrafya dersi müfredatı için hazırlanan eğitsel içerikler ve ders öğretmeninin hızlıca CBS kullanabileceği, öğrencilere ödev verebileceği bir site hedefi ile yola çıkılmıştır. Proje tam bitmemiş olup fırsat buldukça yapılmaya devam edilmektedir. https://cbs-gorev-sistemi.vercel.app/
